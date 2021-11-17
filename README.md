@@ -1,1 +1,1 @@
-PickMyClasses frontend
+PickMyClasses front-end
