@@ -1,8 +1,8 @@
 import { Box, Skeleton } from '@mui/material';
 import React from 'react';
 
-/** A class search result item. */
-export default function ClassResultItem() {
+/** A course search result item. */
+export default function CourseResultItem() {
   return (
     <Box sx={{ margin: '24px 0' }}>
       <Skeleton animation='wave' sx={{ typography: 'h4' }} />

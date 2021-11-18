@@ -1,12 +1,9 @@
 import React from 'react';
-
 import { Typography } from '@mui/material';
-import useStyles from '../styles';
 
 export default function Footer() {
-  const classes = useStyles();
   return (
-    <footer className={classes.footer}>
+    <footer style={{ paddingTop: '16px' }}>
       <Typography variant='h6' align='center' gutterBottom>
         CS 4000 Capstone Project
       </Typography>

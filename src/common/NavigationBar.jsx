@@ -4,13 +4,13 @@ import { SchoolRounded } from '@material-ui/icons';
 import useStyles from '../styles';
 
 export default function NavigationBar() {
-  const classes = useStyles();
+  const styles = useStyles();
   return (
     <>
       <CssBaseline />
-      <AppBar position='static'>
+      <AppBar position='sticky'>
         <Toolbar>
-          <SchoolRounded className={classes.icon} />
+          <SchoolRounded className={styles.icon} />
           <Typography variant='h6'> Pick My Classes</Typography>
         </Toolbar>
       </AppBar>
