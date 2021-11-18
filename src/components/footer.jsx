@@ -1,21 +1,9 @@
 import React from 'react';
 
-import {
-  Button,
-  Grid,
-  AppBar,
-  Card,
-  CardActions,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  CssBaseline,
-  Container,
-  Typography,
-} from '@mui/material';
+import { Typography } from '@mui/material';
 import useStyles from '../styles';
 
-export default function footer() {
+export default function Footer() {
   const classes = useStyles();
   return (
     <footer className={classes.footer}>

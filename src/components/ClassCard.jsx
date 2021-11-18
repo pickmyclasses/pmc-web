@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import useStyles from '../styles';
 
-export default function CourseBar() {
+export default function ClassCard() {
   const classes = useStyles();
   return (
     <Container className={classes.cardGrid} maxWidth='md'>

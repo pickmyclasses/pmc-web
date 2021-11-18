@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Grid } from '@mui/material';
 import Scheduler from '../components/Scheduler';
-import CourseBar from '../components/CourseBar';
-import ClassResultItem from '../components/ClassResultItem';
-import footer from '../components/footer';
+import Footer from '../components/Footer';
 
-import useStyles from '../styles';
+import ClassCard from '../components/ClassCard';
 
 export default function HomePage() {
   const [shouldShowScheduler, setShouldShowScheduler] = useState(true);
   const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
   return (
     <>
       <Grid container sx={{ height: '100%' }}>
@@ -26,15 +23,14 @@ export default function HomePage() {
         </Grid>
       </Grid>
       {cards.map((card) => (
-        <CourseBar />
+        <ClassCard />
       ))}
       {shouldShowScheduler && (
         <Grid item xs={3} sx={{ margin: '24px' }}>
           <Scheduler />
         </Grid>
       )}
-
-      <footer />
+      <Footer />
     </>
   );
 }
