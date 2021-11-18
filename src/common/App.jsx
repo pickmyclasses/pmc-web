@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Container } from '@mui/material';
-import NavigationBar from './NavigationBar';
+import NavigationBar from '../components/NavigationBar';
 import HomePage from '../pages/HomePage';
 
 export default function App() {
