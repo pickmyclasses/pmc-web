@@ -1,19 +1,16 @@
 import React from 'react';
-import { AppBar, Container, Toolbar } from '@mui/material';
-// import { Box } from '@mui/system';
-
+import { Box, Container } from '@mui/material';
+import NavigationBar from './NavigationBar';
 import HomePage from '../pages/HomePage';
 
 export default function App() {
   return (
-    <div>
-      <AppBar position='fixed'>
-        <Toolbar></Toolbar>
-      </AppBar>
-      <Toolbar></Toolbar>
-      <Container maxWidth='xl'>
-        <HomePage></HomePage>
+    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <NavigationBar />
+      <Container maxWidth='xl' sx={{ flex: 1 }}>
+        {/* The following should depend on route */}
+        <HomePage />
       </Container>
-    </div>
+    </Box>
   );
 }

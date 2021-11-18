@@ -1,6 +1,10 @@
 import React from 'react';
-import { AppBar } from '@mui/material';
+import { AppBar, Toolbar } from '@mui/material';
 
 export default function NavigationBar() {
-  return <AppBar></AppBar>;
+  return (
+    <AppBar position='static'>
+      <Toolbar />
+    </AppBar>
+  );
 }
