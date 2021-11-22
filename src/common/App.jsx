@@ -4,6 +4,7 @@ import HomePage from '../pages/HomePage';
 import ClassPage from '../pages/ClassPage';
 import NavigationBar from './NavigationBar';
 import Footer from './Footer';
+import './App.css';
 
 export default function App() {
   return (
@@ -11,8 +12,8 @@ export default function App() {
       <NavigationBar />
       <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0 }}>
         {/* The following should depend on route */}
-        {/* <HomePage /> */}
-        <ClassPage />
+        <HomePage />
+        {/*<ClassPage />*/}
       </Container>
       {/* <Footer /> */}
     </Box>
