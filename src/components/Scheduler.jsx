@@ -3,8 +3,28 @@ import { Box, Divider, useTheme } from '@mui/material';
 import ShoppingCart from './Scheduler/ShoppingCart';
 import RequirementList from './Scheduler/RequirementList';
 
-/** The scheduler panel, which includes the shopping cart and the requirement list. */
-export default function Scheduler() {
+/**
+ * The scheduler panel, which includes the shopping cart and the requirement list.
+ *
+ * @param {{
+ *   scheduledCourses: {
+ *     name: string,
+ *     title: string,
+ *     sessions: {
+ *       component: string,
+ *       days: number[],
+ *       start: number,
+ *       end: number,
+ *     }[],
+ *   }[],
+ *   requirements: {
+ *     title: string,
+ *     progress: number,
+ *     total: number,
+ *   }[],
+ * }} props
+ */
+export default function Scheduler({ scheduledCourses = [], requirements = [] }) {
   const theme = useTheme();
 
   return (
@@ -22,10 +42,10 @@ export default function Scheduler() {
       }}
     >
       <Box sx={{ flex: 1 }}>
-        <ShoppingCart />
+        <ShoppingCart scheduledCourses={scheduledCourses} />
       </Box>
       <Divider sx={{ margin: '16px 0' }} />
-      <RequirementList />
+      <RequirementList requirements={requirements} />
     </Box>
   );
 }
