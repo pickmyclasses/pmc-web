@@ -1,17 +1,27 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, CssBaseline } from '@mui/material';
-import { SchoolRounded } from '@material-ui/icons';
-import useStyles from '../styles';
+import { AppBar, Container, Grid, Toolbar } from '@mui/material';
+import Logo from '../components/Logo';
+import SearchBar from '../components/SearchBar';
+import NavigationBarButtonGroup from '../components/NavigationBarButtonGroup';
 
 export default function NavigationBar() {
-  const styles = useStyles();
   return (
     <>
-      <CssBaseline />
       <AppBar position='sticky'>
         <Toolbar>
-          <SchoolRounded className={styles.icon} />
-          <Typography variant='h6'> Pick My Classes</Typography>
+          <Container maxWidth='xl'>
+            <Grid container spacing='24px' sx={{ alignItems: 'center' }}>
+              <Grid item xs='auto'>
+                <Logo />
+              </Grid>
+              <Grid item xs display='flex' flexDirection='column' alignItems='center'>
+                <SearchBar />
+              </Grid>
+              <Grid item xs='auto'>
+                <NavigationBarButtonGroup />
+              </Grid>
+            </Grid>
+          </Container>
         </Toolbar>
       </AppBar>
     </>
