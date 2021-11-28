@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { School } from '@material-ui/icons';
 
+/** A clickable website logo. */
 export default function Logo({ onClick }) {
   return (
     <Box

@@ -3,14 +3,16 @@ import { Divider, FilledInput, IconButton, colors, useTheme } from '@mui/materia
 import { alpha } from '@mui/material/styles';
 import { Clear, Search } from '@material-ui/icons';
 
-export default function SearchBar() {
+/**
+ * The search-bar that sits in the middle of the navigation bar. Fires events when the user
+ * searches via calling `onSearchClick`.
+ */
+export default function SearchBar({ onSearchClick }) {
   const theme = useTheme();
 
   const [searchText, setSearchText] = useState('');
 
-  const handleSearchClick = () => {
-    console.log(',. clicked!!');
-  };
+  const handleSearchClick = () => onSearchClick(searchText);
 
   return (
     <FilledInput
