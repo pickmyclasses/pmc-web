@@ -24,6 +24,7 @@ export default function SearchBar({ onSearchClick }) {
       inputProps={{ style: { padding: '10px 20px' } }}
       sx={{
         maxWidth: '576px',
+        borderRadius: '4px',
         color: theme.palette.primary.contrastText,
         backgroundColor: alpha(theme.palette.common.black, 0.167),
         '&:hover, &.Mui-focused': { backgroundColor: alpha(theme.palette.common.black, 0.333) },

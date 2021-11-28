@@ -10,7 +10,7 @@ export default function NavigationBarButtonGroup() {
   const theme = useTheme();
 
   return (
-    <Grid container spacing='8px' sx={{ '*': { color: theme.palette.primary.contrastText } }}>
+    <Grid container spacing='16px' sx={{ '*': { color: theme.palette.primary.contrastText } }}>
       {/* Place-holding only; not yet functional */}
       <Grid item>
         <IconButton>
