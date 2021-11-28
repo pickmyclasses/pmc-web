@@ -12,7 +12,7 @@ export default function SearchBar({ onSearchClick }) {
 
   const [searchText, setSearchText] = useState('');
 
-  const handleSearchClick = () => onSearchClick(searchText);
+  const handleSearchClick = () => searchText && onSearchClick?.(searchText);
 
   return (
     <FilledInput
