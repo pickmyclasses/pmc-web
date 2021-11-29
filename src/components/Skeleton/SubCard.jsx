@@ -31,7 +31,7 @@ const SubCard = forwardRef(
           border: '1px solid',
           borderColor: theme.palette.primary.light,
           ':hover': {
-            boxShadow: '0 2px 14px 0 rgb(32 40 45 / 8%)',
+            boxShadow: '0 2px 14px 0 rgb(32 40 45 / 47%)',
           },
           ...sx,
         }}
@@ -40,14 +40,14 @@ const SubCard = forwardRef(
         {/* card header and action */}
         {!darkTitle && title && (
           <CardHeader
-            sx={{ p: 2.5 }}
+            sx={{ p: 1.5 }}
             title={<Typography variant='h5'>{title}</Typography>}
             action={secondary}
           />
         )}
         {darkTitle && title && (
           <CardHeader
-            sx={{ p: 2.5 }}
+            sx={{ p: 1.5 }}
             title={<Typography variant='h4'>{title}</Typography>}
             action={secondary}
           />
@@ -65,7 +65,7 @@ const SubCard = forwardRef(
 
         {/* card content */}
         {content && (
-          <CardContent sx={{ p: 2.5, ...contentSX }} className={contentClass || ''}>
+          <CardContent sx={{ p: 1.5, ...contentSX }} className={contentClass || ''}>
             {children}
           </CardContent>
         )}
