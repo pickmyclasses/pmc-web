@@ -12,8 +12,9 @@ export default function App() {
       <NavigationBar />
       <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0 }}>
         {/* The following should depend on route */}
-        <CoursePage />
+        {/* <CoursePage /> */}
         {/*<ClassPage />*/}
+        <HomePage /> 
       </Container>
       {/* <Footer /> */}
     </Box>
