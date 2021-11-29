@@ -1,14 +1,11 @@
 import PropTypes from 'prop-types';
 
 // material-ui
-import { Box, Card, Grid, Typography } from '@mui/material';
+import { Box, Card, Typography } from '@mui/material';
 
 // project imports
-import SubCard from '../Skeleton/SubCard';
-import MainCard from '../Skeleton/MainCard';
-// import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
 
-const gridSpacing = 3;
+// import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
 
 // ===============================|| COLOR BOX ||=============================== //
 

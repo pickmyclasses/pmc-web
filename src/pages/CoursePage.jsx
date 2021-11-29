@@ -6,7 +6,6 @@ import { Grid } from '@mui/material';
 //Project Imports
 import CourseDescriptionSubCard from '../components/ClassDetails/CourseDescriptionSubCard';
 import CourseEnrollmentSubCard from '../components/ClassDetails/CourseEnrollmentSubCard';
-import SubCard from '../components/Skeleton/SubCard';
 import CourseDetails from '../components/ClassDetails/CourseDetails';
 import MainCard from '../components/Skeleton/MainCard';
 import CourseOverallRatings from '../components/ClassDetails/CourseOverallRatings';
