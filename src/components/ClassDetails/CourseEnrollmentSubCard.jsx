@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Grid } from '@mui/material';
-import MuiTypography from '@mui/material/Typography';
+import { Grid } from '@mui/material';
 import TagBox from '../Utilities/TagBox';
+import MuiTypography from '@mui/material/Typography';
 
 //Project Imports
 import SubCard from '../Skeleton/SubCard';
@@ -13,13 +13,11 @@ const gridSpacing = 3;
 export default function CourseDescriptionSubCard({ CourseData }) {
   return (
     <SubCard title='Enrollment Requirement'>
-      <Grid container spacing={gridSpacing}>
-        <Grid item xs={12} sm={6} md={4} lg={2}>
-          <TagBox bgcolor='error.main' title={CourseData.math} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={2}>
-          {/* <TagBox bgcolor='Physics 1210' title='success.main' /> */}
-          <TagBox bgcolor='primary.light' title={CourseData.physics} />
+      <Grid container direction='column' spacing={gridSpacing}>
+        <Grid item>
+          <MuiTypography variant='subtitle1' gutterBottom>
+            {CourseData.prerequisites}
+          </MuiTypography>
         </Grid>
       </Grid>
     </SubCard>
