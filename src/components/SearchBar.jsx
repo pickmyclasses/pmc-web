@@ -6,6 +6,8 @@ import { Clear, Search } from '@material-ui/icons';
 /**
  * The search-bar that sits in the middle of the navigation bar. Fires events when the user
  * searches via calling `onSearchClick`.
+ *
+ * @param {{onSearchClick: (searchText: string) => void}} props
  */
 export default function SearchBar({ onSearchClick }) {
   const theme = useTheme();
@@ -20,7 +22,7 @@ export default function SearchBar({ onSearchClick }) {
       placeholder='Search'
       value={searchText}
       onChange={(e) => setSearchText(e.target.value)}
-      onKeyDown={(e) => e.key == 'Enter' && handleSearchClick()}
+      onKeyDown={(e) => e.key === 'Enter' && handleSearchClick()}
       inputProps={{ style: { padding: '10px 20px' } }}
       sx={{
         maxWidth: '576px',
