@@ -26,6 +26,7 @@ function InitCourseData() {
     prerequisites:
       'C- or better in CS 3810 AND Full Major Status in Computer Science or Computer Engineering.',
     overall_ratings: [5, 3, 6, 12, 9],
+    canRegister: 1,
   };
 
   const CourseData2 = {
@@ -38,6 +39,7 @@ function InitCourseData() {
     prerequisites:
       '"C-" or better in CS 3500 AND (Full Major status in Computer Science OR Computer Engineering).',
     overall_ratings: [2, 5, 2, 15, 5],
+    canRegister: 0,
   };
 
   CourseDataDict['CS4400'] = CourseData1;
@@ -45,7 +47,7 @@ function InitCourseData() {
 }
 
 export default function CoursePage({ key }) {
-  key = 'CS5530';
+  key = 'CS4400';
   //const CourseDataDict = [];
   InitCourseData();
   return (
