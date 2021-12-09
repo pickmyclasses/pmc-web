@@ -1,0 +1,10 @@
+import React from 'react';
+import googleIcon from './google-logo-9808.png';
+
+const Icon = () => (
+
+      <img src={googleIcon} alt="icon" height="25" />
+
+);
+
+export default Icon;

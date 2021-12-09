@@ -71,7 +71,7 @@
       "clock_start_time": "10:00 AM",
       "clock_end_time": "11:00 AM",
       "associated_course": [],
-      "description": "An in-depth study of computer architecture and design, including topics such as RISC and CISC instruction set architectures, CPU organizations, pipelining, memory systems, input/output, and parallel machines.\n Emphasis is placed on performance measures and compilation issues.",
+      "description": "An in-depth study of computer architecture and design, including topics such as RISC and CISC instruction set ...",
       "credit_hour": "4",
       "prerequesite": [],
       "review": "http://localhost:3000/review/1"
@@ -89,7 +89,7 @@
       "clock_start_time": "9:00 AM",
       "clock_end_time": "10:00 AM",
       "associated_course": ["localhost:3000/course/3"],
-      "description": "The objective of CS4400 is to help students bridge the gap between high-level programming and actual computer systems: processors, the memory hierarchy, operating systems, compilers, linkers, assemblers, networks, and more. Our basic goal is to understand how a computer works, so that as programmers we can make it work efficiently. Thus, this course is an introduction to computer systems from a programmers point of view.",
+      "description": "The objective of CS4400 is to help students bridge the gap between high-level programming ...",
       "credit_hour": "3",
       "prerequesite": ["http://localhost:3000/course/1"],
       "review": "http://localhost:3000/review/2"
@@ -108,6 +108,24 @@
       "clock_end_time": "4:10:00 PM",
       "associated_course": ["localhost:3000/course/2"],
       "description": "Lab for CS4400",
+      "credit_hour": "0",
+      "prerequesite": ["http://localhost:3000/course/1"],
+      "review": "http://localhost:3000/review/2"
+    },
+    {
+      "id": "4",
+      "department": "CS",
+      "number": "1400",
+      "name": "Programming Intro",
+      "professor": "http://localhost:3000/professor/2",
+      "location": "HEB 2022",
+      "semester": "spring",
+      "year": "2022",
+      "date": ["1"],
+      "clock_start_time": "3:00 PM",
+      "clock_end_time": "4:10:00 PM",
+      "associated_course": ["localhost:3000/course/2"],
+      "description": "An introductory course for programming",
       "credit_hour": "0",
       "prerequesite": ["http://localhost:3000/course/1"],
       "review": "http://localhost:3000/review/2"

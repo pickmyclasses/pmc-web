@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Divider, FilledInput, IconButton, colors, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { Clear, Search } from '@material-ui/icons';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { getCoursesBySearch } from '../actions/courses';
 
 /**
  * The search-bar that sits in the middle of the navigation bar. Fires events when the user
@@ -9,12 +12,44 @@ import { Clear, Search } from '@material-ui/icons';
  *
  * @param {{onSearchClick: (searchText: string) => void}} props
  */
+
+function useQuery()
+{
+  return new URLSearchParams(useLocation().search);
+}
+
 export default function SearchBar({ onSearchClick }) {
+  const dispatch = useDispatch();
+
+  const query = useQuery();
+
+  const navigate = useNavigate();
+
+  const page = query.get('page') || 1;
+
+  const searchQuery = query.get('searchQuery');
+
   const theme = useTheme();
 
   const [searchText, setSearchText] = useState('');
 
-  const handleSearchClick = () => searchText && onSearchClick?.(searchText);
+  // equivalent to searchCourse
+  const handleSearchClick = () => {
+    
+    // if the user doesn't type anything, return nothing
+    if(searchText.trim())
+    {
+      // dispatch -> fetch search course
+      dispatch(getCoursesBySearch({ searchText }));
+      navigate(`/course/search?searchQuery=${searchText}`);
+
+    }
+    // else, navigate back to home page
+    else{
+      navigate('/');
+    }
+  }
+
 
   return (
     <FilledInput
