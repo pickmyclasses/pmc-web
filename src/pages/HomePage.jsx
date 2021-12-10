@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Grow, Grid, Button } from '@mui/material';
-import { useNavigate, useLocation } from 'react-router-dom';
+//import { useNavigate, useLocation } from 'react-router-dom';
 
 // Custom components
 import Scheduler from '../components/Scheduler';

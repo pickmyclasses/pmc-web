@@ -41,7 +41,8 @@ export default function SearchBar({ onSearchClick }) {
     {
       // dispatch -> fetch search course
       dispatch(getCoursesBySearch({ searchText }));
-      navigate(`/course/search?searchQuery=${searchText}`);
+      let array = searchText.split(" ");
+      navigate(`/search?department=${array[0]}&number=${array[1]}`);
 
     }
     // else, navigate back to home page

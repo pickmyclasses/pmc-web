@@ -1,5 +1,6 @@
 // import everything from the api
 import * as api from '../api';
+import { FETCH_ALL, FETCH_BY_SEARCH } from '../constants/constants';
 
 
 // thunks allow us to write async functions in React
@@ -24,8 +25,18 @@ export const getCourses = () => async (dispatch) =>
 
 export const getCoursesBySearch = (searchQuery) => async (dispatch) => {
     try{
+
+        const array = searchQuery.searchText.split(" ");
+        let searchObj = {
+            'department': array[0],
+            'number': array[1]
+        };
         
-        const { data } = await api.fetchCoursesBySearch(searchQuery);
+        const { data } = await api.fetchCoursesBySearch(searchObj);
+
+        const action = { type: 'FETCH_BY_SEARCH', payload: data};
+
+        dispatch(action);
 
         console.log(data);
 

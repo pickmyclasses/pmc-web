@@ -17,7 +17,7 @@ const CourseCardGrid = ({ setCurrentId }) => {
     // Call useStyles will return an object where each element is a className
     const classes = useStyles();
 
-    //console.log(courses);
+    console.log("Fetched courses from CourseCardGrid: " + courses);
     
     return(
 
