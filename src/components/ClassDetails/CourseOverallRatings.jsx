@@ -7,29 +7,29 @@ import CourseChart from './CourseBarChart';
 //Project Imports
 import SubCard from '../Skeleton/SubCard';
 
-function ComputeRatingNum(CourseData) {
+function ComputeRatingNum(courseData) {
   let totalNum = 0;
-  for (let num of CourseData.overall_ratings) {
+  for (let num of courseData.overall_ratings) {
     totalNum += num;
   }
   return totalNum;
 }
 
-function ComputeOverallRating(CourseData) {
-  let totalNum = ComputeRatingNum(CourseData);
+function ComputeOverallRating(courseData) {
+  let totalNum = ComputeRatingNum(courseData);
 
   return (
-    (CourseData.overall_ratings[0] +
-      CourseData.overall_ratings[1] * 2 +
-      CourseData.overall_ratings[2] * 3 +
-      CourseData.overall_ratings[3] * 4 +
-      CourseData.overall_ratings[4] * 5) /
+    (courseData.overall_ratings[0] +
+      courseData.overall_ratings[1] * 2 +
+      courseData.overall_ratings[2] * 3 +
+      courseData.overall_ratings[3] * 4 +
+      courseData.overall_ratings[4] * 5) /
     totalNum
   ).toFixed(2);
 }
 
-export default function CourseOverallRatings({ CourseData }) {
-  let rating = ComputeOverallRating(CourseData);
+export default function CourseOverallRatings({ course }) {
+  let rating = ComputeOverallRating(course);
   return (
     <SubCard title=''>
       <Grid container direction='column' spacing={1}>
@@ -40,7 +40,7 @@ export default function CourseOverallRatings({ CourseData }) {
         </Grid>
         <Grid item>
           <MuiTypography variant='subtitle1' gutterBottom>
-            Overall Quality based on {ComputeRatingNum(CourseData)} ratings
+            Overall Quality based on {ComputeRatingNum(course)} ratings
           </MuiTypography>
         </Grid>
         <Grid item>
