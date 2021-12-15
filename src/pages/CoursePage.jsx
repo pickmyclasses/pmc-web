@@ -1,17 +1,20 @@
 // TODO: draw the horizontal bars for student's ratings.
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
-
+import { useParams } from 'react-router-dom';
 //Project Imports
 import CourseDescriptionSubCard from '../components/ClassDetails/CourseDescriptionSubCard';
 import CourseEnrollmentSubCard from '../components/ClassDetails/CourseEnrollmentSubCard';
 import CourseDetails from '../components/ClassDetails/CourseDetails';
 import MainCard from '../components/Skeleton/MainCard';
 import CourseOverallRatings from '../components/ClassDetails/CourseOverallRatings';
+import axios from 'axios';
+import { URL } from '../constants/constants';
 //theme constant
 const gridSpacing = 3;
 const CourseDataDict = [];
+
 /*
  * This is the demo data that will be replaced by data fetched from the API calls from the back-end.
  */
@@ -46,27 +49,42 @@ function InitCourseData() {
   CourseDataDict['CS5530'] = CourseData2;
 }
 
-export default function CoursePage({ key }) {
-  key = 'CS4400';
+export default function CoursePage() {
+  // console.log(props.match.params.id);
+  let key = 'CS4400';
+  let courseParam = useParams();
+  const [course, setCourse] = useState([]);
+  // Make a request for a user with a given ID
+
+  useEffect(() => {
+    // GET request using axios inside useEffect React hook
+    axios
+      .get(`http://localhost:3000/course/${courseParam.id}`)
+      .then((response) => setCourse(response.data));
+    // empty dependency array means this effect will only run once (like componentDidMount in classes)
+  }, []);
+
+  console.log(course);
+
   //const CourseDataDict = [];
   InitCourseData();
   return (
-    <MainCard title={CourseDataDict[key].title}>
+    <MainCard title={course.department + ' ' + course.number + ' ' + course.name}>
       <Grid container spacing={gridSpacing}>
         <Grid item xs={12} sm={12}>
-          <CourseDescriptionSubCard CourseData={CourseDataDict[key]}></CourseDescriptionSubCard>
+          <CourseDescriptionSubCard course={course}></CourseDescriptionSubCard>
         </Grid>
 
         <Grid item xs={12} sm={12}>
-          <CourseEnrollmentSubCard CourseData={CourseDataDict[key]}></CourseEnrollmentSubCard>
+          <CourseEnrollmentSubCard course={course}></CourseEnrollmentSubCard>
         </Grid>
 
-        <Grid item xs={6} sm={6}>
-          <CourseOverallRatings CourseData={CourseDataDict[key]}></CourseOverallRatings>
+        {/* <Grid item xs={6} sm={6}>
+          <CourseOverallRatings course={course}></CourseOverallRatings>
         </Grid>
         <Grid item xs={6} sm={6}>
-          <CourseDetails CourseData={CourseDataDict[key]}></CourseDetails>
-        </Grid>
+          <CourseDetails course={course}></CourseDetails>
+        </Grid> */}
       </Grid>
     </MainCard>
   );

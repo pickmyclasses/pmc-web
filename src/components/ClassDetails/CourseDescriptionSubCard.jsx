@@ -5,12 +5,12 @@ import MuiTypography from '@mui/material/Typography';
 //Project Imports
 import SubCard from '../Skeleton/SubCard';
 const gridSpacing = 3;
-export default function CourseDescriptionSubCard({ CourseData }) {
+export default function CourseDescriptionSubCard({ course }) {
   return (
     <SubCard title='Course Description' spacing={gridSpacing}>
       <Grid container>
         <MuiTypography variant='subtitle1' gutterBottom>
-          {CourseData.description}
+          {course.description}
         </MuiTypography>
       </Grid>
     </SubCard>
