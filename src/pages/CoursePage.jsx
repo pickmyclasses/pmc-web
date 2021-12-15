@@ -64,8 +64,6 @@ export default function CoursePage() {
     // empty dependency array means this effect will only run once (like componentDidMount in classes)
   }, []);
 
-  console.log(course);
-
   //const CourseDataDict = [];
   InitCourseData();
   return (
@@ -79,12 +77,12 @@ export default function CoursePage() {
           <CourseEnrollmentSubCard course={course}></CourseEnrollmentSubCard>
         </Grid>
 
-        {/* <Grid item xs={6} sm={6}>
+        <Grid item xs={6} sm={6}>
           <CourseOverallRatings course={course}></CourseOverallRatings>
         </Grid>
         <Grid item xs={6} sm={6}>
           <CourseDetails course={course}></CourseDetails>
-        </Grid> */}
+        </Grid>
       </Grid>
     </MainCard>
   );
