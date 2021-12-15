@@ -50,7 +50,7 @@ export default function CourseDetails({ course }) {
         </MuiTypography>
         <MuiTypography variant='h5' gutterBottom>
           Course Meet Time:{' '}
-          {meet_dates.map((day) => (
+          {meet_dates?.map((day) => (
             <li>
               {convert_weekdays(day)} {course.clock_start_time} - {course.clock_end_time}
             </li>
