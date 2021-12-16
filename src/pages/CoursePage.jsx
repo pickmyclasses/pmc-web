@@ -9,6 +9,7 @@ import CourseEnrollmentSubCard from '../components/ClassDetails/CourseEnrollment
 import CourseDetails from '../components/ClassDetails/CourseDetails';
 import MainCard from '../components/Skeleton/MainCard';
 import CourseOverallRatings from '../components/ClassDetails/CourseOverallRatings';
+import CourseReviews from '../components/ClassDetails/CourseReviews';
 import axios from 'axios';
 import { URL } from '../constants/constants';
 //theme constant
@@ -64,8 +65,6 @@ export default function CoursePage() {
     // empty dependency array means this effect will only run once (like componentDidMount in classes)
   }, []);
 
-  console.log(course);
-
   //const CourseDataDict = [];
   InitCourseData();
   return (
@@ -79,12 +78,18 @@ export default function CoursePage() {
           <CourseEnrollmentSubCard course={course}></CourseEnrollmentSubCard>
         </Grid>
 
-        {/* <Grid item xs={6} sm={6}>
+        <Grid item xs={6} sm={6}>
           <CourseOverallRatings course={course}></CourseOverallRatings>
         </Grid>
         <Grid item xs={6} sm={6}>
           <CourseDetails course={course}></CourseDetails>
-        </Grid> */}
+        </Grid>
+        <Grid item xs={12} sm={12}>
+          <CourseReviews course={course}></CourseReviews>
+        </Grid>
+        <Grid item xs={12} sm={12}>
+          <CourseReviews course={course}></CourseReviews>
+        </Grid>
       </Grid>
     </MainCard>
   );

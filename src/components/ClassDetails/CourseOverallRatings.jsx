@@ -7,29 +7,32 @@ import CourseChart from './CourseBarChart';
 //Project Imports
 import SubCard from '../Skeleton/SubCard';
 
-function ComputeRatingNum(courseData) {
-  let totalNum = 0;
-  for (let num of courseData.overall_ratings) {
-    totalNum += num;
-  }
-  return totalNum;
+function ComputeRatingNum(course) {
+  // let totalNum = 0;
+  // for (let num of course.overall_ratings) {
+  //   totalNum += num;
+  // }
+  // return totalNum;
+  return 0;
 }
 
-function ComputeOverallRating(courseData) {
-  let totalNum = ComputeRatingNum(courseData);
+function ComputeOverallRating(course) {
+  // let totalNum = ComputeRatingNum(course);
 
-  return (
-    (courseData.overall_ratings[0] +
-      courseData.overall_ratings[1] * 2 +
-      courseData.overall_ratings[2] * 3 +
-      courseData.overall_ratings[3] * 4 +
-      courseData.overall_ratings[4] * 5) /
-    totalNum
-  ).toFixed(2);
+  // return (
+  //   (courseData.overall_ratings[0] +
+  //     courseData.overall_ratings[1] * 2 +
+  //     courseData.overall_ratings[2] * 3 +
+  //     courseData.overall_ratings[3] * 4 +
+  //     courseData.overall_ratings[4] * 5) /
+  //   totalNum
+  // ).toFixed(2);
+  return 0;
 }
 
 export default function CourseOverallRatings({ course }) {
   let rating = ComputeOverallRating(course);
+
   return (
     <SubCard title=''>
       <Grid container direction='column' spacing={1}>
