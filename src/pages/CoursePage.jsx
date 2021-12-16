@@ -9,6 +9,7 @@ import CourseEnrollmentSubCard from '../components/ClassDetails/CourseEnrollment
 import CourseDetails from '../components/ClassDetails/CourseDetails';
 import MainCard from '../components/Skeleton/MainCard';
 import CourseOverallRatings from '../components/ClassDetails/CourseOverallRatings';
+import CourseReviews from '../components/ClassDetails/CourseReviews';
 import axios from 'axios';
 import { URL } from '../constants/constants';
 //theme constant
@@ -82,6 +83,12 @@ export default function CoursePage() {
         </Grid>
         <Grid item xs={6} sm={6}>
           <CourseDetails course={course}></CourseDetails>
+        </Grid>
+        <Grid item xs={12} sm={12}>
+          <CourseReviews course={course}></CourseReviews>
+        </Grid>
+        <Grid item xs={12} sm={12}>
+          <CourseReviews course={course}></CourseReviews>
         </Grid>
       </Grid>
     </MainCard>

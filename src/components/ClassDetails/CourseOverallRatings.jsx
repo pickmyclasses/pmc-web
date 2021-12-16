@@ -33,7 +33,6 @@ function ComputeOverallRating(course) {
 export default function CourseOverallRatings({ course }) {
   let rating = ComputeOverallRating(course);
 
-  console.log(course);
   return (
     <SubCard title=''>
       <Grid container direction='column' spacing={1}>

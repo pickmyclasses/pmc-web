@@ -42,13 +42,13 @@ export default function CourseDetails({ course }) {
   return (
     <SubCard title=''>
       <Grid item>
-        <MuiTypography variant='h5' gutterBottom>
+        <MuiTypography variant='body1' gutterBottom>
           Units: {course.credit_hour}
         </MuiTypography>
-        <MuiTypography variant='h5' gutterBottom>
+        <MuiTypography variant='body1' gutterBottom>
           Location: {course.location}
         </MuiTypography>
-        <MuiTypography variant='h5' gutterBottom>
+        <MuiTypography variant='body1' gutterBottom>
           Course Meet Time:{' '}
           {meet_dates?.map((day) => (
             <li>
@@ -60,7 +60,7 @@ export default function CourseDetails({ course }) {
       </Grid>
 
       <Grid item>
-        <MuiTypography variant='h5' gutterBottom>
+        <MuiTypography variant='body1' gutterBottom>
           Course Components: Laboratory & Lecture
         </MuiTypography>
       </Grid>
