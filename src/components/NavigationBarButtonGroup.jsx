@@ -1,27 +1,57 @@
 import React from 'react';
-import { Grid, IconButton, useTheme } from '@mui/material';
-import { AccountCircle, Notifications } from '@material-ui/icons';
+import { Link } from 'react-router-dom';
+import { Avatar, Button, Grid, IconButton, styled, useTheme } from '@mui/material';
+import { Notifications, Logout } from '@mui/icons-material';
+
+const LargeIconButton = styled(IconButton)({ svg: { transform: 'scale(1.25)' } });
 
 /**
  * The group of buttons like notification and user profile that sits on the right side of the
  * navigation bar.
  */
-export default function NavigationBarButtonGroup() {
+export default function NavigationBarButtonGroup({ userData, logout }) {
   const theme = useTheme();
 
   return (
-    <Grid container spacing='16px' sx={{ '*': { color: theme.palette.primary.contrastText } }}>
-      {/* Place-holding only; not yet functional */}
-      <Grid item>
-        <IconButton>
-          <Notifications />
-        </IconButton>
-      </Grid>
-      <Grid item>
-        <IconButton>
-          <AccountCircle />
-        </IconButton>
-      </Grid>
+    <Grid
+      container
+      spacing='16px'
+      sx={{
+        flexWrap: 'nowrap !important',
+        '*': { color: theme.palette.primary.contrastText },
+      }}
+    >
+      {userData ? renderItemsForLoggedIn(userData, logout) : renderItemsForNotLoggedIn()}
     </Grid>
   );
 }
+
+const renderItemsForLoggedIn = (userData, logout) => (
+  <>
+    <Grid item>
+      <LargeIconButton>
+        <Avatar sx={{ backgroundColor: '#222' }}>{getInitialsFromName(userData.name)}</Avatar>
+      </LargeIconButton>
+    </Grid>
+    <Grid item>
+      <LargeIconButton size='large'>
+        <Notifications />
+      </LargeIconButton>
+    </Grid>
+    <Grid item>
+      <LargeIconButton size='large' onClick={logout}>
+        <Logout />
+      </LargeIconButton>
+    </Grid>
+  </>
+);
+
+const renderItemsForNotLoggedIn = () => (
+  <Grid item>
+    <Button component={Link} to='/auth' variant='contained'>
+      Login
+    </Button>
+  </Grid>
+);
+
+const getInitialsFromName = (name) => name.split(' ').map((token) => token[0].toUpperCase());

@@ -46,19 +46,7 @@ export default function NavigationBar() {
               <SearchBar />
             </Grid>
             <Grid item xs='auto'>
-              {user?.result ? (
-                <div>
-                  <Typography variant='h6'>Hello, {user?.result.name}</Typography>
-                  <Button variant='contained' onClick={logout}>
-                    Logout
-                  </Button>
-                  <NavigationBarButtonGroup />
-                </div>
-              ) : (
-                <Button component={Link} to='/auth' variant='contained'>
-                  Sign In
-                </Button>
-              )}
+              <NavigationBarButtonGroup userData={user?.result} logout={logout} />
             </Grid>
           </Grid>
         </Container>

@@ -13,21 +13,20 @@ import { getCoursesBySearch } from '../actions/courses';
  * @param {{onSearchClick: (searchText: string) => void}} props
  */
 
-function useQuery()
-{
+function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
 export default function SearchBar({ onSearchClick }) {
   const dispatch = useDispatch();
 
-  const query = useQuery();
+  // const query = useQuery();
 
   const navigate = useNavigate();
 
-  const page = query.get('page') || 1;
+  // const page = query.get('page') || 1;
 
-  const searchQuery = query.get('searchQuery');
+  // const searchQuery = query.get('searchQuery');
 
   const theme = useTheme();
 
@@ -35,22 +34,18 @@ export default function SearchBar({ onSearchClick }) {
 
   // equivalent to searchCourse
   const handleSearchClick = () => {
-    
     // if the user doesn't type anything, return nothing
-    if(searchText.trim())
-    {
+    if (searchText.trim()) {
       // dispatch -> fetch search course
       dispatch(getCoursesBySearch({ searchText }));
-      let array = searchText.split(" ");
+      let array = searchText.split(' ');
       navigate(`/search?department=${array[0]}&number=${array[1]}`);
-
     }
     // else, navigate back to home page
-    else{
+    else {
       navigate('/');
     }
-  }
-
+  };
 
   return (
     <FilledInput

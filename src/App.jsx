@@ -18,12 +18,13 @@ export default function App() {
         <NavigationBar />
         <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0 }}>
           {/* Use Link to dynamically generate a list of routes */}
-          {courses.map((course) => (
-            <Link to={'courseDetails/' + course.id} />
+          {courses.map((course, i) => (
+            <Link key={i} to={'courseDetails/' + course.id} />
           ))}
 
           <Routes>
             <Route path='/' exact element={<HomePage />} />
+            <Route path='/search' exact element={<HomePage />} />
             <Route path='/auth' exact element={<Auth />} />
             <Route path='/courseDetails/:id' exact element={<CoursePage />} />
           </Routes>
