@@ -14,7 +14,7 @@ import TimeBlock from './TimeBlock';
  *   end: number,
  * }[]} props.events
  */
-export default function Timeline({ rangeStart = 8 * 60, rangeEnd = 17 * 60, events = [] }) {
+export default function Timeline({ rangeStart = 9 * 60, rangeEnd = 17 * 60, events = [] }) {
   return (
     <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
       {renderGridLines(rangeStart, rangeEnd)}

@@ -22,13 +22,11 @@ export default function CourseCard({ course }) {
             image='https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'
             title='Image title'
           />
-          <CardContent>
-            <Typography className={styles.title} variant='h6' gutterBottom>
+          <CardContent style={{ marginLeft: '12px' }}>
+            <Typography variant='h6' gutterBottom>
               {course.department} {course.number}
             </Typography>
-            <Typography className={styles.title} variant='h6' gutterBottom>
-              {course.name}
-            </Typography>
+            <Typography gutterBottom>{course.name}</Typography>
           </CardContent>
 
           <CardActions>
@@ -54,12 +52,19 @@ export default function CourseCard({ course }) {
             title='Image title'
           />
           <CardContent>
-            <Typography className={styles.description} variant='h6' gutterBottom>
-              {course.description}
+            <Typography variant='h6'>
+              {course.department} {course.number}
             </Typography>
+            <Typography
+              gutterBottom
+              style={{ fontStyle: 'italic', opacity: 0.75, marginBottom: '16px' }}
+            >
+              {course.name}
+            </Typography>
+            <Typography gutterBottom>{course.description}</Typography>
           </CardContent>
 
-          <CardActions classeName={styles.cardActions}>
+          <CardActions className={styles.cardActions}>
             <Button
               style={{ marginRight: '10px' }}
               variant='outlined'

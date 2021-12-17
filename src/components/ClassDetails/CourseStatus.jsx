@@ -7,7 +7,7 @@ function RenderStatus(canRegister) {
   let statusTitle;
   let statusColor;
   let statusInstruction;
-  if (canRegister == 0) {
+  if (canRegister === 0) {
     statusTitle = 'Cannot Register';
     statusColor = 'error';
     statusInstruction = 'You have not fullfilled the requirements. Please check it again!';
