@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Divider, useTheme } from '@mui/material';
-import ShoppingCart from './Scheduler/ShoppingCart';
-import RequirementList from './Scheduler/RequirementList';
+import ShoppingCart from './ShoppingCart';
+import RequirementList from './RequirementList';
 
 /**
  * The scheduler panel, which includes the shopping cart and the requirement list.

@@ -1,13 +1,5 @@
 import PropTypes from 'prop-types';
-
-// material-ui
 import { Box, Card, Typography } from '@mui/material';
-
-// project imports
-
-// import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
-
-// ===============================|| COLOR BOX ||=============================== //
 
 const TagBox = ({ bgcolor, title, data, dark }) => (
   <>

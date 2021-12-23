@@ -1,5 +1,5 @@
 // import everything from the api
-import * as api from '../api';
+import * as api from '../../api';
 // import { FETCH_ALL, FETCH_BY_SEARCH } from '../constants/constants';
 
 // thunks allow us to write async functions in React

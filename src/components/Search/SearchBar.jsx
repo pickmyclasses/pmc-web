@@ -4,7 +4,7 @@ import { alpha } from '@mui/material/styles';
 import { Clear, Search } from '@material-ui/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getCoursesBySearch } from '../actions/courses';
+import { getCoursesBySearch } from '../../redux/actions/courses';
 
 /**
  * The search-bar that sits in the middle of the navigation bar. Fires events when the user

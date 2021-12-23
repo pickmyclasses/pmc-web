@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Grow, Grid, Button } from '@mui/material';
+import { Grow, Grid, Button, Container } from '@mui/material';
 //import { useNavigate, useLocation } from 'react-router-dom';
 
 // Custom components
-import Scheduler from '../components/Scheduler';
+import Scheduler from '../components/Scheduler/Scheduler';
 import CourseCardGrid from '../components/CourseCardGrid/CourseCardGrid';
 
 // the actions
-import { getCourses } from '../actions/courses';
+import { getCourses } from '../redux/actions/courses';
 
 // This allows dispatching an action
 import { useDispatch } from 'react-redux';
@@ -25,25 +25,27 @@ const HomePage = () => {
   }, [dispatch]);
 
   return (
-    <Grid container sx={{ height: '100%' }}>
-      <Grid item xs sx={{ height: '100%', padding: '16px', overflow: 'auto' }}>
-        <Button onClick={() => setShouldShowScheduler(!shouldShowScheduler)}>
-          {shouldShowScheduler ? 'Hide' : 'Show'} scheduler
-        </Button>
-        <Grow in>
-          <Grid container justifyContent='space-between' alignItems='stretch'>
-            <Grid item xs={12}>
-              <CourseCardGrid setCurrentId={setCurrentId} />
+    <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0 }}>
+      <Grid container sx={{ height: '100%' }}>
+        <Grid item xs sx={{ height: '100%', padding: '16px', overflow: 'auto' }}>
+          <Button onClick={() => setShouldShowScheduler(!shouldShowScheduler)}>
+            {shouldShowScheduler ? 'Hide' : 'Show'} scheduler
+          </Button>
+          <Grow in>
+            <Grid container justifyContent='space-between' alignItems='stretch'>
+              <Grid item xs={12}>
+                <CourseCardGrid setCurrentId={setCurrentId} />
+              </Grid>
             </Grid>
-          </Grid>
-        </Grow>
-      </Grid>
-      {shouldShowScheduler && (
-        <Grid item xs={4} sx={{ padding: '24px' }}>
-          <Scheduler {...schedulerContentPlaceholder} />
+          </Grow>
         </Grid>
-      )}
-    </Grid>
+        {shouldShowScheduler && (
+          <Grid item xs={4} sx={{ padding: '24px' }}>
+            <Scheduler {...schedulerContentPlaceholder} />
+          </Grid>
+        )}
+      </Grid>
+    </Container>
   );
 };
 

@@ -1,15 +1,15 @@
 // TODO: draw the horizontal bars for student's ratings.
 
 import React, { useState, useEffect } from 'react';
-import { Grid } from '@mui/material';
+import { Grid, Container } from '@mui/material';
 import { useParams } from 'react-router-dom';
 //Project Imports
-import CourseDescriptionSubCard from '../components/ClassDetails/CourseDescriptionSubCard';
-import CourseEnrollmentSubCard from '../components/ClassDetails/CourseEnrollmentSubCard';
-import CourseDetails from '../components/ClassDetails/CourseDetails';
+import CourseDescriptionSubCard from '../components/CourseDetails/CourseDescriptionSubCard';
+import CourseEnrollmentSubCard from '../components/CourseDetails/CourseEnrollmentSubCard';
+import CourseDetails from '../components/CourseDetails/CourseDetails';
 import MainCard from '../components/Skeleton/MainCard';
-import CourseOverallRatings from '../components/ClassDetails/CourseOverallRatings';
-import CourseReviews from '../components/ClassDetails/CourseReviews';
+import CourseOverallRatings from '../components/CourseDetails/CourseOverallRatings';
+import CourseReviews from '../components/CourseDetails/CourseReviews';
 import axios from 'axios';
 import { URL } from '../constants/constants';
 //theme constant
@@ -68,29 +68,31 @@ export default function CoursePage() {
   //const CourseDataDict = [];
   InitCourseData();
   return (
-    <MainCard title={course.department + ' ' + course.number + ' ' + course.name}>
-      <Grid container spacing={gridSpacing}>
-        <Grid item xs={12} sm={12}>
-          <CourseDescriptionSubCard course={course}></CourseDescriptionSubCard>
-        </Grid>
+    <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0 }}>
+      <MainCard title={course.department + ' ' + course.number + ' ' + course.name}>
+        <Grid container spacing={gridSpacing}>
+          <Grid item xs={12} sm={12}>
+            <CourseDescriptionSubCard course={course}></CourseDescriptionSubCard>
+          </Grid>
 
-        <Grid item xs={12} sm={12}>
-          <CourseEnrollmentSubCard course={course}></CourseEnrollmentSubCard>
-        </Grid>
+          <Grid item xs={12} sm={12}>
+            <CourseEnrollmentSubCard course={course}></CourseEnrollmentSubCard>
+          </Grid>
 
-        <Grid item xs={6} sm={6}>
-          <CourseOverallRatings course={course}></CourseOverallRatings>
+          <Grid item xs={6} sm={6}>
+            <CourseOverallRatings course={course}></CourseOverallRatings>
+          </Grid>
+          <Grid item xs={6} sm={6}>
+            <CourseDetails course={course}></CourseDetails>
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <CourseReviews course={course}></CourseReviews>
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <CourseReviews course={course}></CourseReviews>
+          </Grid>
         </Grid>
-        <Grid item xs={6} sm={6}>
-          <CourseDetails course={course}></CourseDetails>
-        </Grid>
-        <Grid item xs={12} sm={12}>
-          <CourseReviews course={course}></CourseReviews>
-        </Grid>
-        <Grid item xs={12} sm={12}>
-          <CourseReviews course={course}></CourseReviews>
-        </Grid>
-      </Grid>
-    </MainCard>
+      </MainCard>
+    </Container>
   );
 }
