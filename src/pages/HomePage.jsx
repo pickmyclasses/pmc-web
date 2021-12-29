@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Grow, Grid, Button, Container } from '@mui/material';
 //import { useNavigate, useLocation } from 'react-router-dom';
-
-// Custom components
 import Scheduler from '../components/Scheduler/Scheduler';
 import CourseCardGrid from '../components/CourseCardGrid/CourseCardGrid';
-
-// the actions
 import { getCourses } from '../redux/actions/courses';
-
-// This allows dispatching an action
 import { useDispatch } from 'react-redux';
 
 const HomePage = () => {

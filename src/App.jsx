@@ -13,7 +13,7 @@ export default function App() {
       <BrowserRouter>
         <NavigationBar />
         <Routes>
-          <Route path='/' exact element={<HomePage />} />
+          <Route path='/' exact element={<WelcomePage />} />
           <Route path='/search' exact element={<HomePage />} />
           <Route path='/auth' exact element={<AuthPage />} />
           <Route path='/courseDetails/:id' exact element={<CoursePage />} />
