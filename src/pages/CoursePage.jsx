@@ -67,7 +67,7 @@ export default function CoursePage() {
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <CourseDetails courseInfo={{ course, classes }} />
+            <CourseDetails classes={classes} />
           </Grid>
           <Grid item xs={12} sm={12}>
             <CourseOverallRatings course={course}></CourseOverallRatings>
