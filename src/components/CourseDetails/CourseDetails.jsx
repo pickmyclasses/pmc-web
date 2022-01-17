@@ -37,36 +37,43 @@ function convert_weekdays(meet_date) {
   return weekday;
 }
 
-export default function CourseDetails({ course }) {
-  const meet_dates = course.date;
-  return (
-    <SubCard title=''>
-      <Grid item>
-        <MuiTypography variant='body1' gutterBottom>
-          Units: {course.credit_hour}
-        </MuiTypography>
-        <MuiTypography variant='body1' gutterBottom>
-          Location: {course.location}
-        </MuiTypography>
-        <MuiTypography variant='body1' gutterBottom>
-          Course Meet Time:{' '}
-          {meet_dates?.map((day) => (
-            <li>
-              {convert_weekdays(day)} {course.clock_start_time} - {course.clock_end_time}
-            </li>
-          ))}
-          {/* Course Meet Time: {meet_dates} */}
-        </MuiTypography>
-      </Grid>
+export default function CourseDetails(courseInfo) {
+  let course = courseInfo.courseInfo.course;
+  let classes = courseInfo.courseInfo.classes;
 
-      <Grid item>
-        <MuiTypography variant='body1' gutterBottom>
-          Course Components: Laboratory & Lecture
-        </MuiTypography>
-      </Grid>
-      <Grid item lg={15}>
-        <CourseChart />
-      </Grid>
-    </SubCard>
+  console.log(course);
+  console.log(classes);
+
+  //const meet_dates = course.date;
+  return (
+    <></>
+    // <SubCard title=''>
+    //   <Grid item>
+    //     <MuiTypography variant='body1' gutterBottom>
+    //       Units: {course.credit_hour}
+    //     </MuiTypography>
+    //     <MuiTypography variant='body1' gutterBottom>
+    //       Location: {course.location}
+    //     </MuiTypography>
+    //     <MuiTypography variant='body1' gutterBottom>
+    //       Course Meet Time:{' '}
+    //       {meet_dates?.map((day) => (
+    //         <li>
+    //           {convert_weekdays(day)} {course.clock_start_time} - {course.clock_end_time}
+    //         </li>
+    //       ))}
+    //       {/* Course Meet Time: {meet_dates} */}
+    //     </MuiTypography>
+    //   </Grid>
+
+    //   <Grid item>
+    //     <MuiTypography variant='body1' gutterBottom>
+    //       Course Components: Laboratory & Lecture
+    //     </MuiTypography>
+    //   </Grid>
+    //   <Grid item lg={15}>
+    //     <CourseChart />
+    //   </Grid>
+    // </SubCard>
   );
 }
