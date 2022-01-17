@@ -57,7 +57,7 @@
     }
   ],
 
-  "search":[
+  "search": [
     {
       "id": "1",
       "department": "CS",
@@ -157,12 +157,26 @@
       "semester": "spring",
       "year": "2022",
       "section": "10020",
-      "waitlist": "1", 
+      "waitlist": "1",
       "offer_date": ["mon", "wed"],
       "start_time": "10:45 am",
       "end_time": "12:00 pm",
       "location": "WEB 103L",
       "recommendation_score": "3.2",
+      "type": "1",
+      "professor": ["http://localhost:3000/professor/1"]
+    },
+    {
+      "course_id": "4",
+      "semester": "spring",
+      "year": "2022",
+      "section": "10021",
+      "waitlist": "5",
+      "offer_date": ["Thr", "Fri"],
+      "start_time": "10:45 am",
+      "end_time": "12:00 pm",
+      "location": "WEB 104",
+      "recommendation_score": "3.1",
       "type": "1",
       "professor": ["http://localhost:3000/professor/1"]
     }
