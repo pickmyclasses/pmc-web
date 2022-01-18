@@ -134,7 +134,7 @@
       "name": "Computer Systems (lab)",
       "associated_course": ["localhost:3000/course/2"],
       "description": "Lab for CS4400",
-      "credit_hour": "0",
+      "credit_hour": "3",
       "prerequesite": ["http://localhost:3000/course/1"],
       "review": "http://localhost:3000/review/2"
     },
@@ -143,10 +143,10 @@
       "department": "CS",
       "number": "1400",
       "name": "Programming Intro",
-      "associated_course": ["localhost:3000/course/2"],
+      "associated_course": ["CS 1410"],
       "description": "An introductory course for programming",
-      "credit_hour": "0",
-      "prerequesite": ["http://localhost:3000/course/1"],
+      "credit_hour": "4",
+      "prerequesite": ["CS 1030"],
       "review": "http://localhost:3000/review/2"
     }
   ],
@@ -176,7 +176,7 @@
       "start_time": "10:45 am",
       "end_time": "12:00 pm",
       "location": "WEB 104",
-      "recommendation_score": "3.1",
+      "recommendation_score": "3.9",
       "type": "1",
       "professor": ["http://localhost:3000/professor/1"]
     }

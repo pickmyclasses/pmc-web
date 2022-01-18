@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -21,7 +22,7 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-
+import CourseRating from '../../components/CourseDetails/CourseRating';
 import SubCard from '../Skeleton/SubCard';
 
 function createData(OfferDate, Location, Section, RecommendationScore, Professor) {
@@ -207,13 +208,13 @@ EnhancedTableToolbar.propTypes = {
 function initRowData(classes) {
   var rows = [];
   for (var i = 0; i < classes.length; i++) {
-    let row = createData(
-      classes[i].offer_date + ' ' + classes[i].start_time + '-' + classes[i].end_time,
-      classes[i].location,
-      classes[i].section,
-      classes[i].recommendation_Score,
-      classes[i].professor
-    );
+    let offerDate =
+      classes[i].offer_date + ' ' + classes[i].start_time + '-' + classes[i].end_time;
+    let location = classes[i].location;
+    let section = classes[i].section;
+    let recommendationScore = classes[i].recommendation_score;
+    let professor = classes[i].professor;
+    let row = createData(offerDate, location, section, recommendationScore, professor);
     rows.push(row);
   }
   return rows;
@@ -222,7 +223,7 @@ function initRowData(classes) {
 export default function EnhancedTable({ classes }) {
   rows = initRowData(classes);
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('Location');
+  const [orderBy, setOrderBy] = React.useState('offerDate');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -236,19 +237,19 @@ export default function EnhancedTable({ classes }) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = rows.map((n) => n.OfferDate);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, OfferDate) => {
+    const selectedIndex = selected.indexOf(OfferDate);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, OfferDate);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -259,7 +260,8 @@ export default function EnhancedTable({ classes }) {
         selected.slice(selectedIndex + 1)
       );
     }
-
+    //The selected class,
+    //TODO can use to send it to shopping cart
     setSelected(newSelected);
   };
 
@@ -276,7 +278,7 @@ export default function EnhancedTable({ classes }) {
     setDense(event.target.checked);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (OfferDate) => selected.indexOf(OfferDate) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -330,10 +332,13 @@ export default function EnhancedTable({ classes }) {
                       <TableCell component='th' id={labelId} scope='row' padding='none'>
                         {row.OfferDate}
                       </TableCell>
-                      <TableCell align='right'>{row.OfferDate}</TableCell>
                       <TableCell align='right'>{row.Location}</TableCell>
                       <TableCell align='right'>{row.Section}</TableCell>
-                      <TableCell align='right'>{row.RecommendationScore}</TableCell>
+                      <TableCell align='right'>
+                        <CourseRating value={row.RecommendationScore} />
+                      </TableCell>
+
+                      <TableCell align='right'>{row.Professor}</TableCell>
                     </TableRow>
                   );
                 })}

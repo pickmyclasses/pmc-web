@@ -53,7 +53,6 @@ export default function CoursePage() {
   }, []);
   // Make a request for a user with a given ID
 
-  //const CourseDataDict = [];
   return (
     <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0 }}>
       <MainCard title={course.department + ' ' + course.number + ' ' + course.name}>
