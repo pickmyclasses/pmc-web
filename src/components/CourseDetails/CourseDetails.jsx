@@ -1,79 +1,373 @@
-import React from 'react';
-import { Grid } from '@mui/material';
-import MuiTypography from '@mui/material/Typography';
-import CourseChart from './CourseBarChart';
+import * as React from 'react';
 
-//Project Imports
+import PropTypes from 'prop-types';
+import { alpha } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Checkbox from '@mui/material/Checkbox';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { visuallyHidden } from '@mui/utils';
+import CourseRating from '../../components/CourseDetails/CourseRating';
 import SubCard from '../Skeleton/SubCard';
 
-function convert_weekdays(meet_date) {
-  let weekday = null;
-  switch (meet_date) {
-    case '1':
-      weekday = 'Monday';
-      break;
-    case '2':
-      weekday = 'Tuesday';
-      break;
-    case '3':
-      weekday = 'Wednesday';
-      break;
-    case '4':
-      weekday = 'Thursday';
-      break;
-    case '5':
-      weekday = 'Friday';
-      break;
-    case '6':
-      weekday = 'Saturday';
-      break;
-    case '7':
-      weekday = 'Sunday';
-      break;
-    default:
-      weekday = 'Invalid';
-      break;
-  }
-  return weekday;
+function createData(OfferDate, Location, Section, RecommendationScore, Professor) {
+  return {
+    OfferDate,
+    Location,
+    Section,
+    RecommendationScore,
+    Professor,
+  };
 }
 
-export default function CourseDetails(courseInfo) {
-  let course = courseInfo.courseInfo.course;
-  let classes = courseInfo.courseInfo.classes;
+let rows;
 
-  console.log(course);
-  console.log(classes);
+function descendingComparator(a, b, orderBy) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
 
-  //const meet_dates = course.date;
+function getComparator(order, orderBy) {
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+// This method is created for cross-browser compatibility, if you don't
+// need to support IE11, you can use Array.prototype.sort() directly
+function stableSort(array, comparator) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) {
+      return order;
+    }
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map((el) => el[0]);
+}
+
+const headCells = [
+  {
+    id: 'OfferDate',
+    numeric: false,
+    disablePadding: true,
+    label: 'Offer Date',
+  },
+  {
+    id: 'Location',
+    numeric: true,
+    disablePadding: false,
+    label: 'Location',
+  },
+  {
+    id: 'Section',
+    numeric: true,
+    disablePadding: false,
+    label: 'Section',
+  },
+  {
+    id: 'RecommendationScore',
+    numeric: true,
+    disablePadding: false,
+    label: 'Recommendation Score',
+  },
+  {
+    id: 'Professor',
+    numeric: true,
+    disablePadding: false,
+    label: 'Professor',
+  },
+];
+
+function EnhancedTableHead(props) {
+  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
+  };
+
   return (
-    <></>
-    // <SubCard title=''>
-    //   <Grid item>
-    //     <MuiTypography variant='body1' gutterBottom>
-    //       Units: {course.credit_hour}
-    //     </MuiTypography>
-    //     <MuiTypography variant='body1' gutterBottom>
-    //       Location: {course.location}
-    //     </MuiTypography>
-    //     <MuiTypography variant='body1' gutterBottom>
-    //       Course Meet Time:{' '}
-    //       {meet_dates?.map((day) => (
-    //         <li>
-    //           {convert_weekdays(day)} {course.clock_start_time} - {course.clock_end_time}
-    //         </li>
-    //       ))}
-    //       {/* Course Meet Time: {meet_dates} */}
-    //     </MuiTypography>
-    //   </Grid>
+    <TableHead>
+      <TableRow>
+        <TableCell padding='checkbox'>
+          <Checkbox
+            color='primary'
+            indeterminate={numSelected > 0 && numSelected < rowCount}
+            checked={rowCount > 0 && numSelected === rowCount}
+            onChange={onSelectAllClick}
+            inputProps={{
+              'aria-label': 'select all desserts',
+            }}
+          />
+        </TableCell>
+        {headCells.map((headCell) => (
+          <TableCell
+            key={headCell.id}
+            align={headCell.numeric ? 'right' : 'left'}
+            padding={headCell.disablePadding ? 'none' : 'normal'}
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            <TableSortLabel
+              active={orderBy === headCell.id}
+              direction={orderBy === headCell.id ? order : 'asc'}
+              onClick={createSortHandler(headCell.id)}
+            >
+              {headCell.label}
+              {orderBy === headCell.id ? (
+                <Box component='span' sx={visuallyHidden}>
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                </Box>
+              ) : null}
+            </TableSortLabel>
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+}
 
-    //   <Grid item>
-    //     <MuiTypography variant='body1' gutterBottom>
-    //       Course Components: Laboratory & Lecture
-    //     </MuiTypography>
-    //   </Grid>
-    //   <Grid item lg={15}>
-    //     <CourseChart />
-    //   </Grid>
-    // </SubCard>
+EnhancedTableHead.propTypes = {
+  numSelected: PropTypes.number.isRequired,
+  onRequestSort: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes.number.isRequired,
+};
+
+const EnhancedTableToolbar = (props) => {
+  const { numSelected } = props;
+
+  return (
+    <Toolbar
+      sx={{
+        pl: { sm: 2 },
+        pr: { xs: 1, sm: 1 },
+        ...(numSelected > 0 && {
+          bgcolor: (theme) =>
+            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+        }),
+      }}
+    >
+      {numSelected > 0 ? (
+        <Typography
+          sx={{ flex: '1 1 100%' }}
+          color='inherit'
+          variant='subtitle1'
+          component='div'
+        >
+          {numSelected} selected
+        </Typography>
+      ) : (
+        <Typography sx={{ flex: '1 1 100%' }} variant='h6' id='tableTitle' component='div'>
+          Classes
+        </Typography>
+      )}
+
+      {numSelected > 0 ? (
+        <Tooltip title='Delete'>
+          <IconButton>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      ) : (
+        <Tooltip title='Filter list'>
+          <IconButton>
+            <FilterListIcon />
+          </IconButton>
+        </Tooltip>
+      )}
+    </Toolbar>
+  );
+};
+
+EnhancedTableToolbar.propTypes = {
+  numSelected: PropTypes.number.isRequired,
+};
+
+function initRowData(classes) {
+  var rows = [];
+  for (var i = 0; i < classes.length; i++) {
+    let offerDate =
+      classes[i].offer_date + ' ' + classes[i].start_time + '-' + classes[i].end_time;
+    let location = classes[i].location;
+    let section = classes[i].section;
+    let recommendationScore = classes[i].recommendation_score;
+    let professor = classes[i].professor;
+    let row = createData(offerDate, location, section, recommendationScore, professor);
+    rows.push(row);
+  }
+  return rows;
+}
+
+export default function EnhancedTable({ classes }) {
+  rows = initRowData(classes);
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('offerDate');
+  const [selected, setSelected] = React.useState([]);
+  const [page, setPage] = React.useState(0);
+  const [dense, setDense] = React.useState(false);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = rows.map((n) => n.OfferDate);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const handleClick = (event, OfferDate) => {
+    const selectedIndex = selected.indexOf(OfferDate);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, OfferDate);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+    //The selected class,
+    //TODO can use to send it to shopping cart
+    setSelected(newSelected);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked);
+  };
+
+  const isSelected = (OfferDate) => selected.indexOf(OfferDate) !== -1;
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Paper sx={{ width: '100%', mb: 2 }}>
+        <EnhancedTableToolbar numSelected={selected.length} />
+        <TableContainer>
+          <Table
+            sx={{ minWidth: 750 }}
+            aria-labelledby='tableTitle'
+            size={dense ? 'small' : 'medium'}
+          >
+            <EnhancedTableHead
+              numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onSelectAllClick={handleSelectAllClick}
+              onRequestSort={handleRequestSort}
+              rowCount={rows.length}
+            />
+            <TableBody>
+              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+                 rows.slice().sort(getComparator(order, orderBy)) */}
+              {stableSort(rows, getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row.OfferDate);
+                  const labelId = `enhanced-table-checkbox-${index}`;
+
+                  return (
+                    <TableRow
+                      hover
+                      onClick={(event) => handleClick(event, row.OfferDate)}
+                      role='checkbox'
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row.OfferDate}
+                      selected={isItemSelected}
+                    >
+                      <TableCell padding='checkbox'>
+                        <Checkbox
+                          color='primary'
+                          checked={isItemSelected}
+                          inputProps={{
+                            'aria-labelledby': labelId,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell component='th' id={labelId} scope='row' padding='none'>
+                        {row.OfferDate}
+                      </TableCell>
+                      <TableCell align='right'>{row.Location}</TableCell>
+                      <TableCell align='right'>{row.Section}</TableCell>
+                      <TableCell align='right'>
+                        <CourseRating value={row.RecommendationScore} />
+                      </TableCell>
+
+                      <TableCell align='right'>{row.Professor}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              {emptyRows > 0 && (
+                <TableRow
+                  style={{
+                    height: (dense ? 33 : 53) * emptyRows,
+                  }}
+                >
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component='div'
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+      <FormControlLabel
+        control={<Switch checked={dense} onChange={handleChangeDense} />}
+        label='Dense padding'
+      />
+    </Box>
   );
 }
