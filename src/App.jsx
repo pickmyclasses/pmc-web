@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import HomePage from './pages/HomePage';
 import AuthPage from './pages/AuthPage';
@@ -8,15 +8,28 @@ import NavigationBar from './components/NavigationBar/NavigationBar';
 import WelcomePage from './pages/WelcomePage';
 
 export default function App() {
+  const [shouldShowScheduler, setShouldShowScheduler] = useState(true);
+
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <BrowserRouter>
-        <NavigationBar />
+        <NavigationBar
+          isSchedulerShowing={shouldShowScheduler}
+          toggleScheduler={() => setShouldShowScheduler(!shouldShowScheduler)}
+        />
         <Routes>
           <Route path='/' exact element={<WelcomePage />} />
-          <Route path='/search' exact element={<HomePage />} />
+          <Route
+            path='/search'
+            exact
+            element={<HomePage shouldShowScheduler={shouldShowScheduler} />}
+          />
           <Route path='/auth' exact element={<AuthPage />} />
-          <Route path='/courseDetails/:id' exact element={<CoursePage />} />
+          <Route
+            path='/courseDetails/:id'
+            exact
+            element={<CoursePage shouldShowScheduler={shouldShowScheduler} />}
+          />
         </Routes>
       </BrowserRouter>
     </Box>

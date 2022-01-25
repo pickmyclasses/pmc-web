@@ -7,7 +7,7 @@ import Logo from '../Logo/Logo';
 import SearchBar from '../Search/SearchBar';
 import NavigationBarButtonGroup from './NavigationBarButtonGroup';
 
-export default function NavigationBar() {
+export default function NavigationBar({ isSchedulerShowing, toggleScheduler }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -49,7 +49,12 @@ export default function NavigationBar() {
                 <SearchBar />
               </Grid>
               <Grid item xs='auto'>
-                <NavigationBarButtonGroup userData={user?.result} logout={logout} />
+                <NavigationBarButtonGroup
+                  isSchedulerShowing={isSchedulerShowing}
+                  userData={user?.result}
+                  logout={logout}
+                  toggleScheduler={toggleScheduler}
+                />
               </Grid>
             </Grid>
           </Container>

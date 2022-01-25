@@ -10,20 +10,29 @@ import TimeBlock from './TimeBlock';
  * @param {number} props.rangeEnd The latest time of the day to show (default: 5 PM).
  * @param {{
  *   text: string,
+ *   data: object,
  *   start: number,
  *   end: number,
  * }[]} props.events
+ * @param {function(string):void} props.onTimeBlockMouseEnter
+ * @param {function(string):void} props.onTimeBlockMouseLeave
+ * @param {function(string):void} props.onTimeBlockClick
  */
-export default function Timeline({ rangeStart = 9 * 60, rangeEnd = 17 * 60, events = [] }) {
+export default function Timeline({
+  rangeStart = 9 * 60,
+  rangeEnd = 17 * 60,
+  events = [],
+  onTimeBlockClick = () => {},
+}) {
   return (
     <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
       {renderGridLines(rangeStart, rangeEnd)}
-      {events.map((event) => renderEvent(event, rangeStart, rangeEnd))}
+      {events.map((event) => renderEvent(event, rangeStart, rangeEnd, onTimeBlockClick))}
     </Box>
   );
 }
 
-const renderEvent = (event, rangeStart, rangeEnd) => {
+const renderEvent = (event, rangeStart, rangeEnd, onTimeBlockClick) => {
   if (event.start >= rangeEnd || event.end <= rangeStart) return null; // can't fit in range
 
   const rangeSize = rangeEnd - rangeStart;
@@ -35,6 +44,7 @@ const renderEvent = (event, rangeStart, rangeEnd) => {
       text={event.text}
       top={start * 100 + '%'}
       height={(end - start) * 100 + '%'}
+      onClick={() => onTimeBlockClick?.(event.text, event.data)}
     />
   );
 };
