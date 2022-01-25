@@ -10,6 +10,7 @@ import TimeBlock from './TimeBlock';
  * @param {number} props.rangeEnd The latest time of the day to show (default: 5 PM).
  * @param {{
  *   text: string,
+ *   data: object,
  *   start: number,
  *   end: number,
  * }[]} props.events
@@ -43,7 +44,7 @@ const renderEvent = (event, rangeStart, rangeEnd, onTimeBlockClick) => {
       text={event.text}
       top={start * 100 + '%'}
       height={(end - start) * 100 + '%'}
-      onClick={() => onTimeBlockClick?.(event.text)}
+      onClick={() => onTimeBlockClick?.(event.text, event.data)}
     />
   );
 };

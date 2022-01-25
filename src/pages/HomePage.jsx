@@ -6,8 +6,6 @@ import CourseCardGrid from '../components/CourseCardGrid/CourseCardGrid';
 import PageWithScheduler from './PageWithScheduler';
 
 const HomePage = ({ shouldShowScheduler }) => {
-  const [currentId, setCurrentId] = useState(null);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -21,10 +19,7 @@ const HomePage = ({ shouldShowScheduler }) => {
         <Grow in>
           <Grid container justifyContent='space-between' alignItems='stretch'>
             <Grid item xs={12}>
-              <CourseCardGrid
-                numColumns={shouldShowScheduler ? 3 : 4}
-                setCurrentId={setCurrentId}
-              />
+              <CourseCardGrid numColumns={shouldShowScheduler ? 3 : 4} />
             </Grid>
           </Grid>
         </Grow>
