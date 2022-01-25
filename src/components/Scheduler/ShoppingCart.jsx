@@ -23,20 +23,23 @@ const getEventsByDay = (courses) => {
   const eventsByDay = days.map(() => []);
   for (let course of courses) {
     for (let session of course.sessions) {
-      for (let day of session.days)
+      for (let day of session.days) {
         eventsByDay[day].push({
           text: course.name,
           start: session.start,
           end: session.end,
         });
+      }
     }
   }
   return eventsByDay;
 };
 
 const setTimeBlockStyles = (containerRef, setStyle) => {
-  for (let timeBlock of containerRef.current.querySelectorAll('button')) {
-    setStyle(timeBlock.style, timeBlock.getAttribute('text'));
+  if (containerRef?.current) {
+    for (let timeBlock of containerRef.current.querySelectorAll('button')) {
+      setStyle(timeBlock.style, timeBlock.getAttribute('text'));
+    }
   }
 };
 
@@ -91,8 +94,8 @@ export default function ShoppingCart({ scheduledCourses = [] }) {
 
   const handleDocumentClick = (e) => {
     if (
-      (containerRef?.current?.contains?.(e.target) && e.target.tagName === 'BUTTON') ||
-      selectionDetailCardRef?.current?.contains?.(e.target)
+      (containerRef?.current?.contains(e.target) && e.target.tagName === 'BUTTON') ||
+      selectionDetailCardRef?.current?.contains(e.target)
     ) {
       return;
     }
