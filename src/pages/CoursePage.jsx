@@ -12,6 +12,7 @@ import CourseOverallRatings from '../components/CourseDetails/CourseOverallRatin
 import CourseReviews from '../components/CourseDetails/CourseReviews';
 import axios from 'axios';
 import { URL } from '../constants/constants';
+import PageWithScheduler from './PageWithScheduler';
 //theme constant
 const gridSpacing = 3;
 const CourseDataDict = [];
@@ -20,7 +21,7 @@ const CourseDataDict = [];
  * This is the demo data that will be replaced by data fetched from the API calls from the back-end.
  */
 
-export default function CoursePage() {
+export default function CoursePage({ shouldShowScheduler }) {
   // console.log(props.match.params.id);
   let key = 'CS4400';
   let courseParam = useParams();
@@ -54,31 +55,33 @@ export default function CoursePage() {
   // Make a request for a user with a given ID
 
   return (
-    <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0 }}>
-      <MainCard title={course.department + ' ' + course.number + ' ' + course.name}>
-        <Grid container spacing={gridSpacing}>
-          <Grid item xs={12} sm={12}>
-            <CourseDescriptionSubCard course={course}></CourseDescriptionSubCard>
-          </Grid>
+    <PageWithScheduler shouldShowScheduler={shouldShowScheduler}>
+      <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0 }}>
+        <MainCard title={course.department + ' ' + course.number + ' ' + course.name}>
+          <Grid container spacing={gridSpacing}>
+            <Grid item xs={12} sm={12}>
+              <CourseDescriptionSubCard course={course}></CourseDescriptionSubCard>
+            </Grid>
 
-          <Grid item xs={12} sm={12}>
-            <CourseEnrollmentSubCard course={course}></CourseEnrollmentSubCard>
-          </Grid>
+            <Grid item xs={12} sm={12}>
+              <CourseEnrollmentSubCard course={course}></CourseEnrollmentSubCard>
+            </Grid>
 
-          <Grid item xs={12} sm={12}>
-            <CourseDetails classes={classes} />
+            <Grid item xs={12} sm={12}>
+              <CourseDetails classes={classes} />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <CourseOverallRatings course={course}></CourseOverallRatings>
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <CourseReviews course={course}></CourseReviews>
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <CourseReviews course={course}></CourseReviews>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={12}>
-            <CourseOverallRatings course={course}></CourseOverallRatings>
-          </Grid>
-          <Grid item xs={12} sm={12}>
-            <CourseReviews course={course}></CourseReviews>
-          </Grid>
-          <Grid item xs={12} sm={12}>
-            <CourseReviews course={course}></CourseReviews>
-          </Grid>
-        </Grid>
-      </MainCard>
-    </Container>
+        </MainCard>
+      </Container>
+    </PageWithScheduler>
   );
 }

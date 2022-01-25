@@ -7,7 +7,9 @@ import { useSelector } from 'react-redux';
 
 import CourseCard from './CourseCard/CourseCard';
 
-const CourseCardGrid = ({ setCurrentId }) => {
+// TODO: replace numColumns implementation with fixed-size cards (ex: fixed 120px rather than
+//     divided into 4 columns)
+const CourseCardGrid = ({ numColumns = 3, setCurrentId }) => {
   // the state.courses is from combineReducers({ courses: courses })
   const courses = useSelector((state) => state.courses);
 
@@ -16,7 +18,7 @@ const CourseCardGrid = ({ setCurrentId }) => {
   ) : (
     <Grid container alignItems='stretch' spacing={2}>
       {courses.map((course, i) => (
-        <Grid key={i} item xs={12} sm={4}>
+        <Grid key={i} item xs={12} sm={12 / numColumns}>
           <CourseCard course={course} setCurrentId={setCurrentId} />
         </Grid>
       ))}

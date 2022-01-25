@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Box, Grid, useTheme } from '@mui/material';
 import DayTimeline from './Timeline';
 
@@ -33,6 +33,12 @@ const getEventsByDay = (courses) => {
   return eventsByDay;
 };
 
+const setTimeBlockStyles = (containerRef, setStyle) => {
+  for (let timeBlock of containerRef.current.querySelectorAll('button')) {
+    setStyle(timeBlock.style, timeBlock.getAttribute('text'));
+  }
+};
+
 /**
  * The shopping cart resides in the top part of the scheduler.
  *
@@ -52,12 +58,14 @@ const getEventsByDay = (courses) => {
 export default function ShoppingCart({ scheduledCourses = [] }) {
   const theme = useTheme();
 
+  const containerRef = useRef();
+
   const eventsByDay = getEventsByDay(scheduledCourses);
 
   return (
     <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
       <div style={{ marginBottom: '24px' }}>Shopping Cart</div>
-      <Grid container sx={{ width: '100%', flex: 1 }}>
+      <Grid ref={containerRef} container sx={{ width: '100%', flex: 1 }}>
         {days.map(
           (day, i) =>
             day && ( // show timelines only for non-null days
@@ -73,7 +81,15 @@ export default function ShoppingCart({ scheduledCourses = [] }) {
                     flexDirection: 'column',
                   }}
                 >
-                  <DayTimeline events={eventsByDay[i]} />
+                  <DayTimeline
+                    events={eventsByDay[i]}
+                    onTimeBlockClick={(targetText) =>
+                      setTimeBlockStyles(
+                        containerRef,
+                        (style, text) => (style['opacity'] = text === targetText ? 1 : 0.333)
+                      )
+                    }
+                  />
                 </Box>
               </Grid>
             )

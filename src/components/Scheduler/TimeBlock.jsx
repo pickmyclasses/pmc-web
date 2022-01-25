@@ -1,28 +1,26 @@
 import React from 'react';
-import { useTheme } from '@mui/material';
+import { Button } from '@mui/material';
 
-export default function TimeBlock({ text, top, height }) {
-  const theme = useTheme();
-
+export default function TimeBlock({ text, top, height, onClick }) {
   return (
-    <div
-      style={{
+    <Button
+      text={text}
+      variant='outlined'
+      sx={{
         top,
         height,
-        width: '87.5%',
-        left: '6.25%',
-        display: 'block',
+        width: '83.3%',
+        minWidth: 0,
+        left: '8.33%',
         position: 'absolute',
+        fontWeight: 'normal',
         fontSize: 'x-small',
         wordSpacing: '100vw',
-        border: '1px solid',
-        boxSizing: 'border-box',
-        borderColor: theme.palette.text.disabled,
-        borderRadius: '4px',
-        backgroundColor: theme.palette.common.white,
+        filter: 'grayscale(1) brightness(0.5)',
       }}
+      onClick={onClick}
     >
-      <div style={{ lineHeight: '1.25em', textAlign: 'center', marginTop: '8px' }}>{text}</div>
-    </div>
+      <div style={{ lineHeight: '1.25em', letterSpacing: 0, marginTop: '1px' }}>{text}</div>
+    </Button>
   );
 }
