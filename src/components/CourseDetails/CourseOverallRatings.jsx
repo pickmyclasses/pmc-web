@@ -3,6 +3,7 @@ import { Grid } from '@mui/material';
 import MuiTypography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 import CourseChart from './CourseBarChart';
+import CourseAddReview from './CourseAddReview';
 
 //Project Imports
 import SubCard from '../Skeleton/SubCard';
@@ -50,7 +51,7 @@ export default function CourseOverallRatings({ course }) {
           <Rating name='read-only' precision={0.1} value={rating} readOnly size='large' />
         </Grid>
         <Grid item>
-          <CourseChart />
+          <CourseAddReview />
         </Grid>
       </Grid>
     </SubCard>

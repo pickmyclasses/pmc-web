@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import CoursePage from './pages/CoursePage';
 import NavigationBar from './components/NavigationBar/NavigationBar';
 import WelcomePage from './pages/WelcomePage';
+import ReviewPage from './pages/ReviewPage';
 
 export default function App() {
   const [shouldShowScheduler, setShouldShowScheduler] = useState(true);
@@ -29,6 +30,11 @@ export default function App() {
             path='/courseDetails/:id'
             exact
             element={<CoursePage shouldShowScheduler={shouldShowScheduler} />}
+          />
+          <Route
+            path='/courseDetails/:id/review'
+            exact
+            element={<ReviewPage shouldShowScheduler={!shouldShowScheduler} />}
           />
         </Routes>
       </BrowserRouter>
