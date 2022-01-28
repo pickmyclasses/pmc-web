@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Divider, useTheme } from '@mui/material';
-import { fetchScheduledClasses } from '../../api';
 import ShoppingCart from './ShoppingCart';
 import RequirementList from './RequirementList';
 

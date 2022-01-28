@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Box, Grid, Grow } from '@mui/material';
 import { getCourses } from '../redux/actions/courses';
 import { useDispatch } from 'react-redux';
 import CourseCardGrid from '../components/CourseCardGrid/CourseCardGrid';
 import PageWithScheduler from './PageWithScheduler';
 
-const HomePage = ({ shouldShowScheduler }) => {
+export default function HomePage({ shouldShowScheduler }) {
   const dispatch = useDispatch();
 
+  // TODO (QC): Discuss whether we still want to use Redux. If not, refactor the following to
+  // use the fetch functions in /src/api directly.
   useEffect(() => {
     dispatch(getCourses());
-    console.log('dispatch(getCourses)) was called at HomePage');
   }, [dispatch]);
 
   return (
@@ -26,6 +27,4 @@ const HomePage = ({ shouldShowScheduler }) => {
       </Box>
     </PageWithScheduler>
   );
-};
-
-export default HomePage;
+}

@@ -27,9 +27,8 @@ export const isFalsy = (value) => (value === 0 ? false : !!value);
  * use this whenever the data only loads once per load
  */
 export const useMount = (callback) => {
-  useEffect(() => {
-    callback();
-  }, []);
+  // eslint-disable-next-line
+  useEffect(() => callback(), []);
 };
 
 /**

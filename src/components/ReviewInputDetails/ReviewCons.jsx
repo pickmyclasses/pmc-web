@@ -1,15 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import Rating from '@mui/material/Rating';
-import Box from '@mui/material/Box';
-
-import { Grid } from '@mui/material';
-import MuiTypography from '@mui/material/Typography';
-import SubCard from '../Skeleton/SubCard';
+import React from 'react';
+import { Box, Grid, TextField, Typography } from '@mui/material';
+import { ArrowCircleDown } from '@mui/icons-material';
 import { gridSpacing } from '../../constants/constants';
-import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
-import TextField from '@mui/material/TextField';
+import SubCard from '../Skeleton/SubCard';
 
-export default function ReviewCons({ course }) {
+export default function ReviewCons() {
   const [value, setValue] = React.useState('');
 
   const handleChange = (event) => {
@@ -28,11 +23,11 @@ export default function ReviewCons({ course }) {
           alignItems='center'
           justifyContent='center'
         >
-          <MuiTypography variant='h6' gutterBottom>
+          <Typography variant='h6' gutterBottom>
             What do you dislike?
-          </MuiTypography>
+          </Typography>
           <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-            <ArrowCircleDownIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+            <ArrowCircleDown sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
           </Box>
 
           <TextField

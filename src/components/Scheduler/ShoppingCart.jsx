@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import { fetchClassByID, fetchClassesInShoppingCart, fetchCourseByID2 } from '../../api';
+import { fetchClassByID, fetchClassesInShoppingCart, fetchCourseByID } from '../../api';
 import Timeline from './Timeline';
-import CourseCard from '../CourseCardGrid/CourseCard/CourseCard';
 import { parseDay, parseTime } from '../../utils';
 
 /**
@@ -22,7 +21,6 @@ import { parseDay, parseTime } from '../../utils';
  * }} props
  */
 export default function ShoppingCart() {
-  const [selectedCourse, setSelectedCourse] = useState(null);
   const [sessions, setSessions] = useState(null);
 
   useEffect(() => fetchSessions(setSessions), []);
@@ -39,30 +37,9 @@ export default function ShoppingCart() {
     >
       <div style={{ marginBottom: '24px' }}>Shopping Cart</div>
       <Timeline events={sessions} />
-      {selectedCourse && (
-        <Box
-          sx={{
-            position: 'absolute',
-            width: '288px',
-            height: '360px',
-            left: '-288px',
-            top: 'calc(50% - 180px)',
-          }}
-        >
-          <CourseCard course={selectedCourse} />
-        </Box>
-      )}
     </Box>
   );
 }
-
-const setTimeBlockStyles = (containerRef, setStyle) => {
-  if (containerRef?.current) {
-    for (let timeBlock of containerRef.current.querySelectorAll('button')) {
-      setStyle(timeBlock.style, timeBlock.getAttribute('text'));
-    }
-  }
-};
 
 /**
  * Fetches the data for shopping cart and generate a list of sessions for each weekday.
@@ -74,7 +51,7 @@ const fetchSessions = (onFetched) => {
       classes = classes.map(({ data }) => data[0]);
 
       const courseIDs = [...new Set(classes.map((classData) => classData['course_id']))];
-      Promise.all(courseIDs.map((id) => fetchCourseByID2(id))).then((courses) => {
+      Promise.all(courseIDs.map((id) => fetchCourseByID(id))).then((courses) => {
         const courseByID = new Map(courses.map(({ data }) => [data['id'], data]));
 
         const sessions = [];

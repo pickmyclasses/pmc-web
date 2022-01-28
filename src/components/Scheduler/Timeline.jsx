@@ -49,8 +49,13 @@ export default function Timeline({
   }, []);
 
   const renderColumnTitle = (key, title) => (
-    <Grid key={'cl' + key} item xs>
-      <div style={{ textAlign: 'center', color: theme.palette.text.secondary }}>{title}</div>
+    <Grid
+      key={'cl' + key}
+      item
+      xs
+      sx={{ textAlign: 'center', color: theme.palette.text.secondary }}
+    >
+      {title}
     </Grid>
   );
 
@@ -89,27 +94,27 @@ export default function Timeline({
     for (let time = Math.ceil(rangeStart / 3600) * 3600; time < rangeEnd; time += 3600) {
       const y = (time - rangeStart) / (rangeEnd - rangeStart);
       gridLines.push(
-        <>
-          <Divider
-            key={'gl' + time}
-            sx={{ position: 'absolute', top: y * 100 + '%', width: '100%', opacity: 0.5 }}
-          />
-          <div
-            key={'glt' + time}
-            style={{
-              position: 'absolute',
-              top: y * 100 + '%',
-              left: 'calc(100% + 4px)',
-              marginTop: '-6px',
-              width: '24px',
-              fontSize: '12px',
-              opacity: 0.5,
-            }}
-          >
-            {(time / 3600) % 12 || 12}
-            {time == 43200 && 'p'}
-          </div>
-        </>
+        <Divider
+          key={'gl' + time}
+          sx={{ position: 'absolute', top: y * 100 + '%', width: '100%', opacity: 0.5 }}
+        />
+      );
+      gridLines.push(
+        <div
+          key={'glt' + time}
+          style={{
+            position: 'absolute',
+            top: y * 100 + '%',
+            left: 'calc(100% + 4px)',
+            marginTop: '-6px',
+            width: '24px',
+            fontSize: '12px',
+            opacity: 0.5,
+          }}
+        >
+          {(time / 3600) % 12 || 12}
+          {time === 43200 && 'p'}
+        </div>
       );
     }
     return gridLines;

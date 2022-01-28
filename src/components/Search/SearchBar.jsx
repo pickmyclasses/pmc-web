@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Divider, FilledInput, IconButton, colors, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { Clear, Search } from '@material-ui/icons';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { getCoursesBySearch } from '../../redux/actions/courses';
+
+// function useQuery() {
+//   return new URLSearchParams(useLocation().search);
+// }
 
 /**
  * The search-bar that sits in the middle of the navigation bar. Fires events when the user
@@ -12,12 +16,8 @@ import { getCoursesBySearch } from '../../redux/actions/courses';
  *
  * @param {{onSearchClick: (searchText: string) => void}} props
  */
-
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
-
-export default function SearchBar({ onSearchClick }) {
+// export default function SearchBar({ onSearchClick }) {
+export default function SearchBar() {
   const dispatch = useDispatch();
 
   // const query = useQuery();
