@@ -1,14 +1,9 @@
 import React from 'react';
-import { Grid } from '@mui/material';
-import MuiTypography from '@mui/material/Typography';
-import Rating from '@mui/material/Rating';
-import CourseChart from './CourseBarChart';
+import { Grid, Rating, Typography } from '@mui/material';
+import SubCard from '../Skeleton/SubCard';
 import CourseAddReview from './CourseAddReview';
 
-//Project Imports
-import SubCard from '../Skeleton/SubCard';
-
-function ComputeRatingNum(course) {
+function computeRatingNum(course) {
   // let totalNum = 0;
   // for (let num of course.overall_ratings) {
   //   totalNum += num;
@@ -17,8 +12,8 @@ function ComputeRatingNum(course) {
   return 0;
 }
 
-function ComputeOverallRating(course) {
-  // let totalNum = ComputeRatingNum(course);
+function computeOverallRating(course) {
+  // let totalNum = computeRatingNum(course);
 
   // return (
   //   (courseData.overall_ratings[0] +
@@ -32,20 +27,20 @@ function ComputeOverallRating(course) {
 }
 
 export default function CourseOverallRatings({ course }) {
-  let rating = ComputeOverallRating(course);
+  let rating = computeOverallRating(course);
 
   return (
     <SubCard title=''>
       <Grid container direction='column' spacing={1}>
         <Grid item>
-          <MuiTypography variant='h4' gutterBottom>
+          <Typography variant='h4' gutterBottom>
             {rating}/5
-          </MuiTypography>
+          </Typography>
         </Grid>
         <Grid item>
-          <MuiTypography variant='subtitle1' gutterBottom>
-            Overall Quality based on {ComputeRatingNum(course)} ratings
-          </MuiTypography>
+          <Typography variant='subtitle1' gutterBottom>
+            Overall Quality based on {computeRatingNum(course)} ratings
+          </Typography>
         </Grid>
         <Grid item>
           <Rating name='read-only' precision={0.1} value={rating} readOnly size='large' />

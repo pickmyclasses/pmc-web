@@ -1,12 +1,8 @@
 import React from 'react';
-import { Grid } from '@mui/material';
-import Typography from '@mui/material/Typography';
+import { Divider, Grid, Typography } from '@mui/material';
 import CourseStatus from './CourseStatus';
-//Project Imports
 import SubCard from '../Skeleton/SubCard';
 import CourseChip from '../../components/CourseDetails/CourseChip';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
 
 //TODO 1: loop through the course dynamically to check the enrollment requirement
 //TODO 2: Assign different colors to the tag e.g red to show the user hasn't completed the class, blue vice-versa

@@ -107,7 +107,7 @@ export default function Timeline({
             }}
           >
             {(time / 3600) % 12 || 12}
-            {time == 43200 && 'p'}
+            {time === 43200 && 'p'}
           </div>
         </>
       );

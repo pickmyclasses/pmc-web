@@ -17,8 +17,8 @@ export default function TimeDataCard({
       <h3>{title}</h3>
       <div style={{ marginTop: '-16px' }}>{subtitle}</div>
       <Divider sx={{ margin: '12px 0px' }} />
-      {descriptions.map((description) => (
-        <div>{description}</div>
+      {descriptions.map((description, i) => (
+        <div key={i}>{description}</div>
       ))}
       <Box sx={{ marginTop: '16px', display: 'flex', flexDirection: 'row' }}>
         <Button

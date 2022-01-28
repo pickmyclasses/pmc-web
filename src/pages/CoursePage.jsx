@@ -1,56 +1,32 @@
-// TODO: draw the horizontal bars for student's ratings.
-import PageWithScheduler from '../pages/PageWithScheduler';
 import React, { useState, useEffect } from 'react';
-import { Grid, Container } from '@mui/material';
 import { useParams } from 'react-router-dom';
-//Project Imports
+import { Grid, Container } from '@mui/material';
+// Project Imports
+import { fetchCourseByID, fetchClassesByCourseID } from '../../src/api/index';
+import PageWithScheduler from '../pages/PageWithScheduler';
 import CourseDescriptionSubCard from '../components/CourseDetails/CourseDescriptionSubCard';
 import CourseEnrollmentSubCard from '../components/CourseDetails/CourseEnrollmentSubCard';
 import CourseDetails from '../components/CourseDetails/CourseDetails';
 import MainCard from '../components/Skeleton/MainCard';
 import CourseOverallRatings from '../components/CourseDetails/CourseOverallRatings';
 import CourseReviews from '../components/CourseDetails/CourseReviews';
-import { fetchCourseByID } from '../../src/api/index';
-import axios from 'axios';
-//theme constant
-import { gridSpacing } from '../constants/constants';
 import CourseContext from '../components/CourseDetails/CourseContext';
+// Theme constants
+import { gridSpacing } from '../constants/constants';
 
-/*
- * This is the demo data that will be replaced by data fetched from the API calls from the back-end.
- */
+// TODO (KS): draw the horizontal bars for student's ratings.
 
 export default function CoursePage({ shouldShowScheduler }) {
-  let key = 'CS4400';
-  let courseParam = useParams();
   const [course, setCourse] = useState([]);
   const [classes, setClasses] = useState([]);
 
+  const courseParam = useParams();
+
   useEffect(() => {
-    // GET request using axios inside useEffect React hook
-    axios
-      // empty dependency array means this effect will only run once (like componentDidMount in classes)
-      .get(`http://localhost:3000/class?id=${courseParam.id}`)
-      .then((response) => {
-        setClasses(response.data);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      });
-  }, []);
-  useEffect(() => {
-    // GET request using axios inside useEffect React hook
-    axios
-      .get(`http://localhost:3000/course/${courseParam.id}`)
-      .then((response) => {
-        setCourse(response.data);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      });
-  }, []);
+    fetchCourseByID(courseParam.id).then(({ data }) => setCourse(data));
+    fetchClassesByCourseID(courseParam.id).then(({ data }) => setClasses(data));
+  }, [courseParam]);
+
   // Record the ID of the course into the context (global variable)
   CourseContext.courseID = course.id;
   return (
