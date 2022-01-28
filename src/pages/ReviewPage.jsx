@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { createContext } from 'react';
 
 import { Grid, Container } from '@mui/material';
-import { useParams } from 'react-router-dom';
 //Project Imports
 
 import ReviewDescription from '../components/ReviewInputDetails/ReviewDescription';
@@ -31,7 +29,7 @@ export default function ReviewPage({ shouldShowScheduler }) {
       });
   }, []);
   return (
-    <PageWithScheduler shouldShowScheduler={shouldShowScheduler}>
+    <PageWithScheduler shouldShowScheduler={!shouldShowScheduler}>
       <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0 }}>
         <MainCard>
           <Grid container spacing={gridSpacing}>
@@ -50,7 +48,6 @@ export default function ReviewPage({ shouldShowScheduler }) {
           </Grid>
         </MainCard>
       </Container>
-      ;
     </PageWithScheduler>
   );
 }

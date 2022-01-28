@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 
-import { Grid, Container } from '@mui/material';
+import { Grid } from '@mui/material';
 import MuiTypography from '@mui/material/Typography';
 import SubCard from '../Skeleton/SubCard';
-import StarIcon from '@mui/icons-material/Star';
 import { gridSpacing } from '../../constants/constants';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import TextField from '@mui/material/TextField';

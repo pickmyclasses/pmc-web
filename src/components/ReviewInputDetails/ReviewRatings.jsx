@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
+import React from 'react';
 
-import { Grid, Container } from '@mui/material';
+import { Grid } from '@mui/material';
 import MuiTypography from '@mui/material/Typography';
 import SubCard from '../Skeleton/SubCard';
 import StarIcon from '@mui/icons-material/Star';
@@ -24,7 +24,6 @@ const labels = {
 export default function ReviewRatings({ course }) {
   const [value, setValue] = React.useState(2);
   const [hover, setHover] = React.useState(-1);
-  console.log(course);
   return (
     <SubCard>
       <Grid container spacing={gridSpacing}>
