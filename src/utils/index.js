@@ -47,3 +47,16 @@ export const useDebounce = (value, delay) => {
   }, [value, delay]);
   return debouncedValue;
 };
+
+/**
+ * Returns the number of seconds past midnight a string of time represents.
+ * @example parseTime('12:01 AM') // 60
+ */
+export const parseTime = (s) => new Date(`1970-01-01 ${s} Z`).getTime() / 1000;
+
+/**
+ * Returns the numerical representation of a weekday given its name or abbreviation.
+ * @example parseDay('Weds') // 3
+ */
+export const parseDay = (s) =>
+  ['su', 'm', 'tu', 'w', 'th', 'f', 'sa'].findIndex((day) => s.toLowerCase().startsWith(day));

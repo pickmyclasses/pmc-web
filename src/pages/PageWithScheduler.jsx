@@ -21,38 +21,6 @@ export default function PageWithScheduler({ children, shouldShowScheduler }) {
 
 // TODO: convert this to a query for backend INSIDE the Scheduler logic (NOT in HomePage).
 const schedulerContentPlaceholder = {
-  scheduledCourses: [
-    {
-      name: 'CS 4000',
-      title: 'Capstone Design',
-      sessions: [
-        {
-          component: 'Lecture',
-          days: [1, 3, 5],
-          start: 10 * 60 + 45,
-          end: 11 * 60 + 35,
-        },
-      ],
-    },
-    {
-      name: 'CS 4400',
-      title: 'Computer Systems',
-      sessions: [
-        {
-          component: 'Lecture',
-          days: [1, 3],
-          start: 11 * 60 + 50,
-          end: 13 * 60 + 10,
-        },
-        {
-          component: 'Laboratory',
-          days: [4],
-          start: 12 * 60 + 55,
-          end: 13 * 60 + 45,
-        },
-      ],
-    },
-  ],
   requirements: [
     { title: 'Major Requirements', progress: 3, total: 6 },
     { title: 'Major Electives', progress: 4, total: 7 },
