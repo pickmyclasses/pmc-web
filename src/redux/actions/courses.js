@@ -8,7 +8,7 @@ import * as api from '../../api';
 export const getCourses = () => async (dispatch) => {
   try {
     // data - the array of course JSONs
-    const { data } = await api.fetchCourses();
+    const { data } = await api.fetchAllCourses();
 
     const action = { type: 'FETCH_ALL', payload: data };
 

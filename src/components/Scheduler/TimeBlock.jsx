@@ -1,24 +1,23 @@
 import React from 'react';
 import { Button } from '@mui/material';
 
-export default function TimeBlock({ text, data, top, height, onClick }) {
+export default function TimeBlock({ text, data, sx, onMouseEnter, onMouseLeave, onClick }) {
   return (
     <Button
       text={text}
       variant='outlined'
       sx={{
-        top,
-        height,
-        width: '83.3%',
+        ...sx,
         minWidth: 0,
-        left: '8.33%',
         position: 'absolute',
-        fontWeight: 'normal',
+        // fontWeight: 'normal',
+        borderRadius: '0px',
         fontSize: 'x-small',
         wordSpacing: '100vw',
-        filter: 'grayscale(1) brightness(0.5)',
       }}
-      onClick={() => onClick(text, data)}
+      onMouseEnter={() => onMouseEnter?.(text, data)}
+      onMouseLeave={() => onMouseLeave?.(text, data)}
+      onClick={() => onClick?.(text, data)}
     >
       <div
         style={{
