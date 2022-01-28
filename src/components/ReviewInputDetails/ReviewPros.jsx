@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import { Grid, Container } from '@mui/material';
 import MuiTypography from '@mui/material/Typography';
 import SubCard from '../Skeleton/SubCard';
-import StarIcon from '@mui/icons-material/Star';
 import { gridSpacing } from '../../constants/constants';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import TextField from '@mui/material/TextField';
