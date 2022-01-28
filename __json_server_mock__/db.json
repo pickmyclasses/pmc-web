@@ -153,6 +153,36 @@
 
   "class": [
     {
+      "id": "4",
+      "course_id": "2",
+      "semester": "spring",
+      "year": "2022",
+      "section": "10020",
+      "waitlist": "1",
+      "offer_date": ["Mon", "Wed"],
+      "start_time": "10:45 AM",
+      "end_time": "12:05 PM",
+      "location": "WEB 103L",
+      "recommendation_score": "3.2",
+      "type": "1",
+      "professor": ["http://localhost:3000/professor/1"]
+    },
+    {
+      "id": "4",
+      "course_id": "2",
+      "semester": "spring",
+      "year": "2022",
+      "section": "10021",
+      "waitlist": "5",
+      "offer_date": ["Thu"],
+      "start_time": "11:50 AM",
+      "end_time": "12:40 PM",
+      "location": "WEB 104",
+      "recommendation_score": "3.9",
+      "type": "1",
+      "professor": ["http://localhost:3000/professor/1"]
+    },
+    {
       "id": "10020",
       "course_id": "2",
       "semester": "spring",
