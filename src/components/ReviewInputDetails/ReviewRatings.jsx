@@ -10,19 +10,13 @@ import { gridSpacing } from '../../constants/constants';
 
 const labels = {
   1: 'Useless',
-  2: 'Useless+',
-  3: 'Poor',
-  4: 'Poor+',
-  5: 'Ok',
-  6: 'Ok+',
-  7: 'Good',
-  8: 'Good+',
-  9: 'Excellent',
-  10: 'Excellent+',
+  2: 'Poor',
+  3: 'Ok',
+  4: 'Good',
+  5: 'Excellent',
 };
 
-export default function ReviewRatings({ course }) {
-  const [value, setValue] = React.useState(2);
+export default function ReviewRatings({ course, value, onChange }) {
   const [hover, setHover] = React.useState(-1);
   return (
     <SubCard>
@@ -57,13 +51,13 @@ export default function ReviewRatings({ course }) {
             value={value}
             precision={1}
             onChange={(event, newValue) => {
-              setValue(newValue);
+              onChange(newValue);
             }}
             onChangeActive={(event, newHover) => {
               setHover(newHover);
             }}
             defaultValue={5}
-            max={10}
+            max={5}
             emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize='inherit' />}
           />{' '}
           {value !== null && <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>}

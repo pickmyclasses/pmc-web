@@ -10,9 +10,13 @@ import ReviewCons from '../components/ReviewInputDetails/ReviewCons';
 import CourseContext from '../components/CourseDetails/CourseContext';
 import MainCard from '../components/Skeleton/MainCard';
 import { gridSpacing } from '../constants/constants';
+import Button from '@mui/material/Button';
 
 export default function ReviewPage({ shouldShowScheduler }) {
   const [course, setCourse] = useState([]);
+  const [ratingValue, setRatingValue] = useState(3);
+  const [proValue, setProValue] = useState([]);
+  const [conValue, setConValue] = useState([]);
 
   useEffect(() => {
     fetchCourseByID(CourseContext.courseID).then(({ data }) => setCourse(data));
@@ -27,13 +31,42 @@ export default function ReviewPage({ shouldShowScheduler }) {
               <ReviewDescription course={course} />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <ReviewRatings course={course} />
+              <ReviewRatings
+                course={course}
+                value={ratingValue}
+                onChange={(ratingValue) => {
+                  setRatingValue(ratingValue);
+                }}
+              />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <ReviewPros course={course} />
+              <ReviewPros
+                value={proValue}
+                onChange={(proValue) => {
+                  setProValue(proValue);
+                }}
+              />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <ReviewCons course={course} />
+              <ReviewCons
+                value={conValue}
+                onChange={(conValue) => {
+                  setConValue(conValue);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              {proValue}
+            </Grid>
+            <Grid
+              item
+              container
+              spacing={0}
+              direction='column'
+              alignItems='center'
+              justifyContent='center'
+            >
+              <Button variant='contained'>Submit</Button>{' '}
             </Grid>
           </Grid>
         </MainCard>
