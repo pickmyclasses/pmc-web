@@ -4,13 +4,7 @@ import { ArrowCircleDown } from '@mui/icons-material';
 import { gridSpacing } from '../../constants/constants';
 import SubCard from '../Skeleton/SubCard';
 
-export default function ReviewCons() {
-  const [value, setValue] = React.useState('');
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
-
+export default function ReviewCons({ value, onChange }) {
   return (
     <SubCard>
       <Grid container spacing={gridSpacing}>
@@ -37,7 +31,9 @@ export default function ReviewCons() {
             multiline
             maxRows={4}
             value={value}
-            onChange={handleChange}
+            onChange={(event, newValue) => {
+              onChange(newValue);
+            }}
           />
         </Grid>
       </Grid>
