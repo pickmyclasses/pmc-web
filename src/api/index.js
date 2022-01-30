@@ -1,24 +1,44 @@
 import axios from 'axios';
-import { URL } from '../constants/constants';
 
-export const fetchCourseByID = (courseID) => axios.get(`${URL}/course/${courseID}`);
+export const fetchCourseByID = (courseID) => axios.get(`/course/${courseID}`);
 
-export const fetchAllCourses = () => axios.get(`${URL}/course`);
+export const fetchAllCourses = () => axios.get('/course');
 
-export const fetchCoursesBySearch = ({ department, number }) =>
-  axios.get(`${URL}/search?department=${department}&number=${number}`);
+export const fetchHomePageCourses = () => fakeFetchHomePageCourses();
 
-export const fetchClassByID = (classID) => axios.get(`${URL}/class?id=${classID}`);
+// TODO (QC): Get rid of this, although it might be hard to.
+const fakeFetchHomePageCourses = () =>
+  new Promise((onFetched) => {
+    const recommendedCategories = {
+      'Major Requirements To Go': [22960, 22963],
+      'Hot CS Electives': [22961, 22971, 22951, 22970, 22968],
+      'Hot Gen-Ed Courses': [26280, 24783, 25073, 24764, 30556, 28270],
+    };
 
-// TODO (QC): This query is incorrect. We want to fetch classes that belong to some courseID,
-// not classes with courseID. However, the JSON server does not respond to the correct query
-// ('/course/<courseID>/class/list'), and we need to fix this.
-export const fetchClassesByCourseID = (courseID) => fetchClassByID(courseID);
-// export const fetchClassesByCourseID = (courseID) =>
-//   axios.get(`${URL}/course/${courseID}/class/list`);
+    onFetched(
+      Object.entries(recommendedCategories).map(([category, courseIDs]) => ({
+        category,
+        courseIDs,
+      }))
+    );
+  });
+
+export const fetchCoursesBySearch = (query) => fakeFetchCoursesBySearch(query);
+
+// TODO (QC): Get rid of this also.
+const fakeFetchCoursesBySearch = () =>
+  new Promise((onFetched) =>
+    onFetched([
+      23000, 23068, 23063, 22938, 23041, 23001, 22986, 22998, 22964, 23064, 22941, 22942,
+    ])
+  );
+
+export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
+
+export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseID}/class`);
 
 export const fetchClassesInShoppingCart = () => fakeFetchClassesInShoppingCart();
 
 // TODO: Actually fetch from backend and get rid of this.
 const fakeFetchClassesInShoppingCart = () =>
-  new Promise((resolve) => resolve({ data: ['10020', '10021', '10042'] }));
+  new Promise((onFetched) => onFetched({ data: [10774, 10778, 13829, 14553] }));

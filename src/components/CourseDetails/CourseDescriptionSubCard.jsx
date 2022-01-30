@@ -10,7 +10,7 @@ export default function CourseDescriptionSubCard({ course }) {
     <SubCard title='Course Description' spacing={gridSpacing}>
       <Grid container>
         <MuiTypography variant='subtitle1' gutterBottom>
-          {course.description}
+          {course['Description']}
         </MuiTypography>
       </Grid>
     </SubCard>

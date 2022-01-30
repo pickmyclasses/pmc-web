@@ -18,7 +18,7 @@ export default function CourseAddReview() {
       </MuiTypography>
       <Stack spacing={2} direction='row'>
         <Link
-          to={`/courseDetails/${CourseContext.courseID}/review`}
+          to={`/course/${CourseContext.courseID}/review`}
           style={{ textDecoration: 'none' }}
         >
           <Button variant='contained' startIcon={<AddCommentIcon />}>

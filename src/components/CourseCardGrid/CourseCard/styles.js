@@ -18,7 +18,6 @@ export default makeStyles({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    borderRadius: '15px',
     height: '100%',
     width: '100%',
     position: 'relative',
@@ -48,7 +47,7 @@ export default makeStyles({
     fontWeight: 'bold',
   },
   cardActions: {
-    padding: '0 16px 8px 16px',
+    padding: '0 16px 16px 16px',
     display: 'flex',
     justifyContent: 'space-between',
   },

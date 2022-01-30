@@ -205,15 +205,16 @@ EnhancedTableToolbar.propTypes = {
 };
 
 function initRowData(classes) {
-  var rows = [];
-  for (var i = 0; i < classes.length; i++) {
-    let offerDate =
-      classes[i].offer_date + ' ' + classes[i].start_time + '-' + classes[i].end_time;
-    let location = classes[i].location;
-    let section = classes[i].section;
-    let recommendationScore = classes[i].recommendation_score;
-    let professor = classes[i].professor;
-    let row = createData(offerDate, location, section, recommendationScore, professor);
+  let rows = [];
+  for (let classData of classes) {
+    const offerDate = `${classData['OfferDate']} ${classData['StartTime']} – ${classData['EndTime']}`;
+    const location = classData['Location'];
+    const section = classData['Session'];
+    // TODO (QC): No recommendation score provided in the backend. Possibly remove this as
+    // reviews are for the course and not for a class.
+    const recommendationScore = 3;
+    const professor = classData['Instructor'];
+    const row = createData(offerDate, location, section, recommendationScore, professor);
     rows.push(row);
   }
   return rows;
@@ -316,7 +317,7 @@ export default function EnhancedTable({ classes }) {
                       role='checkbox'
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.OfferDate}
+                      key={index}
                       selected={isItemSelected}
                     >
                       <TableCell padding='checkbox'>

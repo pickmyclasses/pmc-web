@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Box } from '@mui/material';
 import HomePage from './pages/HomePage';
+import SearchPage from './pages/SearchPage';
 import AuthPage from './pages/AuthPage';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import CoursePage from './pages/CoursePage';
 import NavigationBar from './components/NavigationBar/NavigationBar';
 import WelcomePage from './pages/WelcomePage';
@@ -21,18 +22,23 @@ export default function App() {
         <Routes>
           <Route path='/' exact element={<WelcomePage />} />
           <Route
-            path='/search'
+            path='/home'
             exact
             element={<HomePage shouldShowScheduler={shouldShowScheduler} />}
           />
+          <Route
+            path='/search/:query'
+            exact
+            element={<SearchPage shouldShowScheduler={shouldShowScheduler} />}
+          />
           <Route path='/auth' exact element={<AuthPage />} />
           <Route
-            path='/courseDetails/:id'
+            path='/course/:id'
             exact
             element={<CoursePage shouldShowScheduler={shouldShowScheduler} />}
           />
           <Route
-            path='/courseDetails/:id/review'
+            path='/course/:id/review'
             exact
             element={<ReviewPage shouldShowScheduler={!shouldShowScheduler} />}
           />

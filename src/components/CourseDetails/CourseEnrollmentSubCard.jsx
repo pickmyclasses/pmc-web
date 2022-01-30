@@ -15,21 +15,23 @@ export default function CourseEnrollmentSubCard({ course }) {
         <Grid item>
           <Typography gutterBottom variant='h6' component='div'>
             Credit hour:
-            <CourseChip value={course.credit_hour} />
+            {/* TODO (QC): Some courses have varying credit hours (e.g. 1-3 credits). */}
+            <CourseChip value={course['MaxCredit']} />
           </Typography>
           <Divider variant='middle' />
 
           <Typography gutterBottom variant='h6' component='div'>
             Associated courses:
-            <CourseChip value={course.associated_course} />
+            {/* TODO (QC): Backend: This should probably be an array/plural. */}
+            <CourseChip value={course['AssociatedCourseID']} />
           </Typography>
 
           <Divider variant='middle' />
 
           <Typography gutterBottom variant='h6' component='div'>
-            Prerequesites:
-            <CourseChip value={course.prerequesite} />
+            Prerequisites:
           </Typography>
+          {course['Prerequisites']}
         </Grid>
         <Grid item sx={{ width: 1 }}>
           <CourseStatus canRegister={1} />

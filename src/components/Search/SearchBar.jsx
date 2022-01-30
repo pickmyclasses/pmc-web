@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { Divider, FilledInput, IconButton, colors, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { Clear, Search } from '@material-ui/icons';
-import { getCoursesBySearch } from '../../redux/actions/courses';
-
-// function useQuery() {
-//   return new URLSearchParams(useLocation().search);
-// }
 
 /**
  * The search-bar that sits in the middle of the navigation bar. Fires events when the user
@@ -18,32 +12,17 @@ import { getCoursesBySearch } from '../../redux/actions/courses';
  */
 // export default function SearchBar({ onSearchClick }) {
 export default function SearchBar() {
-  const dispatch = useDispatch();
-
-  // const query = useQuery();
+  const theme = useTheme();
 
   const navigate = useNavigate();
 
-  // const page = query.get('page') || 1;
-
-  // const searchQuery = query.get('searchQuery');
-
-  const theme = useTheme();
-
   const [searchText, setSearchText] = useState('');
 
-  // equivalent to searchCourse
   const handleSearchClick = () => {
-    // if the user doesn't type anything, return nothing
     if (searchText.trim()) {
-      // dispatch -> fetch search course
-      dispatch(getCoursesBySearch({ searchText }));
-      let array = searchText.split(' ');
-      navigate(`/search?department=${array[0]}&number=${array[1]}`);
-    }
-    // else, navigate back to home page
-    else {
-      navigate('/');
+      navigate(`/search/${searchText}`);
+    } else {
+      navigate('/home');
     }
   };
 

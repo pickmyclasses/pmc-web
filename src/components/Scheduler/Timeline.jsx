@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Box, Divider, Grid, useTheme } from '@mui/material';
+import { Box, CircularProgress, Divider, Grid, useTheme } from '@mui/material';
 import TimeBlock from './TimeBlock';
 import TimeDataCard from './TimeDataCard';
 
@@ -83,7 +83,7 @@ export default function Timeline({
           width: columnWidth * 0.75 + '%',
           height: (end - start) * 100 + '%',
           opacity: !selectedEventData || selectedEventData.id === data.id ? 1 : 0.5,
-          filter: selectedEventData?.id === data.id ? '' : 'grayscale(1) brightness(0.75)',
+          filter: selectedEventData?.id === data.id ? '' : 'grayscale(1)',
         }}
       />
     );
@@ -96,7 +96,7 @@ export default function Timeline({
       gridLines.push(
         <Divider
           key={'gl' + time}
-          sx={{ position: 'absolute', top: y * 100 + '%', width: '100%', opacity: 0.5 }}
+          sx={{ position: 'absolute', top: y * 100 + '%', width: '100%' }}
         />
       );
       gridLines.push(
@@ -109,7 +109,7 @@ export default function Timeline({
             marginTop: '-6px',
             width: '24px',
             fontSize: '12px',
-            opacity: 0.5,
+            opacity: 0.75,
           }}
         >
           {(time / 3600) % 12 || 12}
@@ -125,12 +125,17 @@ export default function Timeline({
       <Grid container sx={{ width: '100%', flex: 1, marginBottom: '4px' }}>
         {columnTitles.map((title, i) => renderColumnTitle(i, title))}
       </Grid>
-      <Box ref={containerRef} sx={{ width: '100%', height: '100%', position: 'relative' }}>
-        {events && (
+      <Box
+        ref={containerRef}
+        sx={{ width: '100%', height: '100%', display: 'flex', position: 'relative' }}
+      >
+        {events != null ? (
           <>
             {renderGridLines()}
             {events.map((event, i) => renderEvent(i, event))}
           </>
+        ) : (
+          <CircularProgress sx={{ margin: 'auto' }} />
         )}
         {selectedEventData && (
           <Box
