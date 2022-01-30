@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { fetchClassByID, fetchClassesInShoppingCart, fetchCourseByID } from '../../api';
 import Timeline from './Timeline';
-import { parseDay, parseTime } from '../../utils';
+import { formatCourseName, parseDayList, parseTime } from '../../utils';
 
 /**
  * The shopping cart resides in the top part of the scheduler.
@@ -48,39 +48,47 @@ export default function ShoppingCart() {
 const fetchSessions = (onFetched) => {
   fetchClassesInShoppingCart().then(({ data: classIDs }) => {
     Promise.all(classIDs.map((id) => fetchClassByID(id))).then((classes) => {
-      classes = classes.map(({ data }) => data[0]);
+      classes = classes.map((data) => data['data']['data']);
 
-      const courseIDs = [...new Set(classes.map((classData) => classData['course_id']))];
+      const courseIDs = [...new Set(classes.map((classData) => classData['CourseID']))];
       Promise.all(courseIDs.map((id) => fetchCourseByID(id))).then((courses) => {
-        const courseByID = new Map(courses.map(({ data }) => [data['id'], data]));
+        const courseByID = new Map(
+          courses.map(
+            ({
+              data: {
+                data: { course },
+              },
+            }) => [course['ID'], course]
+          )
+        );
 
         const sessions = [];
         for (let classData of classes) {
-          for (let dayOffered of classData['offer_date']) {
-            const course = courseByID.get(classData['course_id']);
-            const courseCode = `${course['department']} ${course['number']}`;
+          for (let dayOffered of parseDayList(classData['OfferDate'])) {
+            const course = courseByID.get(classData['CourseID']);
+            const courseCode = formatCourseName(course['CatalogCourseName']);
             const relatedClasses = classes.filter(
-              (classData) => classData['course_id'] === course['id']
+              (classData) => classData['CourseID'] === course['ID']
             );
 
             sessions.push({
-              columnIndex: parseDay(dayOffered) - 1,
-              start: parseTime(classData['start_time']),
-              end: parseTime(classData['end_time']),
+              columnIndex: dayOffered - 1,
+              start: parseTime(classData['StartTime']),
+              end: parseTime(classData['EndTime']),
               text: courseCode,
               data: {
-                id: course['id'],
+                id: course['ID'],
                 earliestStart: Math.min(
-                  ...relatedClasses.map((classData) => parseTime(classData['start_time']))
+                  ...relatedClasses.map((classData) => parseTime(classData['StartTime']))
                 ),
                 title: courseCode,
-                subtitle: course['name'],
+                subtitle: course['Title'],
                 descriptions: relatedClasses.map(
                   (classData) =>
-                    `${classData['offer_date'].join(', ')}` +
-                    ` @ ${classData['start_time']} - ${classData['end_time']}`
+                    `${classData['OfferDate']}` +
+                    ` ${classData['StartTime']}–${classData['EndTime']}`
                 ),
-                detailPageLink: `/courseDetails/${course['id']}`,
+                detailPageLink: `/course/${course['ID']}`,
               },
             });
           }

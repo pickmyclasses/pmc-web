@@ -40,7 +40,7 @@ export default function NavigationBar({ isSchedulerShowing, toggleScheduler }) {
           <Container maxWidth='xl'>
             <Grid container spacing='24px' sx={{ alignItems: 'center' }}>
               <Grid item xs='auto'>
-                <Link to='/' style={{ textDecoration: 'none', color: 'white' }}>
+                <Link to='/home' style={{ textDecoration: 'none', color: 'white' }}>
                   <Logo />
                 </Link>
               </Grid>

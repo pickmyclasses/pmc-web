@@ -7,6 +7,7 @@ import MuiTypography from '@mui/material/Typography';
 import SubCard from '../Skeleton/SubCard';
 import StarIcon from '@mui/icons-material/Star';
 import { gridSpacing } from '../../constants/constants';
+import { formatCourseName } from '../../utils';
 
 const labels = {
   1: 'Useless',
@@ -31,9 +32,8 @@ export default function ReviewRatings({ course, value, onChange }) {
           justifyContent='center'
         >
           <MuiTypography variant='h6' gutterBottom>
-            How likely is it that you would recommend{' '}
-            {course.department + ' ' + course.number + ' ' + course.name} to a friend or
-            colleague?
+            How likely would you recommend {formatCourseName(course['CatalogCourseName'])} (
+            {course['Title']}) to a friend or colleague?
           </MuiTypography>
         </Grid>
 

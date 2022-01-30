@@ -59,7 +59,7 @@ const WelcomePage = () => {
           Start picking your classes with PMC, pick the classes that actually fit your lifestyle
         </div>
         <Button variant='contained' disableElevation className={classes.linkBnt}>
-          <Link to='/search' className={classes.link}>
+          <Link to='/home' className={classes.link}>
             start now!
           </Link>
         </Button>

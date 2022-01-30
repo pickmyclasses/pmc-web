@@ -28,7 +28,7 @@ export const isFalsy = (value) => (value === 0 ? false : !!value);
  */
 export const useMount = (callback) => {
   // eslint-disable-next-line
-  useEffect(() => callback(), []);
+  useEffect(callback, []);
 };
 
 /**
@@ -51,7 +51,8 @@ export const useDebounce = (value, delay) => {
  * Returns the number of seconds past midnight a string of time represents.
  * @example parseTime('12:01 AM') // 60
  */
-export const parseTime = (s) => new Date(`1970-01-01 ${s} Z`).getTime() / 1000;
+export const parseTime = (s) =>
+  new Date(`1970-01-01 ${s.split(/(?<=\d)(?=[A-Za-z])/).join(' ')} Z`).getTime() / 1000;
 
 /**
  * Returns the numerical representation of a weekday given its name or abbreviation.
@@ -59,3 +60,18 @@ export const parseTime = (s) => new Date(`1970-01-01 ${s} Z`).getTime() / 1000;
  */
 export const parseDay = (s) =>
   ['su', 'm', 'tu', 'w', 'th', 'f', 'sa'].findIndex((day) => s.toLowerCase().startsWith(day));
+
+/**
+ * Returns the list of weekdays a string represents, assuming each new day starts with an
+ * uppercase letter.
+ * @example parseDayList('TuTh') // [2, 4]
+ */
+export const parseDayList = (s) => s.split(/(?=[A-Z])/).map((day) => parseDay(day));
+
+/**
+ * Formats a `CatalogCourseName` so that there is a space separating the department code and
+ * course number.
+ * @example formatCourseName('CS1410') // 'CS 1410'
+ */
+export const formatCourseName = (catalogCourseName) =>
+  catalogCourseName.split(/(?<!\d)(?=\d)/).join(' ');

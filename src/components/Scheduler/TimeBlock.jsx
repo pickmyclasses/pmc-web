@@ -1,16 +1,25 @@
 import React from 'react';
 import { Button } from '@mui/material';
 
-export default function TimeBlock({ text, data, sx, onMouseEnter, onMouseLeave, onClick }) {
+export default function TimeBlock({
+  text,
+  color,
+  data,
+  sx,
+  onMouseEnter,
+  onMouseLeave,
+  onClick,
+}) {
   return (
     <Button
       text={text}
-      variant='outlined'
+      variant='contained'
+      disableElevation
+      color={color}
       sx={{
         ...sx,
         minWidth: 0,
         position: 'absolute',
-        // fontWeight: 'normal',
         borderRadius: '0px',
         fontSize: 'x-small',
         wordSpacing: '100vw',

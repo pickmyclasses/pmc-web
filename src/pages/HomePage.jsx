@@ -1,30 +1,25 @@
-import React, { useEffect } from 'react';
-import { Box, Grid, Grow } from '@mui/material';
-import { getCourses } from '../redux/actions/courses';
-import { useDispatch } from 'react-redux';
-import CourseCardGrid from '../components/CourseCardGrid/CourseCardGrid';
+import React, { useState } from 'react';
+import { fetchHomePageCourses } from '../api';
 import PageWithScheduler from './PageWithScheduler';
+import { useMount } from '../utils';
+import CourseCardGrid from '../components/CourseCardGrid/CourseCardGrid';
 
 export default function HomePage({ shouldShowScheduler }) {
-  const dispatch = useDispatch();
+  const [courseCategories, setCourseCategories] = useState(null);
 
-  // TODO (QC): Discuss whether we still want to use Redux. If not, refactor the following to
-  // use the fetch functions in /src/api directly.
-  useEffect(() => {
-    dispatch(getCourses());
-  }, [dispatch]);
+  useMount(() => fetchHomePageCourses().then((data) => setCourseCategories(data)));
 
   return (
     <PageWithScheduler shouldShowScheduler={shouldShowScheduler}>
-      <Box sx={{ padding: '16px 8px' }}>
-        <Grow in>
-          <Grid container justifyContent='space-between' alignItems='stretch'>
-            <Grid item xs={12}>
-              <CourseCardGrid numColumns={shouldShowScheduler ? 3 : 4} />
-            </Grid>
-          </Grid>
-        </Grow>
-      </Box>
+      {courseCategories &&
+        courseCategories.map(({ category, courseIDs }, i) => (
+          <CourseCardGrid
+            key={i}
+            title={category}
+            courseIDs={courseIDs}
+            numColumns={shouldShowScheduler ? 3 : 4}
+          />
+        ))}
     </PageWithScheduler>
   );
 }
