@@ -85,6 +85,15 @@ export default function ReviewPage({ shouldShowScheduler }) {
             <Button
               variant='contained'
               onClick={() => {
+                if (proValue.length === 0) {
+                  alert('Please fill in what do you like about this course.');
+                  return;
+                }
+                if (conValue.length === 0) {
+                  alert('Please fill in what do you dislike about this course.');
+                  return;
+                }
+                console.log(course.ID);
                 postReviewByID({
                   anonymous: true,
                   comment: commentValue,

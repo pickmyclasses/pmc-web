@@ -21,14 +21,6 @@ export default function CourseEnrollmentSubCard({ course }) {
           <Divider variant='middle' />
 
           <Typography gutterBottom variant='h6' component='div'>
-            Associated courses:
-            {/* TODO (QC): Backend: This should probably be an array/plural. */}
-            <CourseChip value={course['AssociatedCourseID']} />
-          </Typography>
-
-          <Divider variant='middle' />
-
-          <Typography gutterBottom variant='h6' component='div'>
             Prerequisites:
           </Typography>
           {course['Prerequisites']}
