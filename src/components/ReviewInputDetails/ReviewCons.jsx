@@ -26,13 +26,13 @@ export default function ReviewCons({ value, onChange }) {
 
           <TextField
             id='outlined-multiline-flexible'
-            variant='standard'
             fullWidth
             multiline
             rows={4}
             value={value}
-            onChange={(event, newValue) => {
-              onChange(newValue);
+            color='warning'
+            onChange={(event) => {
+              onChange(event.target.value);
             }}
           />
         </Grid>

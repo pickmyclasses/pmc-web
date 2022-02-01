@@ -11,6 +11,7 @@ import ReviewComments from '../components/ReviewInputDetails/ReviewComments';
 import MainCard from '../components/Skeleton/MainCard';
 import { gridSpacing } from '../constants/constants';
 import { useMount } from '../utils';
+import { postReviewByID } from '../../src/api/index';
 
 export default function ReviewPage({ shouldShowScheduler }) {
   const [course, setCourse] = useState(null);
@@ -18,7 +19,6 @@ export default function ReviewPage({ shouldShowScheduler }) {
   const [proValue, setProValue] = useState('');
   const [conValue, setConValue] = useState('');
   const [commentValue, setCommentValue] = useState('');
-
   const urlParams = useParams();
 
   useMount(() => {
@@ -73,9 +73,7 @@ export default function ReviewPage({ shouldShowScheduler }) {
               }}
             />
           </Grid>
-          <Grid item xs={12} sm={12}>
-            {proValue}
-          </Grid>
+
           <Grid
             item
             container
@@ -84,7 +82,23 @@ export default function ReviewPage({ shouldShowScheduler }) {
             alignItems='center'
             justifyContent='center'
           >
-            <Button variant='contained'>Submit</Button>{' '}
+            <Button
+              variant='contained'
+              onClick={() => {
+                postReviewByID({
+                  anonymous: true,
+                  comment: commentValue,
+                  cons: conValue,
+                  course_id: course.ID,
+                  pros: proValue,
+                  rating: ratingValue,
+                  recommended: true,
+                  user_id: 0,
+                });
+              }}
+            >
+              Submit
+            </Button>{' '}
           </Grid>
         </Grid>
       </MainCard>

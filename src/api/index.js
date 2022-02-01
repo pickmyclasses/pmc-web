@@ -1,5 +1,24 @@
 import axios from 'axios';
 
+export const postReviewByID = (reviewObj) =>
+  axios
+    .post(`/course/${reviewObj.course_id}/review`, {
+      anonymous: reviewObj.anonymous,
+      comment: reviewObj.comment,
+      cons: reviewObj.cons,
+      course_id: reviewObj.course_id,
+      pros: reviewObj.pros,
+      rating: reviewObj.rating,
+      recommended: reviewObj.recommended,
+      user_id: reviewObj.user_id,
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+      console.log(reviewObj);
+    });
 export const fetchCourseByID = (courseID) => axios.get(`/course/${courseID}`);
 
 export const fetchAllCourses = () => axios.get('/course');

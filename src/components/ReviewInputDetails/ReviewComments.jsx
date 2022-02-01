@@ -26,13 +26,13 @@ export default function ReviewComments({ value, onChange }) {
 
           <TextField
             id='outlined-multiline-flexible'
-            variant='standard'
             fullWidth
             multiline
             rows={4}
             value={value}
-            onChange={(event, newValue) => {
-              onChange(newValue);
+            color='secondary'
+            onChange={(event) => {
+              onChange(event.target.value);
             }}
           />
         </Grid>

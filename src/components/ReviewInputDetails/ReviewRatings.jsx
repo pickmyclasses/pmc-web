@@ -52,6 +52,7 @@ export default function ReviewRatings({ course, value, onChange }) {
             precision={1}
             onChange={(event, newValue) => {
               onChange(newValue);
+              console.log('change!', { newValue });
             }}
             onChangeActive={(event, newHover) => {
               setHover(newHover);
