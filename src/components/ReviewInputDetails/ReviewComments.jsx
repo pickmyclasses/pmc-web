@@ -4,7 +4,7 @@ import { ArrowCircleDown } from '@mui/icons-material';
 import { gridSpacing } from '../../constants/constants';
 import SubCard from '../Skeleton/SubCard';
 
-export default function ReviewCons({ value, onChange }) {
+export default function ReviewComments({ value, onChange }) {
   return (
     <SubCard>
       <Grid container spacing={gridSpacing}>
@@ -18,7 +18,7 @@ export default function ReviewCons({ value, onChange }) {
           justifyContent='center'
         >
           <Typography variant='h6' gutterBottom>
-            What do you dislike?
+            Here's your chance to be more specific
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
             <ArrowCircleDown sx={{ color: 'action.active', mr: 1, my: 0.5 }} />

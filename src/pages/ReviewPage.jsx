@@ -7,6 +7,7 @@ import ReviewDescription from '../components/ReviewInputDetails/ReviewDescriptio
 import ReviewRatings from '../components/ReviewInputDetails/ReviewRatings';
 import ReviewPros from '../components/ReviewInputDetails/ReviewPros';
 import ReviewCons from '../components/ReviewInputDetails/ReviewCons';
+import ReviewComments from '../components/ReviewInputDetails/ReviewComments';
 import MainCard from '../components/Skeleton/MainCard';
 import { gridSpacing } from '../constants/constants';
 import { useMount } from '../utils';
@@ -16,6 +17,7 @@ export default function ReviewPage({ shouldShowScheduler }) {
   const [ratingValue, setRatingValue] = useState(3);
   const [proValue, setProValue] = useState('');
   const [conValue, setConValue] = useState('');
+  const [commentValue, setCommentValue] = useState('');
 
   const urlParams = useParams();
 
@@ -60,6 +62,14 @@ export default function ReviewPage({ shouldShowScheduler }) {
               value={conValue}
               onChange={(conValue) => {
                 setConValue(conValue);
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <ReviewComments
+              value={commentValue}
+              onChange={(commentValue) => {
+                setCommentValue(commentValue);
               }}
             />
           </Grid>

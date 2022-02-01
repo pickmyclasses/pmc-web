@@ -26,10 +26,10 @@ export default function ReviewPros({ value, onChange }) {
 
           <TextField
             id='outlined-multiline-flexible'
-            label='Upsides'
+            variant='standard'
             fullWidth
             multiline
-            maxRows={4}
+            rows={4}
             value={value}
             onChange={(event, newValue) => {
               onChange(newValue);
