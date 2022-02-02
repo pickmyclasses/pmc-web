@@ -14,11 +14,8 @@ export default function NavigationBar({ isSchedulerShowing, toggleScheduler }) {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
 
   useEffect(() => {
-    // const token = user?.token;
-    // JWT login
-
     setUser(JSON.parse(localStorage.getItem('profile')));
-  }, [location]); // When the location changes, simply set the user.
+  }, [location]);
 
   const logout = () => {
     dispatch({ type: 'LOGOUT' });

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const fetchCourseByID = (courseID) => axios.get(`/course/${courseID}`);
 
-export const fetchAllCourses = () => axios.get('/course');
+export const fetchAllCourses = () => axios.get('/course/list');
 
 export const fetchHomePageCourses = () => fakeFetchHomePageCourses();
 
