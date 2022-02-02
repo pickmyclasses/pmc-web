@@ -93,15 +93,14 @@ export default function ReviewPage({ shouldShowScheduler }) {
                   alert('Please fill in what do you dislike about this course.');
                   return;
                 }
-                console.log(course.ID);
                 postReviewByID({
-                  anonymous: true,
+                  // anonymous: true,
                   comment: commentValue,
                   cons: conValue,
                   course_id: course.ID,
                   pros: proValue,
                   rating: ratingValue,
-                  recommended: true,
+                  // recommended: true,
                   user_id: 0,
                 });
               }}
