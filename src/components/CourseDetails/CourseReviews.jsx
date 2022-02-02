@@ -1,53 +1,27 @@
-import React from 'react';
+import { fetchReviewsByID } from '../../api/index';
+import CourseReviewCard from '../../../src/components/CourseDetails/CourseReviewCard';
+import React, { useState, useEffect } from 'react';
 import { Grid, Typography } from '@mui/material';
-import MuiTypography from '@mui/material/Typography';
-import { LoremIpsum, Avatar, fullname, username } from 'react-lorem-ipsum';
-import Rating from '@mui/material/Rating';
-import CourseComments from './CourseComments';
 
-//Project Imports
-import SubCard from '../Skeleton/SubCard';
-const gridSpacing = 3;
-var RandomNumber = Math.floor(Math.random() * 5) + 1;
-const negComments = 'This course is really hard! You have to spend 20 hours a week at least!';
-const posComments = 'The content material is helpful for preparing the coding interviews.';
-const title1 = 'What do you like most about this course?';
-const title2 = 'What do you hate most about this course?';
+export default function CourseReviews({ courseID }) {
+  const [reviews, setReviews] = useState(null);
+  console.log(courseID);
+  useEffect(() => {
+    fetchReviewsByID(courseID).then((data) => setReviews(data['data']['data']));
+    console.log(reviews);
+  }, []);
+  console.log(courseID);
+  const renderReviewSkeletons = () => (
+    <Grid item>
+      <Typography>No reviews for this course written yet.</Typography>
+    </Grid>
+  );
+  const renderReviewCards = () =>
+    reviews.map((review, i) => <CourseReviewCard review={review} />);
 
-export default function CourseDescriptionSubCard({ course }) {
   return (
-    <SubCard
-      title={LoremIpsum({ p: 1, avgWordsPerSentence: 5, avgSentencesPerParagraph: 1 })}
-      spacing={gridSpacing}
-    >
-      <Grid container>
-        <MuiTypography variant='' gutterBottom>
-          <div className='user'>
-            <Avatar gender='all' width='150' height='150' alt='Avatar'></Avatar>
-            <div className='fullname'>{fullname('male')}</div>
-            <div className='username'>{`@${username()}`}</div>
-          </div>
-          <Grid item>
-            <Rating
-              name='read-only'
-              precision={0.1}
-              // TODO Get the actual ratings
-              value={RandomNumber}
-              readOnly
-              size='large'
-            />
-            <Typography variant='subtitle1' color='#212121'>
-              Year: {course.year}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <CourseComments title={title1} comments={posComments} />
-          </Grid>
-          <Grid item>
-            <CourseComments title={title2} comments={negComments} />
-          </Grid>
-        </MuiTypography>
-      </Grid>
-    </SubCard>
+    <Grid item xs={12}>
+      {reviews ? renderReviewCards() : renderReviewSkeletons()}
+    </Grid>
   );
 }

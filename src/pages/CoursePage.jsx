@@ -76,10 +76,7 @@ export default function CoursePage({ shouldShowScheduler }) {
               <CourseOverallRatings course={course}></CourseOverallRatings>
             </Grid>
             <Grid item xs={12} sm={12}>
-              <CourseReviews course={course}></CourseReviews>
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <CourseReviews course={course}></CourseReviews>
+              <CourseReviews courseID={course.ID}></CourseReviews>
             </Grid>
           </Grid>
         </MainCard>

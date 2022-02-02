@@ -21,7 +21,7 @@ export const postReviewByID = (reviewObj) => {
     });
 };
 
-export const fetchReviewsByID = (courseID) => axios.get(`/course/review`);
+export const fetchReviewsByID = (courseID) => axios.get(`/course/${courseID}/review`);
 
 export const fetchCourseByID = (courseID) => axios.get(`/course/${courseID}`);
 
