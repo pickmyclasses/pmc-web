@@ -23,7 +23,7 @@ export default function PageWithScheduler({ children, shouldShowScheduler }) {
   const fetchSchedulerData = useCallback(() => {
     if (user) {
       setIsLoading(true);
-      fetchClassIDsInShoppingCart(user['ID']).then(({ data }) =>
+      fetchClassIDsInShoppingCart(user.ID).then(({ data }) =>
         fetchClassesAndCourses(data, (classes) => {
           setIsLoading(false);
           setClassesInShoppingCart(classes);
@@ -34,6 +34,8 @@ export default function PageWithScheduler({ children, shouldShowScheduler }) {
 
   useEffect(() => fetchSchedulerData(), [fetchSchedulerData]);
 
+  // Combine classes in shopping cart with classes to highlight, only keeping the copy to
+  // highlight if there are repeats.
   const allClasses = [
     ...classesInShoppingCart
       .filter(({ classData }) =>
@@ -48,7 +50,10 @@ export default function PageWithScheduler({ children, shouldShowScheduler }) {
       <Grid container sx={{ height: '100%' }}>
         <Grid item xs sx={{ height: '100%', overflow: 'auto' }}>
           <SchedulerDisplayContentContext.Provider
-            value={{ setClassesToHighlight, refetchSchedulerData: fetchSchedulerData }}
+            value={{
+              setClassesToHighlight,
+              refetchSchedulerData: fetchSchedulerData,
+            }}
           >
             {children}
           </SchedulerDisplayContentContext.Provider>

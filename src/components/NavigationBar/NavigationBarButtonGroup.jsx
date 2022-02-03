@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, useTheme, Tabs, Tab, ListItemIcon, Button } from '@mui/material';
 import { makeStyles } from '@material-ui/core';
@@ -14,6 +14,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import SchoolIcon from '@mui/icons-material/School';
+import { UserContext } from '../../App';
 
 const useStyle = makeStyles({
   tab: {
@@ -38,11 +39,38 @@ const useStyle = makeStyles({
  * The group of buttons like notification and user profile that sits on the right side of the
  * navigation bar.
  */
-export default function NavigationBarButtonGroup({ userData, logout }) {
+export default function NavigationBarButtonGroup({ toggleScheduler, logout }) {
   const theme = useTheme();
   const classes = useStyle();
 
-  const isUserLoggedIn = userData !== null && userData !== undefined;
+  const user = useContext(UserContext);
+  const isUserLoggedIn = user != null;
+
+  const renderTabsForLoggedIn = () => [
+    <Tab
+      key='schedule'
+      label='Schedule'
+      icon={<EventNoteIcon />}
+      className={classes.tab}
+      onClick={toggleScheduler}
+    />,
+    <Tab
+      key='notification'
+      label='Notification'
+      icon={<NotificationAddIcon />}
+      className={classes.tab}
+    />,
+    <Tab
+      key='discussion'
+      label='Discussion'
+      icon={<DashboardIcon />}
+      className={classes.tab}
+    />,
+    <UserDropDownList key='user-drop-down-list' user={user} logout={logout} />,
+  ];
+
+  const renderTabsForNotLoggedIn = () => <LoginButton />;
+
   return (
     <Grid
       container
@@ -53,21 +81,8 @@ export default function NavigationBarButtonGroup({ userData, logout }) {
         '*': { color: theme.palette.primary.contrastText },
       }}
     >
-      <Tabs value={false} aria-label='nav tabs'>
-        {isUserLoggedIn && (
-          <Tab label='Schedule' icon={<EventNoteIcon />} className={classes.tab} />
-        )}
-        {isUserLoggedIn && (
-          <Tab label='Notification' icon={<NotificationAddIcon />} className={classes.tab} />
-        )}
-        {isUserLoggedIn && (
-          <Tab label='Discussion' icon={<DashboardIcon />} className={classes.tab} />
-        )}
-        {isUserLoggedIn ? (
-          <UserDropDownList userData={userData} logout={logout} />
-        ) : (
-          <LoginButton />
-        )}
+      <Tabs value={false} aria-label='nav tabs example'>
+        {isUserLoggedIn ? renderTabsForLoggedIn() : renderTabsForNotLoggedIn()}
       </Tabs>
     </Grid>
   );
@@ -84,7 +99,7 @@ const LoginButton = () => {
   );
 };
 
-const UserDropDownList = ({ userData, logout }) => {
+const UserDropDownList = ({ user, logout }) => {
   const classes = useStyle();
   return (
     <>
@@ -92,7 +107,7 @@ const UserDropDownList = ({ userData, logout }) => {
         {(popupState) => (
           <React.Fragment>
             <Tab
-              label={userData.name}
+              label={user.name}
               icon={<ManageAccountsIcon />}
               className={classes.tab}
               {...bindTrigger(popupState)}

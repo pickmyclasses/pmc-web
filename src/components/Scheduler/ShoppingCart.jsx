@@ -76,10 +76,11 @@ const generateSessions = (classes) => {
 // TODO Q: Some classes in the backend have their component name wrongly listed in
 // a field other than 'Component'. After the backend is fixed, get rid of these
 // helpers and access `classData[...]` directly.
-const getComponent = (classData) =>
+export const getComponent = (classData) =>
   Object.values(classData).find((value) =>
     ['Lecture', 'Laboratory', 'Discussion', 'Seminar'].includes(value)
   );
+
 // TODO Q: This is assuming a class only has one instructor, which may be false.
-const getInstructor = (classData) =>
+export const getInstructor = (classData) =>
   Object.values(classData).find((value) => value && /^[A-Z, ]+$/.test(String(value)));

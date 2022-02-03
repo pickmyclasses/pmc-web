@@ -48,6 +48,7 @@ import { Button } from '@mui/material';
 import { AddShoppingCart, Delete } from '@mui/icons-material';
 import { postAddClassIDToShoppingCart } from '../../api';
 import { UserContext } from '../../App';
+import { getComponent, getInstructor } from '../Scheduler/ShoppingCart';
 
 function createData(OfferDate, Location, Section, RecommendationScore, Professor) {
   return {
@@ -92,36 +93,11 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  {
-    id: 'OfferDate',
-    numeric: false,
-    disablePadding: true,
-    label: 'Offer Date',
-  },
-  {
-    id: 'Location',
-    numeric: true,
-    disablePadding: false,
-    label: 'Location',
-  },
-  {
-    id: 'Section',
-    numeric: true,
-    disablePadding: false,
-    label: 'Section',
-  },
-  {
-    id: 'RecommendationScore',
-    numeric: true,
-    disablePadding: false,
-    label: 'Recommendation Score',
-  },
-  {
-    id: 'Professor',
-    numeric: true,
-    disablePadding: false,
-    label: 'Professor',
-  },
+  { id: 'OfferDate', numeric: false, disablePadding: true, label: 'Session' },
+  { id: 'Component', numeric: false, disablePadding: true, label: 'Component' },
+  { id: 'Location', numeric: false, disablePadding: true, label: 'Meet Times' },
+  { id: 'Section', numeric: false, disablePadding: true, label: 'Location' },
+  { id: 'Professor', numeric: false, disablePadding: true, label: 'Professor' },
 ];
 
 function EnhancedTableHead(props) {
@@ -231,19 +207,17 @@ EnhancedTableToolbar.propTypes = {
 
 // TODO Q: As iterated many times, fix it and do not use OfferDate as the key.
 const formatOfferDate = (classData) =>
-  `${classData['OfferDate']} ${classData['StartTime']} – ${classData['EndTime']}`;
+  `${classData['OfferDate']} ${classData['StartTime']}–${classData['EndTime']}`;
 
 function initRowData(classes) {
   let rows = [];
   for (let classData of classes) {
     const offerDate = formatOfferDate(classData);
+    const component = getComponent(classData);
     const location = classData['Location'];
     const section = classData['Session'];
-    // TODO (QC): No recommendation score provided in the backend. Possibly remove this as
-    // reviews are for the course and not for a class.
-    const recommendationScore = 3;
-    const professor = classData['Instructor'];
-    const row = createData(offerDate, location, section, recommendationScore, professor);
+    const professor = getInstructor(classData);
+    const row = createData(section, component, offerDate, location, professor);
     rows.push(row);
   }
   return rows;
@@ -268,7 +242,7 @@ export default function EnhancedTable({ classes }) {
     // selected is a list of offer dates (TODO Q: fix this during refactor), therefore generate
     // the corresponding list of classes to highlight.
     const selectedClasses = selected
-      .map((OfferDate) => classes.find((classData) => OfferDate === formatOfferDate(classData)))
+      .map((OfferDate) => classes.find((classData) => +OfferDate === +classData.Session))
       .filter(Boolean)
       .map((classData) => ({ classData, course }));
     setClassesToHighlight(selectedClasses);
@@ -374,15 +348,12 @@ export default function EnhancedTable({ classes }) {
                         />
                       </TableCell>
                       <TableCell component='th' id={labelId} scope='row' padding='none'>
-                        {row.OfferDate}
+                        {row.OfferDate.padStart(3, '0')}
                       </TableCell>
-                      <TableCell align='right'>{row.Location}</TableCell>
-                      <TableCell align='right'>{row.Section}</TableCell>
-                      <TableCell align='right'>
-                        <CourseRating value={row.RecommendationScore} />
-                      </TableCell>
-
-                      <TableCell align='right'>{row.Professor}</TableCell>
+                      <TableCell padding='none'>{row.Location}</TableCell>
+                      <TableCell padding='none'>{row.Section}</TableCell>
+                      <TableCell padding='none'>{row.RecommendationScore}</TableCell>
+                      <TableCell padding='none'>{row.Professor}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -429,9 +400,7 @@ export default function EnhancedTable({ classes }) {
         startIcon={<AddShoppingCart />}
         onClick={() => {
           const selectedClassIDs = selected
-            .map((OfferDate) =>
-              classes.find((classData) => OfferDate === formatOfferDate(classData))
-            )
+            .map((OfferDate) => classes.find((classData) => +OfferDate === +classData.Session))
             .filter(Boolean)
             .map((x) => x.ID);
           for (let classID in selectedClassIDs)

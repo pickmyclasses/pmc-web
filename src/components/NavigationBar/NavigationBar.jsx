@@ -44,7 +44,6 @@ export default function NavigationBar({ onUserChange, isSchedulerShowing, toggle
                   <Logo />
                 </Link>
               </Grid>
-
               <Grid item xs display='flex' flexDirection='column' alignItems='center'>
                 <SearchBar />
               </Grid>
