@@ -1,22 +1,44 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Avatar, Button, Grid, IconButton, Tooltip, styled, useTheme } from '@mui/material';
-import { Logout, Notifications, ShoppingCart } from '@mui/icons-material';
+import { Grid, useTheme, Tabs, Tab, ListItemIcon } from '@mui/material';
+import { makeStyles } from '@material-ui/core';
+import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
+import EventNoteIcon from '@mui/icons-material/EventNote';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import SchoolIcon from '@mui/icons-material/School';
 
-const LargeIconButton = styled(IconButton)({ svg: { transform: 'scale(1.25)' } });
+const useStyle = makeStyles({
+  tab: {
+    color: 'white',
+    marginTop: '5%',
+    fontSize: '15%',
+  },
+  menuItem: {
+    fontSize: '0.9em',
+    color: '#d4d6d9',
+  },
+  menuItemIcon: {
+    color: '#d4d6d9',
+  },
+});
 
 /**
  * The group of buttons like notification and user profile that sits on the right side of the
  * navigation bar.
  */
-export default function NavigationBarButtonGroup({
-  isSchedulerShowing,
-  toggleScheduler,
-  userData,
-  logout,
-}) {
+export default function NavigationBarButtonGroup({ userData, logout }) {
   const theme = useTheme();
-
+  const classes = useStyle();
+  // TODO: fix this with context
+  const isUserLoggedIn = userData !== null && userData !== undefined;
   return (
     <Grid
       container
@@ -27,57 +49,93 @@ export default function NavigationBarButtonGroup({
         '*': { color: theme.palette.primary.contrastText },
       }}
     >
-      {userData
-        ? renderItemsForLoggedIn(isSchedulerShowing, toggleScheduler, userData, logout)
-        : renderItemsForNotLoggedIn(isSchedulerShowing, toggleScheduler)}
+      <Tabs value={false} aria-label='nav tabs example'>
+        <Tab label='Schedule' icon={<EventNoteIcon />} className={classes.tab} />
+        <Tab label='Notification' icon={<NotificationAddIcon />} className={classes.tab} />
+        <Tab label='Discussion' icon={<DashboardIcon />} className={classes.tab} />
+        {isUserLoggedIn ? (
+          <UserDropDownList userData={userData} logout={logout} />
+        ) : (
+          <LoginButton />
+        )}
+      </Tabs>
     </Grid>
   );
 }
 
-const renderItemsForLoggedIn = (isSchedulerShowing, toggleScheduler, userData, logout) => (
-  <>
-    <Grid item>
-      <LargeIconButton>
-        <Avatar sx={{ backgroundColor: '#222' }}>{getInitialsFromName(userData.name)}</Avatar>
-      </LargeIconButton>
-    </Grid>
-    {renderToggleSchedulerButton(isSchedulerShowing, toggleScheduler)}
-    <Grid item>
-      <Tooltip title='Notifications' disableInteractive>
-        <LargeIconButton size='large'>
-          <Notifications />
-        </LargeIconButton>
-      </Tooltip>
-    </Grid>
-    <Grid item>
-      <Tooltip title='Log Out' disableInteractive>
-        <LargeIconButton size='large' onClick={logout}>
-          <Logout />
-        </LargeIconButton>
-      </Tooltip>
-    </Grid>
-  </>
-);
+const LoginButton = () => {
+  const classes = useStyle();
+  return (
+    <>
+      <Tab
+        label={'Login'}
+        icon={<ManageAccountsIcon />}
+        className={classes.tab}
+        component={Link}
+        to='/auth'
+      />
+    </>
+  );
+};
 
-const renderItemsForNotLoggedIn = (isSchedulerShowing, toggleScheduler) => (
-  <>
-    {renderToggleSchedulerButton(isSchedulerShowing, toggleScheduler)}
-    <Grid item>
-      <Button component={Link} to='/auth' variant='contained'>
-        Login
-      </Button>
-    </Grid>
-  </>
-);
-
-const getInitialsFromName = (name) => name.split(' ').map((token) => token[0].toUpperCase());
-
-const renderToggleSchedulerButton = (isSchedulerShowing, toggleScheduler) => (
-  <Grid item>
-    <Tooltip title={`${isSchedulerShowing ? 'Hide' : 'Show'} Shopping Cart`} disableInteractive>
-      <LargeIconButton size='large' onClick={toggleScheduler}>
-        <ShoppingCart />
-      </LargeIconButton>
-    </Tooltip>
-  </Grid>
-);
+const UserDropDownList = ({ userData, logout }) => {
+  const classes = useStyle();
+  return (
+    <>
+      <PopupState variant='popover'>
+        {(popupState) => (
+          <React.Fragment>
+            <Tab
+              label={userData.name}
+              icon={<ManageAccountsIcon />}
+              className={classes.tab}
+              {...bindTrigger(popupState)}
+            />
+            <Menu
+              {...bindMenu(popupState)}
+              PaperProps={{
+                sx: {
+                  borderRadius: 0,
+                  width: 135,
+                  bgcolor: '#182b3a',
+                  boxShadow: 'none',
+                },
+              }}
+            >
+              <MenuItem onClick={popupState.close} className={classes.menuItem}>
+                <ListItemIcon className={classes.menuItemIcon}>
+                  <AdminPanelSettingsIcon fontSize='small' />
+                </ListItemIcon>
+                Profile
+              </MenuItem>
+              <MenuItem onClick={popupState.close} className={classes.menuItem}>
+                <ListItemIcon className={classes.menuItemIcon}>
+                  <SchoolIcon fontSize='small' />
+                </ListItemIcon>
+                Capstone
+              </MenuItem>
+              <MenuItem onClick={popupState.close} className={classes.menuItem}>
+                <ListItemIcon className={classes.menuItemIcon}>
+                  <AccountBalanceIcon fontSize='small' />
+                </ListItemIcon>
+                University
+              </MenuItem>
+              <MenuItem onClick={popupState.close} className={classes.menuItem}>
+                <ListItemIcon className={classes.menuItemIcon}>
+                  <EventAvailableIcon fontSize='small' />
+                </ListItemIcon>
+                Schedule
+              </MenuItem>
+              <MenuItem onClick={logout} className={classes.menuItem}>
+                <ListItemIcon className={classes.menuItemIcon}>
+                  <ExitToAppIcon fontSize='small' />
+                </ListItemIcon>
+                Log out
+              </MenuItem>
+            </Menu>
+          </React.Fragment>
+        )}
+      </PopupState>
+    </>
+  );
+};
