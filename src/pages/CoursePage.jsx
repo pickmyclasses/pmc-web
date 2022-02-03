@@ -73,7 +73,7 @@ export default function CoursePage({ shouldShowScheduler }) {
               <EnhancedTable classes={classes} />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <CourseOverallRatings course={course}></CourseOverallRatings>
+              <CourseOverallRatings courseID={course.ID}></CourseOverallRatings>
             </Grid>
             <Grid item xs={12} sm={12}>
               <CourseReviews courseID={course.ID}></CourseReviews>

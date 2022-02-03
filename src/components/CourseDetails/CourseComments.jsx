@@ -1,14 +1,14 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-export default function CourseComments({ title, comments }) {
+export default function CourseComments({ title, comment }) {
   return (
-    <Box sx={{ width: '100%' }}>
-      <Typography variant='h6' gutterBottom>
+    <Box>
+      <Typography variant='body1' gutterBottom color='seconday'>
         {title}
       </Typography>
       <Typography variant='body1' gutterBottom>
-        {comments}
+        '{comment}'
       </Typography>
     </Box>
   );

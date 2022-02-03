@@ -5,12 +5,10 @@ import { Grid, Typography } from '@mui/material';
 
 export default function CourseReviews({ courseID }) {
   const [reviews, setReviews] = useState(null);
-  console.log(courseID);
+
   useEffect(() => {
     fetchReviewsByID(courseID).then((data) => setReviews(data['data']['data']));
-    console.log(reviews);
   }, []);
-  console.log(courseID);
   const renderReviewSkeletons = () => (
     <Grid item>
       <Typography>No reviews for this course written yet.</Typography>

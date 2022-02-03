@@ -12,6 +12,7 @@ import MainCard from '../components/Skeleton/MainCard';
 import { gridSpacing } from '../constants/constants';
 import { useMount } from '../utils';
 import { postReviewByID } from '../../src/api/index';
+import swal from 'sweetalert';
 
 export default function ReviewPage({ shouldShowScheduler }) {
   const [course, setCourse] = useState(null);
@@ -86,13 +87,20 @@ export default function ReviewPage({ shouldShowScheduler }) {
               variant='contained'
               onClick={() => {
                 if (proValue.length === 0) {
-                  alert('Please fill in what do you like about this course.');
+                  swal('Oops!', 'Please fill in what do you like about this course.', 'error');
                   return;
                 }
                 if (conValue.length === 0) {
-                  alert('Please fill in what do you dislike about this course.');
+                  swal(
+                    'Oops!',
+                    "Please fill in what you don't like about this course.",
+                    'error'
+                  );
+
                   return;
                 }
+                swal('Good job!', 'You submitted the review!', 'success');
+
                 postReviewByID({
                   // anonymous: true,
                   comment: commentValue,
