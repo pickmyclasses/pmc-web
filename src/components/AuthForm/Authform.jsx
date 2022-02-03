@@ -31,9 +31,10 @@ export default function AuthForm() {
       .then((data) => {
         const userInfo = data.data;
         setUser({
-          name: `${userInfo.first_name} ${userInfo.last_name}`,
+          name: `${userInfo.firstName} ${userInfo.lastName}`,
           token: userInfo.token,
           role: userInfo.role,
+          userID: userInfo.id,
         });
         navigate('/home');
       })

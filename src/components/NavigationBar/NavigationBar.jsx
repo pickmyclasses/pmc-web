@@ -24,6 +24,8 @@ export default function NavigationBar({ onUserChange, isSchedulerShowing, toggle
     },
   });
 
+  console.log(user);
+
   // TODO Q: Can we get rid of using Redux here since we moved away from Redux pretty much
   // elsewhere?
   const logout = () => {
