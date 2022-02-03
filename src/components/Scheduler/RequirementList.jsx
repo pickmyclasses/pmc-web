@@ -17,7 +17,6 @@ export default function RequirementList({ requirements = [] }) {
 
   return (
     <Box>
-      <div style={{ marginBottom: '24px' }}>Requirements</div>
       {requirements.map(({ title, progress, total }) => (
         <div key={title} style={{ color: theme.palette.text.secondary, lineHeight: '2em' }}>
           {title}: {progress}/{total}

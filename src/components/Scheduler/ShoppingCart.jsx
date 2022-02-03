@@ -1,29 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import { fetchClassByID, fetchClassesInShoppingCart, fetchCourseByID } from '../../api';
-import Timeline from './Timeline';
 import { formatCourseName, parseDayList, parseTime } from '../../utils';
+import Timeline from './Timeline';
 
-/**
- * The shopping cart resides in the top part of the scheduler.
- *
- * @param {{
- *   scheduledCourses: {
- *     name: string,
- *     title: string,
- *     sessions: {
- *       component: string,
- *       days: number[],
- *       start: number,
- *       end: number,
- *     }[],
- *   }[],
- * }} props
- */
-export default function ShoppingCart() {
+/** The shopping cart resides in the top part of the scheduler. */
+export default function ShoppingCart({ classes }) {
   const [sessions, setSessions] = useState(null);
 
-  useEffect(() => fetchSessions(setSessions), []);
+  useEffect(() => setSessions(generateSessions(classes)), [classes]);
 
   return (
     <Box
@@ -35,66 +19,64 @@ export default function ShoppingCart() {
         flexDirection: 'column',
       }}
     >
-      <div style={{ marginBottom: '24px' }}>Shopping Cart</div>
       <Timeline events={sessions} />
     </Box>
   );
 }
 
 /**
- * Fetches the data for shopping cart and generate a list of sessions for each weekday.
- * @param {function(Array): void} onFetched The callback for when fetching is done.
+ * Generates a list of sessions for each weekday from a list of classes and belonged courses.
  */
-const fetchSessions = (onFetched) => {
-  fetchClassesInShoppingCart().then(({ data: classIDs }) => {
-    Promise.all(classIDs.map((id) => fetchClassByID(id))).then((classes) => {
-      classes = classes.map((data) => data['data']['data']);
+const generateSessions = (classes) => {
+  let sessions = [];
+  for (let { classData, course, isHighlighted } of classes) {
+    for (let dayOffered of parseDayList(classData.OfferDate)) {
+      const courseCode = formatCourseName(course.CatalogCourseName);
+      const relatedClasses = classes.filter((classData) => classData.CourseID === course.ID);
 
-      const courseIDs = [...new Set(classes.map((classData) => classData['CourseID']))];
-      Promise.all(courseIDs.map((id) => fetchCourseByID(id))).then((courses) => {
-        const courseByID = new Map(
-          courses.map(
-            ({
-              data: {
-                data: { course },
-              },
-            }) => [course['ID'], course]
-          )
-        );
-
-        const sessions = [];
-        for (let classData of classes) {
-          for (let dayOffered of parseDayList(classData['OfferDate'])) {
-            const course = courseByID.get(classData['CourseID']);
-            const courseCode = formatCourseName(course['CatalogCourseName']);
-            const relatedClasses = classes.filter(
-              (classData) => classData['CourseID'] === course['ID']
-            );
-
-            sessions.push({
-              columnIndex: dayOffered - 1,
-              start: parseTime(classData['StartTime']),
-              end: parseTime(classData['EndTime']),
-              text: courseCode,
-              data: {
-                id: course['ID'],
-                earliestStart: Math.min(
-                  ...relatedClasses.map((classData) => parseTime(classData['StartTime']))
-                ),
-                title: courseCode,
-                subtitle: course['Title'],
-                descriptions: relatedClasses.map(
-                  (classData) =>
-                    `${classData['OfferDate']}` +
-                    ` ${classData['StartTime']}–${classData['EndTime']}`
-                ),
-                detailPageLink: `/course/${course['ID']}`,
-              },
-            });
-          }
-        }
-        onFetched(sessions);
+      sessions.push({
+        columnIndex: dayOffered - 1,
+        start: parseTime(classData.StartTime),
+        end: parseTime(classData.EndTime),
+        color: isHighlighted ? 'success' : undefined,
+        text: courseCode,
+        // The following `data` object determines what to display in the timeline detail
+        // card (which shows up when clicking on a time block).
+        // TODO Q: Extract TimeDataCard so that it's handled by ShoppingCart. Let Timeline
+        // emit an onTimeBlockClick event instead of handling showing the detail card. Put
+        // all this complex data construction into the updated TimeDataCard.
+        data: {
+          id: course.ID,
+          earliestStart: Math.min(
+            ...relatedClasses.map((classData) => parseTime(classData.StartTime))
+          ),
+          title: courseCode,
+          subtitle: course.Title,
+          description: relatedClasses
+            .map((classData, i) => (
+              <div key={i}>
+                {getComponent(classData)}:{' '}
+                <b>
+                  {classData.OfferDate} {classData.StartTime}–{classData.EndTime}
+                </b>
+              </div>
+            ))
+            .concat(`Professor: ${getInstructor(classData)}`),
+          topBorderColor: isHighlighted ? 'success' : undefined,
+          coursePageURL: `/course/${course.ID}`,
+        },
       });
-    });
-  });
+    }
+  }
 };
+
+// TODO Q: Some classes in the backend have their component name wrongly listed in
+// a field other than 'Component'. After the backend is fixed, get rid of these
+// helpers and access `classData[...]` directly.
+const getComponent = (classData) =>
+  Object.values(classData).find((value) =>
+    ['Lecture', 'Laboratory', 'Discussion', 'Seminar'].includes(value)
+  );
+// TODO Q: This is assuming a class only has one instructor, which may be false.
+const getInstructor = (classData) =>
+  Object.values(classData).find((value) => value && /^[A-Z, ]+$/.test(String(value)));

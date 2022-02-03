@@ -1,21 +1,30 @@
 import React from 'react';
-import { Box, Divider, useTheme } from '@mui/material';
+import { Box, CircularProgress, Divider, useTheme } from '@mui/material';
 import ShoppingCart from './ShoppingCart';
 import RequirementList from './RequirementList';
 
 /**
  * The scheduler panel, which includes the shopping cart and the requirement list.
- *
- * @param {{
- *   requirements: {
- *     title: string,
- *     progress: number,
- *     total: number,
- *   }[],
- * }} props
  */
-export default function Scheduler({ requirements = [] }) {
+export default function Scheduler({
+  isLoading = false,
+  classesInShoppingCart = [],
+  requirements = [],
+}) {
   const theme = useTheme();
+
+  const renderLoadingIndication = () => <CircularProgress sx={{ margin: 'auto' }} />;
+
+  const renderSchedulerContent = () => (
+    <>
+      <Box sx={{ flex: 1 }}>
+        <ShoppingCart classes={classesInShoppingCart} />
+      </Box>
+      <Divider sx={{ margin: '16px 0' }} />
+      <div style={{ marginBottom: '24px' }}>Requirements</div>
+      <RequirementList requirements={requirements} />
+    </>
+  );
 
   return (
     <Box
@@ -31,11 +40,8 @@ export default function Scheduler({ requirements = [] }) {
         flexDirection: 'column',
       }}
     >
-      <Box sx={{ flex: 1 }}>
-        <ShoppingCart />
-      </Box>
-      <Divider sx={{ margin: '16px 0' }} />
-      <RequirementList requirements={requirements} />
+      <div style={{ marginBottom: '24px' }}>Shopping Cart</div>
+      {isLoading ? renderLoadingIndication() : renderSchedulerContent()}
     </Box>
   );
 }
