@@ -32,69 +32,34 @@ function NumberLinearProgress(props) {
           value={props.value}
         />
       </Box>
-      <Typography variant='body2' color='textSecondary'>{`${props.value}%`}</Typography>
+      <Typography
+        variant='body2'
+        color='textSecondary'
+        style={{ minWidth: '32px' }}
+      >{`${props.value}%`}</Typography>
     </Box>
   );
 }
 
-function getRatingDistribution({ reviews }) {
-  var dict = {
-    oneStar: 0,
-    twoStar: 0,
-    threeStar: 0,
-    fourStar: 0,
-    fiveStar: 0,
-  };
-  if (!reviews) {
-    return dict;
+function getRatingDistribution(reviews) {
+  let distribution = Array(5).fill(0);
+  if (reviews) {
+    for (let review of reviews) distribution[review.Rating - 1]++;
   }
-  for (let i = 0; i < reviews.length; i++) {
-    switch (reviews[i].Rating) {
-      case 1:
-        dict['oneStar'] += 1;
-        break;
-      case 2:
-        dict['twoStar'] += 1;
-        break;
-      case 3:
-        dict['threeStar'] += 1;
-        break;
-      case 4:
-        dict['fourStar'] += 1;
-        break;
-      case 5:
-        dict['fiveStar'] += 1;
-
-        break;
-    }
-  }
-  return dict;
+  return distribution;
 }
 
 export default function CustomizedProgressBars({ reviews }) {
-  let denom = 0;
-  if (reviews) {
-    denom = reviews.length;
-  }
+  let numReviews = reviews?.length || 1;
+  let ratingDistribution = getRatingDistribution(reviews);
 
-  var dict = getRatingDistribution({ reviews });
   return (
     <Grid container direction='column' spacing={1} xs={6}>
-      <Grid item>
-        <NumberLinearProgress stars={5} value={Math.round((100 * dict['fiveStar']) / denom)} />
-      </Grid>
-      <Grid item>
-        <NumberLinearProgress stars={4} value={Math.round((100 * dict['fourStar']) / denom)} />
-      </Grid>
-      <Grid item>
-        <NumberLinearProgress stars={3} value={Math.round((100 * dict['threeStar']) / denom)} />
-      </Grid>
-      <Grid item>
-        <NumberLinearProgress stars={2} value={Math.round((100 * dict['twoStar']) / denom)} />
-      </Grid>
-      <Grid item>
-        <NumberLinearProgress stars={1} value={Math.round((100 * dict['oneStar']) / denom)} />
-      </Grid>
+      {ratingDistribution.reverse().map((count, i) => (
+        <Grid key={5 - i} item>
+          <NumberLinearProgress stars={5 - i} value={Math.round((100 * count) / numReviews)} />
+        </Grid>
+      ))}
     </Grid>
   );
 }

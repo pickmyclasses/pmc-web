@@ -28,7 +28,7 @@ export default function CourseOverallRatings({ courseID }) {
       <Grid container direction='column' spacing={1}>
         <Grid item>
           <Typography variant='h4' gutterBottom color='primary'>
-            Quality - {avgScore}/5
+            Quality - {avgScore.toFixed(1)}/5
           </Typography>
         </Grid>
         <Grid item>
