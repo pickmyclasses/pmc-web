@@ -21,8 +21,8 @@ export default function PageWithScheduler({ children, shouldShowScheduler }) {
   const user = useContext(UserContext);
 
   const fetchSchedulerData = useCallback(() => {
-    setIsLoading(true);
     if (user) {
+      setIsLoading(true);
       fetchClassIDsInShoppingCart(user['ID']).then(({ data }) =>
         fetchClassesAndCourses(data, (classes) => {
           setIsLoading(false);
@@ -55,8 +55,11 @@ export default function PageWithScheduler({ children, shouldShowScheduler }) {
         </Grid>
         <Grid
           item
-          xs={shouldShowScheduler ? 3.75 : 0}
-          sx={{ padding: '24px', display: shouldShowScheduler ? '' : 'none' }}
+          // TODO Q: Ideally we should show a message in the scheduler if not logged in, e.g.
+          // "Log in to enable your personal shopping cart!"
+          // ...instead of hiding the scheduler altogether.
+          xs={shouldShowScheduler && user ? 3.75 : 0}
+          sx={{ padding: '24px', display: shouldShowScheduler && user ? '' : 'none' }}
         >
           <Scheduler
             isLoading={isLoading}
