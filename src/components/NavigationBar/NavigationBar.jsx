@@ -1,5 +1,5 @@
-import React, { useEffect, useContext } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppBar, Container, Grid, Toolbar } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -11,9 +11,8 @@ import NavigationBarButtonGroup from './NavigationBarButtonGroup';
 export default function NavigationBar({ onUserChange, isSchedulerShowing, toggleScheduler }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   // TODO Q: Nice looking theme for the app bar! Hope we can soon use the same theme in the
   // entire app.
@@ -24,11 +23,6 @@ export default function NavigationBar({ onUserChange, isSchedulerShowing, toggle
       },
     },
   });
-
-  useEffect(
-    () => onUserChange(JSON.parse(localStorage.getItem('profile'))),
-    [location, onUserChange]
-  );
 
   // TODO Q: Can we get rid of using Redux here since we moved away from Redux pretty much
   // elsewhere?
@@ -55,7 +49,7 @@ export default function NavigationBar({ onUserChange, isSchedulerShowing, toggle
               <Grid item xs='auto'>
                 <NavigationBarButtonGroup
                   isSchedulerShowing={isSchedulerShowing}
-                  userData={user?.result}
+                  userData={user}
                   logout={logout}
                   toggleScheduler={toggleScheduler}
                 />

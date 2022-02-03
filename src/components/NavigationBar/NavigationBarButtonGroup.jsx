@@ -41,7 +41,7 @@ const useStyle = makeStyles({
 export default function NavigationBarButtonGroup({ userData, logout }) {
   const theme = useTheme();
   const classes = useStyle();
-  // TODO: fix this with context
+
   const isUserLoggedIn = userData !== null && userData !== undefined;
   return (
     <Grid
@@ -53,7 +53,7 @@ export default function NavigationBarButtonGroup({ userData, logout }) {
         '*': { color: theme.palette.primary.contrastText },
       }}
     >
-      <Tabs value={false} aria-label='nav tabs example'>
+      <Tabs value={false} aria-label='nav tabs'>
         {isUserLoggedIn && (
           <Tab label='Schedule' icon={<EventNoteIcon />} className={classes.tab} />
         )}

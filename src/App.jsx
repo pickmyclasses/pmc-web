@@ -3,21 +3,21 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Box } from '@mui/material';
 import HomePage from './pages/HomePage';
 import SearchPage from './pages/SearchPage';
-import AuthPage from './pages/AuthPage';
 import CoursePage from './pages/CoursePage';
 import NavigationBar from './components/NavigationBar/NavigationBar';
 import WelcomePage from './pages/WelcomePage';
 import ReviewPage from './pages/ReviewPage';
+import AuthForm from './components/AuthForm/Authform';
 
 export const UserContext = createContext();
 
 export default function App() {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
   const [shouldShowScheduler, setShouldShowScheduler] = useState(true);
 
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <UserContext.Provider value={user}>
+      <UserContext.Provider value={{ user, setUser }}>
         <BrowserRouter>
           <NavigationBar
             onUserChange={setUser}
@@ -36,7 +36,7 @@ export default function App() {
               exact
               element={<SearchPage shouldShowScheduler={shouldShowScheduler} />}
             />
-            <Route path='/auth' exact element={<AuthPage />} />
+            <Route path='/auth' exact element={<AuthForm />} />
             <Route
               path='/course/:id'
               exact

@@ -1,5 +1,15 @@
 import axios from 'axios';
 
+export const login = ({ email, password }) => {
+  const promise = axios.post('/login', {
+    email: email,
+    password: password,
+  });
+  return promise.then((response) => response.data);
+};
+
+export const register = (userData) => axios.post('/register');
+
 export const fetchCourseByID = (courseID) => axios.get(`/course/${courseID}`);
 
 export const fetchAllCourses = () => axios.get('/course/list');
