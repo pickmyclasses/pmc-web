@@ -50,9 +50,7 @@ const AuthPage = () => {
 
   // The response will include access token
   const googleSuccess = async (res) => {
-    // res?. will not get us an error if res is null
     const result = await res?.profileObj;
-
     const token = res?.tokenId;
 
     try {

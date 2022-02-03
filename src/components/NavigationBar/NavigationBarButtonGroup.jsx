@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, useTheme, Tabs, Tab, ListItemIcon } from '@mui/material';
+import { Grid, useTheme, Tabs, Tab, ListItemIcon, Button } from '@mui/material';
 import { makeStyles } from '@material-ui/core';
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 import EventNoteIcon from '@mui/icons-material/EventNote';
@@ -28,6 +28,10 @@ const useStyle = makeStyles({
   menuItemIcon: {
     color: '#d4d6d9',
   },
+  button: {
+    marginTop: '30%',
+    color: '#d4d6d9',
+  },
 });
 
 /**
@@ -50,9 +54,15 @@ export default function NavigationBarButtonGroup({ userData, logout }) {
       }}
     >
       <Tabs value={false} aria-label='nav tabs example'>
-        <Tab label='Schedule' icon={<EventNoteIcon />} className={classes.tab} />
-        <Tab label='Notification' icon={<NotificationAddIcon />} className={classes.tab} />
-        <Tab label='Discussion' icon={<DashboardIcon />} className={classes.tab} />
+        {isUserLoggedIn && (
+          <Tab label='Schedule' icon={<EventNoteIcon />} className={classes.tab} />
+        )}
+        {isUserLoggedIn && (
+          <Tab label='Notification' icon={<NotificationAddIcon />} className={classes.tab} />
+        )}
+        {isUserLoggedIn && (
+          <Tab label='Discussion' icon={<DashboardIcon />} className={classes.tab} />
+        )}
         {isUserLoggedIn ? (
           <UserDropDownList userData={userData} logout={logout} />
         ) : (
@@ -67,13 +77,9 @@ const LoginButton = () => {
   const classes = useStyle();
   return (
     <>
-      <Tab
-        label={'Login'}
-        icon={<ManageAccountsIcon />}
-        className={classes.tab}
-        component={Link}
-        to='/auth'
-      />
+      <Button variant='contained' component={Link} to='/auth' className={classes.button}>
+        Login
+      </Button>
     </>
   );
 };
