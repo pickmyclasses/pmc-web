@@ -7,16 +7,19 @@ import ReviewDescription from '../components/ReviewInputDetails/ReviewDescriptio
 import ReviewRatings from '../components/ReviewInputDetails/ReviewRatings';
 import ReviewPros from '../components/ReviewInputDetails/ReviewPros';
 import ReviewCons from '../components/ReviewInputDetails/ReviewCons';
+import ReviewComments from '../components/ReviewInputDetails/ReviewComments';
 import MainCard from '../components/Skeleton/MainCard';
 import { gridSpacing } from '../constants/constants';
 import { useMount } from '../utils';
+import { postReviewByID } from '../../src/api/index';
+import swal from 'sweetalert';
 
 export default function ReviewPage({ shouldShowScheduler }) {
   const [course, setCourse] = useState(null);
   const [ratingValue, setRatingValue] = useState(3);
   const [proValue, setProValue] = useState('');
   const [conValue, setConValue] = useState('');
-
+  const [commentValue, setCommentValue] = useState('');
   const urlParams = useParams();
 
   useMount(() => {
@@ -64,8 +67,14 @@ export default function ReviewPage({ shouldShowScheduler }) {
             />
           </Grid>
           <Grid item xs={12} sm={12}>
-            {proValue}
+            <ReviewComments
+              value={commentValue}
+              onChange={(commentValue) => {
+                setCommentValue(commentValue);
+              }}
+            />
           </Grid>
+
           <Grid
             item
             container
@@ -74,7 +83,38 @@ export default function ReviewPage({ shouldShowScheduler }) {
             alignItems='center'
             justifyContent='center'
           >
-            <Button variant='contained'>Submit</Button>{' '}
+            <Button
+              variant='contained'
+              onClick={() => {
+                if (proValue.length === 0) {
+                  swal('Oops!', 'Please fill in what do you like about this course.', 'error');
+                  return;
+                }
+                if (conValue.length === 0) {
+                  swal(
+                    'Oops!',
+                    "Please fill in what you don't like about this course.",
+                    'error'
+                  );
+
+                  return;
+                }
+                swal('Good job!', 'You submitted the review!', 'success');
+
+                postReviewByID({
+                  // anonymous: true,
+                  comment: commentValue,
+                  cons: conValue,
+                  course_id: course.ID,
+                  pros: proValue,
+                  rating: ratingValue,
+                  // recommended: true,
+                  user_id: 0,
+                });
+              }}
+            >
+              Submit
+            </Button>{' '}
           </Grid>
         </Grid>
       </MainCard>

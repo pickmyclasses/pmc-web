@@ -4,7 +4,8 @@ import MuiTypography from '@mui/material/Typography';
 
 //Project Imports
 import SubCard from '../Skeleton/SubCard';
-const gridSpacing = 3;
+import { gridSpacing } from '../../constants/constants';
+
 export default function CourseDescriptionSubCard({ course }) {
   return (
     <SubCard title='Course Description' spacing={gridSpacing}>

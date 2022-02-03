@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box, Grid, TextField, Typography } from '@mui/material';
-import { ArrowCircleUp } from '@mui/icons-material';
+import { ArrowCircleDown } from '@mui/icons-material';
 import { gridSpacing } from '../../constants/constants';
 import SubCard from '../Skeleton/SubCard';
 
-export default function ReviewPros({ value, onChange }) {
+export default function ReviewComments({ value, onChange }) {
   return (
     <SubCard>
       <Grid container spacing={gridSpacing}>
@@ -18,10 +18,10 @@ export default function ReviewPros({ value, onChange }) {
           justifyContent='center'
         >
           <Typography variant='h6' gutterBottom>
-            What do you like best?
+            Here's your chance to be more specific
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-            <ArrowCircleUp sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+            <ArrowCircleDown sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
           </Box>
 
           <TextField
@@ -30,7 +30,7 @@ export default function ReviewPros({ value, onChange }) {
             multiline
             rows={4}
             value={value}
-            color='success'
+            color='secondary'
             onChange={(event) => {
               onChange(event.target.value);
             }}
