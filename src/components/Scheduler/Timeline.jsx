@@ -25,10 +25,6 @@ export default function Timeline({
   columnTitles = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
   events = [],
 }) {
-  console.log(
-    '**',
-    events?.map(({ text, columnIndex, start, end }) => ({ text, columnIndex, start, end }))
-  );
   const theme = useTheme();
 
   const [mouseEnteredEventData, setMouseEnteredEventData] = useState(null);

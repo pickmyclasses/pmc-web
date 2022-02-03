@@ -1,28 +1,5 @@
 import axios from 'axios';
 
-export const postReviewByID = (reviewObj) => {
-  console.log(reviewObj);
-  axios
-    .post(`/course/review`, {
-      // anonymous: reviewObj.anonymous,
-      comment: reviewObj.comment,
-      cons: reviewObj.cons,
-      course_id: reviewObj.course_id,
-      pros: reviewObj.pros,
-      rating: reviewObj.rating,
-      // recommended: reviewObj.recommended,
-      user_id: reviewObj.user_id,
-    })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-};
-
-export const fetchReviewsByID = (courseID) => axios.get(`/course/${courseID}/review`);
-
 export const fetchCourseByID = (courseID) => axios.get(`/course/${courseID}`);
 
 export const fetchAllCourses = () => axios.get('/course/list');
@@ -60,8 +37,28 @@ export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
 
 export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseID}/class`);
 
-export const fetchClassesInShoppingCart = () => fakeFetchClassesInShoppingCart();
+export const fetchClassIDsInShoppingCart = () => fakeFetchClassIDsInShoppingCart();
 
-// TODO: Actually fetch from backend and get rid of this.
-const fakeFetchClassesInShoppingCart = () =>
+// TODO Q: Actually fetch from backend and get rid of this.
+const fakeFetchClassIDsInShoppingCart = () =>
   new Promise((onFetched) => onFetched({ data: [10795, 10801, 15812, 15813, 17099] }));
+
+// TODO Q: Backend should fix this irregular URL entry.
+export const postAddClassIDToShoppingCart = (body) =>
+  alert('** trying to post ' + JSON.stringify(body));
+// axios.post(`https://pmc-schedule-api.herokuapp.com/schedule`, body);
+
+export const fetchReviewsByID = (courseID) => axios.get(`/course/${courseID}/review`);
+
+// TODO Q: (1) this is not by ID; (2) simplify object passing and remove object reconstruction.
+export const postReviewByID = (reviewObj) =>
+  axios.post(`/course/review`, {
+    // anonymous: reviewObj.anonymous,
+    comment: reviewObj.comment,
+    cons: reviewObj.cons,
+    course_id: reviewObj.course_id,
+    pros: reviewObj.pros,
+    rating: reviewObj.rating,
+    // recommended: reviewObj.recommended,
+    user_id: reviewObj.user_id,
+  });

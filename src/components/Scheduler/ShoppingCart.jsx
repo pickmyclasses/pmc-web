@@ -32,7 +32,9 @@ const generateSessions = (classes) => {
   for (let { classData, course, isHighlighted } of classes) {
     for (let dayOffered of parseDayList(classData.OfferDate)) {
       const courseCode = formatCourseName(course.CatalogCourseName);
-      const relatedClasses = classes.filter((classData) => classData.CourseID === course.ID);
+      const relatedClasses = classes
+        .map(({ classData }) => classData)
+        .filter((x) => x.CourseID === course.ID);
 
       sessions.push({
         columnIndex: dayOffered - 1,
@@ -68,6 +70,7 @@ const generateSessions = (classes) => {
       });
     }
   }
+  return sessions;
 };
 
 // TODO Q: Some classes in the backend have their component name wrongly listed in

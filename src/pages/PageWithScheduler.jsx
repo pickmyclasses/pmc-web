@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { Container, Grid } from '@mui/material';
-import { fetchClassByID, fetchClassesInShoppingCart, fetchCourseByID } from '../api';
+import { fetchClassByID, fetchClassIDsInShoppingCart, fetchCourseByID } from '../api';
 import Scheduler from '../components/Scheduler/Scheduler';
 import { UserContext } from '../App';
 
@@ -23,7 +23,7 @@ export default function PageWithScheduler({ children, shouldShowScheduler }) {
   const fetchSchedulerData = useCallback(() => {
     setIsLoading(true);
     if (user) {
-      fetchClassesInShoppingCart(user['ID']).then(({ data }) =>
+      fetchClassIDsInShoppingCart(user['ID']).then(({ data }) =>
         fetchClassesAndCourses(data, (classes) => {
           setIsLoading(false);
           setClassesInShoppingCart(classes);
@@ -35,7 +35,11 @@ export default function PageWithScheduler({ children, shouldShowScheduler }) {
   useEffect(() => fetchSchedulerData(), [fetchSchedulerData]);
 
   const allClasses = [
-    ...classesInShoppingCart.map((x) => ({ ...x, isHighlighted: false })),
+    ...classesInShoppingCart
+      .filter(({ classData }) =>
+        classesToHighlight.every((y) => y.classData.ID !== classData.ID)
+      )
+      .map((x) => ({ ...x, isHighlighted: false })),
     ...classesToHighlight.map((x) => ({ ...x, isHighlighted: true })),
   ];
 

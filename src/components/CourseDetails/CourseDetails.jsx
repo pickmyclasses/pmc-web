@@ -44,6 +44,10 @@ import { visuallyHidden } from '@mui/utils';
 import CourseRating from '../../components/CourseDetails/CourseRating';
 import { SchedulerDisplayContentContext } from '../../pages/PageWithScheduler';
 import { CourseContext } from '../../pages/CoursePage';
+import { Button } from '@mui/material';
+import { AddShoppingCart, Delete } from '@mui/icons-material';
+import { postAddClassIDToShoppingCart } from '../../api';
+import { UserContext } from '../../App';
 
 function createData(OfferDate, Location, Section, RecommendationScore, Professor) {
   return {
@@ -254,6 +258,7 @@ export default function EnhancedTable({ classes }) {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const user = React.useContext(UserContext);
   const { setClassesToHighlight } = React.useContext(SchedulerDisplayContentContext);
   const course = React.useContext(CourseContext);
 
@@ -267,7 +272,6 @@ export default function EnhancedTable({ classes }) {
       .filter(Boolean)
       .map((classData) => ({ classData, course }));
     setClassesToHighlight(selectedClasses);
-    console.log('** hl', selectedClasses, selected, classes);
   }, [classes, course, selected, setClassesToHighlight]);
 
   const handleRequestSort = (event, property) => {
@@ -408,6 +412,38 @@ export default function EnhancedTable({ classes }) {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label='Dense padding'
       />
+      <Button
+        variant='outlined'
+        color='error'
+        sx={{ float: 'right' }}
+        disabled={selected.length === 0 || !user}
+        startIcon={<Delete />}
+      >
+        Remove from Cart
+      </Button>
+      <Button
+        variant='contained'
+        color='success'
+        sx={{ float: 'right', marginRight: '12px' }}
+        disabled={selected.length === 0 || !user}
+        startIcon={<AddShoppingCart />}
+        onClick={() => {
+          const selectedClassIDs = selected
+            .map((OfferDate) =>
+              classes.find((classData) => OfferDate === formatOfferDate(classData))
+            )
+            .filter(Boolean)
+            .map((x) => x.ID);
+          for (let classID in selectedClassIDs)
+            postAddClassIDToShoppingCart({
+              user_id: user,
+              class_id: classID,
+              semesterID: 1,
+            });
+        }}
+      >
+        Add to Cart
+      </Button>
     </Box>
   );
 }
