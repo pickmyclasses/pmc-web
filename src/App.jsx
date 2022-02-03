@@ -7,7 +7,7 @@ import CoursePage from './pages/CoursePage';
 import NavigationBar from './components/NavigationBar/NavigationBar';
 import WelcomePage from './pages/WelcomePage';
 import ReviewPage from './pages/ReviewPage';
-import AuthForm from './components/AuthForm/Authform';
+import AuthForm from './components/AuthForm/AuthForm';
 
 export const UserContext = createContext();
 
