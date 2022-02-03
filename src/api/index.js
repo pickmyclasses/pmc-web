@@ -1,28 +1,5 @@
 import axios from 'axios';
 
-export const postReviewByID = (reviewObj) => {
-  console.log(reviewObj);
-  axios
-    .post(`/course/review`, {
-      // anonymous: reviewObj.anonymous,
-      comment: reviewObj.comment,
-      cons: reviewObj.cons,
-      course_id: reviewObj.course_id,
-      pros: reviewObj.pros,
-      rating: reviewObj.rating,
-      // recommended: reviewObj.recommended,
-      user_id: reviewObj.user_id,
-    })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-};
-
-export const fetchReviewsByID = (courseID) => axios.get(`/course/${courseID}/review`);
-
 export const fetchCourseByID = (courseID) => axios.get(`/course/${courseID}`);
 
 export const fetchAllCourses = () => axios.get('/course/list');
@@ -33,9 +10,9 @@ export const fetchHomePageCourses = () => fakeFetchHomePageCourses();
 const fakeFetchHomePageCourses = () =>
   new Promise((onFetched) => {
     const recommendedCategories = {
-      'Major Requirements To Go': [22960, 22963],
-      'Hot CS Electives': [22961, 22971, 22951, 22970, 22968],
-      'Hot Gen-Ed Courses': [26280, 24783, 25073, 24764, 30556, 28270],
+      'Major Requirements To Go': [22948, 22949, 22963],
+      'Hot CS Electives': [22961, 22971, 22951, 22970, 22998],
+      'Hot Gen-Ed Courses': [31826, 28270, 24777, 21978, 28354, 27266],
     };
 
     onFetched(
@@ -52,7 +29,7 @@ export const fetchCoursesBySearch = (query) => fakeFetchCoursesBySearch(query);
 const fakeFetchCoursesBySearch = () =>
   new Promise((onFetched) =>
     onFetched([
-      23000, 23068, 23063, 22938, 23041, 23001, 22986, 22998, 22964, 23064, 22941, 22942,
+      22966, 23000, 22968, 23068, 23063, 23041, 23001, 22986, 22998, 22964, 22941, 22942,
     ])
   );
 
@@ -60,8 +37,28 @@ export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
 
 export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseID}/class`);
 
-export const fetchClassesInShoppingCart = () => fakeFetchClassesInShoppingCart();
+export const fetchClassIDsInShoppingCart = () => fakeFetchClassIDsInShoppingCart();
 
-// TODO: Actually fetch from backend and get rid of this.
-const fakeFetchClassesInShoppingCart = () =>
-  new Promise((onFetched) => onFetched({ data: [10774, 10778, 13829, 14553] }));
+// TODO Q: Actually fetch from backend and get rid of this.
+const fakeFetchClassIDsInShoppingCart = () =>
+  new Promise((onFetched) => onFetched({ data: [10795, 10801, 15812, 15813, 17099] }));
+
+// TODO Q: Backend should fix this irregular URL entry.
+export const postAddClassIDToShoppingCart = (body) =>
+  alert('** trying to post ' + JSON.stringify(body));
+// axios.post(`https://pmc-schedule-api.herokuapp.com/schedule`, body);
+
+export const fetchReviewsByID = (courseID) => axios.get(`/course/${courseID}/review`);
+
+// TODO Q: (1) this is not by ID; (2) simplify object passing and remove object reconstruction.
+export const postReviewByID = (reviewObj) =>
+  axios.post(`/course/review`, {
+    // anonymous: reviewObj.anonymous,
+    comment: reviewObj.comment,
+    cons: reviewObj.cons,
+    course_id: reviewObj.course_id,
+    pros: reviewObj.pros,
+    rating: reviewObj.rating,
+    // recommended: reviewObj.recommended,
+    user_id: reviewObj.user_id,
+  });

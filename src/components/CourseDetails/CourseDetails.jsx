@@ -1,3 +1,22 @@
+/* TODO Q: This entire file needs refactor. Here are some aspects to consider in the refactor
+ * (this list may not be exhaustive):
+ *  1. The file name, which does not match what it exports by default, and the content of this *     file, which contains more than one components and pieces of complex logic.
+ *  2. The code style, including notably the following elements:
+ *       - Detached import statements of items from the same directory
+ *       - Inconsistent function declarations: mixture of using lambda and `function` keywords
+ *       - Use of `let` variable instead of a state
+ *       - Superfluous helper functions, often involving complex implementations of simple logic
+ *       - Some irregular casing or construction in names of variables and function arguments
+ *  3. The design. The name `EnhancedTable` implies more general use cases than for displaying
+ *     class listing only. So, the props and constants of the table should not defined locally
+ *     specifically for showing classes. Instead, the table component should be structured and
+ *     developed in a way that promotes reusability and abstraction. Best if it can be adopted
+ *     anywhere in the project.
+ *  4. The way it uses "offer date" as the key for recording and identifying selections, which
+ *     fails to work when there are multiple class offerings with the same offer date.
+ * Although, refactor of this file should not be a top priority, at least not carried out before
+ * a more clarified UX design. */
+
 import * as React from 'react';
 
 import PropTypes from 'prop-types';
@@ -23,6 +42,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import CourseRating from '../../components/CourseDetails/CourseRating';
+import { SchedulerDisplayContentContext } from '../../pages/PageWithScheduler';
+import { CourseContext } from '../../pages/CoursePage';
+import { Button } from '@mui/material';
+import { AddShoppingCart, Delete } from '@mui/icons-material';
+import { postAddClassIDToShoppingCart } from '../../api';
+import { UserContext } from '../../App';
 
 function createData(OfferDate, Location, Section, RecommendationScore, Professor) {
   return {
@@ -204,10 +229,14 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
+// TODO Q: As iterated many times, fix it and do not use OfferDate as the key.
+const formatOfferDate = (classData) =>
+  `${classData['OfferDate']} ${classData['StartTime']} – ${classData['EndTime']}`;
+
 function initRowData(classes) {
   let rows = [];
   for (let classData of classes) {
-    const offerDate = `${classData['OfferDate']} ${classData['StartTime']} – ${classData['EndTime']}`;
+    const offerDate = formatOfferDate(classData);
     const location = classData['Location'];
     const section = classData['Session'];
     // TODO (QC): No recommendation score provided in the backend. Possibly remove this as
@@ -228,6 +257,22 @@ export default function EnhancedTable({ classes }) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const user = React.useContext(UserContext);
+  const { setClassesToHighlight } = React.useContext(SchedulerDisplayContentContext);
+  const course = React.useContext(CourseContext);
+
+  React.useEffect(() => setSelected([]), [classes]);
+
+  React.useEffect(() => {
+    // selected is a list of offer dates (TODO Q: fix this during refactor), therefore generate
+    // the corresponding list of classes to highlight.
+    const selectedClasses = selected
+      .map((OfferDate) => classes.find((classData) => OfferDate === formatOfferDate(classData)))
+      .filter(Boolean)
+      .map((classData) => ({ classData, course }));
+    setClassesToHighlight(selectedClasses);
+  }, [classes, course, selected, setClassesToHighlight]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -260,8 +305,7 @@ export default function EnhancedTable({ classes }) {
         selected.slice(selectedIndex + 1)
       );
     }
-    //The selected class,
-    //TODO can use to send it to shopping cart
+
     setSelected(newSelected);
   };
 
@@ -368,6 +412,38 @@ export default function EnhancedTable({ classes }) {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label='Dense padding'
       />
+      <Button
+        variant='outlined'
+        color='error'
+        sx={{ float: 'right' }}
+        disabled={selected.length === 0 || !user}
+        startIcon={<Delete />}
+      >
+        Remove from Cart
+      </Button>
+      <Button
+        variant='contained'
+        color='success'
+        sx={{ float: 'right', marginRight: '12px' }}
+        disabled={selected.length === 0 || !user}
+        startIcon={<AddShoppingCart />}
+        onClick={() => {
+          const selectedClassIDs = selected
+            .map((OfferDate) =>
+              classes.find((classData) => OfferDate === formatOfferDate(classData))
+            )
+            .filter(Boolean)
+            .map((x) => x.ID);
+          for (let classID in selectedClassIDs)
+            postAddClassIDToShoppingCart({
+              user_id: user,
+              class_id: classID,
+              semesterID: 1,
+            });
+        }}
+      >
+        Add to Cart
+      </Button>
     </Box>
   );
 }
