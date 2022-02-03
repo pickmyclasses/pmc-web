@@ -55,12 +55,9 @@ export default function CustomizedProgressBars({ reviews }) {
 
   return (
     <Grid container direction='column' spacing={1} xs={6}>
-      {ratingDistribution.reverse().map((count, rating) => (
-        <Grid key={rating} item>
-          <NumberLinearProgress
-            stars={rating + 1}
-            value={Math.round((100 * count) / numReviews)}
-          />
+      {ratingDistribution.reverse().map((count, i) => (
+        <Grid key={5 - i} item>
+          <NumberLinearProgress stars={5 - i} value={Math.round((100 * count) / numReviews)} />
         </Grid>
       ))}
     </Grid>
