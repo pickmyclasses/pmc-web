@@ -44,7 +44,7 @@ function NumberLinearProgress(props) {
 function getRatingDistribution(reviews) {
   let distribution = Array(5).fill(0);
   if (reviews) {
-    for (let review of reviews) distribution[review.Rating - 1]++;
+    for (let review of reviews) distribution[review.rating - 1]++;
   }
   return distribution;
 }

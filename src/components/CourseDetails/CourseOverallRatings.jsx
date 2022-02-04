@@ -11,7 +11,7 @@ function calculateAverageScore({ reviews }) {
     return 0;
   }
   for (let step = 0; step < reviews.length; step++) {
-    sum += reviews[step].Rating;
+    sum += reviews[step].rating;
   }
   return sum / reviews.length;
 }
