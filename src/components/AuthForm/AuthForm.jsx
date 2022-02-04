@@ -44,13 +44,13 @@ export default function AuthForm() {
           swal('Oop... Something wnet wrong', err.response.data.message, 'error');
         } else if (err.request) {
           swal(
-            'Oop... Something wnet wrong',
+            'Oop... Something went wrong',
             'Internal error, please try again later',
             'error'
           );
         } else {
           swal(
-            'Oop... Something wnet wrong',
+            'Oop... Something went wrong',
             'Internal error, please try again later',
             'error'
           );
