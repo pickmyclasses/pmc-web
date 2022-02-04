@@ -48,8 +48,8 @@ export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
 export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseID}/class`);
 
 // TODO Q: Remove this after backend migrates and combines APIs.
-const shoppingCartAPIEntryURL = 'http://localhost:5000';
-// const shoppingCartAPIEntryURL = 'https://pmc-schedule-api.herokuapp.com';
+// const shoppingCartAPIEntryURL = 'http://localhost:5000';
+const shoppingCartAPIEntryURL = 'https://pmc-schedule-api.herokuapp.com';
 
 export const fetchClassIDsInShoppingCart = (userID, semesterID) =>
   axios.get(`${shoppingCartAPIEntryURL}/schedule/${userID}/${semesterID}`);
