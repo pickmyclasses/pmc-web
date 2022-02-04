@@ -42,20 +42,20 @@ export default function RegisterForm() {
           swal('Welcome To PMC!', 'Registration succeeded, please login!', 'success');
           setTimeout(function () {
             navigate('/auth');
-          }, 5000);
+          }, 1000);
         })
         .catch((err) => {
           if (err.response) {
-            swal('Oop... Something wnet wrong', err.response.data.message, 'error');
+            swal('Oop... Something went wrong', err.response.data.message, 'error');
           } else if (err.request) {
             swal(
-              'Oop... Something wnet wrong',
+              'Oop... Something went wrong',
               'Internal error, please try again later',
               'error'
             );
           } else {
             swal(
-              'Oop... Something wnet wrong',
+              'Oop... Something went wrong',
               'Internal error, please try again later',
               'error'
             );

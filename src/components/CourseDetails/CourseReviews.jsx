@@ -7,15 +7,16 @@ export default function CourseReviews({ courseID }) {
   const [reviews, setReviews] = useState(null);
 
   useEffect(() => {
-    fetchReviewsByID(courseID).then((data) => setReviews(data['data']['data']));
+    fetchReviewsByID(courseID).then((data) => setReviews(data.data.data));
   }, []);
+
   const renderReviewSkeletons = () => (
     <Grid item>
       <Typography>No reviews for this course written yet.</Typography>
     </Grid>
   );
   const renderReviewCards = () =>
-    reviews.map((review, i) => <CourseReviewCard review={review} />);
+    reviews.map((review) => <CourseReviewCard review={review} key={review.id} />);
 
   return (
     <Grid item xs={12}>

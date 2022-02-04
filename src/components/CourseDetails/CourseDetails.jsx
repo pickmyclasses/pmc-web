@@ -41,7 +41,6 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import CourseRating from '../../components/CourseDetails/CourseRating';
 import { SchedulerDisplayContentContext } from '../../pages/PageWithScheduler';
 import { CourseContext } from '../../pages/CoursePage';
 import { Button, Snackbar } from '@mui/material';

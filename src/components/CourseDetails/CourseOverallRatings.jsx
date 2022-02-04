@@ -7,7 +7,7 @@ import { fetchReviewsByID } from '../../api/index';
 
 function calculateAverageScore({ reviews }) {
   let sum = 0;
-  if (reviews == null || reviews.length == 0) {
+  if (reviews == null || reviews.length === 0) {
     return 0;
   }
   for (let step = 0; step < reviews.length; step++) {
