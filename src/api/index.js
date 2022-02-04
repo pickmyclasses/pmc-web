@@ -8,7 +8,18 @@ export const login = ({ email, password }) => {
   return promise.then((response) => response.data);
 };
 
-export const register = (userData) => axios.post('/register');
+export const register = ({ email, firstName, lastName, college, password, repassword }) => {
+  const data = {
+    email: email,
+    first_name: firstName,
+    last_name: lastName,
+    college: college,
+    password: password,
+    re_password: repassword,
+  };
+  const promise = axios.post('/register', data);
+  return promise.then((response) => response.data);
+};
 
 export const fetchCourseByID = (courseID) => axios.get(`/course/${courseID}`);
 
