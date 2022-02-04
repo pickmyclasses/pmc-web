@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Button, CircularProgress, Container, Grid } from '@mui/material';
-// Project Imports
 import { fetchCourseByID } from '../api';
 import ReviewDescription from '../components/ReviewInputDetails/ReviewDescription';
 import ReviewRatings from '../components/ReviewInputDetails/ReviewRatings';
@@ -13,6 +12,7 @@ import { gridSpacing } from '../constants/constants';
 import { useMount } from '../utils';
 import { postReviewByID } from '../../src/api/index';
 import swal from 'sweetalert';
+import { UserContext } from '../App';
 
 export default function ReviewPage({ shouldShowScheduler }) {
   const [course, setCourse] = useState(null);
@@ -21,6 +21,7 @@ export default function ReviewPage({ shouldShowScheduler }) {
   const [conValue, setConValue] = useState('');
   const [commentValue, setCommentValue] = useState('');
   const urlParams = useParams();
+  const { user } = useContext(UserContext);
 
   useMount(() => {
     fetchCourseByID(urlParams['id']).then((data) => setCourse(data['data']['data']['course']));
@@ -109,7 +110,7 @@ export default function ReviewPage({ shouldShowScheduler }) {
                   pros: proValue,
                   rating: ratingValue,
                   // recommended: true,
-                  user_id: 0,
+                  user_id: user.userID,
                 });
               }}
             >
