@@ -8,6 +8,7 @@ import NavigationBar from './components/NavigationBar/NavigationBar';
 import WelcomePage from './pages/WelcomePage';
 import ReviewPage from './pages/ReviewPage';
 import AuthForm from './components/AuthForm/AuthForm';
+import RegisterForm from './components/AuthForm/RegisterForm';
 
 export const UserContext = createContext();
 
@@ -37,6 +38,7 @@ export default function App() {
               element={<SearchPage shouldShowScheduler={shouldShowScheduler} />}
             />
             <Route path='/auth' exact element={<AuthForm />} />
+            <Route path='/register' exact element={<RegisterForm />} />
             <Route
               path='/course/:id'
               exact

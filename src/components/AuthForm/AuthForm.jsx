@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { login } from '../../api';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../App';
+import swal from 'sweetalert';
 
 export default function AuthForm() {
   const navigate = useNavigate();
@@ -40,11 +41,19 @@ export default function AuthForm() {
       })
       .catch((err) => {
         if (err.response) {
-          console.log(err.response.data.message);
+          swal('Oop... Something wnet wrong', err.response.data.message, 'error');
         } else if (err.request) {
-          console.log(err.request);
+          swal(
+            'Oop... Something wnet wrong',
+            'Internal error, please try again later',
+            'error'
+          );
         } else {
-          console.log('Error', err.message);
+          swal(
+            'Oop... Something wnet wrong',
+            'Internal error, please try again later',
+            'error'
+          );
         }
       });
   };
@@ -103,7 +112,7 @@ export default function AuthForm() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href='#' variant='body2'>
+                <Link href='/register' variant='body2'>
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
