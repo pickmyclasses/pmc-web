@@ -410,6 +410,7 @@ export default function EnhancedTable({ classes }) {
                 selectedClassIDs.length > 1 ? 'es' : ''
               } from shopping cart.`
             );
+            setSelected([]);
           });
         }}
       >
@@ -438,6 +439,7 @@ export default function EnhancedTable({ classes }) {
                 selectedClassIDs.length > 1 ? 'es' : ''
               } to shopping cart.`
             );
+            setSelected([]);
           });
         }}
       >
