@@ -7,13 +7,13 @@ import CoursePage from './pages/CoursePage';
 import NavigationBar from './components/NavigationBar/NavigationBar';
 import WelcomePage from './pages/WelcomePage';
 import ReviewPage from './pages/ReviewPage';
-import AuthForm from './components/AuthForm/Authform';
+import AuthForm from './components/AuthForm/AuthForm';
 
 export const UserContext = createContext();
 
 export default function App() {
-  const [user, setUser] = useState(null);
-  const [shouldShowScheduler, setShouldShowScheduler] = useState(true);
+  const [user, setUser] = useState();
+  const [shouldShowScheduler, setShouldShowScheduler] = useState(false);
 
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>

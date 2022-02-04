@@ -126,8 +126,8 @@ export default function Timeline({
       >
         <TimeBlock
           text={text}
-          color={hasConflicts && !isSelected ? 'warning' : color}
-          gray={!hasConflicts && color == null && !isSelected}
+          color={color ? color : hasConflicts && !isSelected ? 'warning' : color}
+          gray={!hasConflicts && !color && !isSelected}
           darken={isMouseEntered}
           data={data}
           onMouseEnter={(_, data) => setMouseEnteredEventData(data)}

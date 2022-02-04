@@ -8,7 +8,7 @@ import Logo from '../Logo/Logo';
 import SearchBar from '../Search/SearchBar';
 import NavigationBarButtonGroup from './NavigationBarButtonGroup';
 
-export default function NavigationBar({ onUserChange, isSchedulerShowing, toggleScheduler }) {
+export default function NavigationBar({ toggleScheduler }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,8 +23,6 @@ export default function NavigationBar({ onUserChange, isSchedulerShowing, toggle
       },
     },
   });
-
-  console.log(user);
 
   // TODO Q: Can we get rid of using Redux here since we moved away from Redux pretty much
   // elsewhere?
@@ -44,17 +42,11 @@ export default function NavigationBar({ onUserChange, isSchedulerShowing, toggle
                   <Logo />
                 </Link>
               </Grid>
-
               <Grid item xs display='flex' flexDirection='column' alignItems='center'>
                 <SearchBar />
               </Grid>
               <Grid item xs='auto'>
-                <NavigationBarButtonGroup
-                  isSchedulerShowing={isSchedulerShowing}
-                  userData={user}
-                  logout={logout}
-                  toggleScheduler={toggleScheduler}
-                />
+                <NavigationBarButtonGroup logout={logout} toggleScheduler={toggleScheduler} />
               </Grid>
             </Grid>
           </Container>

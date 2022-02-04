@@ -44,10 +44,11 @@ import { visuallyHidden } from '@mui/utils';
 import CourseRating from '../../components/CourseDetails/CourseRating';
 import { SchedulerDisplayContentContext } from '../../pages/PageWithScheduler';
 import { CourseContext } from '../../pages/CoursePage';
-import { Button } from '@mui/material';
+import { Button, Snackbar } from '@mui/material';
 import { AddShoppingCart, Delete } from '@mui/icons-material';
-import { postAddClassIDToShoppingCart } from '../../api';
+import { addClassIDToShoppingCart, removeClassIDFromShoppingCart } from '../../api';
 import { UserContext } from '../../App';
+import { getComponent, getInstructor } from '../Scheduler/ShoppingCart';
 
 function createData(OfferDate, Location, Section, RecommendationScore, Professor) {
   return {
@@ -92,36 +93,11 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  {
-    id: 'OfferDate',
-    numeric: false,
-    disablePadding: true,
-    label: 'Offer Date',
-  },
-  {
-    id: 'Location',
-    numeric: true,
-    disablePadding: false,
-    label: 'Location',
-  },
-  {
-    id: 'Section',
-    numeric: true,
-    disablePadding: false,
-    label: 'Section',
-  },
-  {
-    id: 'RecommendationScore',
-    numeric: true,
-    disablePadding: false,
-    label: 'Recommendation Score',
-  },
-  {
-    id: 'Professor',
-    numeric: true,
-    disablePadding: false,
-    label: 'Professor',
-  },
+  { id: 'OfferDate', numeric: false, disablePadding: true, label: 'Session' },
+  { id: 'Component', numeric: false, disablePadding: true, label: 'Component' },
+  { id: 'Location', numeric: false, disablePadding: true, label: 'Meet Times' },
+  { id: 'Section', numeric: false, disablePadding: true, label: 'Location' },
+  { id: 'Professor', numeric: false, disablePadding: true, label: 'Professor' },
 ];
 
 function EnhancedTableHead(props) {
@@ -231,19 +207,17 @@ EnhancedTableToolbar.propTypes = {
 
 // TODO Q: As iterated many times, fix it and do not use OfferDate as the key.
 const formatOfferDate = (classData) =>
-  `${classData['OfferDate']} ${classData['StartTime']} – ${classData['EndTime']}`;
+  `${classData['OfferDate']} ${classData['StartTime']}–${classData['EndTime']}`;
 
 function initRowData(classes) {
   let rows = [];
   for (let classData of classes) {
     const offerDate = formatOfferDate(classData);
+    const component = getComponent(classData);
     const location = classData['Location'];
     const section = classData['Session'];
-    // TODO (QC): No recommendation score provided in the backend. Possibly remove this as
-    // reviews are for the course and not for a class.
-    const recommendationScore = 3;
-    const professor = classData['Instructor'];
-    const row = createData(offerDate, location, section, recommendationScore, professor);
+    const professor = getInstructor(classData);
+    const row = createData(section, component, offerDate, location, professor);
     rows.push(row);
   }
   return rows;
@@ -257,9 +231,12 @@ export default function EnhancedTable({ classes }) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [snackbarText, setSnackbarText] = React.useState(null);
 
-  const user = React.useContext(UserContext);
-  const { setClassesToHighlight } = React.useContext(SchedulerDisplayContentContext);
+  const { user } = React.useContext(UserContext);
+  const { setClassesToHighlight, refetchSchedulerData } = React.useContext(
+    SchedulerDisplayContentContext
+  );
   const course = React.useContext(CourseContext);
 
   React.useEffect(() => setSelected([]), [classes]);
@@ -267,10 +244,10 @@ export default function EnhancedTable({ classes }) {
   React.useEffect(() => {
     // selected is a list of offer dates (TODO Q: fix this during refactor), therefore generate
     // the corresponding list of classes to highlight.
-    const selectedClasses = selected
-      .map((OfferDate) => classes.find((classData) => OfferDate === formatOfferDate(classData)))
-      .filter(Boolean)
-      .map((classData) => ({ classData, course }));
+    const selectedClasses = getSelectedClasses(selected, classes).map((classData) => ({
+      classData,
+      course,
+    }));
     setClassesToHighlight(selectedClasses);
   }, [classes, course, selected, setClassesToHighlight]);
 
@@ -282,11 +259,11 @@ export default function EnhancedTable({ classes }) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
+      setSelected([]);
+    } else {
       const newSelecteds = rows.map((n) => n.OfferDate);
       setSelected(newSelecteds);
-      return;
     }
-    setSelected([]);
   };
 
   const handleClick = (event, OfferDate) => {
@@ -374,15 +351,12 @@ export default function EnhancedTable({ classes }) {
                         />
                       </TableCell>
                       <TableCell component='th' id={labelId} scope='row' padding='none'>
-                        {row.OfferDate}
+                        {row.OfferDate.padStart(3, '0')}
                       </TableCell>
-                      <TableCell align='right'>{row.Location}</TableCell>
-                      <TableCell align='right'>{row.Section}</TableCell>
-                      <TableCell align='right'>
-                        <CourseRating value={row.RecommendationScore} />
-                      </TableCell>
-
-                      <TableCell align='right'>{row.Professor}</TableCell>
+                      <TableCell padding='none'>{row.Location}</TableCell>
+                      <TableCell padding='none'>{row.Section}</TableCell>
+                      <TableCell padding='none'>{row.RecommendationScore}</TableCell>
+                      <TableCell padding='none'>{row.Professor}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -418,6 +392,26 @@ export default function EnhancedTable({ classes }) {
         sx={{ float: 'right' }}
         disabled={selected.length === 0 || !user}
         startIcon={<Delete />}
+        onClick={() => {
+          const selectedClassIDs = getSelectedClasses(selected, classes).map((x) => x.ID);
+          Promise.all(
+            selectedClassIDs.map((classID) =>
+              removeClassIDFromShoppingCart({
+                user_id: +user.userID,
+                class_id: +classID,
+                // TODO Q: Do not hard code the semester ID here and below.
+                semester_id: 1,
+              })
+            )
+          ).then(() => {
+            refetchSchedulerData();
+            setSnackbarText(
+              `Removed ${selectedClassIDs.length} class${
+                selectedClassIDs.length > 1 ? 'es' : ''
+              } from shopping cart.`
+            );
+          });
+        }}
       >
         Remove from Cart
       </Button>
@@ -428,22 +422,39 @@ export default function EnhancedTable({ classes }) {
         disabled={selected.length === 0 || !user}
         startIcon={<AddShoppingCart />}
         onClick={() => {
-          const selectedClassIDs = selected
-            .map((OfferDate) =>
-              classes.find((classData) => OfferDate === formatOfferDate(classData))
+          const selectedClassIDs = getSelectedClasses(selected, classes).map((x) => x.ID);
+          Promise.all(
+            selectedClassIDs.map((classID) =>
+              addClassIDToShoppingCart({
+                user_id: +user.userID,
+                class_id: +classID,
+                semester_id: 1,
+              })
             )
-            .filter(Boolean)
-            .map((x) => x.ID);
-          for (let classID in selectedClassIDs)
-            postAddClassIDToShoppingCart({
-              user_id: user,
-              class_id: classID,
-              semesterID: 1,
-            });
+          ).then(() => {
+            refetchSchedulerData();
+            setSnackbarText(
+              `Added ${selectedClassIDs.length} class${
+                selectedClassIDs.length > 1 ? 'es' : ''
+              } to shopping cart.`
+            );
+          });
         }}
       >
         Add to Cart
       </Button>
+      <Snackbar
+        open={!!snackbarText}
+        autoHideDuration={4000}
+        onClose={() => setSnackbarText(null)}
+        message={snackbarText}
+      />
     </Box>
   );
 }
+
+const getSelectedClasses = (selected, allClasses) => {
+  return selected
+    .map((OfferDate) => allClasses.find((classData) => +OfferDate === +classData.Session))
+    .filter(Boolean);
+};

@@ -47,16 +47,27 @@ export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
 
 export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseID}/class`);
 
-export const fetchClassIDsInShoppingCart = () => fakeFetchClassIDsInShoppingCart();
+// TODO Q: Remove this after backend migrates and combines APIs.
+const shoppingCartAPIEntryURL = 'http://localhost:5000';
+// const shoppingCartAPIEntryURL = 'https://pmc-schedule-api.herokuapp.com';
+
+export const fetchClassIDsInShoppingCart = (userID, semesterID) =>
+  axios.get(`${shoppingCartAPIEntryURL}/schedule/${userID}/${semesterID}`);
+// fakeFetchClassIDsInShoppingCart();
 
 // TODO Q: Actually fetch from backend and get rid of this.
-const fakeFetchClassIDsInShoppingCart = () =>
-  new Promise((onFetched) => onFetched({ data: [10795, 10801, 15812, 15813, 17099] }));
+// const fakeFetchClassIDsInShoppingCart = () =>
+//   new Promise((onFetched) =>
+//     onFetched({
+//       data: [10795, 10801, 15812, 15813, 17099].map((x) => ({ class_id: x })),
+//     })
+//   );
 
-// TODO Q: Backend should fix this irregular URL entry.
-export const postAddClassIDToShoppingCart = (body) =>
-  alert('** trying to post ' + JSON.stringify(body));
-// axios.post(`https://pmc-schedule-api.herokuapp.com/schedule`, body);
+export const addClassIDToShoppingCart = (body) =>
+  axios.post(`${shoppingCartAPIEntryURL}/schedule/add`, body);
+
+export const removeClassIDFromShoppingCart = (body) =>
+  axios.post(`${shoppingCartAPIEntryURL}/schedule/remove`, body);
 
 export const fetchReviewsByID = (courseID) => axios.get(`/course/${courseID}/review`);
 
