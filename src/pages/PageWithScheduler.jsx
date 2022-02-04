@@ -18,16 +18,20 @@ export default function PageWithScheduler({ children, shouldShowScheduler }) {
   const [classesInShoppingCart, setClassesInShoppingCart] = useState([]);
   const [classesToHighlight, setClassesToHighlight] = useState([]);
 
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const fetchSchedulerData = useCallback(() => {
     if (user) {
       setIsLoading(true);
-      fetchClassIDsInShoppingCart(user.ID).then(({ data }) =>
-        fetchClassesAndCourses(data, (classes) => {
-          setIsLoading(false);
-          setClassesInShoppingCart(classes);
-        })
+      // TODO Q: Don't hard code semesterID:
+      fetchClassIDsInShoppingCart(user.userID, 1).then(({ data }) =>
+        fetchClassesAndCourses(
+          data.map((x) => x.class_id),
+          (classes) => {
+            setIsLoading(false);
+            setClassesInShoppingCart(classes);
+          }
+        )
       );
     }
   }, [user]);

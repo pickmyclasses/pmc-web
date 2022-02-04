@@ -16,6 +16,7 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import SchoolIcon from '@mui/icons-material/School';
 import { UserContext } from '../../App';
 
+// TODO Q: Replace these marginTops with a flex parent whose vertical align is set to middle.
 const useStyle = makeStyles({
   tab: {
     color: 'white',
@@ -43,7 +44,7 @@ export default function NavigationBarButtonGroup({ toggleScheduler, logout }) {
   const theme = useTheme();
   const classes = useStyle();
 
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const isUserLoggedIn = user != null;
 
   const renderTabsForLoggedIn = () => [

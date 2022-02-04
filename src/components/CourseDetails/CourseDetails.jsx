@@ -44,9 +44,9 @@ import { visuallyHidden } from '@mui/utils';
 import CourseRating from '../../components/CourseDetails/CourseRating';
 import { SchedulerDisplayContentContext } from '../../pages/PageWithScheduler';
 import { CourseContext } from '../../pages/CoursePage';
-import { Button } from '@mui/material';
+import { Button, Snackbar } from '@mui/material';
 import { AddShoppingCart, Delete } from '@mui/icons-material';
-import { postAddClassIDToShoppingCart } from '../../api';
+import { addClassIDToShoppingCart, removeClassIDFromShoppingCart } from '../../api';
 import { UserContext } from '../../App';
 import { getComponent, getInstructor } from '../Scheduler/ShoppingCart';
 
@@ -231,9 +231,12 @@ export default function EnhancedTable({ classes }) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [snackbarText, setSnackbarText] = React.useState(null);
 
-  const user = React.useContext(UserContext);
-  const { setClassesToHighlight } = React.useContext(SchedulerDisplayContentContext);
+  const { user } = React.useContext(UserContext);
+  const { setClassesToHighlight, refetchSchedulerData } = React.useContext(
+    SchedulerDisplayContentContext
+  );
   const course = React.useContext(CourseContext);
 
   React.useEffect(() => setSelected([]), [classes]);
@@ -241,10 +244,10 @@ export default function EnhancedTable({ classes }) {
   React.useEffect(() => {
     // selected is a list of offer dates (TODO Q: fix this during refactor), therefore generate
     // the corresponding list of classes to highlight.
-    const selectedClasses = selected
-      .map((OfferDate) => classes.find((classData) => +OfferDate === +classData.Session))
-      .filter(Boolean)
-      .map((classData) => ({ classData, course }));
+    const selectedClasses = getSelectedClasses(selected, classes).map((classData) => ({
+      classData,
+      course,
+    }));
     setClassesToHighlight(selectedClasses);
   }, [classes, course, selected, setClassesToHighlight]);
 
@@ -256,11 +259,11 @@ export default function EnhancedTable({ classes }) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
+      setSelected([]);
+    } else {
       const newSelecteds = rows.map((n) => n.OfferDate);
       setSelected(newSelecteds);
-      return;
     }
-    setSelected([]);
   };
 
   const handleClick = (event, OfferDate) => {
@@ -389,6 +392,26 @@ export default function EnhancedTable({ classes }) {
         sx={{ float: 'right' }}
         disabled={selected.length === 0 || !user}
         startIcon={<Delete />}
+        onClick={() => {
+          const selectedClassIDs = getSelectedClasses(selected, classes).map((x) => x.ID);
+          Promise.all(
+            selectedClassIDs.map((classID) =>
+              removeClassIDFromShoppingCart({
+                user_id: +user.userID,
+                class_id: +classID,
+                // TODO Q: Do not hard code the semester ID here and below.
+                semester_id: 1,
+              })
+            )
+          ).then(() => {
+            refetchSchedulerData();
+            setSnackbarText(
+              `Removed ${selectedClassIDs.length} class${
+                selectedClassIDs.length > 1 ? 'es' : ''
+              } from shopping cart.`
+            );
+          });
+        }}
       >
         Remove from Cart
       </Button>
@@ -399,20 +422,39 @@ export default function EnhancedTable({ classes }) {
         disabled={selected.length === 0 || !user}
         startIcon={<AddShoppingCart />}
         onClick={() => {
-          const selectedClassIDs = selected
-            .map((OfferDate) => classes.find((classData) => +OfferDate === +classData.Session))
-            .filter(Boolean)
-            .map((x) => x.ID);
-          for (let classID in selectedClassIDs)
-            postAddClassIDToShoppingCart({
-              user_id: user,
-              class_id: classID,
-              semesterID: 1,
-            });
+          const selectedClassIDs = getSelectedClasses(selected, classes).map((x) => x.ID);
+          Promise.all(
+            selectedClassIDs.map((classID) =>
+              addClassIDToShoppingCart({
+                user_id: +user.userID,
+                class_id: +classID,
+                semester_id: 1,
+              })
+            )
+          ).then(() => {
+            refetchSchedulerData();
+            setSnackbarText(
+              `Added ${selectedClassIDs.length} class${
+                selectedClassIDs.length > 1 ? 'es' : ''
+              } to shopping cart.`
+            );
+          });
         }}
       >
         Add to Cart
       </Button>
+      <Snackbar
+        open={!!snackbarText}
+        autoHideDuration={4000}
+        onClose={() => setSnackbarText(null)}
+        message={snackbarText}
+      />
     </Box>
   );
 }
+
+const getSelectedClasses = (selected, allClasses) => {
+  return selected
+    .map((OfferDate) => allClasses.find((classData) => +OfferDate === +classData.Session))
+    .filter(Boolean);
+};

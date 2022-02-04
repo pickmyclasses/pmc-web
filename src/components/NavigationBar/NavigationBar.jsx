@@ -24,8 +24,6 @@ export default function NavigationBar({ toggleScheduler }) {
     },
   });
 
-  console.log(user);
-
   // TODO Q: Can we get rid of using Redux here since we moved away from Redux pretty much
   // elsewhere?
   const logout = () => {
@@ -48,11 +46,7 @@ export default function NavigationBar({ toggleScheduler }) {
                 <SearchBar />
               </Grid>
               <Grid item xs='auto'>
-                <NavigationBarButtonGroup
-                  userData={user}
-                  logout={logout}
-                  toggleScheduler={toggleScheduler}
-                />
+                <NavigationBarButtonGroup logout={logout} toggleScheduler={toggleScheduler} />
               </Grid>
             </Grid>
           </Container>
