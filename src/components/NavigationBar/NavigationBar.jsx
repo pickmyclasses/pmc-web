@@ -9,10 +9,9 @@ import SearchBar from '../Search/SearchBar';
 import NavigationBarButtonGroup from './NavigationBarButtonGroup';
 
 export default function NavigationBar({ toggleScheduler }) {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
 
   // TODO Q: Nice looking theme for the app bar! Hope we can soon use the same theme in the
   // entire app.
@@ -27,8 +26,8 @@ export default function NavigationBar({ toggleScheduler }) {
   // TODO Q: Can we get rid of using Redux here since we moved away from Redux pretty much
   // elsewhere?
   const logout = () => {
-    dispatch({ type: 'LOGOUT' });
-    navigate('/');
+    setUser(null);
+    navigate('/home');
   };
 
   return (
