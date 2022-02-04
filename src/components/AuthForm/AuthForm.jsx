@@ -41,7 +41,7 @@ export default function AuthForm() {
       })
       .catch((err) => {
         if (err.response) {
-          swal('Oop... Something wnet wrong', err.response.data.message, 'error');
+          swal('Oop... Something went wrong', err.response.data.message, 'error');
         } else if (err.request) {
           swal(
             'Oop... Something went wrong',
