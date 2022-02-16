@@ -25,7 +25,8 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
   const { setClassesToHighlight } = useContext(SchedulerDisplayContentContext);
 
   const [isMouseEntered, setIsMouseEntered] = useState(false);
-  const [shouldDelayMouseEnterAnimation, setShouldDelayMouseEnterAnimation] = useState(true);
+  const [isCourseTitleExpanded, setIsCourseTitleExpanded] = useState(false);
+  const [isExtraInfoExpanded, setIsExtraInfoExpanded] = useState(false);
 
   const rating = getMeanReviewRating(reviews);
 
@@ -37,22 +38,31 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
         sx={{ flex: 1, minHeight: 0 }}
       />
       <motion.div
-        variants={textAnimationVariants}
-        initial='initial'
-        animate={isMouseEntered ? 'mouseEntered' : 'initial'}
+        variants={textRegionAnimationVariants}
         transition={{ type: 'just' }}
         style={{ padding: '16px 20px' }}
-        onAnimationStart={() => setShouldDelayMouseEnterAnimation(false)}
-        onAnimationComplete={() => !isMouseEntered && setShouldDelayMouseEnterAnimation(true)}
       >
         <ClickableIndicator propagate>
           <CourseEligibilityIndicator eligibility='none'>
             <Typography variant='h6'>{formatCourseName(course.CatalogCourseName)}</Typography>
           </CourseEligibilityIndicator>
         </ClickableIndicator>
-        <Typography variant='subtitle1' gutterBottom>
+        <MotionTypography
+          variants={courseTitleAnimationVariants}
+          initial='initial'
+          animate={isExtraInfoExpanded && isMouseEntered ? 'mouseEntered' : 'initial'}
+          transition={{ duration: 0.375, type: 'just' }}
+          onAnimationComplete={() => !isExtraInfoExpanded && setIsCourseTitleExpanded(false)}
+          lineHeight={1.5}
+          sx={{
+            whiteSpace: isCourseTitleExpanded ? '' : 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+          }}
+          gutterBottom
+        >
           {course.Title}
-        </Typography>
+        </MotionTypography>
         <CenterAligningFlexBox>
           <Typography
             variant='body2'
@@ -65,8 +75,15 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
           <TagList noWrap tags={['Backend', 'Coding']} />
         </CenterAligningFlexBox>
         <motion.div
-          variants={extraTextAnimationVariants}
-          transition={{ type: 'just', delay: shouldDelayMouseEnterAnimation ? 0.5 : 0 }}
+          variants={extraInfoAnimationVariants}
+          transition={{ type: 'just' }}
+          onUpdate={({ height }) => {
+            if (height > 0 && !isExtraInfoExpanded) {
+              setIsCourseTitleExpanded(true);
+              setIsExtraInfoExpanded(true);
+            }
+          }}
+          onAnimationComplete={() => !isMouseEntered && setIsExtraInfoExpanded(false)}
         >
           <CenterAligningFlexBox sx={{ justifyContent: 'space-between' }}>
             <Rating readOnly value={rating} precision={0.5} size='small' />
@@ -91,10 +108,12 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
   );
 
   return (
-    <Card
+    <MotionCard
       onMouseEnter={() => setIsMouseEntered(true)}
       onMouseLeave={() => setIsMouseEntered(false)}
       onClick={() => course && navigate(`/course/${course.ID}`)}
+      initial='initial'
+      whileHover='mouseEntered'
       sx={{
         boxShadow: isMouseEntered ? 9 : 3,
         width: '100%',
@@ -106,20 +125,34 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
       }}
     >
       {course ? renderContent() : renderSkeleton()}
-    </Card>
+    </MotionCard>
   );
 }
 
 export const CenterAligningFlexBox = styled(Box)({ display: 'flex', alignItems: 'center' });
 
-const textAnimationVariants = {
+const MotionCard = motion(Card);
+
+const MotionTypography = motion(Typography);
+
+const textRegionAnimationVariants = {
   initial: { boxShadow: `0 -1px 24px rgba(0, 0, 0, 0)` },
   mouseEntered: { boxShadow: `0 -1px 24px rgba(0, 0, 0, 0.5)` },
 };
 
-const extraTextAnimationVariants = {
-  initial: { marginTop: 0, height: 0, opacity: 0 },
-  mouseEntered: { marginTop: '12px', height: '', opacity: 1 },
+const courseTitleAnimationVariants = {
+  initial: { height: '1.5em' },
+  mouseEntered: { height: 'auto' },
+};
+
+const extraInfoAnimationVariants = {
+  initial: { marginTop: 0, height: 0, opacity: 0, transition: { type: 'just' } },
+  mouseEntered: {
+    marginTop: '12px',
+    height: '',
+    opacity: 1,
+    transition: { delay: 0.5, type: 'just' },
+  },
 };
 
 export const getMeanReviewRating = (reviews) => {
