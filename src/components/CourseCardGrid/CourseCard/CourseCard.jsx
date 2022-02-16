@@ -76,7 +76,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
         </CenterAligningFlexBox>
         <motion.div
           variants={extraInfoAnimationVariants}
-          transition={{ type: 'just' }}
+          transition={{ type: 'just', delay: isCourseTitleExpanded ? 0 : 0.5 }}
           onUpdate={({ height }) => {
             if (height > 0 && !isExtraInfoExpanded) {
               setIsCourseTitleExpanded(true);
@@ -146,13 +146,8 @@ const courseTitleAnimationVariants = {
 };
 
 const extraInfoAnimationVariants = {
-  initial: { marginTop: 0, height: 0, opacity: 0, transition: { type: 'just' } },
-  mouseEntered: {
-    marginTop: '12px',
-    height: '',
-    opacity: 1,
-    transition: { delay: 0.5, type: 'just' },
-  },
+  initial: { marginTop: 0, height: 0, opacity: 0 },
+  mouseEntered: { marginTop: '12px', height: '', opacity: 1 },
 };
 
 export const getMeanReviewRating = (reviews) => {

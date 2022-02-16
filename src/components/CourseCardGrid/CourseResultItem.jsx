@@ -65,7 +65,7 @@ export default function CourseResultItem({ data: { course, classes, reviews } })
             &nbsp;&nbsp;•&nbsp;&nbsp;CS major requirement&nbsp;&nbsp;
           </Typography>
           {rating > 0 && <Rating readOnly value={rating} precision={0.5} size='small' />}
-          <TagList gutterLeft noWrap tags={['Theory', 'Writing']} size='small' />
+          <TagList gutterLeft noWrap tags={['Backend', 'Coding']} size='small' />
         </Box>
         <Typography
           variant='body2'
