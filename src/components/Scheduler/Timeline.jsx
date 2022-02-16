@@ -183,6 +183,7 @@ export default function Timeline({
               position: 'absolute',
               right: 'calc(100% + 8px)',
               top: getTopByTime(selectedEventData.earliestStart) * 100 + '%',
+              zIndex: 9999,
             }}
           >
             <TimeDataCard

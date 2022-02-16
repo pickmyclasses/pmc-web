@@ -27,7 +27,7 @@ export default function NavigationBar({ toggleScheduler }) {
 
   return (
     <ThemeProvider theme={appBarTheme}>
-      <AppBar position='sticky'>
+      <AppBar position='static' sx={{ zIndex: 999 }}>
         <Toolbar>
           <Container maxWidth='xl'>
             <Grid container spacing='24px' sx={{ alignItems: 'center' }}>

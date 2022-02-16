@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, CircularProgress, Divider, useTheme } from '@mui/material';
+import { Box, Card, CircularProgress, Divider, Typography, useTheme } from '@mui/material';
+import { ShoppingCart as ShoppingCartIcon } from '@mui/icons-material';
 import ShoppingCart from './ShoppingCart';
 import RequirementList from './RequirementList';
 
@@ -17,31 +18,26 @@ export default function Scheduler({
 
   const renderSchedulerContent = () => (
     <>
-      <Box sx={{ flex: 1 }}>
+      <Box flex={1}>
         <ShoppingCart classes={classesInShoppingCart} />
       </Box>
       <Divider sx={{ margin: '16px 0' }} />
-      <div style={{ marginBottom: '24px' }}>Requirements</div>
+      <div style={{ marginBottom: '16px' }}>Requirements</div>
       <RequirementList requirements={requirements} />
     </>
   );
 
   return (
-    <Box
-      sx={{
-        border: '1px solid',
-        boxSizing: 'border-box',
-        borderColor: theme.palette.divider,
-        borderRadius: '8px',
-        width: '100%',
-        height: '100%',
-        padding: '24px',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <div style={{ marginBottom: '24px' }}>Shopping Cart</div>
-      {isLoading ? renderLoadingIndication() : renderSchedulerContent()}
-    </Box>
+    <Card sx={{ height: '100%', overflow: 'visible' }}>
+      <Box padding='24px' height='calc(100% - 48px)' display='flex' flexDirection='column'>
+        <Box display='flex' alignItems='center' marginBottom='16px'>
+          <ShoppingCartIcon color='action' fontSize='small' />
+          <Typography variant='overline' marginLeft='8px'>
+            Shopping Cart
+          </Typography>
+        </Box>
+        {isLoading ? renderLoadingIndication() : renderSchedulerContent()}
+      </Box>
+    </Card>
   );
 }
