@@ -66,7 +66,14 @@ export const parseDay = (s) =>
  * uppercase letter.
  * @example parseDayList('TuTh') // [2, 4]
  */
-export const parseDayList = (s) => s.split(/(?=[A-Z])/).map((day) => parseDay(day));
+export const parseDayList = (s) => [
+  ...new Set(
+    s
+      .split(/(?=[A-Z])/)
+      .map((day) => parseDay(day))
+      .sort()
+  ),
+];
 
 /**
  * Formats a `CatalogCourseName` so that there is a space separating the department code and
@@ -75,3 +82,27 @@ export const parseDayList = (s) => s.split(/(?=[A-Z])/).map((day) => parseDay(da
  */
 export const formatCourseName = (catalogCourseName) =>
   catalogCourseName.split(/(?<!\d)(?=\d)/).join(' ');
+
+/**
+ * Singularize or pluralize a word based on its count.
+ * @example
+ * pluralize(2, 'dog') // '2 dogs'
+ * pluralize(2, 'goose', 'geese') // '2 geese'
+ */
+export const pluralize = (count, singular, plural = '-s') =>
+  `${count} ${count === 1 ? singular : plural.replace('-', singular)}`;
+
+/**
+ * Returns the cartesian product across multiple arrays.
+ * @see https://stackoverflow.com/a/43053803
+ * @example cartesian([1, 2], [3, 4]) // [[1, 3], [1, 4], [2, 3], [2, 4]]
+ */
+export const cartesian = (...args) =>
+  args.reduce((a, b) => a.flatMap((d) => b.map((e) => [d, e].flat())));
+
+/**
+ * @see https://stackoverflow.com/a/34890276
+ * @example groupBy(['one', 'two', 'three'], 'length') // {3: ['one', 'two'], 5: ['three']}
+ */
+export const groupBy = (values, key) =>
+  values.reduce((rv, x) => ((rv[x[key]] = rv[x[key]] || []).push(x), rv), {});

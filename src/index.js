@@ -6,6 +6,7 @@ import axios from 'axios';
 import thunk from 'redux-thunk';
 import reducers from './redux/reducers';
 import App from './App.jsx';
+import './index.css';
 
 const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
@@ -17,6 +18,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
-
-document.body.style['margin'] = 0;
-document.body.style['fontFamily'] = 'Roboto, sans-serif';

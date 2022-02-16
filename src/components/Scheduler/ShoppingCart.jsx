@@ -11,6 +11,9 @@ export default function ShoppingCart({ classes }) {
 
   return (
     <Box
+      position='relative'
+      display='flex'
+      flexDirection='column'
       sx={{
         position: 'relative',
         width: '100%',
@@ -83,4 +86,4 @@ export const getComponent = (classData) =>
 
 // TODO Q: This is assuming a class only has one instructor, which may be false.
 export const getInstructor = (classData) =>
-  Object.values(classData).find((value) => value && /^[A-Z, ]+$/.test(String(value)));
+  Object.values(classData).find((value) => value && /^[A-Z]+,[A-Z,]+$/.test(String(value)));
