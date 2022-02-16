@@ -53,7 +53,7 @@ export default function DaysIndicator({
         boxSizing: 'border-box',
       }}
     >
-      Meets online
+      Offered online
     </Typography>
   );
 

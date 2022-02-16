@@ -62,7 +62,7 @@ export default function CourseOfferingSummary({
           hasOnlineOffering &&
           (representativeOfferingDays.length === 0 ? (
             <Typography variant='body2' align={textAlign}>
-              Meets online
+              Offered online
             </Typography>
           ) : (
             <Typography variant='body2' align={textAlign} sx={{ fontSize: 'x-small' }}>
