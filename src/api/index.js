@@ -32,7 +32,7 @@ const fakeFetchHomePageCourses = () =>
   new Promise((onFetched) => {
     const recommendedCategories = {
       'Major Requirements To Go': [22948, 22949, 22963],
-      'Hot CS Electives': [22961, 22971, 22951, 22970, 22998],
+      'Hot CS Electives': [22961, 22971, 22951, 22970, 22998, 23000],
       'Hot Gen-Ed Courses': [31826, 28270, 24777, 21978, 28354, 27266],
     };
 
@@ -50,7 +50,8 @@ export const fetchCoursesBySearch = (query) => fakeFetchCoursesBySearch(query);
 const fakeFetchCoursesBySearch = () =>
   new Promise((onFetched) =>
     onFetched([
-      22966, 23000, 22968, 23068, 23063, 23041, 23001, 22986, 22998, 22964, 22941, 22942,
+      22966, 23000, 22968, 23068, 23063, 23041, 23001, 22986, 22998, 22964, 22941, 22942, 22961,
+      22971, 22951, 22970, 22998, 31826, 28270, 24777, 27266, 21978, 28354, 23000, 30056, 31826,
     ])
   );
 
@@ -80,7 +81,7 @@ export const addClassIDToShoppingCart = (body) =>
 export const removeClassIDFromShoppingCart = (body) =>
   axios.post(`${shoppingCartAPIEntryURL}/schedule/remove`, body);
 
-export const fetchReviewsByID = (courseID) => axios.get(`/course/${courseID}/review`);
+export const fetchReviewsByCourseID = (courseID) => axios.get(`/course/${courseID}/review`);
 
 // TODO Q: (1) this is not by ID; (2) simplify object passing and remove object reconstruction.
 export const postReviewByID = (reviewObj) =>

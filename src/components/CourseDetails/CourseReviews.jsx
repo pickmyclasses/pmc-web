@@ -1,4 +1,4 @@
-import { fetchReviewsByID } from '../../api/index';
+import { fetchReviewsByCourseID } from '../../api/index';
 import CourseReviewCard from '../../../src/components/CourseDetails/CourseReviewCard';
 import React, { useState, useEffect } from 'react';
 import { Grid, Typography } from '@mui/material';
@@ -7,7 +7,7 @@ export default function CourseReviews({ courseID }) {
   const [reviews, setReviews] = useState(null);
 
   useEffect(() => {
-    fetchReviewsByID(courseID).then((data) => setReviews(data.data.data));
+    fetchReviewsByCourseID(courseID).then((data) => setReviews(data.data.data));
   }, []);
 
   const renderReviewSkeletons = () => (

@@ -3,7 +3,7 @@ import SubCard from '../Skeleton/SubCard';
 import CourseAddReview from './CourseAddReview';
 import CourseOverallRatingsBar from './CourseOverallRatingsBar';
 import React, { useState, useEffect } from 'react';
-import { fetchReviewsByID } from '../../api/index';
+import { fetchReviewsByCourseID } from '../../api/index';
 
 function calculateAverageScore({ reviews }) {
   let sum = 0;
@@ -19,7 +19,7 @@ function calculateAverageScore({ reviews }) {
 export default function CourseOverallRatings({ courseID }) {
   const [reviews, setReviews] = useState(null);
   useEffect(() => {
-    fetchReviewsByID(courseID).then((data) => setReviews(data['data']['data']));
+    fetchReviewsByCourseID(courseID).then((data) => setReviews(data['data']['data']));
   }, []);
   let avgScore = calculateAverageScore({ reviews });
 
