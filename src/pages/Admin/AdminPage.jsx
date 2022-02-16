@@ -1,12 +1,12 @@
 import React from 'react';
 import './AdminPage.css';
-
+import Button from 'react-bootstrap/Button';
 
 const AdminPage = () => {
     return(
         <div className='admin'>
             <h1>Admin page</h1>
-            <label for="tables">Choose a table:</label>
+            <label for="tables" className="selector-label">Choose a table:</label>
 
             <select name="tables" id="tables-selector">
                 <option value="class">class</option>
@@ -15,7 +15,7 @@ const AdminPage = () => {
                 <option value="subject">subject</option>
             </select>
             
-            <button> Search </button>
+            <button className='btn btn-success search-button'> Search </button>
 
             <table className='table'>
                 <tr>
