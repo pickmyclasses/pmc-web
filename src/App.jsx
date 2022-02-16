@@ -7,6 +7,7 @@ import CoursePage from './pages/CoursePage';
 import NavigationBar from './components/NavigationBar/NavigationBar';
 import WelcomePage from './pages/WelcomePage';
 import ReviewPage from './pages/ReviewPage';
+import AdminPage from './pages/Admin/AdminPage';
 import AuthForm from './components/AuthForm/AuthForm';
 import RegisterForm from './components/AuthForm/RegisterForm';
 
@@ -27,6 +28,7 @@ export default function App() {
           />
           <Routes>
             <Route path='/' exact element={<WelcomePage />} />
+            <Route path='/backoffice' exact element={<AdminPage/>}/>
             <Route
               path='/home'
               exact
@@ -52,6 +54,6 @@ export default function App() {
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>
-    </Box>
+    </Box>   
   );
 }
