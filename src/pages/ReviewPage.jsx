@@ -13,6 +13,7 @@ import { useMount } from '../utils';
 import { postReviewByID } from '../../src/api/index';
 import swal from 'sweetalert';
 import { UserContext } from '../App';
+import ReviewAnonymous from '../components/ReviewInputDetails/ReviewAnonymous';
 
 export default function ReviewPage({ shouldShowScheduler }) {
   const [course, setCourse] = useState(null);
@@ -20,6 +21,7 @@ export default function ReviewPage({ shouldShowScheduler }) {
   const [proValue, setProValue] = useState('');
   const [conValue, setConValue] = useState('');
   const [commentValue, setCommentValue] = useState('');
+  const [anonymity, setAnonymity] = useState(false);
   const urlParams = useParams();
   const { user } = useContext(UserContext);
 
@@ -34,14 +36,22 @@ export default function ReviewPage({ shouldShowScheduler }) {
       </Box>
     );
   }
-
   return (
     <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0 }}>
       <MainCard>
         <Grid container spacing={gridSpacing}>
           <Grid item xs={12} sm={12}>
             <ReviewDescription course={course} />
+            <ReviewAnonymous
+              userName={user.name}
+              value={anonymity}
+              onChange={(anonymity) => {
+                setAnonymity(anonymity);
+                console.log(anonymity);
+              }}
+            />
           </Grid>
+
           <Grid item xs={12} sm={12}>
             <ReviewRatings
               course={course}
@@ -103,13 +113,13 @@ export default function ReviewPage({ shouldShowScheduler }) {
                 swal('Good job!', 'You submitted the review!', 'success');
 
                 postReviewByID({
-                  // anonymous: true,
+                  anonymous: anonymity,
                   comment: commentValue,
                   cons: conValue,
                   course_id: course.ID,
                   pros: proValue,
                   rating: ratingValue,
-                  // recommended: true,
+                  recommended: true,
                   user_id: user.userID,
                 });
               }}

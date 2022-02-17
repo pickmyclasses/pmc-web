@@ -86,12 +86,12 @@ export const fetchReviewsByCourseID = (courseID) => axios.get(`/course/${courseI
 // TODO Q: (1) this is not by ID; (2) simplify object passing and remove object reconstruction.
 export const postReviewByID = (reviewObj) =>
   axios.post(`/course/review`, {
-    // anonymous: reviewObj.anonymous,
+    anonymous: reviewObj.anonymous,
     comment: reviewObj.comment,
     cons: reviewObj.cons,
     course_id: reviewObj.course_id,
     pros: reviewObj.pros,
     rating: reviewObj.rating,
-    // recommended: reviewObj.recommended,
+    recommended: reviewObj.recommended,
     user_id: reviewObj.user_id,
   });

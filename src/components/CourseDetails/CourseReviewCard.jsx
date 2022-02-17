@@ -13,14 +13,14 @@ const titleAdd = 'What additional feedbacks you have for this course?';
 
 export default function CourseReviewCard({ review }) {
   let createDate = review.created_at.slice(0, 10);
-
+  console.log(review);
   return (
     <SubCard spacing={gridSpacing}>
       <Grid container>
         <MuiTypography variant='' gutterBottom>
           <div className='user'>
             <Avatar className='avatar' width='100' height='100' alt='Avatar' />
-            <div className='username'>{review.user_name}</div>
+            <div className='username'>{review.anonymous ? 'anonymous ' : review.user_name}</div>
             <div className='username'>
               <EditIcon />
               {`${createDate}`}
