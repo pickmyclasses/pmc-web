@@ -11,7 +11,6 @@ import { UserContext } from '../../App';
 export default function CourseAddReview() {
   const course = useContext(CourseContext);
   const { user } = useContext(UserContext);
-  console.log(user);
   return (
     <Grid item>
       <MuiTypography variant='h5' gutterBottom>
@@ -21,12 +20,11 @@ export default function CourseAddReview() {
         Share your thoughts with other students
       </MuiTypography>
       <Stack spacing={2} direction='row'>
-        <Link to={`/course/${course.ID}/review`} style={{ textDecoration: 'none' }}>
-          <Button
-            variant='contained'
-            disabled={user == undefined ? true : false}
-            startIcon={<AddCommentIcon />}
-          >
+        <Link
+          to={user == null ? '#' : `/course/${course.ID}/review`}
+          style={{ textDecoration: 'none' }}
+        >
+          <Button variant='contained' disabled={user == null} startIcon={<AddCommentIcon />}>
             Write a Review
           </Button>
         </Link>
