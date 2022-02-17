@@ -28,7 +28,7 @@ export default function App() {
           />
           <Routes>
             <Route path='/' exact element={<WelcomePage />} />
-            <Route path='/backoffice' exact element={<AdminPage/>}/>
+            <Route path='/admin' exact element={<AdminPage/>}/>
             <Route
               path='/home'
               exact
