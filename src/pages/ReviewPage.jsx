@@ -47,7 +47,6 @@ export default function ReviewPage({ shouldShowScheduler }) {
               value={anonymity}
               onChange={(anonymity) => {
                 setAnonymity(anonymity);
-                console.log(anonymity);
               }}
             />
           </Grid>

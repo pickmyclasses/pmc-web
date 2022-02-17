@@ -13,7 +13,6 @@ const titleAdd = 'What additional feedbacks you have for this course?';
 
 export default function CourseReviewCard({ review }) {
   let createDate = review.created_at.slice(0, 10);
-  console.log(review);
   return (
     <SubCard spacing={gridSpacing}>
       <Grid container>
