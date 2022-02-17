@@ -1,8 +1,12 @@
 import React from 'react';
 import './AdminPage.css';
-import Button from 'react-bootstrap/Button';
+import DataGrid from '@mui/material';
 
 const AdminPage = () => {
+
+    let columns = ['Company'];
+    let rows= ['Google'];
+
     return(
         <div className='admin'>
             <h1>Admin page</h1>
@@ -16,6 +20,14 @@ const AdminPage = () => {
             </select>
             
             <button className='btn btn-success search-button'> Search </button>
+
+            <DataGrid
+            rows={rows}
+            columns={columns}
+            pageSize={5}
+            rowsPerPageOptions={[5]}
+            checkboxSelection
+            />
 
             <table className='table'>
                 <tr>
