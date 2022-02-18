@@ -23,57 +23,68 @@ export default function CourseOfferingSummary({
     SchedulerDisplayContentContext
   );
 
+  const [hasOnlineOffering, setHasOnlineOffering] = useState(false);
+  const [numHiddenOfferings, setNumHiddenOfferings] = useState(0);
+  const [representativeOfferings, setRepresentativeOfferings] = useState([]);
   const [mouseEnteredIndex, setMouseEnteredIndex] = useState(-1);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const [highlightedClassIDs, setHighlightedClassIDs] = useState(null);
 
   // Construct a list of n representative offering days from the list of classes offered. Favor
   // offerings that occupy fewer days.
-  const offeringDays = getOfferingDays(classes).sort((x, y) => x.days.length - y.days.length);
-  const numHidden = offeringDays.length <= maxRows ? 0 : offeringDays.length - maxRows + 1;
-  let representativeOfferingDays = offeringDays.slice(0, offeringDays.length - numHidden);
+  useEffect(() => {
+    const offerings = getOfferingDays(classes).sort((x, y) => x.days.length - y.days.length);
+    const numHiddenOfferings = offerings.length <= maxRows ? 0 : offerings.length - maxRows + 1;
+    let representativeOfferings = offerings.slice(0, offerings.length - numHiddenOfferings);
 
-  const hasOnlineOffering = representativeOfferingDays[0]?.days[0] === -1;
-  if (hasOnlineOffering) representativeOfferingDays.shift();
+    const hasOnlineOffering = representativeOfferings[0]?.days[0] === -1;
+    if (hasOnlineOffering) representativeOfferings.shift();
+
+    setHasOnlineOffering(hasOnlineOffering);
+    setNumHiddenOfferings(numHiddenOfferings);
+    setRepresentativeOfferings(representativeOfferings);
+  }, [classes, maxRows]);
+
+  // Handle highlight and un-highlight logics.
 
   useEffect(() => {
     if (
-      representativeOfferingDays.length === 0 ||
-      !isSchedulerShowing ||
-      !enableHighlight ||
-      !isMouseEntered
+      representativeOfferings.length &&
+      isSchedulerShowing &&
+      enableHighlight &&
+      isMouseEntered
     ) {
-      if (highlightedIndex >= 0) {
-        setClassesToHighlight((highlightedClasses) =>
-          highlightedClasses.filter(
-            ({ classData }) =>
-              !representativeOfferingDays[highlightedIndex].combos.find(
-                (x) => x.ID === classData.ID
-              )
-          )
-        );
-        setHighlightedIndex(-1);
-      }
-      return;
+      // Highlight
+      const indexToHighlight = Math.max(mouseEnteredIndex, 0); // default h'lighting first item
+      const combosToHighlight = representativeOfferings[indexToHighlight].combos;
+      setHighlightedIndex(indexToHighlight);
+      setClassesToHighlight(
+        combosToHighlight.map((classData) => ({
+          classData,
+          course,
+          highlight: true,
+        }))
+      );
+      setHighlightedClassIDs(combosToHighlight.map((x) => x.ID));
+    } else if (highlightedIndex >= 0) {
+      // Un-highlight
+      setClassesToHighlight((highlightedClasses) =>
+        highlightedClasses.filter(
+          ({ classData }) => !highlightedClassIDs.includes(classData.ID)
+        )
+      );
+      setHighlightedIndex(-1);
+      setHighlightedClassIDs(null);
     }
-
-    const indexToHighlight = Math.max(mouseEnteredIndex, 0);
-    setHighlightedIndex(indexToHighlight);
-    setClassesToHighlight(
-      representativeOfferingDays[indexToHighlight].combos.map((classData) => ({
-        classData,
-        course,
-        highlight: true,
-      }))
-    );
+    // eslint-disable-next-line
   }, [
-    course,
+    representativeOfferings,
     enableHighlight,
     isMouseEntered,
-    mouseEnteredIndex,
-    highlightedIndex,
     isSchedulerShowing,
     setClassesToHighlight,
-    representativeOfferingDays,
+    mouseEnteredIndex,
+    course,
   ]);
 
   if (!classes || classes.length === 0) {
@@ -92,22 +103,22 @@ export default function CourseOfferingSummary({
   return (
     <>
       <Box sx={{ width, '> *:not(:last-child)': { paddingBottom: '8px' } }}>
-        {representativeOfferingDays.map(({ days }, i) => (
+        {representativeOfferings.map(({ days }, i) => (
           <DaysIndicator
             key={i}
             width='100%'
             height={rowHeight}
             days={days}
             onMouseEnter={() => setMouseEnteredIndex(i)}
-            onMouseLeave={() => setMouseEnteredIndex(-1)}
+            onMouseLeave={() => !isMouseEntered && setMouseEnteredIndex(-1)}
             isMouseEntered={i === highlightedIndex}
           />
         ))}
-        {numHidden > 0 ? (
+        {numHiddenOfferings > 0 ? (
           <>
             <Typography variant='body2' align={textAlign}>
-              {numHidden === offeringDays.length ? '' : '+'}
-              {pluralize(numHidden, 'offering')}
+              {representativeOfferings.length === 0 ? '' : '+'}
+              {pluralize(numHiddenOfferings, 'offering')}
             </Typography>
             {hasOnlineOffering && (
               <Typography variant='body2' align={textAlign} sx={{ marginTop: '-8px' }}>
@@ -117,7 +128,7 @@ export default function CourseOfferingSummary({
           </>
         ) : (
           hasOnlineOffering &&
-          (representativeOfferingDays.length === 0 ? (
+          (representativeOfferings.length === 0 ? (
             <Typography variant='body2' align={textAlign}>
               Offered online
             </Typography>
