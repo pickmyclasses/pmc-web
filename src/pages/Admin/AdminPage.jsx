@@ -14,7 +14,7 @@ export default function AdminPage()
 
 
     const [error, setError] = useState(null);
-    const [nbRows, setNbRows] = React.useState(10);
+    const [nbRows, setNbRows] = useState(10);
 
 
     const removeRow = () => setNbRows((x) => Math.max(0, x - 1));
@@ -25,7 +25,6 @@ export default function AdminPage()
         rowLength: 100,
         maxColumns: 6,
     });
-
 
     useEffect(() => {
         fetch("https://pmc-schedule-api.herokuapp.com/" + tableName)
@@ -72,8 +71,6 @@ export default function AdminPage()
                     <option value="course">course</option>
                     <option value="subject">subject</option>
                 </select>
-
-
 
                 <Button variant="outlined" onClick={removeRow}>
                     Remove a row
