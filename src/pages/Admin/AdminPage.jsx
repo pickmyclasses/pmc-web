@@ -6,16 +6,10 @@ import { useDemoData } from '@mui/x-data-grid-generator';
 export default function AdminPage() 
 {
     const [isLoaded, setIsLoaded] = useState(false);
-
     const [tableName, setTableName] = useState("");
-
-
     const [testData, setTestData] = useState([]);
-
-
     const [error, setError] = useState(null);
     const [nbRows, setNbRows] = useState(10);
-
 
     const removeRow = () => setNbRows((x) => Math.max(0, x - 1));
     const addRow = () => setNbRows((x) => Math.min(100, x + 1));
@@ -40,7 +34,6 @@ export default function AdminPage()
                     setError(error);
                 }
             );
-
     }, [tableName]);
 
 
@@ -57,7 +50,23 @@ export default function AdminPage()
         return <div>Loading...</div>;
     } else 
     {
-        console.log(testData);
+        let columns = [];
+        let rows = [];
+
+        if(testData.length > 0)
+        {
+            let temp = {};
+            for(let key in testData[0])
+            {
+                temp.name= key;
+                temp.headerName = key;
+                temp.width = 100;
+                columns.push(key);
+            }
+
+            rows = testData;
+        }
+
         return (
             <div style={{ width: '100%' }}>
                 <h1>Admin Page</h1>
@@ -71,14 +80,13 @@ export default function AdminPage()
                     <option value="course">course</option>
                     <option value="subject">subject</option>
                 </select>
-
-                <Button variant="outlined" onClick={removeRow}>
-                    Remove a row
-                </Button>
-                <Button variant="outlined" onClick={addRow}>
-                    Add a row
-                </Button>
-                <DataGrid autoHeight {...data} rows={data.rows.slice(0, nbRows)} />
+                <DataGrid
+                rows={rows}
+                columns={columns}
+                pageSize={20}
+                rowsPerPageOptions={[20]}
+                checkboxSelection
+                />
             </div>
         );
     }
