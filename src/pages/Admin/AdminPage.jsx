@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { DataGrid } from '@mui/x-data-grid';
 import { useDemoData } from '@mui/x-data-grid-generator';
+import MUIDataTable from "mui-datatables";
 
 export default function AdminPage() 
 {
@@ -55,21 +56,23 @@ export default function AdminPage()
 
         if(testData.length > 0)
         {
-            let temp = {};
             for(let key in testData[0])
             {
-                temp.name= key;
-                temp.headerName = key;
-                temp.width = 100;
-                columns.push(key);
+                let temp = {}
+                temp.field=key;
+                columns.push(temp);
             }
 
             rows = testData;
         }
+        const options = {
+            filterType: 'checkbox',
+          };
 
         return (
-            <div style={{ width: '100%' }}>
+            <div style={{ width: '100%' }} className="admindiv">
                 <h1>Admin Page</h1>
+                <h1>Table {tableName}</h1>
 
                 <label className="selector-label">Choose a table:</label>
 
@@ -80,13 +83,13 @@ export default function AdminPage()
                     <option value="course">course</option>
                     <option value="subject">subject</option>
                 </select>
+
+            <div style={{ height: 2500, width: '100%' }}>
                 <DataGrid
-                rows={rows}
                 columns={columns}
-                pageSize={20}
-                rowsPerPageOptions={[20]}
-                checkboxSelection
+                rows={rows}
                 />
+            </div>
             </div>
         );
     }
