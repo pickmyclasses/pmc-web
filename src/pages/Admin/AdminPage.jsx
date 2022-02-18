@@ -9,7 +9,7 @@ export default function AdminPage() {
     const [tableName, setTableName] = useState("");
 
 
-    const [data, setData] = useState([]);
+    const [testData, setTestData] = useState([]);
 
 
     const [error, setError] = useState(null);
@@ -19,11 +19,11 @@ export default function AdminPage() {
     const removeRow = () => setNbRows((x) => Math.max(0, x - 1));
     const addRow = () => setNbRows((x) => Math.min(100, x + 1));
 
-    // const { data } = useDemoData({
-    //     dataSet: 'Commodity',
-    //     rowLength: 100,
-    //     maxColumns: 6,
-    // });
+    const { data } = useDemoData({
+        dataSet: 'Commodity',
+        rowLength: 100,
+        maxColumns: 6,
+    });
 
 
     useEffect(() => {
@@ -33,7 +33,7 @@ export default function AdminPage() {
                 (data) => {
                     console.log("useEffect is called: " + tableName);
                     setIsLoaded(true);
-                    setData(data);
+                    setTestData(data);
                 },
                 (error) => {
                     setIsLoaded(true);
@@ -44,6 +44,10 @@ export default function AdminPage() {
     }, [tableName]);
 
 
+    let handleChange = (e) => {
+        setIsLoaded(false);
+        setTableName(e.target.value);
+    }
 
     if (error) 
     {
@@ -53,14 +57,14 @@ export default function AdminPage() {
         return <div>Loading...</div>;
     } else 
     {
-        console.log(data);
+        console.log(testData);
         return (
             <div style={{ width: '100%' }}>
                 <h1>Admin Page</h1>
 
                 <label className="selector-label">Choose a table:</label>
 
-                <select name="tables" id="tables-selector" onChange={(e) => setTableName(e.target.value)}>
+                <select name="tables" id="tables-selector" onChange={handleChange}>
                     <option value=""></option>
                     <option value="class">class</option>
                     <option value="college">college</option>
