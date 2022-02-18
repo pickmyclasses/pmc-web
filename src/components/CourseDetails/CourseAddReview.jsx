@@ -6,10 +6,11 @@ import Button from '@mui/material/Button';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import { CourseContext } from '../../pages/CoursePage';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../../App';
 
 export default function CourseAddReview() {
   const course = useContext(CourseContext);
-
+  const { user } = useContext(UserContext);
   return (
     <Grid item>
       <MuiTypography variant='h5' gutterBottom>
@@ -19,8 +20,11 @@ export default function CourseAddReview() {
         Share your thoughts with other students
       </MuiTypography>
       <Stack spacing={2} direction='row'>
-        <Link to={`/course/${course.ID}/review`} style={{ textDecoration: 'none' }}>
-          <Button variant='contained' startIcon={<AddCommentIcon />}>
+        <Link
+          to={user == null ? '#' : `/course/${course.ID}/review`}
+          style={{ textDecoration: 'none' }}
+        >
+          <Button variant='contained' disabled={user == null} startIcon={<AddCommentIcon />}>
             Write a Review
           </Button>
         </Link>
