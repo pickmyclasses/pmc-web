@@ -6,6 +6,7 @@ import { UserContext } from '../App';
 
 /**
  * @type {React.Context<{
+ *   isSchedulerShowing: Boolean,
  *   setClassesToHighlight: function(Array<{classData: Object, course: Object}>): void,
  *   refetchSchedulerData: function(): void,
  * }>}
@@ -17,6 +18,7 @@ export default function PageWithScheduler({ children, shouldShowScheduler }) {
   const [isLoading, setIsLoading] = useState(true);
   const [classesInShoppingCart, setClassesInShoppingCart] = useState([]);
   const [classesToHighlight, setClassesToHighlight] = useState([]);
+  const [allClasses, setAllClasses] = useState([]);
 
   const { user } = useContext(UserContext);
 
@@ -40,14 +42,14 @@ export default function PageWithScheduler({ children, shouldShowScheduler }) {
 
   // Combine classes in shopping cart with classes to highlight, only keeping the copy to
   // highlight if there are repeats.
-  const allClasses = [
-    ...classesInShoppingCart
-      .filter(({ classData }) =>
+  useEffect(() => {
+    setAllClasses([
+      ...classesInShoppingCart.filter(({ classData }) =>
         classesToHighlight.every((y) => y.classData.ID !== classData.ID)
-      )
-      .map((x) => ({ ...x, isHighlighted: false })),
-    ...classesToHighlight.map((x) => ({ ...x, isHighlighted: true })),
-  ];
+      ),
+      ...classesToHighlight,
+    ]);
+  }, [classesInShoppingCart, classesToHighlight]);
 
   return (
     <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0 }}>
@@ -55,6 +57,7 @@ export default function PageWithScheduler({ children, shouldShowScheduler }) {
         <Grid item xs sx={{ height: '100%', overflow: 'auto' }}>
           <SchedulerDisplayContentContext.Provider
             value={{
+              isSchedulerShowing: shouldShowScheduler,
               setClassesToHighlight,
               refetchSchedulerData: fetchSchedulerData,
             }}

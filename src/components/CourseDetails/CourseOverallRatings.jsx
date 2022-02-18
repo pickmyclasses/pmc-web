@@ -20,7 +20,7 @@ export default function CourseOverallRatings({ courseID }) {
   const [reviews, setReviews] = useState(null);
   useEffect(() => {
     fetchReviewsByCourseID(courseID).then((data) => setReviews(data['data']['data']));
-  }, []);
+  }, [courseID]);
   let avgScore = calculateAverageScore({ reviews });
 
   return (

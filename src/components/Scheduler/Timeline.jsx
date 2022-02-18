@@ -1,5 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Box, Divider, Grid, useTheme } from '@mui/material';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useMount } from '../../utils';
 import TimeBlock from './TimeBlock';
 import TimeDataCard from './TimeDataCard';
@@ -20,13 +21,16 @@ import TimeDataCard from './TimeDataCard';
  * }[]} props.events
  */
 export default function Timeline({
-  rangeStart = 9 * 3600,
+  rangeStart = 8.5 * 3600,
   rangeEnd = 17.5 * 3600,
   columnTitles = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
   events = [],
 }) {
   const theme = useTheme();
 
+  const [eventsShown, setEventsShown] = useState([]);
+  const [eventsWithConflicts, setEventsWithConflicts] = useState([]);
+  const [eventsShiftedRight, setEventsShiftedRight] = useState([]);
   const [mouseEnteredEventData, setMouseEnteredEventData] = useState(null);
   const [selectedEventData, setSelectedEventData] = useState(null);
   const [doesSelectedEventHaveConflicts, setDoesSelectedEventHaveConflicts] = useState(false);
@@ -51,6 +55,33 @@ export default function Timeline({
     return () => document.removeEventListener('click', handleDocumentClick);
   });
 
+  // Compute which events are no longer part of the timeline and are to fade out.  Preserve the
+  // old events (events that are removed from the timeline) in the "shown" list to assist in
+  // the fade-out animation. These old events are truly removed after their fade-out animations
+  // finish.
+  useEffect(() => {
+    let newEventsShown = new Map();
+    for (let oldEvent of eventsShown) {
+      const key = getEventKey(oldEvent);
+      newEventsShown.set(key, oldEvent);
+      newEventsShown.get(key).isActive = false;
+    }
+    for (let newEvent of events) {
+      const key = getEventKey(newEvent);
+      if (newEventsShown.has(key)) {
+        Object.assign(newEventsShown.get(key), { ...newEvent, isActive: true });
+      } else {
+        newEventsShown.set(key, { ...newEvent, key, isActive: true });
+      }
+    }
+    setEventsShown(
+      [...newEventsShown.values()].sort(
+        (a, b) => a.columnIndex * 86400 + a.start - (b.columnIndex * 86400 + b.start)
+      )
+    );
+    // eslint-disable-next-line
+  }, [events]);
+
   const renderColumnTitle = (key, title) => (
     <Grid
       key={'cl' + key}
@@ -62,28 +93,25 @@ export default function Timeline({
     </Grid>
   );
 
-  const handleTimeBlockClick = (_text, data) => {
-    setDoesSelectedEventHaveConflicts(
-      events.some((event, i) => event.data.id === data.id && eventsWithConflicts[i])
-    );
-    setSelectedEventData(selectedEventData?.id !== data.id && data);
-  };
-
-  /* Compute which events should be slightly shifted right in the display. Some events are
-   * shifted right to avoid covering other events and making other events unrecognizable. */
-  let eventsWithConflicts;
-  let eventsShiftedRight;
-  if (events) {
-    events.sort((a, b) => a.columnIndex * 86400 + a.start - (b.columnIndex * 86400 + b.start));
-
-    eventsWithConflicts = [];
-    eventsShiftedRight = [];
+  // Compute which events should be slightly shifted right in the display. Some events are
+  // shifted right to avoid covering other events and making other events unrecognizable.
+  useEffect(() => {
+    let eventsWithConflicts = [];
+    let eventsShiftedRight = [];
     let prevEnd = -1;
     let prevColumnIndex = -1;
+    let wasPrevActive = false;
     let wasPrevShiftedRight = false;
-    for (let event of events) {
-      const hasConflicts = event.columnIndex === prevColumnIndex && event.start < prevEnd;
-      if (hasConflicts) eventsWithConflicts[eventsWithConflicts.length - 1] = true;
+    for (let event of eventsShown) {
+      const hasConflicts =
+        event.isActive &&
+        wasPrevActive &&
+        event.columnIndex === prevColumnIndex &&
+        event.start < prevEnd;
+
+      if (hasConflicts && event.isActive && wasPrevActive) {
+        eventsWithConflicts[eventsWithConflicts.length - 1] = true;
+      }
       eventsWithConflicts.push(hasConflicts);
 
       const shiftedRight = hasConflicts && !wasPrevShiftedRight;
@@ -92,50 +120,81 @@ export default function Timeline({
       if (event.columnIndex !== prevColumnIndex || event.end >= prevEnd) {
         prevColumnIndex = event.columnIndex;
         prevEnd = event.end;
+        wasPrevActive = event.isActive;
         wasPrevShiftedRight = shiftedRight;
       }
     }
-  }
 
+    setEventsWithConflicts(eventsWithConflicts);
+    setEventsShiftedRight(eventsShiftedRight);
+  }, [eventsShown]);
+
+  // Logic for rendering elements in the timeline.
   const getTopByTime = (time) => (time - rangeStart) / (rangeEnd - rangeStart);
 
-  const renderEvent = (i, { columnIndex, text, color, data, start, end }) => {
+  const handleTimeBlockClick = (data) => {
+    setDoesSelectedEventHaveConflicts(
+      events.some((event, i) => event.data.groupID === data.groupID && eventsWithConflicts[i])
+    );
+    setSelectedEventData(selectedEventData?.groupID !== data.groupID && data);
+  };
+
+  const renderEvent = (i, event) => {
+    const { columnIndex, text, color, data, start, end, key, isActive, sx } = event;
+
     if (start >= rangeEnd || end <= rangeStart) return null; // can't fit in range
 
-    start = getTopByTime(Math.max(start, rangeStart));
-    end = getTopByTime(Math.min(end, rangeEnd));
-
+    const top = getTopByTime(Math.max(start, rangeStart));
+    const bottom = getTopByTime(Math.min(end, rangeEnd));
     const hasConflicts = eventsWithConflicts[i];
-    const isMouseEntered = mouseEnteredEventData?.id === data.id;
-    const isSelected = selectedEventData?.id === data.id;
+    const isMouseEntered = mouseEnteredEventData?.groupID === data.groupID;
+    const isSelected = selectedEventData?.groupID === data.groupID;
 
     return (
-      <Box
-        key={`e${data.id}-${columnIndex}-${start}-${end}`}
-        sx={{
-          position: 'absolute',
-          top: start * 100 + '%',
-          left: (columnIndex + 0.0833) * columnWidth + '%',
-          zIndex: isMouseEntered ? 999 : isSelected ? 998 : '',
-          width: 0.667 * columnWidth + '%',
-          height: (end - start) * 100 + '%',
-          // Adapt the same transition style from MUI to the shifting movement.
-          transition: 'transform 250ms cubic-bezier(0.4, 0, 0.2, 1)',
-          transform: eventsShiftedRight[i] ? 'translateX(25%)' : '',
-        }}
+      <AnimatePresence
+        key={'e' + key}
+        onExitComplete={() =>
+          requestAnimationFrame(() => {
+            if (!event.isActive) {
+              setEventsShown((eventsShown) => eventsShown.filter((x) => x.key !== key));
+            }
+          })
+        }
       >
-        <TimeBlock
-          text={text}
-          color={color ? color : hasConflicts && !isSelected ? 'warning' : color}
-          gray={!hasConflicts && !color && !isSelected}
-          darken={isMouseEntered}
-          data={data}
-          onMouseEnter={(_, data) => setMouseEnteredEventData(data)}
-          onMouseLeave={() => setMouseEnteredEventData(null)}
-          onClick={handleTimeBlockClick}
-          variant={isSelected ? 'contained' : 'outlined'}
-        />
-      </Box>
+        {isActive && (
+          <MotionBox
+            variants={timeBlockContainerAnimationVariants}
+            initial='initial'
+            animate='active'
+            exit='inactive'
+            transition={{ duration: 0.25 }}
+            sx={{
+              position: 'absolute',
+              top: top * 100 + '%',
+              left: (columnIndex + 0.0833) * columnWidth + '%',
+              zIndex: isMouseEntered ? 999 : isSelected ? 998 : '',
+              width: 0.667 * columnWidth + '%',
+              height: (bottom - top) * 100 + '%',
+              // Adapt the same transition style from MUI to the shifting movement.
+              transition: 'transform 250ms cubic-bezier(0.4, 0, 0.2, 1)',
+              transform: eventsShiftedRight[i] ? 'translateX(25%)' : '',
+            }}
+          >
+            <TimeBlock
+              text={text}
+              color={color ? color : hasConflicts && !isSelected ? 'warning' : color}
+              gray={!hasConflicts && !color && !isSelected}
+              darken={isMouseEntered}
+              variant={isSelected ? 'contained' : 'outlined'}
+              sx={sx}
+              data={data}
+              onMouseEnter={() => setMouseEnteredEventData(data)}
+              onMouseLeave={() => setMouseEnteredEventData(null)}
+              onClick={() => handleTimeBlockClick(data)}
+            />
+          </MotionBox>
+        )}
+      </AnimatePresence>
     );
   };
 
@@ -175,7 +234,7 @@ export default function Timeline({
         sx={{ width: '100%', height: 'calc(100% - 32px)', position: 'relative' }}
       >
         {renderGridLines()}
-        {events && events.map((event, i) => renderEvent(i, event))}
+        {eventsShown.map((event, i) => renderEvent(i, event))}
         {selectedEventData && (
           <Box
             ref={dataCardRef}
@@ -196,3 +255,13 @@ export default function Timeline({
     </Box>
   );
 }
+
+const MotionBox = motion(Box);
+
+const timeBlockContainerAnimationVariants = {
+  initial: { opacity: 0 },
+  active: { opacity: 1 },
+  inactive: { opacity: 0 },
+};
+
+const getEventKey = ({ data, columnIndex }) => `${data.eventID}-${columnIndex}`;

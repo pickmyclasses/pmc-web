@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, useTheme } from '@mui/material';
+import { Button, Typography, useTheme } from '@mui/material';
 
 export default function TimeBlock({
   text,
@@ -9,9 +9,7 @@ export default function TimeBlock({
   gray = false,
   data,
   sx = {},
-  onMouseEnter,
-  onMouseLeave,
-  onClick,
+  ...props
 }) {
   const theme = useTheme();
 
@@ -36,25 +34,21 @@ export default function TimeBlock({
         : darken
         ? theme.palette.grey[200]
         : theme.palette.background.default) + ' !important',
-    fontSize: 'x-small',
     wordSpacing: '100vw',
     alignItems: 'flex-start',
     overflow: 'hidden',
   };
 
+  const textStyles = {
+    pointerEvents: 'none',
+    fontSize: 'min(14px, 1.5vmin)',
+  };
+
   return (
-    <Button
-      text={text}
-      variant={variant}
-      color={color}
-      sx={buttonStyles}
-      onMouseEnter={() => onMouseEnter?.(text, data)}
-      onMouseLeave={() => onMouseLeave?.(text, data)}
-      onClick={() => onClick?.(text, data)}
-    >
-      <div style={{ lineHeight: '1.25em', letterSpacing: 0, pointerEvents: 'none' }}>
+    <Button text={text} variant={variant} color={color} sx={buttonStyles} {...props}>
+      <Typography variant='subtitle2' lineHeight={1.19} style={textStyles}>
         {text}
-      </div>
+      </Typography>
     </Button>
   );
 }

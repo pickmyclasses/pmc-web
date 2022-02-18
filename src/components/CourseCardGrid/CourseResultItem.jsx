@@ -1,25 +1,22 @@
-import { Star, StarOutline, WatchLater, WatchLaterOutlined } from '@mui/icons-material';
 import {
   Box,
   Card,
   CardMedia,
-  Chip,
   Divider,
   Rating,
   Skeleton,
   Typography,
   useTheme,
 } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { formatCourseName, pluralize } from '../../utils';
 import CourseEligibilityIndicator from './CourseCard/CourseEligibilityIndicator';
-import DaysIndicator from './CourseCard/DaysIndicator';
 import TagList from './CourseCard/TagList';
 import ClickableIndicator from './CourseCard/ClickableIndicator';
 import CourseOfferingSummary from './CourseOfferingSummary';
-import { CenterAligningFlexBox, getMeanReviewRating } from './CourseCard/CourseCard';
+import { getMeanReviewRating } from './CourseCard/CourseCard';
 
 /** A course search result item. */
 export default function CourseResultItem({ data: { course, classes, reviews } }) {
@@ -27,6 +24,8 @@ export default function CourseResultItem({ data: { course, classes, reviews } })
   const theme = useTheme();
 
   const rating = getMeanReviewRating(reviews);
+
+  const [isMouseEntered, setIsMouseEntered] = useState(false);
 
   const renderContent = () => (
     <>
@@ -58,7 +57,13 @@ export default function CourseResultItem({ data: { course, classes, reviews } })
             </CourseEligibilityIndicator>
           </Box>
         </ClickableIndicator>
-        <Box sx={{ display: 'flex', alignItems: 'center', margin: '4px 0 8px' }}>
+        <Box
+          display='flex'
+          alignItems='center'
+          margin='4px 0 8px'
+          whiteSpace='nowrap'
+          sx={{ '*': { minWidth: 0, textOverflow: 'ellipsis', overflow: 'hidden' } }}
+        >
           <Typography variant='body2' color={theme.palette.text.secondary}>
             {course.MinCredit === course.MaxCredit ? '' : course.MinCredit + '–'}
             {pluralize(+course.MaxCredit, 'credit')}
@@ -81,7 +86,14 @@ export default function CourseResultItem({ data: { course, classes, reviews } })
       </Box>
       <Divider orientation='vertical' sx={{ height: 'calc(100% - 16px)', marginTop: '8px' }} />
       <Box sx={{ padding: '12px 16px', width: '108px', height: 'fit-content', margin: 'auto' }}>
-        <CourseOfferingSummary classes={classes} maxRows={4} textAlign='center' />
+        <CourseOfferingSummary
+          course={course}
+          classes={classes}
+          maxRows={4}
+          textAlign='center'
+          enableHighlight
+          isMouseEntered={isMouseEntered}
+        />
       </Box>
     </>
   );
@@ -99,6 +111,8 @@ export default function CourseResultItem({ data: { course, classes, reviews } })
 
   return (
     <MotionCard
+      onMouseEnter={() => setIsMouseEntered(true)}
+      onMouseLeave={() => setIsMouseEntered(false)}
       onClick={() => course && navigate(`/course/${course.ID}`)}
       initial='initial'
       whileHover='mouseEntered'

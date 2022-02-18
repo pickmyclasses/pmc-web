@@ -105,4 +105,7 @@ export const cartesian = (...args) =>
  * @example groupBy(['one', 'two', 'three'], 'length') // {3: ['one', 'two'], 5: ['three']}
  */
 export const groupBy = (values, key) =>
-  values.reduce((rv, x) => ((rv[x[key]] = rv[x[key]] || []).push(x), rv), {});
+  values.reduce((rv, x) => {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});

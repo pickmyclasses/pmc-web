@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Card,
@@ -16,13 +16,10 @@ import ClickableIndicator from './ClickableIndicator';
 import CourseEligibilityIndicator from './CourseEligibilityIndicator';
 import TagList from './TagList';
 import CourseOfferingSummary from '../CourseOfferingSummary';
-import { SchedulerDisplayContentContext } from '../../../pages/PageWithScheduler';
 
 export default function CourseCard({ data: { course, classes, reviews } }) {
   const navigate = useNavigate();
   const theme = useTheme();
-
-  const { setClassesToHighlight } = useContext(SchedulerDisplayContentContext);
 
   const [isMouseEntered, setIsMouseEntered] = useState(false);
   const [isCourseTitleExpanded, setIsCourseTitleExpanded] = useState(false);
@@ -88,10 +85,13 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
           <CenterAligningFlexBox sx={{ justifyContent: 'space-between' }}>
             <Rating readOnly value={rating} precision={0.5} size='small' />
             <CourseOfferingSummary
+              course={course}
               classes={classes}
               maxRows={1}
               rowHeight={1.5}
-              width='120px'
+              width='min(120px, calc(100% - 120px))'
+              enableHighlight
+              isMouseEntered={isMouseEntered && isExtraInfoExpanded}
             />
           </CenterAligningFlexBox>
         </motion.div>
@@ -101,7 +101,12 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
 
   const renderSkeleton = () => (
     <>
-      <Skeleton width='100%' height='192px' />
+      <Skeleton
+        variant='rectangular'
+        width='100%'
+        height='180px'
+        sx={{ marginBottom: '20px' }}
+      />
       <Skeleton width='50%' height='60px' sx={{ marginLeft: '20px' }} />
       <Skeleton width='75%' height='36px' sx={{ marginLeft: '20px' }} />
     </>
