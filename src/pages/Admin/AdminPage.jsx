@@ -2,41 +2,48 @@ import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { DataGrid } from '@mui/x-data-grid';
 import { useDemoData } from '@mui/x-data-grid-generator';
-import axios from 'axios';
 
 export default function AdminPage() {
     const [isLoaded, setIsLoaded] = useState(false);
-    const [classes, setClasses] = React.useState([]);
+
+    const [tableName, setTableName] = useState("");
+
+
+    const [data, setData] = useState([]);
+
+
     const [error, setError] = useState(null);
-    const [nbRows, setNbRows] = React.useState(5);
+    const [nbRows, setNbRows] = React.useState(10);
+
+
     const removeRow = () => setNbRows((x) => Math.max(0, x - 1));
     const addRow = () => setNbRows((x) => Math.min(100, x + 1));
 
-    const { data } = useDemoData({
-        dataSet: 'Commodity',
-        rowLength: 100,
-        maxColumns: 6,
-    });
+    // const { data } = useDemoData({
+    //     dataSet: 'Commodity',
+    //     rowLength: 100,
+    //     maxColumns: 6,
+    // });
 
 
     useEffect(() => {
-        fetch("https://jsonplaceholder.typicode.com/users/")
+        fetch("https://pmc-schedule-api.herokuapp.com/" + tableName)
             .then(res => res.json())
             .then(
                 (data) => {
+                    console.log("useEffect is called: " + tableName);
                     setIsLoaded(true);
-                    setClasses(data);
+                    setData(data);
                 },
                 (error) => {
                     setIsLoaded(true);
                     setError(error);
                 }
-            )
-    }, []);
+            );
 
-    let handleClick = () => {
+    }, [tableName]);
 
-    }
+
 
     if (error) 
     {
@@ -46,9 +53,23 @@ export default function AdminPage() {
         return <div>Loading...</div>;
     } else 
     {
+        console.log(data);
         return (
             <div style={{ width: '100%' }}>
                 <h1>Admin Page</h1>
+
+                <label className="selector-label">Choose a table:</label>
+
+                <select name="tables" id="tables-selector" onChange={(e) => setTableName(e.target.value)}>
+                    <option value=""></option>
+                    <option value="class">class</option>
+                    <option value="college">college</option>
+                    <option value="course">course</option>
+                    <option value="subject">subject</option>
+                </select>
+
+
+
                 <Button variant="outlined" onClick={removeRow}>
                     Remove a row
                 </Button>
