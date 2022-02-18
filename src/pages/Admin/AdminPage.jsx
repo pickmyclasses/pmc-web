@@ -3,7 +3,8 @@ import Button from '@mui/material/Button';
 import { DataGrid } from '@mui/x-data-grid';
 import { useDemoData } from '@mui/x-data-grid-generator';
 
-export default function AdminPage() {
+export default function AdminPage() 
+{
     const [isLoaded, setIsLoaded] = useState(false);
 
     const [tableName, setTableName] = useState("");
