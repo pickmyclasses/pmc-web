@@ -114,9 +114,6 @@ function EnhancedTableHead(props) {
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
           />
         </TableCell>
         {headCells.map((headCell) => (
@@ -246,6 +243,7 @@ export default function EnhancedTable({ classes }) {
     const selectedClasses = getSelectedClasses(selected, classes).map((classData) => ({
       classData,
       course,
+      highlight: true,
     }));
     setClassesToHighlight(selectedClasses);
   }, [classes, course, selected, setClassesToHighlight]);
@@ -341,13 +339,7 @@ export default function EnhancedTable({ classes }) {
                       selected={isItemSelected}
                     >
                       <TableCell padding='checkbox'>
-                        <Checkbox
-                          color='primary'
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
+                        <Checkbox color='primary' checked={isItemSelected} />
                       </TableCell>
                       <TableCell component='th' id={labelId} scope='row' padding='none'>
                         {row.OfferDate.padStart(3, '0')}

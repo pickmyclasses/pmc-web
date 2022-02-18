@@ -8,7 +8,7 @@ export default function CourseReviews({ courseID }) {
 
   useEffect(() => {
     fetchReviewsByCourseID(courseID).then((data) => setReviews(data.data.data));
-  }, []);
+  }, [courseID]);
 
   const renderReviewSkeletons = () => (
     <Grid item>

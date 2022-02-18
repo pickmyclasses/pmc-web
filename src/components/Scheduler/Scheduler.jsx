@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Card, CircularProgress, Divider, Typography, useTheme } from '@mui/material';
+import { Box, Card, CircularProgress, Divider, Typography } from '@mui/material';
 import { ShoppingCart as ShoppingCartIcon } from '@mui/icons-material';
 import ShoppingCart from './ShoppingCart';
 import RequirementList from './RequirementList';
@@ -12,8 +12,6 @@ export default function Scheduler({
   classesInShoppingCart = [],
   requirements = [],
 }) {
-  const theme = useTheme();
-
   const renderLoadingIndication = () => <CircularProgress sx={{ margin: 'auto' }} />;
 
   const renderSchedulerContent = () => (

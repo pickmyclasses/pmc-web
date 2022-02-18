@@ -9,6 +9,8 @@ export const login = ({ email, password }) => {
 };
 
 export const register = ({ email, firstName, lastName, college, password, repassword }) => {
+  // TODO Q: Maybe write a global util function to convert all keys in an object into snake
+  // case.
   const data = {
     email: email,
     first_name: firstName,
@@ -51,7 +53,7 @@ const fakeFetchCoursesBySearch = () =>
   new Promise((onFetched) =>
     onFetched([
       22966, 23000, 22968, 23068, 23063, 23041, 23001, 22986, 22998, 22964, 22941, 22942, 22961,
-      22971, 22951, 22970, 22998, 31826, 28270, 24777, 27266, 21978, 28354, 23000, 30056, 31826,
+      22971, 22951, 22970, 22998, 31826, 28270, 24777, 27266, 27334, 21978, 28354, 30056, 31826,
     ])
   );
 

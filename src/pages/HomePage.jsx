@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import {
-  fetchClassesByCourseID,
-  fetchCourseByID,
-  fetchHomePageCourses,
-  fetchReviewsByCourseID,
-} from '../api';
+import { fetchCourseByID, fetchHomePageCourses, fetchReviewsByCourseID } from '../api';
 import PageWithScheduler from './PageWithScheduler';
 import { useMount } from '../utils';
 import CourseCardGrid from '../components/CourseCardGrid/CourseCardGrid';
