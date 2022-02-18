@@ -10,7 +10,7 @@ import ReviewPage from './pages/ReviewPage';
 import AdminPage from './pages/Admin/AdminPage';
 import AuthForm from './components/AuthForm/AuthForm';
 import RegisterForm from './components/AuthForm/RegisterForm';
-
+import FeedbackEditor from './pages/FeedbackEditorPage';
 export const UserContext = createContext();
 
 export default function App() {
@@ -27,8 +27,11 @@ export default function App() {
             toggleScheduler={() => setShouldShowScheduler(!shouldShowScheduler)}
           />
           <Routes>
+            <Route path='/backoffice' exact element={<AdminPage />} />
+            <Route path='/FeedbackEditor' exact element={<FeedbackEditor />} />
+
             <Route path='/' exact element={<WelcomePage />} />
-            <Route path='/backoffice' exact element={<AdminPage/>}/>
+            <Route path='/backoffice' exact element={<AdminPage />} />
             <Route
               path='/home'
               exact
@@ -54,6 +57,6 @@ export default function App() {
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>
-    </Box>   
+    </Box>
   );
 }
