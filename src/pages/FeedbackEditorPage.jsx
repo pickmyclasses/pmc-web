@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Container, Grid, Typography } from '@mui/material';
+import React from 'react';
+import { Container, Grid } from '@mui/material';
 import MainCard from '../components/Skeleton/MainCard';
 import { gridSpacing } from '../constants/constants';
 import Radio from '@mui/material/Radio';
@@ -7,9 +7,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-export default function ReviewPage({ shouldShowScheduler }) {
-  const [course, setCourse] = useState(null);
-
+export default function ReviewPage() {
   return (
     <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0 }}>
       <MainCard>

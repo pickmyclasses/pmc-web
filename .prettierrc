@@ -1,5 +1,6 @@
 {
   "jsxSingleQuote": true,
   "printWidth": 96,
+  "quoteProps": "preserve",
   "singleQuote": true
 }
