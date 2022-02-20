@@ -1,29 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Alert,
-  Card,
-  CardActions,
-  Divider,
-  IconButton,
-  Tooltip,
-  useTheme,
-} from '@mui/material';
+import { Alert, Card, CardActions, Divider, IconButton, Tooltip } from '@mui/material';
 import { Edit, Info } from '@material-ui/icons';
 
 export default function TimeDataCard({
-  data: { title, subtitle, description, coursePageURL, topBorderColor = 'primary' },
+  data: { title, subtitle, description, coursePageURL, topBorderColor = 'gray' },
   hasConflicts = false,
 }) {
-  const theme = useTheme();
-
   return (
     <Card
       sx={{
         position: 'relative',
         width: '324px',
         padding: '0px 16px 16px',
-        borderTop: '8px solid ' + theme.palette[topBorderColor].main,
+        borderTop: '8px solid ' + topBorderColor,
         boxShadow: 2,
       }}
     >

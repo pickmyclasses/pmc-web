@@ -7,6 +7,7 @@ import { UserContext } from '../App';
 /**
  * @type {React.Context<{
  *   isSchedulerShowing: Boolean,
+ *   classesInShoppingCart: Array<{classData: Object, course: Object}>,
  *   setClassesToHighlight: function(Array<{classData: Object, course: Object}>): void,
  *   refetchSchedulerData: function(): void,
  * }>}
@@ -58,6 +59,7 @@ export default function PageWithScheduler({ children, shouldShowScheduler }) {
           <SchedulerDisplayContentContext.Provider
             value={{
               isSchedulerShowing: shouldShowScheduler,
+              classesInShoppingCart,
               setClassesToHighlight,
               refetchSchedulerData: fetchSchedulerData,
             }}
