@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Box,
   Card,
@@ -16,10 +16,13 @@ import ClickableIndicator from './ClickableIndicator';
 import CourseEligibilityIndicator from './CourseEligibilityIndicator';
 import TagList from './TagList';
 import CourseOfferingSummary from '../CourseOfferingSummary';
+import { SchedulerDisplayContentContext } from '../../../pages/PageWithScheduler';
 
 export default function CourseCard({ data: { course, classes, reviews } }) {
   const navigate = useNavigate();
   const theme = useTheme();
+
+  const { classesInShoppingCart } = useContext(SchedulerDisplayContentContext);
 
   const [isMouseEntered, setIsMouseEntered] = useState(false);
   const [isCourseTitleExpanded, setIsCourseTitleExpanded] = useState(false);
@@ -36,7 +39,9 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
         style={{ padding: '16px 20px' }}
       >
         <ClickableIndicator propagate>
-          <CourseEligibilityIndicator eligibility='none'>
+          <CourseEligibilityIndicator
+            eligibility={getEligibility(course, classes, classesInShoppingCart)}
+          >
             <Typography variant='h6'>{formatCourseName(course.CatalogCourseName)}</Typography>
           </CourseEligibilityIndicator>
         </ClickableIndicator>
@@ -157,4 +162,10 @@ export const getMeanReviewRating = (reviews) => {
     for (let review of reviews) totalRating += review.rating;
   }
   return totalRating / reviews?.length;
+};
+
+export const getEligibility = (course, classes, classesInShoppingCart) => {
+  if (!classes?.length) return 'not-offered';
+  if (classesInShoppingCart.some((x) => x.course.ID === course.ID)) return 'in-shopping-cart';
+  return 'none';
 };

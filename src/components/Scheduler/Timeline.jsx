@@ -9,9 +9,9 @@ import TimeDataCard from './TimeDataCard';
  * Represents the timeline view in the shopping cart.
  *
  * @param {object} props
- * @param {number} props.rangeStart The earliest time of the day to show (default: 8 AM).
- * @param {number} props.rangeEnd The latest time of the day to show (default: 5 PM).
- * @param {string[]} props.columnTitles The column titles to display (default: the weekdays).
+ * @param {number} props.defaultRangeStart
+ * @param {number} props.defaultRangeEnd
+ * @param {string[]} props.columnTitles
  * @param {{
  *   columnIndex: string,
  *   text: string,
@@ -21,13 +21,15 @@ import TimeDataCard from './TimeDataCard';
  * }[]} props.events
  */
 export default function Timeline({
-  rangeStart = 8.5 * 3600,
-  rangeEnd = 17.5 * 3600,
+  defaultRangeStart = 9 * 3600,
+  defaultRangeEnd = 17 * 3600,
   columnTitles = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
   events = [],
 }) {
   const theme = useTheme();
 
+  const [rangeStart, setRangeStart] = useState(defaultRangeStart);
+  const [rangeEnd, setRangeEnd] = useState(defaultRangeEnd);
   const [hasHighlights, setHasHighlights] = useState(false);
   const [eventsShown, setEventsShown] = useState([]);
   const [eventsWithConflicts, setEventsWithConflicts] = useState([]);
@@ -43,7 +45,7 @@ export default function Timeline({
 
   // Deselect any highlighted event on click outside.
   useMount(() => {
-    const handleDocumentClick = (e) => {
+    const handleDocumentMouseDown = (e) => {
       if (
         (!containerRef?.current?.contains(e.target) || e.target.tagName !== 'BUTTON') &&
         !dataCardRef?.current?.contains(e.target)
@@ -52,9 +54,16 @@ export default function Timeline({
       }
     };
 
-    document.addEventListener('click', handleDocumentClick);
-    return () => document.removeEventListener('click', handleDocumentClick);
+    document.addEventListener('mousedown', handleDocumentMouseDown);
+    return () => document.removeEventListener('mousedown', handleDocumentMouseDown);
   });
+
+  useEffect(() => {
+    const earliestStart = Math.min(...events.map((x) => x.start)) || defaultRangeStart;
+    const latestEnd = Math.max(...events.map((x) => x.end)) || defaultRangeEnd;
+    setRangeStart(Math.min(defaultRangeStart, earliestStart));
+    setRangeEnd(Math.max(defaultRangeEnd, latestEnd));
+  }, [events, defaultRangeStart, defaultRangeEnd]);
 
   // Compute which events are no longer part of the timeline and are to fade out.  Preserve the
   // old events (events that are removed from the timeline) in the "shown" list to assist in
@@ -164,7 +173,7 @@ export default function Timeline({
       >
         {isActive && (
           <MotionBox
-            variants={timeBlockContainerAnimationVariants}
+            variants={faderAnimationVariants}
             initial='initial'
             animate='active'
             exit='inactive'
@@ -177,8 +186,8 @@ export default function Timeline({
               width: 0.667 * columnWidth + '%',
               height: (bottom - top) * 100 + '%',
               // Adapt the same transition style from MUI to the shifting movement.
-              transition: 'transform 250ms cubic-bezier(0.4, 0, 0.2, 1)',
               transform: eventsShiftedRight[i] ? 'translateX(25%)' : '',
+              transition: getTransitionForStyles('top', 'height', 'transform'),
             }}
           >
             <TimeBlock
@@ -208,25 +217,33 @@ export default function Timeline({
 
   const renderGridLines = () => {
     const gridLines = [];
-    for (let time = Math.ceil(rangeStart / 3600) * 3600; time <= rangeEnd; time += 3600) {
+    for (let time = 0; time < 86400; time += 3600) {
       const y = (time - rangeStart) / (rangeEnd - rangeStart);
       gridLines.push(
-        <Divider
-          key={'gl' + time}
-          textAlign='right'
-          sx={{
-            position: 'absolute',
-            transform: 'translateY(-50%)',
-            top: y * 100 + '%',
-            width: 'calc(100% + 24px)',
-            '::before': { width: '100%' },
-            '> span': { fontSize: '12px', opacity: 0.667, padding: '0 4px 0 2px' },
-            '::after': { display: 'none' },
-          }}
-        >
-          {(time / 3600) % 12 || 12}
-          {time === 43200 && 'p'}
-        </Divider>
+        <AnimatePresence key={'gl' + time}>
+          {time >= rangeStart && time < rangeEnd && (
+            <MotionDivider
+              variants={faderAnimationVariants}
+              initial='initial'
+              animate='active'
+              exit='inactive'
+              textAlign='right'
+              sx={{
+                position: 'absolute',
+                transform: 'translateY(-50%)',
+                top: y * 100 + '%',
+                width: 'calc(100% + 24px)',
+                '::before': { width: '100%' },
+                '> span': { fontSize: '12px', opacity: 0.667, padding: '0 4px 0 2px' },
+                '::after': { display: 'none' },
+                transition: getTransitionForStyles('top'),
+              }}
+            >
+              {(time / 3600) % 12 || 12}
+              {time === 43200 && 'p'}
+            </MotionDivider>
+          )}
+        </AnimatePresence>
       );
     }
     return gridLines;
@@ -266,10 +283,15 @@ export default function Timeline({
 
 const MotionBox = motion(Box);
 
-const timeBlockContainerAnimationVariants = {
+const MotionDivider = motion(Divider);
+
+const faderAnimationVariants = {
   initial: { opacity: 0 },
   active: { opacity: 1 },
   inactive: { opacity: 0 },
 };
 
 const getEventKey = ({ data, columnIndex }) => `${data.eventID}-${columnIndex}`;
+
+export const getTransitionForStyles = (...styles) =>
+  styles.map((x) => x + ' 250ms cubic-bezier(0.4, 0, 0.2, 1)').join(', ');

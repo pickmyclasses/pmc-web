@@ -1,30 +1,81 @@
 import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { formatCourseName, parseDayList, parseTime } from '../../utils';
 import Timeline from './Timeline';
 import ImageColors from 'react-native-image-colors';
 import Color from 'color';
+import { pluralize } from '../../utils';
 
 /** The shopping cart resides in the top part of the scheduler. */
 export default function ShoppingCart({ classes }) {
-  const [sessions, setSessions] = useState([]);
+  const theme = useTheme();
 
-  useEffect(() => generateSessions(classes, setSessions), [classes]);
+  const [sessionGenerationResolver, setSessionGenerationResolver] = useState({});
+  const [sessions, setSessions] = useState([]);
+  const [minCredits, setMinCredits] = useState(0);
+  const [maxCredits, setMaxCredits] = useState(0);
+  const [numCourses, setNumCourses] = useState(0);
+  const [numOnlineCourses, setNumOnlineCourses] = useState(false);
+  const [hasHighlights, setHasHighlights] = useState(false);
+
+  useEffect(() => {
+    // Enumerate each class' meet times and turn them into individual sessions/events. First
+    // the previous resolver so if old loading came with a delay, it wouldn't override new
+    // results.
+    sessionGenerationResolver.onGenerated = null;
+    let newResolver = { onGenerated: setSessions };
+    setSessionGenerationResolver(newResolver);
+    generateSessions(classes, newResolver);
+
+    // Compute the content to display in the bottom summary text.
+    // const [numCredits, courses] = getNumCreditsAndCourses(classes);
+    // setNumCredits(numCredits);
+    // setNumCourses(courses.length);
+    // setHasOnlineClasses(courses.filter(({ OfferDate }) => OfferDate === ''));
+    // setHasHighlights(classes.some(({ highlight }) => highlight));
+    setHasHighlights(classes.some((x) => x.highlight));
+    let courseByID = {};
+    let minCredits = 0;
+    let maxCredits = 0;
+    for (let { classData, course } of classes) {
+      if (courseByID.hasOwnProperty(course.ID)) {
+        courseByID[course.ID].isOnline |= !classData.OfferDate;
+      } else {
+        courseByID[course.ID] = { course, isOnline: !classData.OfferDate };
+        minCredits += +course.MinCredit;
+        maxCredits += +course.MaxCredit;
+      }
+    }
+    setMinCredits(minCredits);
+    setMaxCredits(maxCredits);
+    const courses = Object.values(courseByID);
+    setNumCourses(courses.length);
+    setNumOnlineCourses(courses.filter((x) => x.isOnline).length);
+    // eslint-disable-next-line
+  }, [classes]);
 
   return (
-    <Box
-      position='relative'
-      display='flex'
-      flexDirection='column'
-      sx={{
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <Timeline events={sessions} />
+    <Box display='flex' flexDirection='column' position='relative' width='100%' height='100%'>
+      <Box flex={1}>
+        <Timeline events={sessions} />
+      </Box>
+      <Typography
+        marginTop='16px'
+        variant='caption'
+        align='center'
+        color={hasHighlights ? theme.palette.success.main : ''}
+      >
+        {numCourses === 0 ? (
+          <>&nbsp;</>
+        ) : (
+          <>
+            {minCredits === maxCredits ? '' : minCredits + '–'}
+            {pluralize(maxCredits, 'credit')}&nbsp;&nbsp;•&nbsp;&nbsp;
+            {pluralize(numCourses, 'course')}
+            {numOnlineCourses > 0 ? <>&nbsp;({pluralize(numOnlineCourses, 'online')})</> : ''}
+          </>
+        )}
+      </Typography>
     </Box>
   );
 }
@@ -32,10 +83,12 @@ export default function ShoppingCart({ classes }) {
 /**
  * Generates a list of sessions for each weekday from a list of classes and belonged courses.
  */
-const generateSessions = (classes, onGenerated) => {
+const generateSessions = (classes, resolver) => {
   let sessions = [];
   for (let { classData, course, highlight } of classes) {
     for (let dayOffered of parseDayList(classData.OfferDate)) {
+      if (dayOffered === -1) continue; // online course
+
       const courseCode = formatCourseName(course.CatalogCourseName);
       const relatedClasses = classes
         .map(({ classData }) => classData)
@@ -87,7 +140,9 @@ const generateSessions = (classes, onGenerated) => {
       );
     }
   }
-  Promise.all(sessions).then((x) => onGenerated(x));
+  // Using a resolver object this way prevents the onGenerated callback being called later than
+  // the next update of session generation.
+  Promise.all(sessions).then((x) => resolver.onGenerated?.(x));
 };
 
 // TODO Q: Some classes in the backend have their component name wrongly listed in

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { SchedulerDisplayContentContext } from '../../pages/PageWithScheduler';
 import { cartesian, groupBy, parseDayList, pluralize } from '../../utils';
 import { getComponent, getInstructor } from '../Scheduler/ShoppingCart';
+import { getTransitionForStyles } from '../Scheduler/Timeline';
 import DaysIndicator from './CourseCard/DaysIndicator';
 
 export default function CourseOfferingSummary({
@@ -23,8 +24,9 @@ export default function CourseOfferingSummary({
     SchedulerDisplayContentContext
   );
 
-  const [hasOnlineOffering, setHasOnlineOffering] = useState(false);
+  const [onlineOffering, setOnlineOffering] = useState(null);
   const [numHiddenOfferings, setNumHiddenOfferings] = useState(0);
+  const [comboInShoppingCart, setComboInShoppingCart] = useState(null);
   const [representativeOfferings, setRepresentativeOfferings] = useState([]);
   const [mouseEnteredIndex, setMouseEnteredIndex] = useState(-1);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -33,14 +35,20 @@ export default function CourseOfferingSummary({
   // Construct a list of n representative offering days from the list of classes offered. Favor
   // offerings that occupy fewer days.
   useEffect(() => {
-    const offerings = enumerateOfferings(classes, course, classesInShoppingCart);
+    const [offerings, comboInShoppingCart] = enumerateOfferings(
+      classes,
+      course,
+      classesInShoppingCart
+    );
+    setComboInShoppingCart(comboInShoppingCart);
+
     const numHiddenOfferings = offerings.length <= maxRows ? 0 : offerings.length - maxRows + 1;
     let representativeOfferings = offerings.slice(0, offerings.length - numHiddenOfferings);
 
     const hasOnlineOffering = representativeOfferings[0]?.days[0] === -1;
+    setOnlineOffering(hasOnlineOffering ? representativeOfferings[0] : null);
     if (hasOnlineOffering) representativeOfferings.shift();
 
-    setHasOnlineOffering(hasOnlineOffering);
     setNumHiddenOfferings(numHiddenOfferings);
     setRepresentativeOfferings(representativeOfferings);
   }, [classes, course, classesInShoppingCart, maxRows]);
@@ -49,23 +57,26 @@ export default function CourseOfferingSummary({
 
   useEffect(() => {
     if (
-      representativeOfferings.length &&
+      (representativeOfferings.length || onlineOffering || comboInShoppingCart) &&
       isSchedulerShowing &&
       enableHighlight &&
-      isMouseEntered
+      (mouseEnteredIndex >= 0 || isMouseEntered)
     ) {
       // Highlight
-      const indexToHighlight = Math.max(mouseEnteredIndex, 0); // default h'lighting first item
-      const combosToHighlight = representativeOfferings[indexToHighlight].combo;
+      const indexToHighlight = Math.max(mouseEnteredIndex, 0);
+      const comboToHighlight =
+        indexToHighlight === representativeOfferings.length
+          ? onlineOffering?.combo || comboInShoppingCart
+          : representativeOfferings[indexToHighlight].combo;
       setHighlightedIndex(indexToHighlight);
       setClassesToHighlight(
-        combosToHighlight.map((classData) => ({
+        comboToHighlight.map((classData) => ({
           classData,
           course,
           highlight: true,
         }))
       );
-      setHighlightedClassIDs(combosToHighlight.map((x) => x.ID));
+      setHighlightedClassIDs(comboToHighlight.map((x) => x.ID));
     } else if (highlightedIndex >= 0) {
       // Un-highlight
       setClassesToHighlight((highlightedClasses) =>
@@ -75,6 +86,7 @@ export default function CourseOfferingSummary({
       );
       setHighlightedIndex(-1);
       setHighlightedClassIDs(null);
+      if (!isMouseEntered) setMouseEnteredIndex(-1);
     }
     // eslint-disable-next-line
   }, [
@@ -110,34 +122,52 @@ export default function CourseOfferingSummary({
             height={rowHeight}
             days={days}
             onMouseEnter={() => setMouseEnteredIndex(i)}
-            onMouseLeave={() => !isMouseEntered && setMouseEnteredIndex(-1)}
+            onMouseLeave={() => setMouseEnteredIndex(-1)}
             isMouseEntered={i === highlightedIndex}
           />
         ))}
-        {numHiddenOfferings > 0 ? (
-          <>
-            <Typography variant='body2' align={textAlign}>
-              {representativeOfferings.length === 0 ? '' : '+'}
-              {pluralize(numHiddenOfferings, 'offering')}
-            </Typography>
-            {hasOnlineOffering && (
-              <Typography variant='body2' align={textAlign} sx={{ marginTop: '-8px' }}>
-                (1 online)
+        <Box
+          onMouseEnter={
+            onlineOffering
+              ? () => setMouseEnteredIndex(representativeOfferings.length)
+              : comboInShoppingCart && (() => setMouseEnteredIndex(0))
+          }
+          onMouseLeave={() => setMouseEnteredIndex(-1)}
+          sx={{
+            '*': {
+              color:
+                onlineOffering && highlightedIndex === representativeOfferings.length
+                  ? theme.palette.success.main
+                  : '',
+              transition: getTransitionForStyles('color'),
+            },
+          }}
+        >
+          {numHiddenOfferings > 0 ? (
+            <>
+              <Typography variant='body2' align={textAlign}>
+                {representativeOfferings.length === 0 ? '' : '+'}
+                {pluralize(numHiddenOfferings, 'offering')}
               </Typography>
-            )}
-          </>
-        ) : (
-          hasOnlineOffering &&
-          (representativeOfferings.length === 0 ? (
-            <Typography variant='body2' align={textAlign}>
-              Offered online
-            </Typography>
+              {onlineOffering && (
+                <Typography variant='body2' align={textAlign} sx={{ marginTop: '-8px' }}>
+                  (1 online)
+                </Typography>
+              )}
+            </>
           ) : (
-            <Typography variant='body2' align={textAlign} sx={{ fontSize: 'x-small' }}>
-              +1 online offering
-            </Typography>
-          ))
-        )}
+            onlineOffering &&
+            (representativeOfferings.length === 0 ? (
+              <Typography variant='body2' align={textAlign}>
+                Offered online
+              </Typography>
+            ) : (
+              <Typography variant='body2' align={textAlign} sx={{ fontSize: 'x-small' }}>
+                +1 online offering
+              </Typography>
+            ))
+          )}
+        </Box>
       </Box>
     </>
   );
@@ -193,12 +223,15 @@ const enumerateOfferings = (classes, course, classesInShoppingCart) => {
     }
   }
 
-  return daysAndCombos
-    .sort((x, y) => x.dayString.localeCompare(y.dayString))
-    .map(({ dayString, ...x }) => ({ ...x, days: dayStringToDayList(dayString) }))
-    .sort((x, y) => x.days.length - y.days.length) // top-list classes occupying fewer days
-    .sort((x, y) => y.isInShoppingCart - x.isInShoppingCart) // top-list combo in cart
-    .sort((x, y) => (y.days[0] === -1) - (x.days[0] === -1)); // top-list online classes
+  return [
+    daysAndCombos
+      .sort((x, y) => x.dayString.localeCompare(y.dayString))
+      .map(({ dayString, ...x }) => ({ ...x, days: dayStringToDayList(dayString) }))
+      .sort((x, y) => x.days.length - y.days.length) // top-list classes occupying fewer days
+      .sort((x, y) => y.isInShoppingCart - x.isInShoppingCart) // top-list combo in cart
+      .sort((x, y) => (y.days[0] === -1) - (x.days[0] === -1)), // top-list online classes
+    comboInShoppingCart.length ? comboInShoppingCart : null,
+  ];
 };
 
 const getSortedOfferedDayString = (combo) =>

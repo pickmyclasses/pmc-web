@@ -8,7 +8,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { formatCourseName, pluralize } from '../../utils';
@@ -16,16 +16,20 @@ import CourseEligibilityIndicator from './CourseCard/CourseEligibilityIndicator'
 import TagList from './CourseCard/TagList';
 import ClickableIndicator from './CourseCard/ClickableIndicator';
 import CourseOfferingSummary from './CourseOfferingSummary';
-import { getMeanReviewRating } from './CourseCard/CourseCard';
+import { getEligibility, getMeanReviewRating } from './CourseCard/CourseCard';
+import { SchedulerDisplayContentContext } from '../../pages/PageWithScheduler';
 
 /** A course search result item. */
 export default function CourseResultItem({ data: { course, classes, reviews } }) {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const rating = getMeanReviewRating(reviews);
+  const { classesInShoppingCart } = useContext(SchedulerDisplayContentContext);
 
   const [isMouseEntered, setIsMouseEntered] = useState(false);
+  const [mouseEnterEventTimeoutHandle, setMouseEnterEventTimeoutHandle] = useState(0);
+
+  const rating = getMeanReviewRating(reviews);
 
   const renderContent = () => (
     <>
@@ -41,7 +45,9 @@ export default function CourseResultItem({ data: { course, classes, reviews } })
               '> *': { minWidth: 0 },
             }}
           >
-            <CourseEligibilityIndicator eligibility='none'>
+            <CourseEligibilityIndicator
+              eligibility={getEligibility(course, classes, classesInShoppingCart)}
+            >
               <Typography variant='h6'>{formatCourseName(course.CatalogCourseName)}</Typography>
               <Typography
                 variant='h6'
@@ -107,8 +113,13 @@ export default function CourseResultItem({ data: { course, classes, reviews } })
 
   return (
     <MotionCard
-      onMouseEnter={() => setIsMouseEntered(true)}
-      onMouseLeave={() => setIsMouseEntered(false)}
+      onMouseEnter={() => {
+        setMouseEnterEventTimeoutHandle(setTimeout(() => setIsMouseEntered(true), 500));
+      }}
+      onMouseLeave={() => {
+        setIsMouseEntered(false);
+        clearTimeout(mouseEnterEventTimeoutHandle);
+      }}
       onClick={() => course && navigate(`/course/${course.ID}`)}
       initial='initial'
       whileHover='mouseEntered'
