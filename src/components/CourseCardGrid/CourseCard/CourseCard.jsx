@@ -29,11 +29,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
 
   const renderContent = () => (
     <>
-      <CardMedia
-        component='img'
-        image={`https://source.unsplash.com/random/${course.ID}`}
-        sx={{ flex: 1, minHeight: 0 }}
-      />
+      <CardMedia component='img' image={course.ImageURL} sx={{ flex: 1, minHeight: 0 }} />
       <motion.div
         variants={textRegionAnimationVariants}
         transition={{ type: 'just' }}

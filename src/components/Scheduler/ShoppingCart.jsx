@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { formatCourseName, parseDayList, parseTime } from '../../utils';
 import Timeline from './Timeline';
+import ImageColors from 'react-native-image-colors';
+import Color from 'color';
 
 /** The shopping cart resides in the top part of the scheduler. */
 export default function ShoppingCart({ classes }) {
   const [sessions, setSessions] = useState([]);
 
-  useEffect(() => setSessions(generateSessions(classes)), [classes]);
+  useEffect(() => generateSessions(classes, setSessions), [classes]);
 
   return (
     <Box
@@ -30,7 +32,7 @@ export default function ShoppingCart({ classes }) {
 /**
  * Generates a list of sessions for each weekday from a list of classes and belonged courses.
  */
-const generateSessions = (classes) => {
+const generateSessions = (classes, onGenerated) => {
   let sessions = [];
   for (let { classData, course, highlight } of classes) {
     for (let dayOffered of parseDayList(classData.OfferDate)) {
@@ -39,11 +41,12 @@ const generateSessions = (classes) => {
         .map(({ classData }) => classData)
         .filter((x) => x.CourseID === course.ID);
 
-      sessions.push({
+      let sessionData = {
         columnIndex: dayOffered - 1,
         start: parseTime(classData.StartTime),
         end: parseTime(classData.EndTime),
-        color: highlight ? 'success' : undefined,
+        color: 'gray',
+        isHighlighted: highlight,
         text: courseCode,
         // The following `data` object determines what to display in the timeline detail
         // card (which shows up when clicking on a time block).
@@ -68,13 +71,23 @@ const generateSessions = (classes) => {
               </div>
             ))
             .concat(`Professor: ${getInstructor(classData)}`),
-          topBorderColor: highlight ? 'success' : undefined,
+          topBorderColor: 'gray',
           coursePageURL: `/course/${course.ID}`,
         },
-      });
+      };
+
+      sessions.push(
+        new Promise((onAssignedColors) =>
+          ImageColors.getColors(course.ImageURL, { cache: true }).then((palette) => {
+            const representativeColor = Color(palette.vibrant).desaturate(0.375);
+            sessionData.color = sessionData.data.topBorderColor = representativeColor;
+            onAssignedColors(sessionData);
+          })
+        )
+      );
     }
   }
-  return sessions;
+  Promise.all(sessions).then((x) => onGenerated(x));
 };
 
 // TODO Q: Some classes in the backend have their component name wrongly listed in

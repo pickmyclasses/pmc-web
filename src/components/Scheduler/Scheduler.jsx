@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Card, CircularProgress, Divider, Typography } from '@mui/material';
-import { ShoppingCart as ShoppingCartIcon } from '@mui/icons-material';
+import { EventNote } from '@mui/icons-material';
 import ShoppingCart from './ShoppingCart';
 import RequirementList from './RequirementList';
 
@@ -27,11 +27,11 @@ export default function Scheduler({
 
   return (
     <Card sx={{ height: '100%', overflow: 'visible' }}>
-      <Box padding='24px' height='calc(100% - 48px)' display='flex' flexDirection='column'>
+      <Box padding='20px' height='calc(100% - 40px)' display='flex' flexDirection='column'>
         <Box display='flex' alignItems='center' marginBottom='16px'>
-          <ShoppingCartIcon color='action' fontSize='small' />
+          <EventNote color='action' fontSize='small' />
           <Typography variant='overline' marginLeft='8px'>
-            Shopping Cart
+            Schedule
           </Typography>
         </Box>
         {isLoading ? renderLoadingIndication() : renderSchedulerContent()}

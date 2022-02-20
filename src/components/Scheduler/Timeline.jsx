@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Box, Divider, Grid, useTheme } from '@mui/material';
+import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useMount } from '../../utils';
 import TimeBlock from './TimeBlock';
@@ -28,6 +28,7 @@ export default function Timeline({
 }) {
   const theme = useTheme();
 
+  const [hasHighlights, setHasHighlights] = useState(false);
   const [eventsShown, setEventsShown] = useState([]);
   const [eventsWithConflicts, setEventsWithConflicts] = useState([]);
   const [eventsShiftedRight, setEventsShiftedRight] = useState([]);
@@ -79,19 +80,9 @@ export default function Timeline({
         (a, b) => a.columnIndex * 86400 + a.start - (b.columnIndex * 86400 + b.start)
       )
     );
+    setHasHighlights(events.some((x) => x.isHighlighted));
     // eslint-disable-next-line
   }, [events]);
-
-  const renderColumnTitle = (key, title) => (
-    <Grid
-      key={'cl' + key}
-      item
-      xs
-      sx={{ textAlign: 'center', marginLeft: '-4.17%', color: theme.palette.text.secondary }}
-    >
-      {title}
-    </Grid>
-  );
 
   // Compute which events should be slightly shifted right in the display. Some events are
   // shifted right to avoid covering other events and making other events unrecognizable.
@@ -130,6 +121,15 @@ export default function Timeline({
   }, [eventsShown]);
 
   // Logic for rendering elements in the timeline.
+
+  const renderColumnTitle = (key, title) => (
+    <Grid key={'cl' + key} item xs sx={{ textAlign: 'center', marginLeft: '-4.17%' }}>
+      <Typography variant='subtitle2' color={theme.palette.text.secondary}>
+        {title}
+      </Typography>
+    </Grid>
+  );
+
   const getTopByTime = (time) => (time - rangeStart) / (rangeEnd - rangeStart);
 
   const handleTimeBlockClick = (data) => {
@@ -140,7 +140,8 @@ export default function Timeline({
   };
 
   const renderEvent = (i, event) => {
-    const { columnIndex, text, color, data, start, end, key, isActive, sx } = event;
+    const { columnIndex, text, color, data, start, end, key, isActive, isHighlighted, sx } =
+      event;
 
     if (start >= rangeEnd || end <= rangeStart) return null; // can't fit in range
 
@@ -172,7 +173,7 @@ export default function Timeline({
               position: 'absolute',
               top: top * 100 + '%',
               left: (columnIndex + 0.0833) * columnWidth + '%',
-              zIndex: isMouseEntered ? 999 : isSelected ? 998 : '',
+              zIndex: isMouseEntered || isHighlighted ? 999 : isSelected ? 998 : '',
               width: 0.667 * columnWidth + '%',
               height: (bottom - top) * 100 + '%',
               // Adapt the same transition style from MUI to the shifting movement.
@@ -182,10 +183,17 @@ export default function Timeline({
           >
             <TimeBlock
               text={text}
-              color={color ? color : hasConflicts && !isSelected ? 'warning' : color}
-              gray={!hasConflicts && !color && !isSelected}
-              darken={isMouseEntered}
-              variant={isSelected ? 'contained' : 'outlined'}
+              color={
+                isHighlighted
+                  ? hasConflicts
+                    ? 'error'
+                    : 'success'
+                  : hasHighlights
+                  ? 'gray'
+                  : color
+              }
+              darken={isMouseEntered || isSelected}
+              variant={isHighlighted ? 'outlined' : 'contained'}
               sx={sx}
               data={data}
               onMouseEnter={() => setMouseEnteredEventData(data)}
@@ -225,7 +233,7 @@ export default function Timeline({
   };
 
   return (
-    <Box sx={{ width: 'calc(100% - 16px)', height: '100%' }}>
+    <Box width='calc(100% - 16px)' height='100%'>
       <Grid container sx={{ width: '100%', flex: 1, marginBottom: '4px' }}>
         {columnTitles.map((title, i) => renderColumnTitle(i, title))}
       </Grid>

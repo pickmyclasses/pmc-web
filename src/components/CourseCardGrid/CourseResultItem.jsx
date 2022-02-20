@@ -29,11 +29,7 @@ export default function CourseResultItem({ data: { course, classes, reviews } })
 
   const renderContent = () => (
     <>
-      <CardMedia
-        component='img'
-        image={`https://source.unsplash.com/random/${course.ID}`}
-        sx={{ width: '216px' }}
-      />
+      <CardMedia component='img' image={course.ImageURL} sx={{ width: '216px' }} />
       <Box sx={{ padding: '16px', flex: 1, minWidth: 0 }}>
         <ClickableIndicator propagate>
           <Box
