@@ -4,7 +4,7 @@ import CourseCard from './CourseCard/CourseCard';
 
 export default function CourseCardGrid({ numColumns = 3, courses = [] }) {
   return (
-    <Box sx={{ padding: '16px 32px 32px 4px' }}>
+    <Box sx={{ padding: '4px' }}>
       <Grid container justifyContent='space-between' alignItems='stretch'>
         <Grid item xs={12}>
           <Grid container alignItems='stretch' spacing='32px' columns={numColumns}>

@@ -43,9 +43,12 @@ export const fetchHomePageCourses = () => fakeFetchHomePageCourses();
 const fakeFetchHomePageCourses = () =>
   new Promise((onFetched) => {
     const recommendedCategories = {
-      'Major Requirements To Go': [22948, 22949, 22963],
-      'Hot CS Electives': [22961, 22971, 22951, 22970, 22998, 23000],
-      'Hot Gen-Ed Courses': [31826, 28270, 24777, 21978, 28354, 27266],
+      'Major Requirements To Go': [
+        22948, 22949,
+        // 22963
+      ],
+      // 'Hot CS Electives': [22961, 22971, 22951, 22970, 22998, 23000],
+      // 'Hot Gen-Ed Courses': [31826, 28270, 24777, 21978, 28354, 27266],
     };
 
     onFetched(

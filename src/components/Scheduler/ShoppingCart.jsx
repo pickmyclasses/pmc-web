@@ -69,10 +69,11 @@ export default function ShoppingCart({ classes }) {
           <>&nbsp;</>
         ) : (
           <>
-            {minCredits === maxCredits ? '' : minCredits + '–'}
-            {pluralize(maxCredits, 'credit')}&nbsp;&nbsp;•&nbsp;&nbsp;
             {pluralize(numCourses, 'course')}
             {numOnlineCourses > 0 ? <>&nbsp;({pluralize(numOnlineCourses, 'online')})</> : ''}
+            &nbsp;&nbsp;•&nbsp;&nbsp;
+            {minCredits === maxCredits ? '' : minCredits + '–'}
+            {pluralize(maxCredits, 'credit')}
           </>
         )}
       </Typography>
