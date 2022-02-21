@@ -67,9 +67,9 @@ export default function CourseResultItem({ data: { course, classes, reviews } })
           sx={{ '*': { minWidth: 0, textOverflow: 'ellipsis', overflow: 'hidden' } }}
         >
           <Typography variant='body2' color={theme.palette.text.secondary}>
+            CS major requirement &nbsp;&nbsp;•&nbsp;&nbsp;
             {course.MinCredit === course.MaxCredit ? '' : course.MinCredit + '–'}
-            {pluralize(+course.MaxCredit, 'credit')}
-            &nbsp;&nbsp;•&nbsp;&nbsp;CS major requirement&nbsp;&nbsp;
+            {pluralize(+course.MaxCredit, 'credit')}&nbsp;&nbsp;
           </Typography>
           {rating > 0 && <Rating readOnly value={rating} precision={0.5} size='small' />}
           <TagList gutterLeft noWrap tags={['Backend', 'Coding']} size='small' />

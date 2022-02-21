@@ -2,7 +2,7 @@ import React, { createContext, useCallback, useContext, useEffect, useState } fr
 import { Container, Grid } from '@mui/material';
 import { fetchClassByID, fetchClassIDsInShoppingCart, fetchCourseByID } from '../api';
 import Scheduler from '../components/Scheduler/Scheduler';
-import { UserContext } from '../App';
+import { AppContext, UserContext } from '../App';
 
 /**
  * @type {React.Context<{
@@ -15,7 +15,9 @@ import { UserContext } from '../App';
 export const SchedulerDisplayContentContext = createContext();
 
 /** A page that displays a static, toggle-able scheduler on the right. */
-export default function PageWithScheduler({ children, shouldShowScheduler }) {
+export default function PageWithScheduler({ children }) {
+  const { shouldShowScheduler } = useContext(AppContext);
+
   const [isLoading, setIsLoading] = useState(true);
   const [classesInShoppingCart, setClassesInShoppingCart] = useState([]);
   const [classesToHighlight, setClassesToHighlight] = useState([]);
