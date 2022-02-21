@@ -109,3 +109,14 @@ export const groupBy = (values, key) =>
     (rv[x[key]] = rv[x[key]] || []).push(x);
     return rv;
   }, {});
+
+/**
+ * Get the current view port size
+ */
+export const getWindowDimensions = () => {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height,
+  };
+};

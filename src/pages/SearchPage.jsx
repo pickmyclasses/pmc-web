@@ -6,6 +6,7 @@ import PageWithScheduler from './PageWithScheduler';
 import { useMount } from '../utils';
 import CourseResultList from '../components/CourseCardGrid/CourseResultList';
 import { fetchCoursesByCourseIDs } from './HomePage';
+import FilterVerticalContainer from '../components/Filter/FilterFormGroup';
 
 export default function SearchPage({ shouldShowScheduler }) {
   const [courses, setCourses] = useState(null);
@@ -20,19 +21,24 @@ export default function SearchPage({ shouldShowScheduler }) {
   });
 
   return (
-    <PageWithScheduler shouldShowScheduler={shouldShowScheduler}>
-      {courses ? (
-        <Box sx={{ padding: '24px' }}>
-          <Typography variant='subtitle2' gutterBottom>
-            Found {courses.length} results for <b>"{urlParams['query']}"</b>
-          </Typography>
-          <CourseResultList courses={courses} />
-        </Box>
-      ) : (
-        <Box sx={{ width: '100%', height: '100%', display: 'flex' }}>
-          <CircularProgress sx={{ margin: 'auto' }} />
-        </Box>
-      )}
-    </PageWithScheduler>
+    <>
+      <PageWithScheduler shouldShowScheduler={shouldShowScheduler}>
+        <div style={{ display: 'flex' }}>
+          <FilterVerticalContainer />
+          {courses ? (
+            <Box sx={{ padding: '24px' }}>
+              <Typography variant='subtitle2' gutterBottom>
+                Found {courses.length} results for <b>"{urlParams['query']}"</b>
+              </Typography>
+              <CourseResultList courses={courses} />
+            </Box>
+          ) : (
+            <Box sx={{ width: '100%', height: '100%', display: 'flex' }}>
+              <CircularProgress sx={{ margin: 'auto' }} />
+            </Box>
+          )}
+        </div>
+      </PageWithScheduler>
+    </>
   );
 }
