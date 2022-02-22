@@ -3,7 +3,8 @@ import SubCard from '../Skeleton/SubCard';
 import CourseAddReview from './CourseAddReview';
 import CourseOverallRatingsBar from './CourseOverallRatingsBar';
 import React, { useState, useEffect } from 'react';
-import { fetchReviewsByCourseID, calculateAverageScore, ShowLoading } from '../../api/index';
+import { fetchReviewsByCourseID } from '../../api/index';
+import { calculateAverageScore, ShowLoading } from '../../utils/index';
 
 export default function CourseOverallRatings({ courseID }) {
   const [reviews, setReviews] = useState(null);

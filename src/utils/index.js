@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
+import LinearProgress from '@mui/material/LinearProgress';
 
 /**
  * CleanObject removes the empty parts of the request
@@ -109,3 +111,33 @@ export const groupBy = (values, key) =>
     (rv[x[key]] = rv[x[key]] || []).push(x);
     return rv;
   }, {});
+
+/*
+ *Calculate average score of course reviews
+ */
+export function calculateAverageScore({ reviews }) {
+  let sum = 0;
+  if (reviews == null || reviews.length === 0) {
+    return 0;
+  }
+  for (let step = 0; step < reviews.length; step++) {
+    sum += reviews[step].rating;
+  }
+  return sum / reviews.length;
+}
+
+/*
+ * Show loading effect when it is still loading or rendering the page
+ */
+export function ShowLoading(props) {
+  const isLoading = props.isLoading;
+  if (isLoading) {
+    return (
+      <Box sx={{ width: '100%' }}>
+        <LinearProgress />
+      </Box>
+    );
+  } else {
+    return null;
+  }
+}
