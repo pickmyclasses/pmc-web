@@ -4,7 +4,24 @@ import CourseAddReview from './CourseAddReview';
 import CourseOverallRatingsBar from './CourseOverallRatingsBar';
 import React, { useState, useEffect } from 'react';
 import { fetchReviewsByCourseID } from '../../api/index';
-import { calculateAverageScore, ShowLoading } from '../../utils/index';
+import { calculateAverageScore } from '../../utils/index';
+import Box from '@mui/material/Box';
+import LinearProgress from '@mui/material/LinearProgress';
+/*
+ * Show loading effect when it is still loading or rendering the page
+ */
+export function LoadingIndicator(props) {
+  const isLoading = props.isLoading;
+  if (isLoading) {
+    return (
+      <Box sx={{ width: '100%' }}>
+        <LinearProgress />
+      </Box>
+    );
+  } else {
+    return null;
+  }
+}
 
 export default function CourseOverallRatings({ courseID }) {
   const [reviews, setReviews] = useState(null);
@@ -17,7 +34,7 @@ export default function CourseOverallRatings({ courseID }) {
   let avgScore = calculateAverageScore({ reviews });
   return (
     <SubCard title=''>
-      <ShowLoading isLoading={rendering == null} />
+      <LoadingIndicator isLoading={rendering == null} />
       <Grid container direction='column' spacing={1}>
         <Grid item>
           <Typography variant='h4' gutterBottom color='primary'>

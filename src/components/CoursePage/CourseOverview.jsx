@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import {
-  CheckCircleOutline,
-  MenuBook,
-  People,
-  School,
-  Star,
-  StarOutline,
-  WatchLater,
-} from '@mui/icons-material';
-import { Alert, Box, Card, Chip, Divider, Grid, Link, Typography } from '@mui/material';
+import { CheckCircleOutline, MenuBook, People, School, WatchLater } from '@mui/icons-material';
+import { Alert, Box, Card, Chip, Divider, Grid, Link, Typography, Rating } from '@mui/material';
 import TagList from '../CourseCardGrid/CourseCard/TagList';
 import { formatCreditRange } from './CoursePageTop';
 import CourseCardGrid from '../CourseCardGrid/CourseCardGrid';
 import ClickableIndicator from '../CourseCardGrid/CourseCard/ClickableIndicator';
-import { fetchReviewsByCourseID, calculateAverageScore } from '../../api/index';
+import { fetchReviewsByCourseID } from '../../api/index';
+import { calculateAverageScore } from '../../utils/index';
 
 export default function CourseOverview({ course, classes }) {
   const navigate = useNavigate();
@@ -26,7 +19,6 @@ export default function CourseOverview({ course, classes }) {
     fetchReviewsByCourseID(courseID).then((data) => setReviews(data['data']['data']));
   }, [courseID]);
   let avgScore = calculateAverageScore({ reviews });
-
   return (
     <Box>
       <Grid container spacing='32px' marginBottom='16px'>
@@ -71,11 +63,13 @@ export default function CourseOverview({ course, classes }) {
                   marginBottom: '8px',
                 }}
               >
-                <Star fontSize='large' color='warning' />
-                <Star fontSize='large' color='warning' />
-                <Star fontSize='large' color='warning' />
-                <Star fontSize='large' color='warning' />
-                <StarOutline fontSize='large' color='disabled' />
+                <Rating
+                  name='read-only'
+                  precision={0.1}
+                  value={avgScore}
+                  readOnly
+                  size='large'
+                />
                 <Box
                   sx={{
                     marginLeft: '16px',

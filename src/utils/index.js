@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
-import LinearProgress from '@mui/material/LinearProgress';
 
 /**
  * CleanObject removes the empty parts of the request
@@ -124,20 +122,4 @@ export function calculateAverageScore({ reviews }) {
     sum += reviews[step].rating;
   }
   return sum / reviews.length;
-}
-
-/*
- * Show loading effect when it is still loading or rendering the page
- */
-export function ShowLoading(props) {
-  const isLoading = props.isLoading;
-  if (isLoading) {
-    return (
-      <Box sx={{ width: '100%' }}>
-        <LinearProgress />
-      </Box>
-    );
-  } else {
-    return null;
-  }
 }
