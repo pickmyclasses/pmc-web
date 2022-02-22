@@ -40,7 +40,7 @@ export default function CoursePage() {
   }
 
   return (
-    <Box width='100%' height='100%' minHeight={0} overflow='auto'>
+    <Box width='100%' height='100%' minHeight={0} sx={{ overflowY: 'scroll' }}>
       <CoursePageTop course={course} tabs={tabs} activeTabName={activeTabName} />
       <PageWithScheduler>
         <Container maxWidth='xl' sx={{ paddingY: '32px' }}>
