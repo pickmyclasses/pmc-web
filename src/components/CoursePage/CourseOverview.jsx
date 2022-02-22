@@ -1,20 +1,24 @@
-import React from 'react';
-import {
-  CheckCircleOutline,
-  MenuBook,
-  People,
-  School,
-  Star,
-  StarOutline,
-  WatchLater,
-} from '@mui/icons-material';
-import { Alert, Box, Card, Chip, Divider, Grid, Link, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { CheckCircleOutline, MenuBook, People, School, WatchLater } from '@mui/icons-material';
+import { Alert, Box, Card, Chip, Divider, Grid, Link, Typography, Rating } from '@mui/material';
 import TagList from '../CourseCardGrid/CourseCard/TagList';
 import { formatCreditRange } from './CoursePageTop';
 import CourseCardGrid from '../CourseCardGrid/CourseCardGrid';
 import ClickableIndicator from '../CourseCardGrid/CourseCard/ClickableIndicator';
+import { fetchReviewsByCourseID } from '../../api/index';
+import { calculateAverageScore } from '../../utils/index';
 
 export default function CourseOverview({ course, classes }) {
+  const navigate = useNavigate();
+  const coursePageURL = '/course/' + course.ID;
+  let courseID = course.ID;
+  const [reviews, setReviews] = useState(null);
+  useEffect(() => {
+    fetchReviewsByCourseID(courseID).then((data) => setReviews(data['data']['data']));
+  }, [courseID]);
+  let avgScore = calculateAverageScore({ reviews });
   return (
     <Box>
       <Grid container spacing='32px' marginBottom='16px'>
@@ -29,7 +33,7 @@ export default function CourseOverview({ course, classes }) {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <School fontSize='small' color='primary' sx={{ marginRight: '8px' }} />
                 <Typography variant='body1' color='darkslateblue'>
-                  CS major requirement
+                  {course.DesignationCatalog}
                 </Typography>
                 <WatchLater
                   fontSize='small'
@@ -45,7 +49,10 @@ export default function CourseOverview({ course, classes }) {
         </Grid>
         {/* TODO Q: everything below this point is placeholder. Fix this. */}
         <Grid item xs={3}>
-          <Card sx={{ width: '100%', height: '100%' }}>
+          <Card
+            onClick={() => navigate(`${coursePageURL}/reviews`)}
+            sx={{ width: '100%', height: '100%', cursor: 'pointer' }}
+          >
             <Box sx={{ padding: '24px', '> *': { marginY: '12px' } }}>
               <Box
                 sx={{
@@ -56,11 +63,13 @@ export default function CourseOverview({ course, classes }) {
                   marginBottom: '8px',
                 }}
               >
-                <Star fontSize='large' color='warning' />
-                <Star fontSize='large' color='warning' />
-                <Star fontSize='large' color='warning' />
-                <Star fontSize='large' color='warning' />
-                <StarOutline fontSize='large' color='disabled' />
+                <Rating
+                  name='read-only'
+                  precision={0.1}
+                  value={avgScore}
+                  readOnly
+                  size='large'
+                />
                 <Box
                   sx={{
                     marginLeft: '16px',
@@ -69,12 +78,12 @@ export default function CourseOverview({ course, classes }) {
                     alignItems: 'center',
                   }}
                 >
-                  <Typography variant='h5'>4.2</Typography>
+                  <Typography variant='h5'>{avgScore.toFixed(1)}</Typography>
                   <Typography variant='body2'>out of 5</Typography>
                 </Box>
               </Box>
               <Typography variant='body2' align='center' sx={{ opacity: 0.75 }}>
-                <i>Based on 42 reviews</i>
+                <i>Based on {reviews != null ? reviews.length : 0} reviews</i>
               </Typography>
               <Divider sx={{ marginTop: '12px' }} />
               <Typography variant='subtitle2'>Top Pros</Typography>
@@ -109,8 +118,12 @@ export default function CourseOverview({ course, classes }) {
             </Box>
           </Card>
         </Grid>
+
         <Grid item xs={3}>
-          <Card sx={{ width: '100%', height: '100%' }}>
+          <Card
+            onClick={() => navigate(`${coursePageURL}/registration`)}
+            sx={{ width: '100%', height: '100%', cursor: 'pointer' }}
+          >
             <Alert
               icon={false}
               sx={{

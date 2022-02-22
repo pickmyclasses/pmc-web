@@ -3,11 +3,7 @@ import Typography from '@mui/material/Typography';
 
 export default function CourseComments({ title, comment, isPositive }) {
   return (
-    <Box
-      sx={{
-        fontFamily: 'Segoe UI Emoji',
-      }}
-    >
+    <Box>
       <Typography variant='body1' gutterBottom color='seconday'>
         {title}
       </Typography>
