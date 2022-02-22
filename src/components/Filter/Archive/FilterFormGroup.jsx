@@ -184,13 +184,20 @@ export default function FilterFormGroup() {
 }
 
 const WeekdayDropDown = () => {
+  const weekdays = [
+    { date: 'Monday', num: 1 },
+    { date: 'Tuesday', num: 2 },
+    { date: 'Wednesday', num: 3 },
+    { date: 'Thursday', unm: 4 },
+    { date: 'Friday', num: 5 },
+  ];
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', ml: 4 }}>
-      <FormControlLabel control={<Checkbox size='small' />} label='Monday' />
-      <FormControlLabel control={<Checkbox size='small' />} label='Tuesday' />
-      <FormControlLabel control={<Checkbox size='small' />} label='Wednesday' />
-      <FormControlLabel control={<Checkbox size='small' />} label='Thursday' />
-      <FormControlLabel control={<Checkbox size='small' />} label='Friday' />
+      {weekdays.map((day) => (
+        <div key={day.num}>
+          <FormControlLabel control={<Checkbox size='small' />} label={day.date} />
+        </div>
+      ))}
     </Box>
   );
 };
