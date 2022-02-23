@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Divider, FilledInput, IconButton, colors, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { Clear, Search } from '@material-ui/icons';
@@ -11,20 +10,20 @@ import { Clear, Search } from '@material-ui/icons';
  * @param {{onSearchClick: (searchText: string) => void}} props
  */
 // export default function SearchBar({ onSearchClick }) {
-export default function SearchBar() {
+export default function SearchBar({ textColor, backgroundColor, callback }) {
   const theme = useTheme();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [searchText, setSearchText] = useState('');
 
-  const handleSearchClick = () => {
-    if (searchText.trim()) {
-      navigate(`/search/${searchText}`);
-    } else {
-      navigate('/home');
-    }
-  };
+  // const handleSearchClick = () => {
+  //   if (searchText.trim()) {
+  //     navigate(`/${searchPrefix}/${searchText}`);
+  //   } else {
+  //     navigate('/home');
+  //   }
+  // };
 
   return (
     <FilledInput
@@ -32,13 +31,13 @@ export default function SearchBar() {
       placeholder='Search'
       value={searchText}
       onChange={(e) => setSearchText(e.target.value)}
-      onKeyDown={(e) => e.key === 'Enter' && handleSearchClick()}
+      onKeyDown={(e) => e.key === 'Enter' && callback(searchText)}
       inputProps={{ style: { padding: '10px 20px' } }}
       sx={{
         maxWidth: '576px',
         borderRadius: '4px',
-        color: theme.palette.primary.contrastText,
-        backgroundColor: alpha(theme.palette.common.black, 0.167),
+        color: textColor,
+        backgroundColor: backgroundColor,
         '&:hover, &.Mui-focused': { backgroundColor: alpha(theme.palette.common.black, 0.333) },
         '::before, ::after': { display: 'none' },
       }}
@@ -70,7 +69,12 @@ export default function SearchBar() {
               />
             </>
           )}
-          <IconButton sx={{ color: colors.blue[300] }} onClick={handleSearchClick}>
+          <IconButton
+            sx={{ color: colors.blue[300] }}
+            onClick={function () {
+              callback(searchText);
+            }}
+          >
             <Search />
           </IconButton>
         </>
