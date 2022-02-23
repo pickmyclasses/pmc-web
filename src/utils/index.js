@@ -109,3 +109,17 @@ export const groupBy = (values, key) =>
     (rv[x[key]] = rv[x[key]] || []).push(x);
     return rv;
   }, {});
+
+/*
+ *Calculate average score of course reviews
+ */
+export function calculateAverageScore({ reviews }) {
+  let sum = 0;
+  if (reviews == null || reviews.length === 0) {
+    return 0;
+  }
+  for (let step = 0; step < reviews.length; step++) {
+    sum += reviews[step].rating;
+  }
+  return sum / reviews.length;
+}

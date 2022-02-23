@@ -68,7 +68,7 @@ export const SpecialCourseDropdown = ({ setOptionSelect }) => {
 
 export const SpecialDropdown = ({ setOptionSelect }) => {
   return (
-    <Box sx={{ height: '9%', border: '1px solid grey', backgroundColor: 'white' }}>
+    <Box sx={{ height: '5%', border: '1px solid grey', backgroundColor: 'white' }}>
       <FormGroup row>
         <div style={{ marginLeft: '10%' }}>
           <FormControlLabel
@@ -90,7 +90,6 @@ export const SpecialDropdown = ({ setOptionSelect }) => {
             }
             style={{ marginLeft: 20 }}
           />
-          <CustomInput label={'min hour'} placeholder={'min hour'} />
         </div>
       </FormGroup>
     </Box>
