@@ -50,7 +50,7 @@ export default function NavigationBar({ toggleScheduler }) {
                 <SearchBar
                   textColor={theme.palette.primary.contrastText}
                   backgroundColor={alpha(theme.palette.common.black, 0.167)}
-                  callback={handleSearchClick}
+                  onSearch={handleSearchClick}
                 />
               </Grid>
               <Grid item xs='auto'>

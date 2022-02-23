@@ -10,20 +10,10 @@ import { Clear, Search } from '@material-ui/icons';
  * @param {{onSearchClick: (searchText: string) => void}} props
  */
 // export default function SearchBar({ onSearchClick }) {
-export default function SearchBar({ textColor, backgroundColor, callback }) {
+export default function SearchBar({ textColor, backgroundColor, onSearch }) {
   const theme = useTheme();
 
-  // const navigate = useNavigate();
-
   const [searchText, setSearchText] = useState('');
-
-  // const handleSearchClick = () => {
-  //   if (searchText.trim()) {
-  //     navigate(`/${searchPrefix}/${searchText}`);
-  //   } else {
-  //     navigate('/home');
-  //   }
-  // };
 
   return (
     <FilledInput
@@ -31,7 +21,7 @@ export default function SearchBar({ textColor, backgroundColor, callback }) {
       placeholder='Search'
       value={searchText}
       onChange={(e) => setSearchText(e.target.value)}
-      onKeyDown={(e) => e.key === 'Enter' && callback(searchText)}
+      onKeyDown={(e) => e.key === 'Enter' && onSearch(searchText)}
       inputProps={{ style: { padding: '10px 20px' } }}
       sx={{
         maxWidth: '576px',
@@ -72,7 +62,7 @@ export default function SearchBar({ textColor, backgroundColor, callback }) {
           <IconButton
             sx={{ color: colors.blue[300] }}
             onClick={function () {
-              callback(searchText);
+              onSearch(searchText);
             }}
           >
             <Search />
