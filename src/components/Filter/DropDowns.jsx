@@ -5,6 +5,7 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Typography from '@mui/material/Typography';
 import { CustomSelect, StyledOption } from '../UnstyledBasics/CustomSelect';
+import { CustomInput } from '../UnstyledBasics/CustomInput';
 
 export const TypeDropdown = ({ setOptionSelect }) => {
   const types = [
@@ -89,6 +90,7 @@ export const SpecialDropdown = ({ setOptionSelect }) => {
             }
             style={{ marginLeft: 20 }}
           />
+          <CustomInput label={'min hour'} placeholder={'min hour'} />
         </div>
       </FormGroup>
     </Box>

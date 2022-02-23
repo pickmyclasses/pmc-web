@@ -1,20 +1,16 @@
-import React from 'react';
+import { React, forwardRef } from 'react';
 import InputUnstyled from '@mui/base/InputUnstyled';
 import { styled } from '@mui/system';
 import { grey, blue } from '@mui/material/colors';
 
 const StyledInputElement = styled('input')(
   ({ theme }) => `
-  width: 320px;
+  width: 5em;
   font-size: 0.875rem;
-  font-family: IBM Plex Sans, sans-serif;
-  font-weight: 400;
-  line-height: 1.5;
   color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
   background: ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
   border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[300]};
-  border-radius: 8px;
-  padding: 12px 12px;
+  border-radius: 0.1em;
 
   &:hover {
     background: ${theme.palette.mode === 'dark' ? '' : grey[100]};
@@ -27,10 +23,10 @@ const StyledInputElement = styled('input')(
 `
 );
 
-const CustomInput = React.forwardRef(function CustomInput(props, ref) {
+const RawInput = forwardRef(function RawInput(props, ref) {
   return <InputUnstyled components={{ Input: StyledInputElement }} {...props} ref={ref} />;
 });
 
-export default function UnstyledInput() {
-  return <CustomInput aria-label='Demo input' placeholder='Type something...' />;
-}
+export const CustomInput = ({ label, placeholder }) => {
+  return <RawInput aria-label={label} placeholder={placeholder} />;
+};
