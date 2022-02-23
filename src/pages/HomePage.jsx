@@ -9,7 +9,6 @@ import { AppContext } from '../App';
 
 export default function HomePage() {
   const { shouldShowScheduler } = useContext(AppContext);
-
   const [courseCategories, setCourseCategories] = useState([]);
 
   useMount(() =>
