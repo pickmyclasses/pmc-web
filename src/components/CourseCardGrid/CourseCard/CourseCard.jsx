@@ -22,7 +22,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const { setClassesToHighlight } = useContext(SchedulerDisplayContentContext);
+  const { classesInShoppingCart } = useContext(SchedulerDisplayContentContext);
 
   const [isMouseEntered, setIsMouseEntered] = useState(false);
   const [isCourseTitleExpanded, setIsCourseTitleExpanded] = useState(false);
@@ -32,18 +32,16 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
 
   const renderContent = () => (
     <>
-      <CardMedia
-        component='img'
-        image={`https://source.unsplash.com/random/${course.ID}`}
-        sx={{ flex: 1, minHeight: 0 }}
-      />
+      <CardMedia component='img' image={course.ImageURL} sx={{ flex: 1, minHeight: 0 }} />
       <motion.div
         variants={textRegionAnimationVariants}
         transition={{ type: 'just' }}
         style={{ padding: '16px 20px' }}
       >
         <ClickableIndicator propagate>
-          <CourseEligibilityIndicator eligibility='none'>
+          <CourseEligibilityIndicator
+            eligibility={getEligibility(course, classes, classesInShoppingCart)}
+          >
             <Typography variant='h6'>{formatCourseName(course.CatalogCourseName)}</Typography>
           </CourseEligibilityIndicator>
         </ClickableIndicator>
@@ -88,10 +86,13 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
           <CenterAligningFlexBox sx={{ justifyContent: 'space-between' }}>
             <Rating readOnly value={rating} precision={0.5} size='small' />
             <CourseOfferingSummary
+              course={course}
               classes={classes}
               maxRows={1}
               rowHeight={1.5}
-              width='120px'
+              width='min(120px, calc(100% - 120px))'
+              enableHighlight
+              isMouseEntered={isMouseEntered && isExtraInfoExpanded}
             />
           </CenterAligningFlexBox>
         </motion.div>
@@ -101,7 +102,12 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
 
   const renderSkeleton = () => (
     <>
-      <Skeleton width='100%' height='192px' />
+      <Skeleton
+        variant='rectangular'
+        width='100%'
+        height='180px'
+        sx={{ marginBottom: '20px' }}
+      />
       <Skeleton width='50%' height='60px' sx={{ marginLeft: '20px' }} />
       <Skeleton width='75%' height='36px' sx={{ marginLeft: '20px' }} />
     </>
@@ -156,4 +162,10 @@ export const getMeanReviewRating = (reviews) => {
     for (let review of reviews) totalRating += review.rating;
   }
   return totalRating / reviews?.length;
+};
+
+export const getEligibility = (course, classes, classesInShoppingCart) => {
+  if (!classes?.length) return 'not-offered';
+  if (classesInShoppingCart.some((x) => x.course.ID === course.ID)) return 'in-shopping-cart';
+  return 'none';
 };

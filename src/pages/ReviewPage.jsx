@@ -14,6 +14,7 @@ import { postReviewByID } from '../../src/api/index';
 import swal from 'sweetalert';
 import { UserContext } from '../App';
 import ReviewAnonymous from '../components/ReviewInputDetails/ReviewAnonymous';
+import ReviewRecommend from '../components/ReviewInputDetails/ReviewRecommend';
 
 export default function ReviewPage({ shouldShowScheduler }) {
   const [course, setCourse] = useState(null);
@@ -22,6 +23,8 @@ export default function ReviewPage({ shouldShowScheduler }) {
   const [conValue, setConValue] = useState('');
   const [commentValue, setCommentValue] = useState('');
   const [anonymity, setAnonymity] = useState(false);
+  const [recommendation, setRecommendation] = useState(false);
+
   const urlParams = useParams();
   const { user } = useContext(UserContext);
 
@@ -42,13 +45,6 @@ export default function ReviewPage({ shouldShowScheduler }) {
         <Grid container spacing={gridSpacing}>
           <Grid item xs={12} sm={12}>
             <ReviewDescription course={course} />
-            <ReviewAnonymous
-              userName={user.name}
-              value={anonymity}
-              onChange={(anonymity) => {
-                setAnonymity(anonymity);
-              }}
-            />
           </Grid>
 
           <Grid item xs={12} sm={12}>
@@ -81,6 +77,21 @@ export default function ReviewPage({ shouldShowScheduler }) {
               value={commentValue}
               onChange={(commentValue) => {
                 setCommentValue(commentValue);
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <ReviewAnonymous
+              userName={user.name}
+              value={anonymity}
+              onChange={(anonymity) => {
+                setAnonymity(anonymity);
+              }}
+            />
+            <ReviewRecommend
+              value={recommendation}
+              onChange={(recommendation) => {
+                setRecommendation(recommendation);
               }}
             />
           </Grid>
@@ -118,7 +129,7 @@ export default function ReviewPage({ shouldShowScheduler }) {
                   course_id: course.ID,
                   pros: proValue,
                   rating: ratingValue,
-                  recommended: true,
+                  recommended: recommendation,
                   user_id: user.userID,
                 });
               }}

@@ -1,17 +1,14 @@
-import React, { useState } from 'react';
-import {
-  fetchClassesByCourseID,
-  fetchCourseByID,
-  fetchHomePageCourses,
-  fetchReviewsByCourseID,
-} from '../api';
+import React, { useContext, useState } from 'react';
+import { fetchCourseByID, fetchHomePageCourses, fetchReviewsByCourseID } from '../api';
 import PageWithScheduler from './PageWithScheduler';
 import { useMount } from '../utils';
 import CourseCardGrid from '../components/CourseCardGrid/CourseCardGrid';
 import ClickableIndicator from '../components/CourseCardGrid/CourseCard/ClickableIndicator';
 import { Box, Divider, Typography } from '@mui/material';
+import { AppContext } from '../App';
 
-export default function HomePage({ shouldShowScheduler }) {
+export default function HomePage() {
+  const { shouldShowScheduler } = useContext(AppContext);
   const [courseCategories, setCourseCategories] = useState([]);
 
   useMount(() =>
@@ -27,8 +24,8 @@ export default function HomePage({ shouldShowScheduler }) {
   );
 
   return (
-    <PageWithScheduler shouldShowScheduler={shouldShowScheduler}>
-      <Box sx={{ paddingTop: '32px' }}>
+    <PageWithScheduler>
+      <Box sx={{ padding: '32px 32px' }}>
         {courseCategories &&
           courseCategories.map(({ category, courses }, i) => (
             <Box key={i}>
@@ -38,12 +35,14 @@ export default function HomePage({ shouldShowScheduler }) {
                   {category}
                 </Typography>
               </ClickableIndicator>
-              <CourseCardGrid
-                key={i}
-                title={category}
-                courses={courses}
-                numColumns={shouldShowScheduler ? 3 : 4}
-              />
+              <Box sx={{ padding: '16px 0 24px 0' }}>
+                <CourseCardGrid
+                  key={i}
+                  title={category}
+                  courses={courses}
+                  numColumns={shouldShowScheduler ? 3 : 4}
+                />
+              </Box>
             </Box>
           ))}
       </Box>

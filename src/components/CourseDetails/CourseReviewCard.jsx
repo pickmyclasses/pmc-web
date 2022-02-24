@@ -6,6 +6,7 @@ import CourseComments from './CourseComments';
 import SubCard from '../Skeleton/SubCard';
 import { gridSpacing } from '../../constants/constants';
 import EditIcon from '@mui/icons-material/Edit';
+import CourseReviewRecommendation from '../CourseDetails/CourseReviewRecommendation';
 
 const titlePos = 'What do you like most about this course?';
 const titleNeg = 'What do you hate most about this course?';
@@ -35,13 +36,16 @@ export default function CourseReviewCard({ review }) {
             />
           </Grid>
           <Grid item>
-            <CourseComments title={titlePos} comment={review.pros} />
+            <CourseComments title={titlePos} comment={review.pros} isPositive={true} />
           </Grid>
           <Grid item>
-            <CourseComments title={titleNeg} comment={review.cons} />
+            <CourseComments title={titleNeg} comment={review.cons} isPositive={false} />
           </Grid>
           <Grid item>
             <CourseComments title={titleAdd} comment={review.comment} />
+          </Grid>
+          <Grid item>
+            <CourseReviewRecommendation isRecommended={review.recommended} />
           </Grid>
         </MuiTypography>
       </Grid>

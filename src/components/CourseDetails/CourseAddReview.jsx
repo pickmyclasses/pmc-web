@@ -20,14 +20,15 @@ export default function CourseAddReview() {
         Share your thoughts with other students
       </MuiTypography>
       <Stack spacing={2} direction='row'>
-        <Link
-          to={user == null ? '#' : `/course/${course.ID}/review`}
-          style={{ textDecoration: 'none' }}
+        <Button
+          variant='contained'
+          disabled={user == null}
+          startIcon={<AddCommentIcon />}
+          component={Link}
+          to={`/course/${course.ID}/reviews/compose`}
         >
-          <Button variant='contained' disabled={user == null} startIcon={<AddCommentIcon />}>
-            Write a Review
-          </Button>
-        </Link>
+          Write a Review
+        </Button>
       </Stack>
     </Grid>
   );

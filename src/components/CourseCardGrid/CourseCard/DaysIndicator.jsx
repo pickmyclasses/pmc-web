@@ -6,9 +6,8 @@ export default function DaysIndicator({
   width = '144px',
   height = 1.5,
   showOnlyHighlightedDayNames = true,
-  onMouseEnter = () => {},
-  onMouseLeave = () => {},
   isMouseEntered = false,
+  ...props
 }) {
   const isOnline = days.length === 1 && days[0] === -1;
   const numBlocks = dayNames.filter(Boolean).length;
@@ -59,12 +58,11 @@ export default function DaysIndicator({
 
   return (
     <Box
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
       position='relative'
       display='flex'
       width={`calc(${width} + ${numBlocks * 2}px)`}
       sx={{ userSelect: 'none', '> *': { transition: 'all 250ms' } }}
+      {...props}
     >
       {isOnline
         ? renderOnlineIndication()

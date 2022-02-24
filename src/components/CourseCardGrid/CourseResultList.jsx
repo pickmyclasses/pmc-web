@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import CourseResultItem from './CourseResultItem';
 
 export default function CourseResultList({ courses = [] }) {

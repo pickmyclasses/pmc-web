@@ -9,6 +9,8 @@ export const login = ({ email, password }) => {
 };
 
 export const register = ({ email, firstName, lastName, college, password, repassword }) => {
+  // TODO Q: Maybe write a global util function to convert all keys in an object into snake
+  // case.
   const data = {
     email: email,
     first_name: firstName,
@@ -21,7 +23,17 @@ export const register = ({ email, firstName, lastName, college, password, repass
   return promise.then((response) => response.data);
 };
 
-export const fetchCourseByID = (courseID) => axios.get(`/course/${courseID}`);
+/**
+ * Fetches the course but also injects the fake image URL. Basically pretends `ImageURL` was an
+ * actual field of the course.
+ */
+export const fetchCourseByID = (courseID) =>
+  new Promise((onFetched) =>
+    axios.get(`/course/${courseID}`).then((data) => {
+      data.data.data.course.ImageURL = getFakeCourseImageURL(data.data.data.course);
+      onFetched(data);
+    })
+  );
 
 export const fetchAllCourses = () => axios.get('/course/list');
 
@@ -51,9 +63,20 @@ const fakeFetchCoursesBySearch = () =>
   new Promise((onFetched) =>
     onFetched([
       22966, 23000, 22968, 23068, 23063, 23041, 23001, 22986, 22998, 22964, 22941, 22942, 22961,
-      22971, 22951, 22970, 22998, 31826, 28270, 24777, 27266, 21978, 28354, 23000, 30056, 31826,
+      22971, 22951, 22970, 22998, 31826, 28270, 24777, 27266, 27334, 21978, 28354, 30056, 31826,
     ])
   );
+
+export const getFakeCourseImageURL = (course) =>
+  `https://picsum.photos/seed/${+course.ID + 13}/1280/720`;
+// `https://source.unsplash.com/random/?${course.ID},${getCourseKeywords(course)}`;
+
+// const getCourseKeywords = (course) =>
+//   course.Title.toLowerCase()
+//     .replace(/[^A-Za-z\s]/g, '')
+//     .split(/\s/)
+//     .filter((x) => x.length >= 4)
+//     .join('+');
 
 export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
 

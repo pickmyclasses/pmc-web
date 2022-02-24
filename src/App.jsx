@@ -10,8 +10,12 @@ import ReviewPage from './pages/ReviewPage';
 import AdminPage from './pages/Admin/AdminPage';
 import AuthForm from './components/AuthForm/AuthForm';
 import RegisterForm from './components/AuthForm/RegisterForm';
+import FeedbackEditor from './pages/FeedbackEditorPage';
 
 export const UserContext = createContext();
+
+/** @type {React.Context<{shouldShowScheduler: Boolean}>} */
+export const AppContext = createContext();
 
 export default function App() {
   const [user, setUser] = useState();
@@ -20,40 +24,30 @@ export default function App() {
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <UserContext.Provider value={{ user, setUser }}>
-        <BrowserRouter>
-          <NavigationBar
-            onUserChange={setUser}
-            isSchedulerShowing={shouldShowScheduler}
-            toggleScheduler={() => setShouldShowScheduler(!shouldShowScheduler)}
-          />
-          <Routes>
-            <Route path='/' exact element={<WelcomePage />} />
-            <Route path='/admin' exact element={<AdminPage/>}/>
-            <Route
-              path='/home'
-              exact
-              element={<HomePage shouldShowScheduler={shouldShowScheduler} />}
+        <AppContext.Provider value={{ shouldShowScheduler }}>
+          <BrowserRouter>
+            <NavigationBar
+              onUserChange={setUser}
+              isSchedulerShowing={shouldShowScheduler}
+              toggleScheduler={() => setShouldShowScheduler(!shouldShowScheduler)}
             />
-            <Route
-              path='/search/:query'
-              exact
-              element={<SearchPage shouldShowScheduler={shouldShowScheduler} />}
-            />
-            <Route path='/auth' exact element={<AuthForm />} />
-            <Route path='/register' exact element={<RegisterForm />} />
-            <Route
-              path='/course/:id'
-              exact
-              element={<CoursePage shouldShowScheduler={shouldShowScheduler} />}
-            />
-            <Route
-              path='/course/:id/review'
-              exact
-              element={<ReviewPage shouldShowScheduler={!shouldShowScheduler} />}
-            />
-          </Routes>
-        </BrowserRouter>
+            <Routes>
+              <Route exact path='/' element={<WelcomePage />} />
+              <Route exact path='/home' element={<HomePage />} />
+              <Route exact path='/auth' element={<AuthForm />} />
+              <Route exact path='/register' element={<RegisterForm />} />
+              <Route exact path='/search/:query' element={<SearchPage />} />
+              <Route exact path='/course/:id' element={<CoursePage />} />
+              <Route exact path='/course/:id/:tab' element={<CoursePage />} />
+              <Route exact path='/course/:id/reviews/compose' element={<ReviewPage />} />
+              <Route exact path='/admin' element={<AdminPage />} />
+              {/* TODO Q: The following routes are for backward-compatibility only. Please
+               *  migrate all URLs to use the above with normalized formats. */}
+              <Route path='/FeedbackEditor' element={<FeedbackEditor />} />
+            </Routes>
+          </BrowserRouter>
+        </AppContext.Provider>
       </UserContext.Provider>
-    </Box>   
+    </Box>
   );
 }
