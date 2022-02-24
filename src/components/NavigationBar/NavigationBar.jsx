@@ -51,6 +51,8 @@ export default function NavigationBar({ toggleScheduler }) {
                   textColor={theme.palette.primary.contrastText}
                   backgroundColor={alpha(theme.palette.common.black, 0.167)}
                   onSearch={handleSearchClick}
+                  maxWidth={'576px'}
+                  focusHoverColor={alpha(theme.palette.common.black, 0.333)}
                 />
               </Grid>
               <Grid item xs='auto'>
