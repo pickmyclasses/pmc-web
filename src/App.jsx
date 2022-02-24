@@ -40,7 +40,7 @@ export default function App() {
               <Route exact path='/course/:id' element={<CoursePage />} />
               <Route exact path='/course/:id/:tab' element={<CoursePage />} />
               <Route exact path='/course/:id/reviews/compose' element={<ReviewPage />} />
-              <Route exact path='/backoffice' element={<AdminPage />} />
+              <Route exact path='/admin' element={<AdminPage />} />
               {/* TODO Q: The following routes are for backward-compatibility only. Please
                *  migrate all URLs to use the above with normalized formats. */}
               <Route path='/FeedbackEditor' element={<FeedbackEditor />} />
