@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
 import { DataGrid } from '@mui/x-data-grid';
-import { useDemoData } from '@mui/x-data-grid-generator';
-import MUIDataTable from "mui-datatables";
 
 export default function AdminPage() 
 {
@@ -10,18 +7,9 @@ export default function AdminPage()
     const [tableName, setTableName] = useState("");
     const [testData, setTestData] = useState([]);
     const [error, setError] = useState(null);
-    const [nbRows, setNbRows] = useState(10);
 
-    const removeRow = () => setNbRows((x) => Math.max(0, x - 1));
-    const addRow = () => setNbRows((x) => Math.min(100, x + 1));
-
-    const { data } = useDemoData({
-        dataSet: 'Commodity',
-        rowLength: 100,
-        maxColumns: 6,
-    });
-
-    useEffect(() => {
+    useEffect(() => 
+    {
         fetch("https://pmc-schedule-api.herokuapp.com/" + tableName)
             .then(res => res.json())
             .then(
@@ -65,14 +53,24 @@ export default function AdminPage()
 
             rows = testData;
         }
-        const options = {
-            filterType: 'checkbox',
-          };
+        // const options = {
+        //     filterType: 'checkbox',
+        //   };
 
         return (
             <div style={{ width: '100%' }} className="admindiv">
                 <h1>Admin Page</h1>
                 <h1>Table {tableName}</h1>
+
+                <label className="selector-label">Choose a table:</label>
+
+                <select name="tables" id="tables-selector" onChange={handleChange}>
+                    <option value=""></option>
+                    <option value="class">class</option>
+                    <option value="college">college</option>
+                    <option value="course">course</option>
+                    <option value="subject">subject</option>
+                </select>
 
                 <label className="selector-label">Choose a table:</label>
 
