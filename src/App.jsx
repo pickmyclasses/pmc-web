@@ -8,6 +8,7 @@ import NavigationBar from './components/NavigationBar/NavigationBar';
 import WelcomePage from './pages/WelcomePage';
 import ReviewPage from './pages/ReviewPage';
 import AdminPage from './pages/Admin/AdminPage';
+import UpdateData from './pages/Admin/UpdateData';
 import AuthForm from './components/AuthForm/AuthForm';
 import RegisterForm from './components/AuthForm/RegisterForm';
 import FeedbackEditor from './pages/FeedbackEditorPage';
@@ -41,6 +42,8 @@ export default function App() {
               <Route exact path='/course/:id/:tab' element={<CoursePage />} />
               <Route exact path='/course/:id/reviews/compose' element={<ReviewPage />} />
               <Route exact path='/admin' element={<AdminPage />} />
+              <Route exact path='/admin-update' element={<UpdateData />} />
+              
               {/* TODO Q: The following routes are for backward-compatibility only. Please
                *  migrate all URLs to use the above with normalized formats. */}
               <Route path='/FeedbackEditor' element={<FeedbackEditor />} />

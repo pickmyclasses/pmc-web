@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Button } from '@mui/material';
+import { Link } from "react-router-dom";
 
 export default function AdminPage() 
 {
@@ -37,11 +38,6 @@ export default function AdminPage()
         console.log("delete id: " + delete_id);
     }
 
-    let updateClick = (e) => {
-        let update_id = e.row.id;
-        console.log("update id: " + update_id);
-    }
-
     if (error) 
     {
         return <div>Error: {error.message}</div>;
@@ -66,15 +62,16 @@ export default function AdminPage()
                 field: "Update",
                 renderCell: (cellValues) => {
                   return (
-                    <Button
-                      variant="contained"
-                      color="success"
-                      onClick={() => {
-                        updateClick(cellValues);
-                      }}
+                    <Link to="/admin-update" state = {{data: cellValues.row}}
                     >
-                      Update
-                    </Button>
+                      <Button
+                        variant="contained"
+                        color="success"
+                      >
+                        Update
+                      </Button>
+                    </Link>
+
                   );
                 }
             });
