@@ -1,12 +1,15 @@
 import { Grid } from '@mui/material';
 import MuiTypography from '@mui/material/Typography';
-import { Avatar } from 'react-lorem-ipsum';
 import Rating from '@mui/material/Rating';
 import CourseComments from './CourseComments';
 import SubCard from '../Skeleton/SubCard';
 import { gridSpacing } from '../../constants/constants';
 import EditIcon from '@mui/icons-material/Edit';
 import CourseReviewRecommendation from '../CourseDetails/CourseReviewRecommendation';
+import Avatar from '@mui/material/Avatar';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import FaceIcon from '@mui/icons-material/Face';
 
 const titlePos = 'What do you like most about this course?';
 const titleNeg = 'What do you hate most about this course?';
@@ -14,18 +17,17 @@ const titleAdd = 'What additional feedbacks you have for this course?';
 
 export default function CourseReviewCard({ review }) {
   let createDate = review.created_at.slice(0, 10);
+  console.log(review);
+  let userName = review.anonymous ? 'anonymous ' : review.user_name;
   return (
     <SubCard spacing={gridSpacing}>
       <Grid container>
         <MuiTypography variant='' gutterBottom>
-          <div className='user'>
-            <Avatar className='avatar' width='100' height='100' alt='Avatar' />
-            <div className='username'>{review.anonymous ? 'anonymous ' : review.user_name}</div>
-            <div className='username'>
-              <EditIcon />
-              {`${createDate}`}
-            </div>
-          </div>
+          <Stack direction='row' spacing={1}>
+            <Chip icon={<FaceIcon />} label={userName} variant='outlined' color='primary' />
+            <Chip icon={<EditIcon />} label={createDate} variant='outlined' color='success' />
+          </Stack>
+
           <Grid item>
             <Rating
               name='read-only'

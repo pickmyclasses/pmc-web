@@ -43,7 +43,7 @@ export default function CourseOverallRatings({ courseID }) {
         </Grid>
         <Grid item>
           <Typography variant='subtitle1' gutterBottom>
-            Overall Quality based on {reviews != null ? reviews.length : 0} ratings
+            {reviews != null ? reviews.length : 0} global ratings
           </Typography>
         </Grid>
         <Grid item>
