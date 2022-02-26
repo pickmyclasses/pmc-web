@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, useTheme, Tab, Button } from '@mui/material';
-import { makeStyles } from '@material-ui/core';
+import { Grid, Tab, Button, styled, ThemeProvider } from '@mui/material';
 import { UserContext } from '../../App';
+import { navigationBarTheme } from './NavigationBar';
 import SchedulerDropDown from './NavigationBarButtonGroup/SchedulerDropDown';
 import UserDropDown from './NavigationBarButtonGroup/UserDropDown';
 import { Dashboard, NotificationAdd } from '@mui/icons-material';
@@ -12,66 +12,34 @@ import { Dashboard, NotificationAdd } from '@mui/icons-material';
  * navigation bar.
  */
 export default function NavigationBarButtonGroup() {
-  const theme = useTheme();
-  const classes = useStyle();
-
   const { user } = useContext(UserContext);
 
   const renderTabsForLoggedIn = () => [
     <SchedulerDropDown key='scheduler' />,
-    <Tab
-      key='notification'
-      label='Notification'
-      icon={<NotificationAdd />}
-      className={classes.tab}
-    />,
-    <Tab key='discussion' label='Discussion' icon={<Dashboard />} className={classes.tab} />,
+    <ButtonGroupTab key='notification' label='Notification' icon={<NotificationAdd />} />,
+    <ButtonGroupTab key='discussion' label='Discussion' icon={<Dashboard />} />,
     <UserDropDown key='user' />,
   ];
 
   const renderTabsForNotLoggedIn = () => [
-    <Button
-      key='login'
-      variant='contained'
-      component={Link}
-      to='/auth'
-      className={classes.button}
-    >
+    <Button key='login' variant='contained' component={Link} to='/auth'>
       Login
     </Button>,
   ];
 
   return (
-    <Grid
-      container
-      spacing='16px'
-      sx={{
-        alignItems: 'center',
-        flexWrap: 'nowrap !important',
-        '*': { color: theme.palette.primary.contrastText },
-      }}
-    >
-      {user == null ? renderTabsForNotLoggedIn() : renderTabsForLoggedIn()}
-    </Grid>
+    <ThemeProvider theme={navigationBarTheme}>
+      <Grid
+        container
+        sx={{
+          alignItems: 'center',
+          flexWrap: 'nowrap !important',
+        }}
+      >
+        {user == null ? renderTabsForNotLoggedIn() : renderTabsForLoggedIn()}
+      </Grid>
+    </ThemeProvider>
   );
 }
 
-// TODO Q: Replace these marginTops with a flex parent whose vertical align is set to middle.
-export const useStyle = makeStyles({
-  tab: {
-    color: 'white',
-    marginTop: '5%',
-    fontSize: '15%',
-  },
-  menuItem: {
-    fontSize: '0.9em',
-    color: '#d4d6d9',
-  },
-  menuItemIcon: {
-    color: '#d4d6d9',
-  },
-  button: {
-    marginTop: '30%',
-    color: '#d4d6d9',
-  },
-});
+export const ButtonGroupTab = styled(Tab)({ fontSize: 'xx-small' });
