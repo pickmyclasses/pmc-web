@@ -3,9 +3,9 @@ import Typography from '@mui/material/Typography';
 
 export default function CourseComments({ title, comment, isPositive }) {
   return (
-    <Typography variant='body1' gutterBottom color='seconday'>
-      <Box sx={{ fontWeight: 'bold' }}>{title}</Box>
-      <Box>{comment}</Box>
-    </Typography>
+    <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}>
+      <Typography variant='subtitle2'>{title}</Typography>
+      <Typography variant='body2'>{comment}</Typography>
+    </Box>
   );
 }
