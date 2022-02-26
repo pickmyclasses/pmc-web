@@ -5,7 +5,6 @@ import { Box, CircularProgress, Container } from '@mui/material';
 import { fetchClassesByCourseID, fetchCourseByID } from '../api';
 import CoursePageTop from '../components/CoursePage/CoursePageTop';
 import CourseOverview from '../components/CoursePage/CourseOverview';
-import PageWithScheduler from './PageWithScheduler';
 import CourseRelated from '../components/CoursePage/CourseRelated';
 import CourseReviews from '../components/CoursePage/CourseReviews';
 import CourseRegistration from '../components/CoursePage/CourseRegistration';
@@ -42,13 +41,11 @@ export default function CoursePage() {
   return (
     <Box width='100%' height='100%' minHeight={0} sx={{ overflowY: 'scroll' }}>
       <CoursePageTop course={course} tabs={tabs} activeTabName={activeTabName} />
-      <PageWithScheduler>
-        <Container maxWidth='xl' sx={{ paddingY: '32px' }}>
-          <CourseContext.Provider value={course}>
-            {createElement(tabs[activeTabName].content, { course, classes })}
-          </CourseContext.Provider>
-        </Container>
-      </PageWithScheduler>
+      <Container maxWidth='xl' sx={{ paddingY: '32px' }}>
+        <CourseContext.Provider value={course}>
+          {createElement(tabs[activeTabName].content, { course, classes })}
+        </CourseContext.Provider>
+      </Container>
     </Box>
   );
 }

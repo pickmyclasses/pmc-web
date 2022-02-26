@@ -4,6 +4,8 @@
     "desaturate",
     "endregion",
     "fontawesome",
-    "saturationv"
+    "saturationv",
+    "swal",
+    "sweetalert"
   ]
 }

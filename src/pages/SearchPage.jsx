@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { fetchCoursesBySearch } from '../api';
-import PageWithScheduler from './PageWithScheduler';
+import ContainerWithStaticScheduler from '../components/Scheduler/ContainerWithStaticScheduler';
 import { useMount } from '../utils';
 import CourseResultList from '../components/CourseCardGrid/CourseResultList';
 import { fetchCoursesByCourseIDs } from './HomePage';
@@ -23,7 +23,7 @@ export default function SearchPage({ shouldShowScheduler }) {
   return (
     <>
       <FilterVerticalContainer />
-      <PageWithScheduler shouldShowScheduler={shouldShowScheduler}>
+      <ContainerWithStaticScheduler shouldShowScheduler={shouldShowScheduler}>
         {courses ? (
           <Box sx={{ padding: '24px' }}>
             <Typography variant='subtitle2' gutterBottom>
@@ -36,7 +36,7 @@ export default function SearchPage({ shouldShowScheduler }) {
             <CircularProgress sx={{ margin: 'auto' }} />
           </Box>
         )}
-      </PageWithScheduler>
+      </ContainerWithStaticScheduler>
     </>
   );
 }

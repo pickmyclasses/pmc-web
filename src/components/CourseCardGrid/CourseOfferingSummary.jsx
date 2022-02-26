@@ -2,11 +2,13 @@ import { Box, Typography, useTheme } from '@mui/material';
 import React, { useContext } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { SchedulerDisplayContentContext } from '../../pages/PageWithScheduler';
+import { SetClassesToHighlightContext } from '../Scheduler/ContainerWithStaticScheduler';
 import { cartesian, groupBy, parseDayList, pluralize } from '../../utils';
+import { SchedulerContext } from '../Scheduler/ContainerWithScheduler';
 import { getComponent, getInstructor } from '../Scheduler/ShoppingCart';
 import { getTransitionForStyles } from '../Scheduler/Timeline';
 import DaysIndicator from './CourseCard/DaysIndicator';
+import { NavigationBarContext } from '../NavigationBar/ContainerWithNavigationBar';
 
 export default function CourseOfferingSummary({
   classes,
@@ -20,9 +22,9 @@ export default function CourseOfferingSummary({
 }) {
   const theme = useTheme();
 
-  const { isSchedulerShowing, classesInShoppingCart, setClassesToHighlight } = useContext(
-    SchedulerDisplayContentContext
-  );
+  const { shouldShowStaticScheduler } = useContext(NavigationBarContext);
+  const { classesInShoppingCart } = useContext(SchedulerContext);
+  const setClassesToHighlight = useContext(SetClassesToHighlightContext);
 
   const [onlineOffering, setOnlineOffering] = useState(null);
   const [numHiddenOfferings, setNumHiddenOfferings] = useState(0);
@@ -54,11 +56,10 @@ export default function CourseOfferingSummary({
   }, [classes, course, classesInShoppingCart, maxRows]);
 
   // Handle highlight and un-highlight logics.
-
   useEffect(() => {
     if (
       (representativeOfferings.length || onlineOffering || comboInShoppingCart) &&
-      isSchedulerShowing &&
+      shouldShowStaticScheduler &&
       enableHighlight &&
       (mouseEnteredIndex >= 0 || isMouseEntered)
     ) {
@@ -93,7 +94,7 @@ export default function CourseOfferingSummary({
     representativeOfferings,
     enableHighlight,
     isMouseEntered,
-    isSchedulerShowing,
+    shouldShowStaticScheduler,
     setClassesToHighlight,
     mouseEnteredIndex,
     course,
@@ -188,7 +189,7 @@ const enumerateOfferings = (classes, course, classesInShoppingCart) => {
   const comboInShoppingCart = classesInShoppingCart
     .filter((x) => x.course.ID === course.ID)
     .map((x) => x.classData);
-  if (comboInShoppingCart.length > 0) {
+  if (comboInShoppingCart?.length) {
     daysAndCombos.push({
       dayString: getSortedOfferedDayString(comboInShoppingCart),
       combo: comboInShoppingCart,

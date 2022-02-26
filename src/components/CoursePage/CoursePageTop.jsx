@@ -87,7 +87,7 @@ export const ActionItem = ({ icon, ...props }) => (
 
 export const TabsWithoutBottomGap = styled(Tabs)({
   position: 'relative',
-  '> *': { position: 'absolute', bottom: 0, width: '100%' },
+  '> *:first-child': { position: 'absolute', bottom: 0, width: '100%' },
   button: { width: '25%', minHeight: 0 },
 });
 

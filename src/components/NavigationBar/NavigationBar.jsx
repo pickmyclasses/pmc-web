@@ -1,18 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppBar, Container, Grid, Toolbar, useTheme } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { alpha } from '@mui/material/styles';
-import { UserContext } from '../../App';
 import Logo from '../Logo/Logo';
 import SearchBar from '../Search/SearchBar';
 import NavigationBarButtonGroup from './NavigationBarButtonGroup';
 
-export default function NavigationBar({ toggleScheduler }) {
+export default function NavigationBar() {
   const navigate = useNavigate();
   const theme = useTheme();
-
-  const { setUser } = useContext(UserContext);
 
   const appBarTheme = createTheme({
     palette: {
@@ -21,11 +18,6 @@ export default function NavigationBar({ toggleScheduler }) {
       },
     },
   });
-
-  const logout = () => {
-    setUser(null);
-    navigate('/home');
-  };
 
   const handleSearchClick = (searchText) => {
     if (searchText.trim()) {
@@ -56,7 +48,7 @@ export default function NavigationBar({ toggleScheduler }) {
                 />
               </Grid>
               <Grid item xs='auto'>
-                <NavigationBarButtonGroup logout={logout} toggleScheduler={toggleScheduler} />
+                <NavigationBarButtonGroup />
               </Grid>
             </Grid>
           </Container>

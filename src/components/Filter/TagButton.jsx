@@ -11,7 +11,7 @@ library.add(fas);
 
 export default function TagButton({ beforeClick, afterClick }) {
   const handleSearch = () => {
-    console.log('clicked');
+    alert('** tag button');
   };
 
   return (

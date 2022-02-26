@@ -1,14 +1,15 @@
 import React, { useContext, useState } from 'react';
 import { fetchCourseByID, fetchHomePageCourses, fetchReviewsByCourseID } from '../api';
-import PageWithScheduler from './PageWithScheduler';
+import ContainerWithStaticScheduler from '../components/Scheduler/ContainerWithStaticScheduler';
 import { useMount } from '../utils';
 import CourseCardGrid from '../components/CourseCardGrid/CourseCardGrid';
 import ClickableIndicator from '../components/CourseCardGrid/CourseCard/ClickableIndicator';
 import { Box, Divider, Typography } from '@mui/material';
-import { AppContext } from '../App';
+import { NavigationBarContext } from '../components/NavigationBar/ContainerWithNavigationBar';
 
 export default function HomePage() {
-  const { shouldShowScheduler } = useContext(AppContext);
+  const { shouldShowStaticScheduler } = useContext(NavigationBarContext);
+
   const [courseCategories, setCourseCategories] = useState([]);
 
   useMount(() =>
@@ -24,7 +25,7 @@ export default function HomePage() {
   );
 
   return (
-    <PageWithScheduler>
+    <ContainerWithStaticScheduler>
       <Box sx={{ padding: '32px 32px' }}>
         {courseCategories &&
           courseCategories.map(({ category, courses }, i) => (
@@ -40,13 +41,13 @@ export default function HomePage() {
                   key={i}
                   title={category}
                   courses={courses}
-                  numColumns={shouldShowScheduler ? 3 : 4}
+                  numColumns={shouldShowStaticScheduler ? 3 : 4}
                 />
               </Box>
             </Box>
           ))}
       </Box>
-    </PageWithScheduler>
+    </ContainerWithStaticScheduler>
   );
 }
 

@@ -69,34 +69,30 @@ const fakeFetchCoursesBySearch = () =>
 
 export const getFakeCourseImageURL = (course) =>
   `https://picsum.photos/seed/${+course.ID + 13}/1280/720`;
-// `https://source.unsplash.com/random/?${course.ID},${getCourseKeywords(course)}`;
-
-// const getCourseKeywords = (course) =>
-//   course.Title.toLowerCase()
-//     .replace(/[^A-Za-z\s]/g, '')
-//     .split(/\s/)
-//     .filter((x) => x.length >= 4)
-//     .join('+');
 
 export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
 
 export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseID}/class`);
 
 // TODO Q: Remove this after backend migrates and combines APIs.
-// const shoppingCartAPIEntryURL = 'http://localhost:5000';
-const shoppingCartAPIEntryURL = 'https://pmc-schedule-api.herokuapp.com';
+const shoppingCartAPIEntryURL = 'http://localhost:5000';
+// const shoppingCartAPIEntryURL = 'https://pmc-schedule-api.herokuapp.com';
 
 export const fetchClassIDsInShoppingCart = (userID, semesterID) =>
   axios.get(`${shoppingCartAPIEntryURL}/schedule/${userID}/${semesterID}`);
-// fakeFetchClassIDsInShoppingCart();
 
-// TODO Q: Actually fetch from backend and get rid of this.
-// const fakeFetchClassIDsInShoppingCart = () =>
-//   new Promise((onFetched) =>
-//     onFetched({
-//       data: [10795, 10801, 15812, 15813, 17099].map((x) => ({ class_id: x })),
-//     })
-//   );
+export const fetchRequirements = () => fakeFetchRequirements();
+
+// TODO Q: Search the word "fake" in source code and get rid of all of them.
+const fakeFetchRequirements = () =>
+  new Promise((onFetched) =>
+    onFetched([
+      { title: 'Major Requirements', progress: 3, total: 6 },
+      { title: 'Major Electives', progress: 4, total: 7 },
+      { title: 'Math/Science Electives', progress: 2, total: 5 },
+      { title: 'General Education', progress: 6, total: 13 },
+    ])
+  );
 
 export const addClassIDToShoppingCart = (body) =>
   axios.post(`${shoppingCartAPIEntryURL}/schedule/add`, body);

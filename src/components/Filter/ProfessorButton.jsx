@@ -11,7 +11,7 @@ library.add(fas);
 
 export default function ButtonWithSearchDropdown({ beforeClick, afterClick }) {
   const handleSearch = () => {
-    console.log('clicked');
+    alert('** button with search drop down');
   };
 
   return (

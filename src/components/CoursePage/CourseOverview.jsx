@@ -258,11 +258,9 @@ export default function CourseOverview({ course, classes }) {
           </Card>
         </Grid>
       </Grid>
-      <ClickableIndicator>
-        <Typography variant='overline' fontSize='medium' sx={{ opacity: 0.75 }}>
-          You may also like
-        </Typography>
-      </ClickableIndicator>
+      <Typography variant='overline' fontSize='medium' sx={{ opacity: 0.75 }}>
+        You may also like
+      </Typography>
       <Box width='100%'>
         <CourseCardGrid numColumns={4} courses={new Array(4).fill({ course, classes })} />
       </Box>

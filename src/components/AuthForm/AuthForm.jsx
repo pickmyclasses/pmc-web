@@ -14,8 +14,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { login } from '../../api';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../../App';
 import swal from 'sweetalert';
+import { UserContext } from '../../App';
 
 export default function AuthForm() {
   const navigate = useNavigate();
