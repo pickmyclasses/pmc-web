@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Stack, Typography, useTheme } from '@mui/material';
 import React, { useContext } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -115,7 +115,7 @@ export default function CourseOfferingSummary({
 
   return (
     <>
-      <Box sx={{ width, '> *:not(:last-child)': { paddingBottom: '8px' } }}>
+      <Stack width={width}>
         {representativeOfferings.map(({ days }, i) => (
           <DaysIndicator
             key={i}
@@ -169,7 +169,7 @@ export default function CourseOfferingSummary({
             ))
           )}
         </Box>
-      </Box>
+      </Stack>
     </>
   );
 }

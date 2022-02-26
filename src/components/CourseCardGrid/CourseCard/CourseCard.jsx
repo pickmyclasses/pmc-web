@@ -83,7 +83,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
           }}
           onAnimationComplete={() => !isMouseEntered && setIsExtraInfoExpanded(false)}
         >
-          <Box display='flex' sx={{ justifyContent: 'space-between' }}>
+          <CenterAligningFlexBox justifyContent='space-between'>
             <Rating readOnly value={rating} precision={0.5} size='small' />
             <CourseOfferingSummary
               course={course}
@@ -94,7 +94,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
               enableHighlight={isMouseEntered && isExtraInfoExpanded}
               isMouseEntered={isMouseEntered && isExtraInfoExpanded}
             />
-          </Box>
+          </CenterAligningFlexBox>
         </motion.div>
       </motion.div>
     </>
@@ -152,8 +152,8 @@ const courseTitleAnimationVariants = {
 };
 
 const extraInfoAnimationVariants = {
-  initial: { marginTop: '8px', height: 0, opacity: 0 },
-  mouseEntered: { marginTop: '12px', height: '', opacity: 1 },
+  initial: { marginTop: '8px', marginBottom: 0, height: 0, opacity: 0 },
+  mouseEntered: { marginTop: '12px', marginBottom: '8px', height: '', opacity: 1 },
 };
 
 export const getMeanReviewRating = (reviews) => {
