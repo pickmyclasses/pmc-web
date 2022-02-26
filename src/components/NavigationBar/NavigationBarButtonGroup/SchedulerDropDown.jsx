@@ -1,27 +1,27 @@
 import { EventNote } from '@mui/icons-material';
-import { Menu, Tab } from '@mui/material';
+import { Menu } from '@mui/material';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import React, { useContext } from 'react';
 import Scheduler from '../../Scheduler/Scheduler';
 import { NavigationBarContext } from '../ContainerWithNavigationBar';
-import { useStyle } from '../NavigationBarButtonGroup';
+import { ButtonGroupTab } from '../NavigationBarButtonGroup';
 
 export default function SchedulerDropDown() {
-  const classes = useStyle();
   const { hasStaticScheduler, shouldShowStaticScheduler, setShouldShowStaticScheduler } =
     useContext(NavigationBarContext);
+
+  const handleTabClick = () => {
+    if (hasStaticScheduler) setShouldShowStaticScheduler(!shouldShowStaticScheduler);
+  };
 
   return (
     <PopupState variant='popover'>
       {(popupState) => (
         <>
-          <Tab
+          <ButtonGroupTab
             label='Schedule'
             icon={<EventNote />}
-            className={classes.tab}
-            onClick={() =>
-              hasStaticScheduler && setShouldShowStaticScheduler(!shouldShowStaticScheduler)
-            }
+            onClick={handleTabClick}
             {...(!hasStaticScheduler && bindTrigger(popupState))}
           />
           <Menu

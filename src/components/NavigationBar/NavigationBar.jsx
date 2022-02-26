@@ -1,7 +1,14 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AppBar, Container, Grid, Toolbar, useTheme } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {
+  AppBar,
+  Container,
+  Grid,
+  Toolbar,
+  useTheme,
+  createTheme,
+  ThemeProvider,
+} from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import Logo from '../Logo/Logo';
 import SearchBar from '../Search/SearchBar';
@@ -10,14 +17,6 @@ import NavigationBarButtonGroup from './NavigationBarButtonGroup';
 export default function NavigationBar() {
   const navigate = useNavigate();
   const theme = useTheme();
-
-  const appBarTheme = createTheme({
-    palette: {
-      primary: {
-        main: '#182b3a',
-      },
-    },
-  });
 
   const handleSearchClick = (searchText) => {
     if (searchText.trim()) {
@@ -28,7 +27,7 @@ export default function NavigationBar() {
   };
 
   return (
-    <ThemeProvider theme={appBarTheme}>
+    <ThemeProvider theme={navigationBarTheme}>
       <AppBar position='static' sx={{ zIndex: 999 }}>
         <Toolbar>
           <Container maxWidth='xl'>
@@ -57,3 +56,10 @@ export default function NavigationBar() {
     </ThemeProvider>
   );
 }
+
+export const navigationBarTheme = createTheme({
+  palette: {
+    primary: { main: '#182b3a' },
+    text: { main: '#d4d6d9' },
+  },
+});

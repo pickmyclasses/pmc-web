@@ -1,80 +1,60 @@
 import {
   AccountBalance,
   AdminPanelSettings,
-  EventAvailable,
   ExitToApp,
   ManageAccounts,
   School,
 } from '@mui/icons-material';
-import { ListItem, Menu, MenuItem, Tab } from '@mui/material';
+import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import PopupState, { bindMenu, bindTrigger } from 'material-ui-popup-state';
-import React, { useContext } from 'react';
+import React, { useContext, createElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../../App';
-import { useStyle } from '../NavigationBarButtonGroup';
+import { ButtonGroupTab } from '../NavigationBarButtonGroup';
 
 export default function UserDropDown() {
   const navigate = useNavigate();
-  const classes = useStyle();
   const { user, setUser } = useContext(UserContext);
+
+  const handleLogOutMenuItemClick = () => {
+    setUser(null);
+    navigate('/home');
+  };
+
+  const menuItems = [
+    { icon: AdminPanelSettings, text: 'Profile' },
+    { icon: School, text: 'Capstone' },
+    { icon: AccountBalance, text: 'My university', props: { divider: true } },
+    { icon: ExitToApp, text: 'Log out', handleClick: handleLogOutMenuItemClick },
+  ];
 
   return (
     <PopupState variant='popover'>
       {(popupState) => (
         <>
-          <Tab
+          <ButtonGroupTab
             label={user.name}
             icon={<ManageAccounts />}
-            className={classes.tab}
             {...bindTrigger(popupState)}
           />
           <Menu
             {...bindMenu(popupState)}
-            PaperProps={{
-              sx: {
-                borderRadius: 0,
-                width: '192px',
-                backgroundColor: '#182b3a',
-                boxShadow: 'none',
-              },
-            }}
+            disableScrollLock
+            PaperProps={{ sx: { width: '240px' } }}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
           >
-            <MenuItem onClick={popupState.close} className={classes.menuItem}>
-              <ListItem className={classes.menuItemIcon}>
-                <AdminPanelSettings fontSize='small' />
-              </ListItem>
-              Profile
-            </MenuItem>
-            <MenuItem onClick={popupState.close} className={classes.menuItem}>
-              <ListItem className={classes.menuItemIcon}>
-                <School fontSize='small' />
-              </ListItem>
-              Capstone
-            </MenuItem>
-            <MenuItem onClick={popupState.close} className={classes.menuItem}>
-              <ListItem className={classes.menuItemIcon}>
-                <AccountBalance fontSize='small' />
-              </ListItem>
-              University
-            </MenuItem>
-            <MenuItem onClick={popupState.close} className={classes.menuItem}>
-              <ListItem className={classes.menuItemIcon}>
-                <EventAvailable fontSize='small' />
-              </ListItem>
-              Schedule
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                setUser(null);
-                navigate('/home');
-              }}
-              className={classes.menuItem}
-            >
-              <ListItem className={classes.menuItemIcon}>
-                <ExitToApp fontSize='small' />
-              </ListItem>
-              Log out
-            </MenuItem>
+            {menuItems.map(({ icon, text, handleClick, props }, i) => (
+              <MenuItem
+                key={i}
+                onClick={handleClick || popupState.close}
+                sx={{ height: '48px' }}
+                {...props}
+              >
+                <ListItemIcon>{createElement(icon)}</ListItemIcon>
+                <ListItemText sx={{ marginLeft: '8px' }}>{text}</ListItemText>
+              </MenuItem>
+            ))}
           </Menu>
         </>
       )}

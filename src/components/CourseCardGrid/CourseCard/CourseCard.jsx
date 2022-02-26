@@ -91,7 +91,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
               maxRows={1}
               rowHeight={1.5}
               width='min(120px, calc(100% - 120px))'
-              enableHighlight
+              enableHighlight={isMouseEntered && isExtraInfoExpanded}
               isMouseEntered={isMouseEntered && isExtraInfoExpanded}
             />
           </CenterAligningFlexBox>
