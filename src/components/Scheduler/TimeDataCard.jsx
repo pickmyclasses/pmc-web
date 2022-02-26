@@ -6,6 +6,7 @@ import { Edit, Info } from '@material-ui/icons';
 export default function TimeDataCard({
   data: { title, subtitle, description, coursePageURL, topBorderColor = 'gray' },
   hasConflicts = false,
+  onLinkClick = () => {},
 }) {
   return (
     <Card
@@ -33,12 +34,16 @@ export default function TimeDataCard({
         <Tooltip title='Edit' disableInteractive>
           {/* TODO Q: The edit link should link to course page with scroll bar location
            *  pointed at the offering listing table. */}
-          <IconButton component={Link} to={coursePageURL}>
+          <IconButton
+            component={Link}
+            to={coursePageURL + '/registration'}
+            onClick={onLinkClick}
+          >
             <Edit />
           </IconButton>
         </Tooltip>
         <Tooltip title='Course Details' disableInteractive>
-          <IconButton component={Link} to={coursePageURL}>
+          <IconButton component={Link} to={coursePageURL} onClick={onLinkClick}>
             <Info />
           </IconButton>
         </Tooltip>

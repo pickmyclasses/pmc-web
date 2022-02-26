@@ -28,7 +28,7 @@ export default function NavigationBar() {
 
   return (
     <ThemeProvider theme={navigationBarTheme}>
-      <AppBar position='static' sx={{ zIndex: 999 }}>
+      <AppBar position='static' sx={{ zIndex: 9999 }}>
         <Toolbar>
           <Container maxWidth='xl'>
             <Grid container spacing='24px' sx={{ alignItems: 'center' }}>

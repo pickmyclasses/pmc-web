@@ -1,5 +1,6 @@
 import { BookmarkBorder, Share } from '@mui/icons-material';
 import {
+  AppBar,
   Box,
   Card,
   CardMedia,
@@ -62,9 +63,9 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
   );
 
   return (
-    <Box>
-      <Card>
-        <CardMedia component='img' image={course.ImageURL} height='360px' />
+    <>
+      <CardMedia component='img' image={course.ImageURL} height='360px' />
+      <Card sx={{ position: 'sticky', top: 0, zIndex: 9998, boxShadow: 2 }}>
         <Container maxWidth='xl'>
           <Box padding='16px 0' display='flex' justifyContent='space-between'>
             {renderCourseInfo()}
@@ -77,7 +78,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
           </TabsWithoutBottomGap>
         </Container>
       </Card>
-    </Box>
+    </>
   );
 }
 

@@ -36,7 +36,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
       <motion.div
         variants={textRegionAnimationVariants}
         transition={{ type: 'just' }}
-        style={{ padding: '16px 20px' }}
+        style={{ padding: '16px 20px 8px' }}
       >
         <ClickableIndicator propagate>
           <CourseEligibilityIndicator
@@ -83,7 +83,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
           }}
           onAnimationComplete={() => !isMouseEntered && setIsExtraInfoExpanded(false)}
         >
-          <CenterAligningFlexBox sx={{ justifyContent: 'space-between' }}>
+          <Box display='flex' sx={{ justifyContent: 'space-between' }}>
             <Rating readOnly value={rating} precision={0.5} size='small' />
             <CourseOfferingSummary
               course={course}
@@ -94,7 +94,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
               enableHighlight={isMouseEntered && isExtraInfoExpanded}
               isMouseEntered={isMouseEntered && isExtraInfoExpanded}
             />
-          </CenterAligningFlexBox>
+          </Box>
         </motion.div>
       </motion.div>
     </>
@@ -105,7 +105,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
       <Skeleton
         variant='rectangular'
         width='100%'
-        height='180px'
+        height='calc(100% - 144px)'
         sx={{ marginBottom: '20px' }}
       />
       <Skeleton width='50%' height='60px' sx={{ marginLeft: '20px' }} />
@@ -123,7 +123,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
       sx={{
         boxShadow: isMouseEntered ? 9 : 3,
         width: '100%',
-        height: '324px',
+        height: '288px',
         display: 'flex',
         flexFlow: 'column',
         cursor: 'pointer',
@@ -152,7 +152,7 @@ const courseTitleAnimationVariants = {
 };
 
 const extraInfoAnimationVariants = {
-  initial: { marginTop: 0, height: 0, opacity: 0 },
+  initial: { marginTop: '8px', height: 0, opacity: 0 },
   mouseEntered: { marginTop: '12px', height: '', opacity: 1 },
 };
 

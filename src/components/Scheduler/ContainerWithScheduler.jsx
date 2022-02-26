@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import {
   fetchClassByID,
-  fetchClassIDsInShoppingCart,
+  fetchClassesInShoppingCart,
   fetchCourseByID,
   fetchRequirements,
 } from '../../api';
@@ -44,10 +44,6 @@ export default function ContainerWithScheduler({ children }) {
  */
 export const SchedulerContext = createContext();
 
-// TODO Q: The backend will soon support processing/responding to queries in bulk. We should
-// replace the following helper functions with simpler API calls that requests class/course
-// data in bulk.
-
 /**
  * Fetches the content data to display in the scheduler, including
  *   - The classes and corresponding courses the `user` has in their shopping cart (outputs via
@@ -59,11 +55,12 @@ export const SchedulerContext = createContext();
  */
 const fetchSchedulerData = (user, setClassesInShoppingCart, setRequirements) => {
   if (user) {
-    // Logged in
-    fetchClassIDsInShoppingCart(user.userID, /* semester_id: */ 1).then(({ data }) =>
-      fetchClassesAndCourses(
-        data.map((x) => x.class_id),
-        setClassesInShoppingCart
+    fetchClassesInShoppingCart(user.userID).then((data) =>
+      setClassesInShoppingCart(
+        data.data.data.scheduled_class_list.map((x) => ({
+          classData: x.class_data,
+          course: x.course_data,
+        }))
       )
     );
     fetchRequirements().then(setRequirements);
@@ -72,24 +69,4 @@ const fetchSchedulerData = (user, setClassesInShoppingCart, setRequirements) => 
     setClassesInShoppingCart([]);
     setRequirements([]);
   }
-};
-
-/**
- * Fetches data for classes and the courses they belong to. With the callback `onFetched`
- * outputs an array of objects like `{classData, course}`.
- */
-const fetchClassesAndCourses = (classIDs, onFetched) => {
-  Promise.all(classIDs.map((x) => fetchClassByID(x))).then((resClasses) => {
-    const classes = resClasses.map((x) => x.data.data);
-    const courseIDs = [...new Set(classes.map((x) => x.CourseID))];
-    Promise.all(courseIDs.map((x) => fetchCourseByID(x))).then((resCourses) => {
-      const courses = resCourses.map((x) => x.data.data.course);
-      onFetched(
-        classes.map((classData) => ({
-          classData,
-          course: courses.find((x) => x.ID === classData.CourseID),
-        }))
-      );
-    });
-  });
 };
