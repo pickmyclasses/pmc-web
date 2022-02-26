@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import {
   fetchClassByID,
+  fetchClassesInShoppingCart,
   fetchClassIDsInShoppingCart,
   fetchCourseByID,
   fetchRequirements,
@@ -60,10 +61,19 @@ export const SchedulerContext = createContext();
 const fetchSchedulerData = (user, setClassesInShoppingCart, setRequirements) => {
   if (user) {
     // Logged in
-    fetchClassIDsInShoppingCart(user.userID, /* semester_id: */ 1).then(({ data }) =>
-      fetchClassesAndCourses(
-        data.map((x) => x.class_id),
-        setClassesInShoppingCart
+    // fetchClassIDsInShoppingCart(user.userID, /* semester_id: */ 1).then(({ data }) =>
+    //   fetchClassesAndCourses(
+    //     data.map((x) => x.class_id),
+    //     setClassesInShoppingCart
+    //   )
+    // );
+
+    fetchClassesInShoppingCart(user.userID).then((data) =>
+      setClassesInShoppingCart(
+        data.data.data.scheduled_class_list.map((x) => ({
+          classData: x.class_data,
+          course: x.course_data,
+        }))
       )
     );
     fetchRequirements().then(setRequirements);

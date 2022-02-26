@@ -273,6 +273,7 @@ export default function Timeline({
             <TimeDataCard
               data={selectedEventData}
               hasConflicts={doesSelectedEventHaveConflicts}
+              onLinkClick={() => setSelectedEventData(null)}
             />
           </Box>
         )}
