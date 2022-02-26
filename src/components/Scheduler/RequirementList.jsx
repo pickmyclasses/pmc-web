@@ -19,11 +19,11 @@ export default function RequirementList({ requirements = [] }) {
 
   return (
     <Stack spacing='8px'>
-      <Typography variant='subtitle1'>Requirements</Typography>
+      <Typography variant='subtitle2'>Requirements</Typography>
       {requirements.map(({ title, progress, total }) => (
-        <div key={title} style={{ color: theme.palette.text.secondary }}>
+        <Typography variant='body2' key={title} style={{ color: theme.palette.text.secondary }}>
           {title}: {progress}/{total}
-        </div>
+        </Typography>
       ))}
     </Stack>
   );

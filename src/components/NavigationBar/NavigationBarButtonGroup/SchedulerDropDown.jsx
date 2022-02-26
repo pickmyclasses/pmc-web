@@ -31,7 +31,7 @@ export default function SchedulerDropDown() {
               sx: {
                 overflow: 'visible',
                 width: '360px',
-                height: '720px',
+                height: '792px',
                 '> *': { padding: '20px !important', height: 'calc(100% - 40px)' },
               },
             }}
