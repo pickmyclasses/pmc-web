@@ -29,7 +29,7 @@ export default function UserDropDown() {
   ];
 
   return (
-    <PopupState variant='popper'>
+    <PopupState variant='popover'>
       {(popupState) => (
         <>
           <ButtonGroupTab

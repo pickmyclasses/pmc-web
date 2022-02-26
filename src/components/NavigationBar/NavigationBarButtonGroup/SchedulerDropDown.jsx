@@ -15,7 +15,7 @@ export default function SchedulerDropDown() {
   };
 
   return (
-    <PopupState variant='popper'>
+    <PopupState variant='popover'>
       {(popupState) => (
         <>
           <ButtonGroupTab
