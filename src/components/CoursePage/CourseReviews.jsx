@@ -1,8 +1,13 @@
 import { fetchReviewsByCourseID } from '../../api/index';
 import CourseReviewCard from '../../../src/components/CourseDetails/CourseReviewCard';
-import React, { useState, useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
+import React, { useState, useEffect, createContext } from 'react';
+import { Grid, Box, Typography, Card } from '@mui/material';
 import CourseOverallRatings from '../CourseDetails/CourseOverallRatings';
+
+// Default filtering method is Most Recent
+export const FilterContext = createContext({
+  filterMethod: 'MRE',
+});
 
 export default function CourseReviews({ course }) {
   const [reviews, setReviews] = useState(null);
@@ -12,15 +17,24 @@ export default function CourseReviews({ course }) {
   }, [course]);
 
   const renderReviewSkeletons = () => (
-    <Typography>No reviews for this course written yet.</Typography>
+    <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}>
+      <Typography>No reviews for this course written yet.</Typography>
+    </Box>
   );
   const renderReviewCards = () =>
-    reviews.map((review) => <CourseReviewCard review={review} key={review.id} />);
-
+    reviews.map((review) => (
+      <Grid item xs={9}>
+        <CourseReviewCard review={review} key={review.id} />{' '}
+      </Grid>
+    ));
   return (
     <Box>
-      <CourseOverallRatings courseID={course.ID}></CourseOverallRatings>
-      {reviews ? renderReviewCards() : renderReviewSkeletons()}
+      <Grid container spacing='32px' marginBottom='16px'>
+        <Grid item xs={9}>
+          <CourseOverallRatings courseID={course.ID}></CourseOverallRatings>
+        </Grid>
+        {reviews ? renderReviewCards() : renderReviewSkeletons()}
+      </Grid>
     </Box>
   );
 }
