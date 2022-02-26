@@ -1,39 +1,37 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import MenuItem from '@mui/material/MenuItem';
-import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControl from '@mui/material/FormControl';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import DropdownButton from './DropdownButton';
 
 library.add(fas);
 
-export default function RatingButton({ beforeClick, afterClick }) {
-  const ratings = [
-    { name: '1', id: 1 },
-    { name: '2', id: 2 },
-    { name: '3', id: 3 },
-    { name: '4', id: 4 },
-    { name: '5', id: 5 },
-  ];
+export default function RatingButton({ setOptionSelected }) {
+  const [rating, setRating] = useState(0);
+
+  useEffect(() => {
+    setOptionSelected(true);
+  }, [rating, setOptionSelected]);
+
   return (
-    <DropdownButton name={'min rating'} beforeClick={beforeClick} afterClick={afterClick}>
-      {ratings.map((rating) => (
-        <MenuItem key={rating.id}>
-          <FormControlLabel control={<Checkbox size='medium' />} label={rating.name} />
-        </MenuItem>
-      ))}
-      <MenuItem>
-        <Button variant='contained' sx={{ width: '100%' }}>
-          Save
-        </Button>
-      </MenuItem>
-      <MenuItem>
-        <Button variant='contained' sx={{ width: '100%' }}>
-          Clear
-        </Button>
-      </MenuItem>
-    </DropdownButton>
+    <MenuItem>
+      <FormControl>
+        <RadioGroup
+          name='rating-buttons-group'
+          value={rating}
+          onChange={(event) => setRating(event.target.value)}
+          row
+        >
+          <FormControlLabel value={1} control={<Radio />} label={'1'} />
+          <FormControlLabel value={2} control={<Radio />} label={'2'} />
+          <FormControlLabel value={3} control={<Radio />} label={'3'} />
+          <FormControlLabel value={4} control={<Radio />} label={'4'} />
+          <FormControlLabel value={5} control={<Radio />} label={'5'} />
+        </RadioGroup>
+      </FormControl>
+    </MenuItem>
   );
 }

@@ -129,3 +129,11 @@ export function calculateAverageScore({ reviews }) {
   }
   return sum / reviews.length;
 }
+
+/**
+ * Check if the input string is a number
+ */
+export const isNumeric = (str) => {
+  if (typeof str != 'string') return false;
+  return !isNaN(str) && !isNaN(parseFloat(str));
+};

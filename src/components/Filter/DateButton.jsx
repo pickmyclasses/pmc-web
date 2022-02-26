@@ -1,42 +1,81 @@
-import React from 'react';
+import { React, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Button from '@mui/material/Button';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import DropdownButton from './DropdownButton';
 
 library.add(fas);
 
-export default function DateButton({ beforeClick, afterClick }) {
-  const weekdays = [
-    { name: 'Monday', id: 1 },
-    { name: 'Tuesday', id: 2 },
-    { name: 'Wednesday', id: 3 },
-    { name: 'Thursday', id: 4 },
-    { name: 'Friday', id: 5 },
-    { name: 'Saturday', id: 6 },
-    { name: 'Sunday', id: 7 },
-  ];
+export default function DateButton() {
+  const [monSelected, setMonSelected] = useState(true);
+  const [tueSelected, setTueSelected] = useState(true);
+  const [wedSelected, setWedSelected] = useState(true);
+  const [thurSelected, setThurSelected] = useState(true);
+  const [friSelected, setFriSelected] = useState(true);
 
   return (
-    <DropdownButton name={'date'} beforeClick={beforeClick} afterClick={afterClick}>
-      {weekdays.map((day) => (
-        <MenuItem key={day.id}>
-          <FormControlLabel control={<Checkbox size='small' />} label={day.name} />
-        </MenuItem>
-      ))}
+    <>
       <MenuItem>
-        <Button variant='contained' sx={{ width: '100%' }}>
-          Save
-        </Button>
+        <FormControlLabel
+          control={
+            <Checkbox
+              size='small'
+              checked={monSelected}
+              onChange={(event) => setMonSelected(event.target.checked)}
+            />
+          }
+          label={'Mon'}
+        />
       </MenuItem>
       <MenuItem>
-        <Button variant='contained' sx={{ width: '100%' }}>
-          Clear
-        </Button>
+        <FormControlLabel
+          control={
+            <Checkbox
+              size='small'
+              checked={tueSelected}
+              onChange={(event) => setTueSelected(event.target.checked)}
+            />
+          }
+          label={'Tue'}
+        />
       </MenuItem>
-    </DropdownButton>
+      <MenuItem>
+        <FormControlLabel
+          control={
+            <Checkbox
+              size='small'
+              checked={wedSelected}
+              onChange={(event) => setWedSelected(event.target.checked)}
+            />
+          }
+          label={'Wed'}
+        />
+      </MenuItem>
+      <MenuItem>
+        <FormControlLabel
+          control={
+            <Checkbox
+              size='small'
+              checked={thurSelected}
+              onChange={(event) => setThurSelected(event.target.checked)}
+            />
+          }
+          label={'Thur'}
+        />
+      </MenuItem>
+      <MenuItem>
+        <FormControlLabel
+          control={
+            <Checkbox
+              size='small'
+              checked={friSelected}
+              onChange={(event) => setFriSelected(event.target.checked)}
+            />
+          }
+          label={'Fri'}
+        />
+      </MenuItem>
+    </>
   );
 }

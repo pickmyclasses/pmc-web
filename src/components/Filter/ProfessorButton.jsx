@@ -5,17 +5,16 @@ import Button from '@mui/material/Button';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import SearchBar from '../Search/SearchBar';
-import DropdownButton from './DropdownButton';
 
 library.add(fas);
 
-export default function ButtonWithSearchDropdown({ beforeClick, afterClick }) {
+export default function ProfessorButton() {
   const handleSearch = () => {
     alert('** button with search drop down');
   };
 
   return (
-    <DropdownButton name={'professor'} beforeClick={beforeClick} afterClick={afterClick}>
+    <>
       <MenuItem>
         <SearchBar
           textColor={grey[900]}
@@ -35,6 +34,6 @@ export default function ButtonWithSearchDropdown({ beforeClick, afterClick }) {
           Exclude
         </Button>
       </MenuItem>
-    </DropdownButton>
+    </>
   );
 }

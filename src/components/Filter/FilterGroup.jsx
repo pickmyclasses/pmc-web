@@ -9,6 +9,7 @@ import DateButton from './DateButton';
 import CreditButton from './CreditButton';
 import RatingButton from './RatingButton';
 import TypeButton from './TypeButton';
+import DropdownButton from './DropdownButton';
 import SpecialCoursesButton from './SpecialCoursesButton';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -42,25 +43,44 @@ export default function FilterGroup() {
         <Button
           variant='contained'
           sx={hideClicked ? buttonStyleAfterClick : buttonStyleBeforeClick}
-          style={{ marginLeft: '10%', marginRight: '2%' }}
+          style={{ marginLeft: '10%', marginRight: '5%' }}
           onClick={() => setHideClicked(!hideClicked)}
         >
           <div style={{ textTransform: 'lowercase' }}>hide no offerings</div>
         </Button>
-        <TypeButton beforeClick={buttonStyleBeforeClick} afterClick={buttonStyleAfterClick} />
-        <SpecialCoursesButton
-          beforeClick={buttonStyleBeforeClick}
-          afterClick={buttonStyleAfterClick}
-        />
-        <RatingButton beforeClick={buttonStyleBeforeClick} afterClick={buttonStyleAfterClick} />
-        <CreditButton beforeClick={buttonStyleBeforeClick} afterClick={buttonStyleAfterClick} />
-        <DateButton beforeClick={buttonStyleBeforeClick} afterClick={buttonStyleAfterClick} />
-        <TimeButton beforeClick={buttonStyleBeforeClick} afterClick={buttonStyleAfterClick} />
-        <TagButton beforeClick={buttonStyleBeforeClick} afterClick={buttonStyleAfterClick} />
-        <ProfessorButton
-          beforeClick={buttonStyleBeforeClick}
-          afterClick={buttonStyleAfterClick}
-        />
+
+        <DropdownButton name={'type'}>
+          <TypeButton />
+        </DropdownButton>
+
+        <DropdownButton name={'special courses'}>
+          <SpecialCoursesButton />
+        </DropdownButton>
+
+        <DropdownButton name={'rating'}>
+          <RatingButton />
+        </DropdownButton>
+
+        <DropdownButton name={'credit hour'}>
+          <CreditButton />
+        </DropdownButton>
+
+        <DropdownButton name={'date'}>
+          <DateButton />
+        </DropdownButton>
+
+        <DropdownButton name={'time'}>
+          <TimeButton />
+        </DropdownButton>
+
+        <DropdownButton name={'include tag'}>
+          <TagButton />
+        </DropdownButton>
+
+        <DropdownButton name={'professor'}>
+          <ProfessorButton />
+        </DropdownButton>
+
         <Button variant='text' sx={{ mt: '0.4%' }}>
           S<div style={{ textTransform: 'lowercase' }}>ave</div>
         </Button>
