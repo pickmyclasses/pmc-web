@@ -16,13 +16,13 @@ import ClickableIndicator from './ClickableIndicator';
 import CourseEligibilityIndicator from './CourseEligibilityIndicator';
 import TagList from './TagList';
 import CourseOfferingSummary from '../CourseOfferingSummary';
-import { SchedulerDisplayContentContext } from '../../../pages/PageWithScheduler';
+import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
 
 export default function CourseCard({ data: { course, classes, reviews } }) {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const { classesInShoppingCart } = useContext(SchedulerDisplayContentContext);
+  const { classesInShoppingCart } = useContext(SchedulerContext);
 
   const [isMouseEntered, setIsMouseEntered] = useState(false);
   const [isCourseTitleExpanded, setIsCourseTitleExpanded] = useState(false);

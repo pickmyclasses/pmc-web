@@ -12,11 +12,11 @@ import { gridSpacing } from '../constants/constants';
 import { useMount } from '../utils';
 import { postReviewByID } from '../../src/api/index';
 import swal from 'sweetalert';
-import { UserContext } from '../App';
 import ReviewAnonymous from '../components/ReviewInputDetails/ReviewAnonymous';
 import ReviewRecommend from '../components/ReviewInputDetails/ReviewRecommend';
+import { UserContext } from '../App';
 
-export default function ReviewPage({ shouldShowScheduler }) {
+export default function ReviewPage() {
   const [course, setCourse] = useState(null);
   const [ratingValue, setRatingValue] = useState(3);
   const [proValue, setProValue] = useState('');
@@ -26,7 +26,7 @@ export default function ReviewPage({ shouldShowScheduler }) {
   const [recommendation, setRecommendation] = useState(false);
 
   const urlParams = useParams();
-  const { user } = useContext(UserContext);
+  const user = useContext(UserContext);
 
   useMount(() => {
     fetchCourseByID(urlParams['id']).then((data) => setCourse(data['data']['data']['course']));

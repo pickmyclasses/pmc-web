@@ -17,14 +17,14 @@ import TagList from './CourseCard/TagList';
 import ClickableIndicator from './CourseCard/ClickableIndicator';
 import CourseOfferingSummary from './CourseOfferingSummary';
 import { getEligibility, getMeanReviewRating } from './CourseCard/CourseCard';
-import { SchedulerDisplayContentContext } from '../../pages/PageWithScheduler';
+import { SchedulerContext } from '../Scheduler/ContainerWithScheduler';
 
 /** A course search result item. */
 export default function CourseResultItem({ data: { course, classes, reviews } }) {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const { classesInShoppingCart } = useContext(SchedulerDisplayContentContext);
+  const { classesInShoppingCart } = useContext(SchedulerContext);
 
   const [isMouseEntered, setIsMouseEntered] = useState(false);
   const [mouseEnterEventTimeoutHandle, setMouseEnterEventTimeoutHandle] = useState(0);
