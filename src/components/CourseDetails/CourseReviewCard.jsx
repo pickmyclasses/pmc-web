@@ -6,7 +6,6 @@ import SubCard from '../Skeleton/SubCard';
 import { gridSpacing } from '../../constants/constants';
 import EditIcon from '@mui/icons-material/Edit';
 import CourseReviewRecommendation from '../CourseDetails/CourseReviewRecommendation';
-import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import FaceIcon from '@mui/icons-material/Face';
