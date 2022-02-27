@@ -28,11 +28,6 @@ export default function ShoppingCart({ classes }) {
     generateSessions(classes, newResolver);
 
     // Compute the content to display in the bottom summary text.
-    // const [numCredits, courses] = getNumCreditsAndCourses(classes);
-    // setNumCredits(numCredits);
-    // setNumCourses(courses.length);
-    // setHasOnlineClasses(courses.filter(({ OfferDate }) => OfferDate === ''));
-    // setHasHighlights(classes.some(({ highlight }) => highlight));
     setHasHighlights(classes.some((x) => x.highlight));
     let courseByID = {};
     let minCredits = 0;
@@ -60,22 +55,16 @@ export default function ShoppingCart({ classes }) {
         <Timeline events={sessions} />
       </Box>
       <Typography
-        marginTop='16px'
+        marginTop='12px'
         variant='caption'
         align='center'
         color={hasHighlights ? theme.palette.success.main : ''}
       >
-        {numCourses === 0 ? (
-          <>&nbsp;</>
-        ) : (
-          <>
-            {pluralize(numCourses, 'course')}
-            {numOnlineCourses > 0 ? <>&nbsp;({pluralize(numOnlineCourses, 'online')})</> : ''}
-            &nbsp;&nbsp;•&nbsp;&nbsp;
-            {minCredits === maxCredits ? '' : minCredits + '–'}
-            {pluralize(maxCredits, 'credit')}
-          </>
-        )}
+        {pluralize(numCourses, 'course')}
+        {numOnlineCourses > 0 ? <>&nbsp;({pluralize(numOnlineCourses, 'online')})</> : ''}
+        &nbsp;&nbsp;•&nbsp;&nbsp;
+        {minCredits === maxCredits ? '' : minCredits + '–'}
+        {pluralize(maxCredits, 'credit')}
       </Typography>
     </Box>
   );

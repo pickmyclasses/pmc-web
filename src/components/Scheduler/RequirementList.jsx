@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, useTheme } from '@mui/material';
+import { Stack, Typography, useTheme } from '@mui/material';
 
 /**
  * The requirement list resides in the bottom part of the scheduler.
@@ -15,13 +15,16 @@ import { Box, useTheme } from '@mui/material';
 export default function RequirementList({ requirements = [] }) {
   const theme = useTheme();
 
+  if (!requirements?.length) return null;
+
   return (
-    <Box>
+    <Stack spacing='8px'>
+      <Typography variant='subtitle2'>Requirements</Typography>
       {requirements.map(({ title, progress, total }) => (
-        <div key={title} style={{ color: theme.palette.text.secondary, lineHeight: '1.67em' }}>
+        <Typography variant='body2' key={title} style={{ color: theme.palette.text.secondary }}>
           {title}: {progress}/{total}
-        </div>
+        </Typography>
       ))}
-    </Box>
+    </Stack>
   );
 }

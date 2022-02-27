@@ -1,30 +1,51 @@
-import { React, useState } from 'react';
+import React, { useState } from 'react';
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
+import { grey, cyan } from '@mui/material/colors';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 library.add(fas);
 
-export default function DropdownButton({ name, beforeClick, afterClick, children }) {
+export default function DropdownButton({ name, children }) {
   const [clicked, setClicked] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [optionSelected, setOptionSelected] = useState(false);
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     setClicked(!clicked);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const buttonStyleBeforeClick = {
+    color: grey[900],
+    backgroundColor: grey[100],
+    '&:hover': {
+      color: grey[50],
+      backgroundColor: cyan[800],
+    },
+  };
+
+  const buttonStyleAfterClick = {
+    color: grey[50],
+    backgroundColor: cyan[800],
+    '&:hover': {
+      color: grey[50],
+      backgroundColor: cyan[800],
+    },
   };
 
   return (
     <>
       <Button
         variant='contained'
-        sx={clicked ? afterClick : beforeClick}
+        sx={optionSelected ? buttonStyleAfterClick : buttonStyleBeforeClick}
         style={{ marginRight: '1%' }}
         onClick={handleClick}
       >
@@ -39,7 +60,7 @@ export default function DropdownButton({ name, beforeClick, afterClick, children
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        onClick={handleClose}
+        onClick={() => setClicked(!clicked)}
         PaperProps={{
           elevation: 0,
           sx: {
@@ -69,7 +90,7 @@ export default function DropdownButton({ name, beforeClick, afterClick, children
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {children}
+        {React.cloneElement(children, { setOptionSelected: setOptionSelected })}
       </Menu>
     </>
   );

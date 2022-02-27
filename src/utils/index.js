@@ -23,12 +23,18 @@ export const cleanObject = (object) => {
 export const isFalsy = (value) => (value === 0 ? false : !!value);
 
 /**
- * UseMount mounts data (render) once only when the page loaded
- * use this whenever the data only loads once per load
+ * Registers function calls for when a component is mounted (first rendered) and for when the
+ * component is unmounted.
+ * @param {function(): function(): void} onMounted
+ * @example
+ * useMount(() => {
+ *   console.log('Component mounted');
+ *   return () => console.log('Component unmounted');
+ * }
  */
-export const useMount = (callback) => {
+export const useMount = (onMounted) => {
   // eslint-disable-next-line
-  useEffect(callback, []);
+  useEffect(onMounted, []);
 };
 
 /**
@@ -123,3 +129,11 @@ export function calculateAverageScore({ reviews }) {
   }
   return sum / reviews.length;
 }
+
+/**
+ * Check if the input string is a number
+ */
+export const isNumeric = (str) => {
+  if (typeof str != 'string') return false;
+  return !isNaN(str) && !isNaN(parseFloat(str));
+};

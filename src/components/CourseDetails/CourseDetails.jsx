@@ -41,13 +41,14 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import { SchedulerDisplayContentContext } from '../../pages/PageWithScheduler';
 import { CourseContext } from '../../pages/CoursePage';
 import { Button, Snackbar } from '@mui/material';
 import { AddShoppingCart, Delete } from '@mui/icons-material';
 import { addClassIDToShoppingCart, removeClassIDFromShoppingCart } from '../../api';
-import { UserContext } from '../../App';
 import { getComponent, getInstructor } from '../Scheduler/ShoppingCart';
+import { SchedulerContext } from '../Scheduler/ContainerWithScheduler';
+import { UserContext } from '../../App';
+import { SetClassesToHighlightContext } from '../Scheduler/ContainerWithStaticScheduler';
 
 function createData(OfferDate, Location, Section, RecommendationScore, Professor) {
   return {
@@ -230,10 +231,9 @@ export default function EnhancedTable({ classes }) {
   const [snackbarText, setSnackbarText] = React.useState(null);
 
   const { user } = React.useContext(UserContext);
-  const { setClassesToHighlight, refetchSchedulerData } = React.useContext(
-    SchedulerDisplayContentContext
-  );
-  const course = React.useContext(CourseContext);
+  const { refreshSchedulerData } = React.useContext(SchedulerContext);
+  const setClassesToHighlight = React.useContext(SetClassesToHighlightContext);
+  const { course } = React.useContext(CourseContext);
 
   React.useEffect(() => setSelected([]), [classes]);
 
@@ -395,7 +395,7 @@ export default function EnhancedTable({ classes }) {
               })
             )
           ).then(() => {
-            refetchSchedulerData();
+            refreshSchedulerData();
             setSnackbarText(
               `Removed ${selectedClassIDs.length} class${
                 selectedClassIDs.length > 1 ? 'es' : ''
@@ -424,7 +424,7 @@ export default function EnhancedTable({ classes }) {
               })
             )
           ).then(() => {
-            refetchSchedulerData();
+            refreshSchedulerData();
             setSnackbarText(
               `Added ${selectedClassIDs.length} class${
                 selectedClassIDs.length > 1 ? 'es' : ''

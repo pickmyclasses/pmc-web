@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { fetchCoursesBySearch } from '../api';
-import PageWithScheduler from './PageWithScheduler';
+import ContainerWithStaticScheduler from '../components/Scheduler/ContainerWithStaticScheduler';
 import { useMount } from '../utils';
 import CourseResultList from '../components/CourseCardGrid/CourseResultList';
 import { fetchCoursesByCourseIDs } from './HomePage';
 import FilterVerticalContainer from '../components/Filter/FilterVerticalContainer';
+import Scrollbars from 'react-custom-scrollbars';
 
 export default function SearchPage({ shouldShowScheduler }) {
   const [courses, setCourses] = useState(null);
@@ -23,20 +24,22 @@ export default function SearchPage({ shouldShowScheduler }) {
   return (
     <>
       <FilterVerticalContainer />
-      <PageWithScheduler shouldShowScheduler={shouldShowScheduler}>
+      <ContainerWithStaticScheduler shouldShowScheduler={shouldShowScheduler}>
         {courses ? (
-          <Box sx={{ padding: '24px' }}>
-            <Typography variant='subtitle2' gutterBottom>
-              Found {courses.length} results for <b>"{urlParams['query']}"</b>
-            </Typography>
-            <CourseResultList courses={courses} />
-          </Box>
+          <Scrollbars autoHide>
+            <Box sx={{ padding: '24px' }}>
+              <Typography variant='subtitle2' gutterBottom>
+                Found {courses.length} results for <b>"{urlParams['query']}"</b>
+              </Typography>
+              <CourseResultList courses={courses} />
+            </Box>
+          </Scrollbars>
         ) : (
           <Box sx={{ width: '100%', height: '100%', display: 'flex' }}>
             <CircularProgress sx={{ margin: 'auto' }} />
           </Box>
         )}
-      </PageWithScheduler>
+      </ContainerWithStaticScheduler>
     </>
   );
 }

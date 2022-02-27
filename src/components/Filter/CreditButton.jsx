@@ -1,37 +1,39 @@
-import React from 'react';
+import { React, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
-import Button from '@mui/material/Button';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import DropdownButton from './DropdownButton';
+import { isNumeric } from '../../utils';
 
 library.add(fas);
 
-export default function CreditButton({ beforeClick, afterClick }) {
+export default function CreditButton() {
+  const [maxCredit, setMaxCredit] = useState('');
+  const [minCredit, setMinCredit] = useState('');
+
+  const handleMaxCredit = (event) => {
+    const newVal = event.target.value;
+    isNumeric(event.target.value) ? setMaxCredit(newVal) : setMaxCredit('');
+  };
+
+  const handleMinCredit = (event) => {
+    const newVal = event.target.value;
+    isNumeric(event.target.value) ? setMinCredit(newVal) : setMinCredit('');
+  };
+
   return (
-    <DropdownButton name={'credit hour'} beforeClick={beforeClick} afterClick={afterClick}>
-      <MenuItem>
+    <>
+      <MenuItem sx={{ maxWidth: 100 }}>
         <FormControl sx={{ width: '100%' }}>
-          <OutlinedInput placeholder='Maximum credit hour' />
+          <OutlinedInput placeholder='min ' value={minCredit} onChange={handleMinCredit} />
         </FormControl>
       </MenuItem>
-      <MenuItem>
+      <MenuItem sx={{ maxWidth: 100 }}>
         <FormControl sx={{ width: '100%' }}>
-          <OutlinedInput placeholder='Minimum credit hour' />
+          <OutlinedInput placeholder='max' value={maxCredit} onChange={handleMaxCredit} />
         </FormControl>
       </MenuItem>
-      <MenuItem>
-        <Button variant='contained' sx={{ width: '100%' }}>
-          Save
-        </Button>
-      </MenuItem>
-      <MenuItem>
-        <Button variant='contained' sx={{ width: '100%' }}>
-          Clear
-        </Button>
-      </MenuItem>
-    </DropdownButton>
+    </>
   );
 }

@@ -8,7 +8,12 @@ export default function CourseEligibilityIndicator({ children, eligibility = 'no
   const [iconType, colorName, colorValue, tooltipTitle] = {
     'none': [null, 'primary', theme.palette.text.primary, ''],
     'eligible': [Check, 'action', theme.palette.text.primary, 'Eligible for this course'],
-    'in-shopping-cart': [ShoppingCart, 'disabled', theme.palette.grey[600], 'In shopping cart'],
+    'in-shopping-cart': [
+      ShoppingCart,
+      'action',
+      theme.palette.text.primary,
+      'In shopping cart',
+    ],
     'taken': [DoDisturb, 'disabled', theme.palette.grey[600], 'Taken in the past'],
     'not-offered': [
       DoDisturb,

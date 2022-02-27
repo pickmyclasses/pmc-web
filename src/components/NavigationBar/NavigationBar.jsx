@@ -1,31 +1,22 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AppBar, Container, Grid, Toolbar, useTheme } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {
+  AppBar,
+  Container,
+  Grid,
+  Toolbar,
+  useTheme,
+  createTheme,
+  ThemeProvider,
+} from '@mui/material';
 import { alpha } from '@mui/material/styles';
-import { UserContext } from '../../App';
 import Logo from '../Logo/Logo';
 import SearchBar from '../Search/SearchBar';
 import NavigationBarButtonGroup from './NavigationBarButtonGroup';
 
-export default function NavigationBar({ toggleScheduler }) {
+export default function NavigationBar() {
   const navigate = useNavigate();
   const theme = useTheme();
-
-  const { setUser } = useContext(UserContext);
-
-  const appBarTheme = createTheme({
-    palette: {
-      primary: {
-        main: '#182b3a',
-      },
-    },
-  });
-
-  const logout = () => {
-    setUser(null);
-    navigate('/home');
-  };
 
   const handleSearchClick = (searchText) => {
     if (searchText.trim()) {
@@ -36,8 +27,8 @@ export default function NavigationBar({ toggleScheduler }) {
   };
 
   return (
-    <ThemeProvider theme={appBarTheme}>
-      <AppBar position='static' sx={{ zIndex: 999 }}>
+    <ThemeProvider theme={navigationBarTheme}>
+      <AppBar position='static' sx={{ zIndex: 9999 }}>
         <Toolbar>
           <Container maxWidth='xl'>
             <Grid container spacing='24px' sx={{ alignItems: 'center' }}>
@@ -56,7 +47,7 @@ export default function NavigationBar({ toggleScheduler }) {
                 />
               </Grid>
               <Grid item xs='auto'>
-                <NavigationBarButtonGroup logout={logout} toggleScheduler={toggleScheduler} />
+                <NavigationBarButtonGroup />
               </Grid>
             </Grid>
           </Container>
@@ -65,3 +56,10 @@ export default function NavigationBar({ toggleScheduler }) {
     </ThemeProvider>
   );
 }
+
+export const navigationBarTheme = createTheme({
+  palette: {
+    primary: { main: '#182b3a' },
+    text: { main: '#d4d6d9' },
+  },
+});

@@ -30,10 +30,16 @@ export const register = ({ email, firstName, lastName, college, password, repass
 export const fetchCourseByID = (courseID) =>
   new Promise((onFetched) =>
     axios.get(`/course/${courseID}`).then((data) => {
-      data.data.data.course.ImageURL = getFakeCourseImageURL(data.data.data.course);
+      injectFakeImageURLToCourse(data.data.data.course);
       onFetched(data);
     })
   );
+
+const getFakeCourseImageURL = (course) =>
+  `https://picsum.photos/seed/${+course.ID + 13}/1280/720`;
+
+const injectFakeImageURLToCourse = (course) =>
+  (course.ImageURL = getFakeCourseImageURL(course));
 
 export const fetchAllCourses = () => axios.get('/course/list');
 
@@ -63,46 +69,44 @@ const fakeFetchCoursesBySearch = () =>
   new Promise((onFetched) =>
     onFetched([
       22966, 23000, 22968, 23068, 23063, 23041, 23001, 22986, 22998, 22964, 22941, 22942, 22961,
-      22971, 22951, 22970, 22998, 31826, 28270, 24777, 27266, 27334, 21978, 28354, 30056, 31826,
+      22971, 22951, 22970, 22998, 31826, 28270, 24777, 27266, 27334, 21978, 28354, 30056, 25305,
     ])
   );
-
-export const getFakeCourseImageURL = (course) =>
-  `https://picsum.photos/seed/${+course.ID + 13}/1280/720`;
-// `https://source.unsplash.com/random/?${course.ID},${getCourseKeywords(course)}`;
-
-// const getCourseKeywords = (course) =>
-//   course.Title.toLowerCase()
-//     .replace(/[^A-Za-z\s]/g, '')
-//     .split(/\s/)
-//     .filter((x) => x.length >= 4)
-//     .join('+');
 
 export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
 
 export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseID}/class`);
 
-// TODO Q: Remove this after backend migrates and combines APIs.
-// const shoppingCartAPIEntryURL = 'http://localhost:5000';
-const shoppingCartAPIEntryURL = 'https://pmc-schedule-api.herokuapp.com';
+/**
+ * Fetches the list of `{classData, course}` a user has in their shopping cart but also injects
+ * the fake image URL. Basically pretends `ImageURL` was an actual field of a course.
+ */
+export const fetchClassesInShoppingCart = (userID) =>
+  new Promise((onFetched) =>
+    axios.get(`schedule?user_id=${userID}`).then((data) => {
+      for (let { course_data } of data.data.data.scheduled_class_list) {
+        injectFakeImageURLToCourse(course_data);
+      }
+      onFetched(data);
+    })
+  );
 
-export const fetchClassIDsInShoppingCart = (userID, semesterID) =>
-  axios.get(`${shoppingCartAPIEntryURL}/schedule/${userID}/${semesterID}`);
-// fakeFetchClassIDsInShoppingCart();
+export const fetchRequirements = () => fakeFetchRequirements();
 
-// TODO Q: Actually fetch from backend and get rid of this.
-// const fakeFetchClassIDsInShoppingCart = () =>
-//   new Promise((onFetched) =>
-//     onFetched({
-//       data: [10795, 10801, 15812, 15813, 17099].map((x) => ({ class_id: x })),
-//     })
-//   );
+// TODO Q: Search the word "fake" in source code and get rid of all of them.
+const fakeFetchRequirements = () =>
+  new Promise((onFetched) =>
+    onFetched([
+      { title: 'Major Requirements', progress: 3, total: 6 },
+      { title: 'Major Electives', progress: 4, total: 7 },
+      { title: 'Math/Science Electives', progress: 2, total: 5 },
+      { title: 'General Education', progress: 6, total: 13 },
+    ])
+  );
 
-export const addClassIDToShoppingCart = (body) =>
-  axios.post(`${shoppingCartAPIEntryURL}/schedule/add`, body);
+export const addClassIDToShoppingCart = (body) => axios.post('/schedule', body);
 
-export const removeClassIDFromShoppingCart = (body) =>
-  axios.post(`${shoppingCartAPIEntryURL}/schedule/remove`, body);
+export const removeClassIDFromShoppingCart = (body) => axios.put('/schedule', body);
 
 export const fetchReviewsByCourseID = (courseID) => axios.get(`/course/${courseID}/review`);
 

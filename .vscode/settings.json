@@ -1,9 +1,12 @@
 {
   "cSpell.words": [
     "backoffice",
+    "bgcolor",
     "desaturate",
     "endregion",
     "fontawesome",
-    "saturationv"
+    "saturationv",
+    "swal",
+    "sweetalert"
   ]
 }

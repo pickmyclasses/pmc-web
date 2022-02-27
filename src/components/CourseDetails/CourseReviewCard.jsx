@@ -1,32 +1,29 @@
 import { Grid } from '@mui/material';
-import MuiTypography from '@mui/material/Typography';
-import { Avatar } from 'react-lorem-ipsum';
+import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 import CourseComments from './CourseComments';
 import SubCard from '../Skeleton/SubCard';
 import { gridSpacing } from '../../constants/constants';
-import EditIcon from '@mui/icons-material/Edit';
 import CourseReviewRecommendation from '../CourseDetails/CourseReviewRecommendation';
+import Stack from '@mui/material/Stack';
+import { Box } from '@material-ui/core';
 
-const titlePos = 'What do you like most about this course?';
-const titleNeg = 'What do you hate most about this course?';
-const titleAdd = 'What additional feedbacks you have for this course?';
+const titlePos = 'What do you like most?';
+const titleNeg = 'What do you hate most?';
+const titleAdd = 'Additional feedbacks?';
 
 export default function CourseReviewCard({ review }) {
   let createDate = review.created_at.slice(0, 10);
+  let userName = review.anonymous ? 'anonymous ' : review.user_name;
+
   return (
     <SubCard spacing={gridSpacing}>
-      <Grid container>
-        <MuiTypography variant='' gutterBottom>
-          <div className='user'>
-            <Avatar className='avatar' width='100' height='100' alt='Avatar' />
-            <div className='username'>{review.anonymous ? 'anonymous ' : review.user_name}</div>
-            <div className='username'>
-              <EditIcon />
-              {`${createDate}`}
-            </div>
-          </div>
-          <Grid item>
+      <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}>
+        <Typography variant='subtitle1' gutterBottom component='div'>
+          {userName}
+        </Typography>
+        <Grid item>
+          <Stack direction='row' spacing={1}>
             <Rating
               name='read-only'
               precision={0.1}
@@ -34,21 +31,24 @@ export default function CourseReviewCard({ review }) {
               readOnly
               size='large'
             />
-          </Grid>
-          <Grid item>
-            <CourseComments title={titlePos} comment={review.pros} isPositive={true} />
-          </Grid>
-          <Grid item>
-            <CourseComments title={titleNeg} comment={review.cons} isPositive={false} />
-          </Grid>
-          <Grid item>
-            <CourseComments title={titleAdd} comment={review.comment} />
-          </Grid>
-          <Grid item>
-            <CourseReviewRecommendation isRecommended={review.recommended} />
-          </Grid>
-        </MuiTypography>
-      </Grid>
+            <Typography variant='subtitle1' gutterBottom component='div' sx={{ opacity: 0.75 }}>
+              {createDate}
+            </Typography>
+          </Stack>
+        </Grid>
+        <Grid item>
+          <CourseComments title={titlePos} comment={review.pros} isPositive={true} />
+        </Grid>
+        <Grid item>
+          <CourseComments title={titleNeg} comment={review.cons} isPositive={false} />
+        </Grid>
+        <Grid item>
+          <CourseComments title={titleAdd} comment={review.comment} />
+        </Grid>
+        <Grid item>
+          <CourseReviewRecommendation isRecommended={review.recommended} />
+        </Grid>
+      </Box>
     </SubCard>
   );
 }

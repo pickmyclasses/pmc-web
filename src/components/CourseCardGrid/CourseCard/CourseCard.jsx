@@ -16,13 +16,13 @@ import ClickableIndicator from './ClickableIndicator';
 import CourseEligibilityIndicator from './CourseEligibilityIndicator';
 import TagList from './TagList';
 import CourseOfferingSummary from '../CourseOfferingSummary';
-import { SchedulerDisplayContentContext } from '../../../pages/PageWithScheduler';
+import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
 
 export default function CourseCard({ data: { course, classes, reviews } }) {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const { classesInShoppingCart } = useContext(SchedulerDisplayContentContext);
+  const { classesInShoppingCart } = useContext(SchedulerContext);
 
   const [isMouseEntered, setIsMouseEntered] = useState(false);
   const [isCourseTitleExpanded, setIsCourseTitleExpanded] = useState(false);
@@ -36,7 +36,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
       <motion.div
         variants={textRegionAnimationVariants}
         transition={{ type: 'just' }}
-        style={{ padding: '16px 20px' }}
+        style={{ padding: '16px 20px 8px' }}
       >
         <ClickableIndicator propagate>
           <CourseEligibilityIndicator
@@ -83,7 +83,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
           }}
           onAnimationComplete={() => !isMouseEntered && setIsExtraInfoExpanded(false)}
         >
-          <CenterAligningFlexBox sx={{ justifyContent: 'space-between' }}>
+          <CenterAligningFlexBox justifyContent='space-between'>
             <Rating readOnly value={rating} precision={0.5} size='small' />
             <CourseOfferingSummary
               course={course}
@@ -91,7 +91,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
               maxRows={1}
               rowHeight={1.5}
               width='min(120px, calc(100% - 120px))'
-              enableHighlight
+              enableHighlight={isMouseEntered && isExtraInfoExpanded}
               isMouseEntered={isMouseEntered && isExtraInfoExpanded}
             />
           </CenterAligningFlexBox>
@@ -105,7 +105,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
       <Skeleton
         variant='rectangular'
         width='100%'
-        height='180px'
+        height='calc(100% - 144px)'
         sx={{ marginBottom: '20px' }}
       />
       <Skeleton width='50%' height='60px' sx={{ marginLeft: '20px' }} />
@@ -123,7 +123,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
       sx={{
         boxShadow: isMouseEntered ? 9 : 3,
         width: '100%',
-        height: '324px',
+        height: '288px',
         display: 'flex',
         flexFlow: 'column',
         cursor: 'pointer',
@@ -152,8 +152,8 @@ const courseTitleAnimationVariants = {
 };
 
 const extraInfoAnimationVariants = {
-  initial: { marginTop: 0, height: 0, opacity: 0 },
-  mouseEntered: { marginTop: '12px', height: '', opacity: 1 },
+  initial: { marginTop: '8px', marginBottom: 0, height: 0, opacity: 0 },
+  mouseEntered: { marginTop: '12px', marginBottom: '8px', height: '', opacity: 1 },
 };
 
 export const getMeanReviewRating = (reviews) => {

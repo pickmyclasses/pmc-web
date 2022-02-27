@@ -1,5 +1,6 @@
 import { BookmarkBorder, Share } from '@mui/icons-material';
 import {
+  AppBar,
   Box,
   Card,
   CardMedia,
@@ -45,7 +46,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
 
   const renderActionItems = () => (
     <Box>
-      <ActionItem label='Bookmark' icon={BookmarkBorder} onClick={() => alert('** mark')} />
+      <ActionItem label='Bookmark' icon={BookmarkBorder} onClick={() => alert('** bookmark')} />
       <ActionItem label='Share' icon={Share} onClick={() => alert('** share')} />
     </Box>
   );
@@ -62,9 +63,9 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
   );
 
   return (
-    <Box>
-      <Card>
-        <CardMedia component='img' image={course.ImageURL} height='360px' />
+    <>
+      <CardMedia component='img' image={course.ImageURL} height='360px' />
+      <Card sx={{ position: 'sticky', top: 0, zIndex: 1, boxShadow: 2 }}>
         <Container maxWidth='xl'>
           <Box padding='16px 0' display='flex' justifyContent='space-between'>
             {renderCourseInfo()}
@@ -77,7 +78,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
           </TabsWithoutBottomGap>
         </Container>
       </Card>
-    </Box>
+    </>
   );
 }
 
@@ -87,7 +88,7 @@ export const ActionItem = ({ icon, ...props }) => (
 
 export const TabsWithoutBottomGap = styled(Tabs)({
   position: 'relative',
-  '> *': { position: 'absolute', bottom: 0, width: '100%' },
+  '> *:first-of-type': { position: 'absolute', bottom: 0, width: '100%' },
   button: { width: '25%', minHeight: 0 },
 });
 
