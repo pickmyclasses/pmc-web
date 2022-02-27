@@ -22,7 +22,7 @@ import TimeDataCard from './TimeDataCard';
  */
 export default function Timeline({
   defaultRangeStart = 9 * 3600,
-  defaultRangeEnd = 17 * 3600,
+  defaultRangeEnd = 16 * 3600,
   columnTitles = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
   events = [],
 }) {
@@ -59,10 +59,15 @@ export default function Timeline({
   });
 
   useEffect(() => {
-    const earliestStart = Math.min(...events.map((x) => x.start)) || defaultRangeStart;
-    const latestEnd = Math.max(...events.map((x) => x.end)) || defaultRangeEnd;
-    setRangeStart(Math.min(defaultRangeStart, earliestStart));
-    setRangeEnd(Math.max(defaultRangeEnd, latestEnd));
+    let earliestStart = Math.min(...events.map((x) => x.start)) || defaultRangeStart;
+    earliestStart = Math.floor(earliestStart / 3600) * 3600;
+    let latestEnd = Math.max(...events.map((x) => x.end)) || defaultRangeEnd;
+    latestEnd = Math.ceil(latestEnd / 3600) * 3600;
+    const range = defaultRangeEnd - defaultRangeStart;
+    const defaultStart = Math.max(latestEnd - range, defaultRangeStart);
+    const defaultEnd = Math.min(earliestStart + range, defaultRangeEnd);
+    setRangeStart(Math.min(defaultStart, earliestStart));
+    setRangeEnd(Math.max(defaultEnd, latestEnd));
   }, [events, defaultRangeStart, defaultRangeEnd]);
 
   // Compute which events are no longer part of the timeline and are to fade out.  Preserve the
@@ -187,7 +192,7 @@ export default function Timeline({
               height: (bottom - top) * 100 + '%',
               // Adapt the same transition style from MUI to the shifting movement.
               transform: eventsShiftedRight[i] ? 'translateX(25%)' : '',
-              transition: getTransitionForStyles('top', 'height', 'transform'),
+              transition: getTransitionForStyles(['top', 'height', 'transform'], 0.375),
             }}
           >
             <TimeBlock
@@ -217,11 +222,12 @@ export default function Timeline({
 
   const renderGridLines = () => {
     const gridLines = [];
-    for (let time = 0; time < 86400; time += 3600) {
+    for (let time = 0, i = 0; time <= 86400; time += 3600) {
       const y = (time - rangeStart) / (rangeEnd - rangeStart);
+      const isInRange = time >= rangeStart && time <= rangeEnd;
       gridLines.push(
         <AnimatePresence key={'gl' + time}>
-          {time >= rangeStart && time < rangeEnd && (
+          {isInRange && (
             <MotionDivider
               variants={faderAnimationVariants}
               initial='initial'
@@ -236,15 +242,16 @@ export default function Timeline({
                 '::before': { width: '100%' },
                 '> span': { fontSize: '12px', opacity: 0.667, padding: '0 4px 0 2px' },
                 '::after': { display: 'none' },
-                transition: getTransitionForStyles('top'),
+                transition: getTransitionForStyles(['top'], 0.375),
               }}
             >
               {(time / 3600) % 12 || 12}
-              {time === 43200 && 'p'}
+              {(time % 43200 === 0 || i === 0) && (time % 86400 < 43200 ? 'am' : 'pm')}
             </MotionDivider>
           )}
         </AnimatePresence>
       );
+      if (isInRange) i++;
     }
     return gridLines;
   };
@@ -294,5 +301,5 @@ const faderAnimationVariants = {
 
 const getEventKey = ({ data, columnIndex }) => `${data.eventID}-${columnIndex}`;
 
-export const getTransitionForStyles = (...styles) =>
-  styles.map((x) => x + ' 250ms cubic-bezier(0.4, 0, 0.2, 1)').join(', ');
+export const getTransitionForStyles = (styles, duration = 0.25) =>
+  styles.map((x) => `${x} ${duration}s cubic-bezier(0.4, 0, 0.2, 1)`).join(', ');
