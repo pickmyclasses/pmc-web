@@ -8,6 +8,7 @@ import CourseOverview from '../components/CoursePage/CourseOverview';
 import CourseRelated from '../components/CoursePage/CourseRelated';
 import CourseReviews from '../components/CoursePage/CourseReviews';
 import CourseRegistration from '../components/CoursePage/CourseRegistration';
+import { fetchReviewsByCourseID } from '../api/index';
 
 export const CourseContext = createContext();
 
@@ -17,6 +18,7 @@ export default function CoursePage() {
   const [activeTabName, setActiveTabName] = useState('');
   const [course, setCourse] = useState(null);
   const [classes, setClasses] = useState(null);
+  const [reviews, setReviews] = useState(null);
 
   useEffect(() => {
     // Fetch data for the course and classes offered.
@@ -24,12 +26,15 @@ export default function CoursePage() {
     fetchCourseByID(courseID).then((data) => setCourse(data.data.data.course));
     fetchClassesByCourseID(courseID).then((data) => setClasses(data.data.data));
 
+    // Fetch reviews for the course
+    fetchReviewsByCourseID(courseID).then((data) => setReviews(data.data.data));
+
     // Figure out the active tab from the URL.
     const tabParam = String(urlParams.tab).toLowerCase();
     setActiveTabName(tabs.hasOwnProperty(tabParam) ? tabParam : '');
   }, [urlParams]);
 
-  if (!course || !classes) {
+  if (!course || !classes || !reviews) {
     // Loading, render centered spinning circle.
     return (
       <Box width='100%' height='100%' display='flex'>
@@ -43,7 +48,7 @@ export default function CoursePage() {
       <CoursePageTop course={course} tabs={tabs} activeTabName={activeTabName} />
       <Container maxWidth='xl' sx={{ paddingY: '32px' }}>
         <CourseContext.Provider value={course}>
-          {createElement(tabs[activeTabName].content, { course, classes })}
+          {createElement(tabs[activeTabName].content, { course, classes, reviews })}
         </CourseContext.Provider>
       </Container>
     </Box>
