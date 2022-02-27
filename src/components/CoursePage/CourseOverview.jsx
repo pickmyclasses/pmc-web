@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircleOutline, MenuBook, People, School, WatchLater } from '@mui/icons-material';
 import { Alert, Box, Card, Chip, Divider, Grid, Link, Typography, Rating } from '@mui/material';
 import TagList from '../CourseCardGrid/CourseCard/TagList';
 import { formatCreditRange } from './CoursePageTop';
 import CourseCardGrid from '../CourseCardGrid/CourseCardGrid';
-import { fetchReviewsByCourseID } from '../../api/index';
-import { calculateAverageScore } from '../../utils/index';
+import { CourseContext } from '../../pages/CoursePage';
+import { getMeanReviewRating } from '../CourseCardGrid/CourseCard/CourseCard';
 
-export default function CourseOverview({ course, classes }) {
+export default function CourseOverview() {
   const navigate = useNavigate();
+  const { course, classes, reviews } = useContext(CourseContext);
+
   const coursePageURL = '/course/' + course.ID;
-  let courseID = course.ID;
-  const [reviews, setReviews] = useState(null);
-  useEffect(() => {
-    fetchReviewsByCourseID(courseID).then((data) => setReviews(data['data']['data']));
-  }, [courseID]);
-  let avgScore = calculateAverageScore({ reviews });
+  const rating = getMeanReviewRating(reviews);
+
   return (
     <Box>
       <Grid container spacing='32px' marginBottom='16px'>
@@ -61,13 +59,7 @@ export default function CourseOverview({ course, classes }) {
                   marginBottom: '8px',
                 }}
               >
-                <Rating
-                  name='read-only'
-                  precision={0.1}
-                  value={avgScore}
-                  readOnly
-                  size='large'
-                />
+                <Rating name='read-only' precision={0.5} value={rating} readOnly size='large' />
                 <Box
                   sx={{
                     marginLeft: '16px',
@@ -76,7 +68,7 @@ export default function CourseOverview({ course, classes }) {
                     alignItems: 'center',
                   }}
                 >
-                  <Typography variant='h5'>{avgScore.toFixed(1)}</Typography>
+                  <Typography variant='h5'>{rating.toFixed(1)}</Typography>
                   <Typography variant='body2'>out of 5</Typography>
                 </Box>
               </Box>

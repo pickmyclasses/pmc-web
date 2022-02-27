@@ -10,8 +10,6 @@ import CourseReviews from '../components/CoursePage/CourseReviews';
 import CourseRegistration from '../components/CoursePage/CourseRegistration';
 import { fetchReviewsByCourseID } from '../api/index';
 
-export const CourseContext = createContext();
-
 export default function CoursePage() {
   const urlParams = useParams();
 
@@ -45,13 +43,22 @@ export default function CoursePage() {
     <Box width='100%' height='100%' minHeight={0} sx={{ overflowY: 'scroll' }}>
       <CoursePageTop course={course} tabs={tabs} activeTabName={activeTabName} />
       <Container maxWidth='xl' sx={{ paddingY: '32px' }}>
-        <CourseContext.Provider value={course}>
-          {createElement(tabs[activeTabName].content, { course, classes, reviews })}
+        <CourseContext.Provider value={{ course, classes, reviews }}>
+          {createElement(tabs[activeTabName].content)}
         </CourseContext.Provider>
       </Container>
     </Box>
   );
 }
+
+/**
+ * @type {React.Context<{
+ *   course: Object,
+ *   classes: Array<Object>,
+ *   reviews: Array<Object>
+ * }>}
+ */
+export const CourseContext = createContext();
 
 const tabs = {
   '': { title: 'Overview', icon: Widgets, content: CourseOverview },
