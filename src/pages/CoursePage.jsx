@@ -21,12 +21,10 @@ export default function CoursePage() {
   const [reviews, setReviews] = useState(null);
 
   useEffect(() => {
-    // Fetch data for the course and classes offered.
+    // Fetch data for the course, classes offered, and reviews.
     const courseID = urlParams.id;
     fetchCourseByID(courseID).then((data) => setCourse(data.data.data.course));
     fetchClassesByCourseID(courseID).then((data) => setClasses(data.data.data));
-
-    // Fetch reviews for the course
     fetchReviewsByCourseID(courseID).then((data) => setReviews(data.data.data));
 
     // Figure out the active tab from the URL.

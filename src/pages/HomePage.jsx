@@ -41,7 +41,7 @@ export default function HomePage() {
                   key={i}
                   title={category}
                   courses={courses}
-                  numColumns={shouldShowStaticScheduler ? 3 : 4}
+                  numColumns={shouldShowStaticScheduler ? 3 : 5}
                 />
               </Box>
             </Box>
