@@ -1,25 +1,27 @@
 import CourseReviewCard from '../../../src/components/CourseDetails/CourseReviewCard';
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import { Grid, Box, Typography } from '@mui/material';
 import CourseOverallRatings from '../CourseDetails/CourseOverallRatings';
+import { CourseContext } from '../../pages/CoursePage';
 
-// Default filtering method is Most Recent
-export const FilterContext = createContext();
+export default function CourseReviews() {
+  const { reviews } = useContext(CourseContext);
 
-export default function CourseReviews({ reviews }) {
   const [sortedReviews, setSortedReviews] = useState(reviews);
-  const [filterMethod, setFilterMethod] = useState('MostRecent');
+  const [filterMethod, setFilterMethod] = useState('most-recent');
+
   useEffect(() => {
     const comparatorByFilterMethod = {
-      'MostRecent': (x, y) =>
+      'most-recent': (x, y) =>
         new Date(y.created_at).getTime() - new Date(x.created_at).getTime(),
-      'LeastRecent': (x, y) =>
+      'least-recent': (x, y) =>
         new Date(x.created_at).getTime() - new Date(y.created_at).getTime(),
-      //'MostHelpful': TODO
-      //'LeastHelpful':TODO
-      'HighestRated': (x, y) => y.rating - x.rating,
-      'LowestRated': (x, y) => x.rating - y.rating,
+      // 'most-helpful': TODO K
+      // 'LeastHelpful': TODO K
+      'highest-rated': (x, y) => y.rating - x.rating,
+      'lowest-rated': (x, y) => x.rating - y.rating,
     };
+
     setSortedReviews(reviews.concat().sort(comparatorByFilterMethod[filterMethod]));
   }, [filterMethod, reviews]);
 
@@ -31,7 +33,7 @@ export default function CourseReviews({ reviews }) {
   const renderReviewCards = () =>
     sortedReviews.map((review, i) => (
       <Grid item xs={9} key={i}>
-        <CourseReviewCard review={review} key={review.id} />{' '}
+        <CourseReviewCard review={review} key={review.id} />
       </Grid>
     ));
   return (
@@ -47,3 +49,11 @@ export default function CourseReviews({ reviews }) {
     </Box>
   );
 }
+
+/**
+ * @type {React.Context<{
+ *   filterMethod: String,
+ *   setFilterMethod: function(String): void,
+ * }>}
+ */
+export const FilterContext = createContext();

@@ -6,6 +6,7 @@ import CourseCardGrid from '../components/CourseCardGrid/CourseCardGrid';
 import ClickableIndicator from '../components/CourseCardGrid/CourseCard/ClickableIndicator';
 import { Box, Divider, Typography } from '@mui/material';
 import { NavigationBarContext } from '../components/NavigationBar/ContainerWithNavigationBar';
+import Scrollbars from 'react-custom-scrollbars';
 
 export default function HomePage() {
   const { shouldShowStaticScheduler } = useContext(NavigationBarContext);
@@ -26,27 +27,29 @@ export default function HomePage() {
 
   return (
     <ContainerWithStaticScheduler>
-      <Box sx={{ padding: '32px 32px' }}>
-        {courseCategories &&
-          courseCategories.map(({ category, courses }, i) => (
-            <Box key={i}>
-              {i > 0 && <Divider sx={{ marginY: '16px' }} />}
-              <ClickableIndicator>
-                <Typography variant='overline' fontSize='medium' sx={{ opacity: 0.75 }}>
-                  {category}
-                </Typography>
-              </ClickableIndicator>
-              <Box sx={{ padding: '16px 0 24px 0' }}>
-                <CourseCardGrid
-                  key={i}
-                  title={category}
-                  courses={courses}
-                  numColumns={shouldShowStaticScheduler ? 3 : 4}
-                />
+      <Scrollbars autoHide>
+        <Box padding='32px'>
+          {courseCategories &&
+            courseCategories.map(({ category, courses }, i) => (
+              <Box key={i}>
+                {i > 0 && <Divider sx={{ marginY: '16px' }} />}
+                <ClickableIndicator>
+                  <Typography variant='overline' fontSize='medium' sx={{ opacity: 0.75 }}>
+                    {category}
+                  </Typography>
+                </ClickableIndicator>
+                <Box sx={{ padding: '16px 0 24px 0' }}>
+                  <CourseCardGrid
+                    key={i}
+                    title={category}
+                    courses={courses}
+                    numColumns={shouldShowStaticScheduler ? 3 : 4}
+                  />
+                </Box>
               </Box>
-            </Box>
-          ))}
-      </Box>
+            ))}
+        </Box>
+      </Scrollbars>
     </ContainerWithStaticScheduler>
   );
 }

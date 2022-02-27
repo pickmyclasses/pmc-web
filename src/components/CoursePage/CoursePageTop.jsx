@@ -46,7 +46,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
 
   const renderActionItems = () => (
     <Box>
-      <ActionItem label='Bookmark' icon={BookmarkBorder} onClick={() => alert('** mark')} />
+      <ActionItem label='Bookmark' icon={BookmarkBorder} onClick={() => alert('** bookmark')} />
       <ActionItem label='Share' icon={Share} onClick={() => alert('** share')} />
     </Box>
   );
@@ -65,7 +65,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
   return (
     <>
       <CardMedia component='img' image={course.ImageURL} height='360px' />
-      <Card sx={{ position: 'sticky', top: 0, zIndex: 1000, boxShadow: 2 }}>
+      <Card sx={{ position: 'sticky', top: 0, zIndex: 1, boxShadow: 2 }}>
         <Container maxWidth='xl'>
           <Box padding='16px 0' display='flex' justifyContent='space-between'>
             {renderCourseInfo()}

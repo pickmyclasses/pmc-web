@@ -58,6 +58,8 @@ export default function Timeline({
     return () => document.removeEventListener('mousedown', handleDocumentMouseDown);
   });
 
+  // Auto zooms the timeline to fit all the events, with ranges rounded to the nearest hour that
+  // to fits and having the same size as the default range.
   useEffect(() => {
     let earliestStart = Math.min(...events.map((x) => x.start)) || defaultRangeStart;
     earliestStart = Math.floor(earliestStart / 3600) * 3600;

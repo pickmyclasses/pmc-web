@@ -233,7 +233,7 @@ export default function EnhancedTable({ classes }) {
   const { user } = React.useContext(UserContext);
   const { refreshSchedulerData } = React.useContext(SchedulerContext);
   const setClassesToHighlight = React.useContext(SetClassesToHighlightContext);
-  const course = React.useContext(CourseContext);
+  const { course } = React.useContext(CourseContext);
 
   React.useEffect(() => setSelected([]), [classes]);
 
