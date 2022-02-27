@@ -36,13 +36,15 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
       <motion.div
         variants={textRegionAnimationVariants}
         transition={{ type: 'just' }}
-        style={{ padding: '16px 20px 8px' }}
+        style={{ padding: '16px 16px 4px' }}
       >
         <ClickableIndicator propagate>
           <CourseEligibilityIndicator
             eligibility={getEligibility(course, classes, classesInShoppingCart)}
           >
-            <Typography variant='h6'>{formatCourseName(course.CatalogCourseName)}</Typography>
+            <Typography variant='h6' fontSize='1.125rem' lineHeight={1.38}>
+              {formatCourseName(course.CatalogCourseName)}
+            </Typography>
           </CourseEligibilityIndicator>
         </ClickableIndicator>
         <MotionTypography
@@ -70,7 +72,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
             {course.MinCredit === course.MaxCredit ? '' : course.MinCredit + '–'}
             {pluralize(course.MaxCredit, 'credit')}&nbsp;&nbsp;•&nbsp;&nbsp;
           </Typography>
-          <TagList noWrap tags={['Backend', 'Coding']} />
+          <TagList noWrap size='small' tags={['Backend', 'Coding']} />
         </CenterAligningFlexBox>
         <motion.div
           variants={extraInfoAnimationVariants}
@@ -123,7 +125,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
       sx={{
         boxShadow: isMouseEntered ? 9 : 3,
         width: '100%',
-        height: '288px',
+        height: '256px',
         display: 'flex',
         flexFlow: 'column',
         cursor: 'pointer',
