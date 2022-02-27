@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { CheckCircleOutline, MenuBook, People, School, WatchLater } from '@mui/icons-material';
 import { Alert, Box, Card, Chip, Divider, Grid, Link, Typography, Rating } from '@mui/material';
 import TagList from '../CourseCardGrid/CourseCard/TagList';
 import { formatCreditRange } from './CoursePageTop';
 import CourseCardGrid from '../CourseCardGrid/CourseCardGrid';
-import ClickableIndicator from '../CourseCardGrid/CourseCard/ClickableIndicator';
 import { fetchReviewsByCourseID } from '../../api/index';
 import { calculateAverageScore } from '../../utils/index';
 
