@@ -55,7 +55,7 @@ export default function ShoppingCart({ classes }) {
         <Timeline events={sessions} />
       </Box>
       <Typography
-        marginTop='16px'
+        marginTop='12px'
         variant='caption'
         align='center'
         color={hasHighlights ? theme.palette.success.main : ''}

@@ -115,7 +115,7 @@ export default function CourseOfferingSummary({
 
   return (
     <>
-      <Stack width={width}>
+      <Stack width={width} sx={{ '> *:not(:last-of-type)': { paddingBottom: '8px' } }}>
         {representativeOfferings.map(({ days }, i) => (
           <DaysIndicator
             key={i}
@@ -127,48 +127,50 @@ export default function CourseOfferingSummary({
             isMouseEntered={i === highlightedIndex}
           />
         ))}
-        <Box
-          onMouseEnter={
-            onlineOffering
-              ? () => setMouseEnteredIndex(representativeOfferings.length)
-              : comboInShoppingCart && (() => setMouseEnteredIndex(0))
-          }
-          onMouseLeave={() => setMouseEnteredIndex(-1)}
-          sx={{
-            '*': {
-              color:
-                onlineOffering && highlightedIndex === representativeOfferings.length
-                  ? theme.palette.success.main
-                  : '',
-              transition: getTransitionForStyles('color'),
-            },
-          }}
-        >
-          {numHiddenOfferings > 0 ? (
-            <>
-              <Typography variant='body2' align={textAlign}>
-                {representativeOfferings.length === 0 ? '' : '+'}
-                {pluralize(numHiddenOfferings, 'offering')}
-              </Typography>
-              {onlineOffering && (
-                <Typography variant='body2' align={textAlign} sx={{ marginTop: '-8px' }}>
-                  (1 online)
+        {(numHiddenOfferings || onlineOffering) && (
+          <Box
+            onMouseEnter={
+              onlineOffering
+                ? () => setMouseEnteredIndex(representativeOfferings.length)
+                : comboInShoppingCart && (() => setMouseEnteredIndex(0))
+            }
+            onMouseLeave={() => setMouseEnteredIndex(-1)}
+            sx={{
+              '*': {
+                color:
+                  onlineOffering && highlightedIndex === representativeOfferings.length
+                    ? theme.palette.success.main
+                    : '',
+                transition: getTransitionForStyles(['color']),
+              },
+            }}
+          >
+            {numHiddenOfferings ? (
+              <>
+                <Typography variant='body2' align={textAlign}>
+                  {!representativeOfferings.length ? '' : '+'}
+                  {pluralize(numHiddenOfferings, 'offering')}
                 </Typography>
-              )}
-            </>
-          ) : (
-            onlineOffering &&
-            (representativeOfferings.length === 0 ? (
-              <Typography variant='body2' align={textAlign}>
-                Offered online
-              </Typography>
+                {onlineOffering && (
+                  <Typography variant='body2' align={textAlign} sx={{ marginTop: '-8px' }}>
+                    (1 online)
+                  </Typography>
+                )}
+              </>
             ) : (
-              <Typography variant='body2' align={textAlign} sx={{ fontSize: 'x-small' }}>
-                +1 online offering
-              </Typography>
-            ))
-          )}
-        </Box>
+              onlineOffering &&
+              (!representativeOfferings.length ? (
+                <Typography variant='body2' align={textAlign}>
+                  Offered online
+                </Typography>
+              ) : (
+                <Typography variant='body2' align={textAlign} sx={{ fontSize: 'x-small' }}>
+                  +1 online offering
+                </Typography>
+              ))
+            )}
+          </Box>
+        )}
       </Stack>
     </>
   );

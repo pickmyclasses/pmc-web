@@ -35,7 +35,7 @@ export default function Scheduler({ classesToHighlight = null }) {
       <Box flex={1}>
         <ShoppingCart classes={classes} />
       </Box>
-      <Divider sx={{ margin: '16px 0' }} />
+      <Divider sx={{ margin: '12px 0' }} />
       <RequirementList requirements={requirements || []} />
     </>
   );
