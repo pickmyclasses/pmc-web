@@ -11,7 +11,7 @@ import { UserContext } from '../../App';
 export default function ContainerWithNavigationBar({ children }) {
   const { user } = useContext(UserContext);
 
-  const [hasStaticScheduler, setHasStaticScheduler] = useState(true);
+  const [hasStaticScheduler, setHasStaticScheduler] = useState(false);
   const [shouldShowStaticScheduler, setShouldShowStaticScheduler] = useState(user != null);
 
   return (

@@ -9,6 +9,7 @@ import { ButtonGroupTab } from '../NavigationBarButtonGroup';
 export default function SchedulerDropDown() {
   const { hasStaticScheduler, shouldShowStaticScheduler, setShouldShowStaticScheduler } =
     useContext(NavigationBarContext);
+  console.log('** con', hasStaticScheduler, shouldShowStaticScheduler);
 
   const handleTabClick = () => {
     if (hasStaticScheduler) setShouldShowStaticScheduler(!shouldShowStaticScheduler);

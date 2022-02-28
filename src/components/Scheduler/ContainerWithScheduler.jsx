@@ -19,12 +19,17 @@ export default function ContainerWithScheduler({ children }) {
   const [classesInShoppingCart, setClassesInShoppingCart] = useState([]);
   const [requirements, setRequirements] = useState([]);
 
-  const refreshSchedulerData = useCallback(
-    () => fetchSchedulerData(user, setClassesInShoppingCart, setRequirements),
-    [user]
-  );
+  const refreshSchedulerData = useCallback(() => {
+    if (user) {
+      fetchClassesInShoppingCart(user.userID).then(setClassesInShoppingCart);
+      fetchRequirements(user.userID).then(setRequirements);
+    } else {
+      setClassesInShoppingCart([]);
+      setRequirements([]);
+    }
+  }, [user]);
 
-  useEffect(() => refreshSchedulerData(), [refreshSchedulerData]);
+  useEffect(refreshSchedulerData, [refreshSchedulerData]);
 
   return (
     <SchedulerContext.Provider
@@ -43,30 +48,3 @@ export default function ContainerWithScheduler({ children }) {
  * }>}
  */
 export const SchedulerContext = createContext();
-
-/**
- * Fetches the content data to display in the scheduler, including
- *   - The classes and corresponding courses the `user` has in their shopping cart (outputs via
- *     the `onFetchedClassesInShoppingCart` callback), and
- *   - The graduation requirements and progress toward graduation for the `user` (outputs via
- *     the `onFetchedRequirements` callback).
- *
- * Outputs are empty (but not null) if `user` is null.
- */
-const fetchSchedulerData = (user, setClassesInShoppingCart, setRequirements) => {
-  if (user) {
-    fetchClassesInShoppingCart(user.userID).then((data) =>
-      setClassesInShoppingCart(
-        data.data.data.scheduledClassList.map((x) => ({
-          classData: x.classData,
-          course: x.courseData,
-        }))
-      )
-    );
-    fetchRequirements().then(setRequirements);
-  } else {
-    // Not logged in
-    setClassesInShoppingCart([]);
-    setRequirements([]);
-  }
-};

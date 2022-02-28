@@ -72,14 +72,15 @@ export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseI
  * the fake image URL. Basically pretends `ImageURL` was an actual field of a course.
  */
 export const fetchClassesInShoppingCart = (userID) =>
-  new Promise((onFetched) =>
-    axios.get(`schedule?userID=${userID}`).then((data) => {
-      for (let { courseData } of data.data.data.scheduledClassList) {
-        injectFakeImageURLToCourse(courseData);
-      }
-      onFetched(data);
-    })
-  );
+  axios.get(`schedule?userID=${userID}`).then((data) => {
+    for (let { courseData } of data.data.data.scheduledClassList) {
+      injectFakeImageURLToCourse(courseData);
+    }
+    return data.data.data.scheduledClassList.map(({ classData, courseData: course }) => ({
+      classData,
+      course,
+    }));
+  });
 
 export const fetchRequirements = () => fakeFetchRequirements();
 
