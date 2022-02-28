@@ -78,7 +78,7 @@ const OnTopScrollBars = ({ children }) => {
     <Scrollbars
       autoHide
       renderTrackVertical={({ style, ...props }) => (
-        <div style={{ ...style, ...defaultScrollBarsStyle, zIndex: 1001 }} {...props} />
+        <div style={{ ...style, ...defaultScrollBarsStyle, zIndex: 1002 }} {...props} />
       )}
     >
       {children}

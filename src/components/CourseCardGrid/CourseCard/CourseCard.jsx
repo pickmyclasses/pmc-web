@@ -40,7 +40,7 @@ export default function CourseCard({ course }) {
         <ClickableIndicator propagate>
           <CourseEligibilityIndicator course={course}>
             <Typography variant='h6' fontSize='1.125rem' lineHeight={1.38}>
-              {formatCourseName(course.CatalogCourseName)}
+              {formatCourseName(course.catalogCourseName)}
             </Typography>
           </CourseEligibilityIndicator>
         </ClickableIndicator>
@@ -58,7 +58,7 @@ export default function CourseCard({ course }) {
           }}
           gutterBottom
         >
-          {course.Title}
+          {course.title}
         </MotionTypography>
         <CenterAligningFlexBox>
           <Typography
@@ -66,8 +66,8 @@ export default function CourseCard({ course }) {
             color={theme.palette.text.secondary}
             sx={{ whiteSpace: 'nowrap' }}
           >
-            {course.MinCredit === course.MaxCredit ? '' : course.MinCredit + '–'}
-            {pluralize(course.MaxCredit, 'credit')}&nbsp;&nbsp;•&nbsp;&nbsp;
+            {course.minCredit === course.maxCredit ? '' : course.minCredit + '–'}
+            {pluralize(course.maxCredit, 'credit')}&nbsp;&nbsp;•&nbsp;&nbsp;
           </Typography>
           <TagList noWrap size='small' tags={['Backend', 'Coding']} />
         </CenterAligningFlexBox>
@@ -119,7 +119,7 @@ export default function CourseCard({ course }) {
     <MotionCard
       onMouseEnter={() => setIsMouseEntered(true)}
       onMouseLeave={() => setIsMouseEntered(false)}
-      onClick={() => course && navigate(`/course/${course.ID}`)}
+      onClick={() => course && navigate(`/course/${course.id}`)}
       initial='initial'
       whileHover='mouseEntered'
       sx={{

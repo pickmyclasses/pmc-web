@@ -1,27 +1,9 @@
 import axios from 'axios';
 
-export const login = ({ email, password }) => {
-  const promise = axios.post('/login', {
-    email: email,
-    password: password,
-  });
-  return promise.then((response) => response.data);
-};
+export const login = (body) => axios.post('/login', body).then((response) => response.data);
 
-export const register = ({ email, firstName, lastName, college, password, repassword }) => {
-  // TODO Q: Maybe write a global util function to convert all keys in an object into snake
-  // case.
-  const data = {
-    email: email,
-    first_name: firstName,
-    last_name: lastName,
-    college: college,
-    password: password,
-    re_password: repassword,
-  };
-  const promise = axios.post('/register', data);
-  return promise.then((response) => response.data);
-};
+export const register = (body) =>
+  axios.post('/register', body).then((response) => response.data);
 
 /**
  * Fetches the course but also injects the fake image URL. Basically pretends `ImageURL` was an
@@ -32,15 +14,15 @@ export const fetchCourseByID = (courseID) =>
     axios.get(`/course/${courseID}`).then((data) => {
       // Inject classesOffered. TODO Q: Remove this after Jay finished object combination for
       // fetch course query response.
-      const course = data.data.data.course;
-      course.classesOffered = data.data.data.classes;
+      const course = data.data.data;
       injectFakeImageURLToCourse(course);
       onFetched(course);
     })
   );
 
-const getFakeCourseImageURL = (course) =>
-  `https://picsum.photos/seed/${+course.ID + 13}/1280/720`;
+const getFakeCourseImageURL = (course) => (
+  console.log('** id', course), `https://picsum.photos/seed/${+course.id + 13}/1280/720`
+);
 
 const injectFakeImageURLToCourse = (course) =>
   (course.ImageURL = getFakeCourseImageURL(course));
@@ -74,6 +56,7 @@ const fakeFetchCoursesBySearch = () => {
   const resultCourseIDs = [
     22966, 23000, 22968, 23068, 23063, 23041, 23001, 22986, 22998, 22964, 22941, 22942, 22961,
     22971, 22951, 22970, 22998, 31826, 28270, 24777, 27266, 27334, 21978, 28354, 30056, 25305,
+    22958,
   ];
 
   return Promise.all(resultCourseIDs.map((id) => fetchCourseByID(id)));
@@ -91,9 +74,9 @@ export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseI
  */
 export const fetchClassesInShoppingCart = (userID) =>
   new Promise((onFetched) =>
-    axios.get(`schedule?user_id=${userID}`).then((data) => {
-      for (let { course_data } of data.data.data.scheduled_class_list) {
-        injectFakeImageURLToCourse(course_data);
+    axios.get(`schedule?userID=${userID}`).then((data) => {
+      for (let { courseData } of data.data.data.scheduledClassList) {
+        injectFakeImageURLToCourse(courseData);
       }
       onFetched(data);
     })
@@ -121,13 +104,13 @@ export const fetchReviewsByCourseID = (courseID) =>
 
 // TODO Q: (1) this is not by ID; (2) simplify object passing and remove object reconstruction.
 export const postReviewByID = (reviewObj) =>
-  axios.post(`/course/review`, {
+  axios.post(`/course/${reviewObj.courseID}/review`, {
     anonymous: reviewObj.anonymous,
     comment: reviewObj.comment,
     cons: reviewObj.cons,
-    course_id: reviewObj.course_id,
+    courseID: reviewObj.courseID,
     pros: reviewObj.pros,
     rating: reviewObj.rating,
     recommended: reviewObj.recommended,
-    user_id: reviewObj.user_id,
+    userID: reviewObj.userID,
   });

@@ -30,13 +30,13 @@ export default function CourseResultItem({ course }) {
             sx={{ '> *': { minWidth: 0 } }}
           >
             <CourseEligibilityIndicator course={course}>
-              <Typography variant='h6'>{formatCourseName(course.CatalogCourseName)}</Typography>
+              <Typography variant='h6'>{formatCourseName(course.catalogCourseName)}</Typography>
               <Typography
                 variant='h6'
                 fontWeight='normal'
                 sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}
               >
-                &nbsp;— {course.Title}
+                &nbsp;— {course.title}
               </Typography>
             </CourseEligibilityIndicator>
           </Box>
@@ -50,8 +50,8 @@ export default function CourseResultItem({ course }) {
         >
           <Typography variant='body2' color={theme.palette.text.secondary}>
             CS major requirement &nbsp;&nbsp;•&nbsp;&nbsp;
-            {course.MinCredit === course.MaxCredit ? '' : course.MinCredit + '–'}
-            {pluralize(+course.MaxCredit, 'credit')}&nbsp;&nbsp;•&nbsp;&nbsp;
+            {course.minCredit === course.maxCredit ? '' : course.minCredit + '–'}
+            {pluralize(+course.maxCredit, 'credit')}&nbsp;&nbsp;•&nbsp;&nbsp;
           </Typography>
           <LabeledRatingDisplay value={course.overallRating} />
           <Typography variant='body2' color={theme.palette.text.secondary}>
@@ -68,7 +68,7 @@ export default function CourseResultItem({ course }) {
             overflow: 'hidden',
           }}
         >
-          {course.Description}
+          {course.description}
         </Typography>
       </Box>
       <Divider orientation='vertical' sx={{ height: 'calc(100% - 16px)', marginTop: '8px' }} />
@@ -104,7 +104,7 @@ export default function CourseResultItem({ course }) {
         setIsMouseEntered(false);
         clearTimeout(mouseEnterEventTimeoutHandle);
       }}
-      onClick={() => course && navigate(`/course/${course.ID}`)}
+      onClick={() => course && navigate(`/course/${course.id}`)}
       initial='initial'
       whileHover='mouseEntered'
       sx={{

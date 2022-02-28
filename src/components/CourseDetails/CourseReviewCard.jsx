@@ -13,7 +13,7 @@ const titleNeg = 'What do you hate most?';
 const titleAdd = 'Additional feedbacks?';
 
 export default function CourseReviewCard({ review }) {
-  let createDate = review.created_at.slice(0, 10);
+  let createDate = review.createdAt.slice(0, 10);
   let userName = review.anonymous ? 'anonymous ' : review.user_name;
 
   return (

@@ -19,7 +19,7 @@ export default function CourseOfferingSummary({
   enableHighlight = false,
   isMouseEntered = false,
 }) {
-  const classes = course.classesOffered;
+  const classes = course.classes;
 
   const theme = useTheme();
 
@@ -78,12 +78,12 @@ export default function CourseOfferingSummary({
           highlight: true,
         }))
       );
-      setHighlightedClassIDs(comboToHighlight.map((x) => x.ID));
+      setHighlightedClassIDs(comboToHighlight.map((x) => x.id));
     } else if (highlightedIndex >= 0) {
       // Un-highlight
       setClassesToHighlight((highlightedClasses) =>
         highlightedClasses.filter(
-          ({ classData }) => !highlightedClassIDs.includes(classData.ID)
+          ({ classData }) => !highlightedClassIDs.includes(classData.id)
         )
       );
       setHighlightedIndex(-1);
@@ -190,7 +190,7 @@ const enumerateOfferings = (classes, course, classesInShoppingCart) => {
   // If the course is in the shopping cart, prioritize that offering and move it to the top of
   // offering list.
   const comboInShoppingCart = classesInShoppingCart
-    .filter((x) => x.course.ID === course.ID)
+    .filter((x) => x.course.id === course.id)
     .map((x) => x.classData);
   if (comboInShoppingCart?.length) {
     daysAndCombos.push({
@@ -239,7 +239,7 @@ const enumerateOfferings = (classes, course, classesInShoppingCart) => {
 };
 
 const getSortedOfferedDayString = (combo) =>
-  parseDayList(combo.map((x) => x.OfferDate).join(''))
+  parseDayList(combo.map((x) => x.offerDate).join(''))
     .sort()
     .join(' ');
 

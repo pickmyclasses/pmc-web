@@ -33,12 +33,12 @@ export default function ShoppingCart({ classes }) {
     let minCredits = 0;
     let maxCredits = 0;
     for (let { classData, course } of classes) {
-      if (courseByID.hasOwnProperty(course.ID)) {
-        courseByID[course.ID].isOnline |= !classData.OfferDate;
+      if (courseByID.hasOwnProperty(course.id)) {
+        courseByID[course.id].isOnline |= !classData.offerDate;
       } else {
-        courseByID[course.ID] = { course, isOnline: !classData.OfferDate };
-        minCredits += +course.MinCredit;
-        maxCredits += +course.MaxCredit;
+        courseByID[course.id] = { course, isOnline: !classData.offerDate };
+        minCredits += +course.minCredit;
+        maxCredits += +course.maxCredit;
       }
     }
     setMinCredits(minCredits);
@@ -76,18 +76,18 @@ export default function ShoppingCart({ classes }) {
 const generateSessions = (classes, resolver) => {
   let sessions = [];
   for (let { classData, course, highlight } of classes) {
-    for (let dayOffered of parseDayList(classData.OfferDate)) {
+    for (let dayOffered of parseDayList(classData.offerDate)) {
       if (dayOffered === -1) continue; // online course
 
-      const courseCode = formatCourseName(course.CatalogCourseName);
+      const courseCode = formatCourseName(course.catalogCourseName);
       const relatedClasses = classes
         .map(({ classData }) => classData)
-        .filter((x) => x.CourseID === course.ID);
+        .filter((x) => x.courseID === course.id);
 
       let sessionData = {
         columnIndex: dayOffered - 1,
-        start: parseTime(classData.StartTime),
-        end: parseTime(classData.EndTime),
+        start: parseTime(classData.startTime),
+        end: parseTime(classData.endTime),
         color: 'gray',
         isHighlighted: highlight,
         text: courseCode,
@@ -97,25 +97,25 @@ const generateSessions = (classes, resolver) => {
         // emit an onTimeBlockClick event instead of handling showing the detail card. Put
         // all this complex data construction into the updated TimeDataCard.
         data: {
-          eventID: classData.ID,
-          groupID: course.ID,
+          eventID: classData.id,
+          groupID: course.id,
           earliestStart: Math.min(
-            ...relatedClasses.map((classData) => parseTime(classData.StartTime))
+            ...relatedClasses.map((classData) => parseTime(classData.startTime))
           ),
           title: courseCode,
-          subtitle: course.Title,
+          subtitle: course.title,
           description: relatedClasses
             .map((classData, i) => (
               <div key={i}>
                 {getComponent(classData)}:{' '}
                 <b>
-                  {classData.OfferDate} {classData.StartTime}–{classData.EndTime}
+                  {classData.offerDate} {classData.startTime}–{classData.endTime}
                 </b>
               </div>
             ))
             .concat(`Professor: ${getInstructor(classData)}`),
           topBorderColor: 'gray',
-          coursePageURL: `/course/${course.ID}`,
+          coursePageURL: `/course/${course.id}`,
         },
       };
 

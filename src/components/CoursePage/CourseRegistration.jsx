@@ -12,7 +12,7 @@ export default function CourseRegistration() {
       <ContainerWithStaticScheduler>
         <CourseEnrollmentSubCard course={course} />
         {/* TODO (QC): Inconsistent component/file naming. */}
-        <EnhancedTable classes={course.classesOffered} />
+        <EnhancedTable classes={course.classes} />
       </ContainerWithStaticScheduler>
     </Box>
   );

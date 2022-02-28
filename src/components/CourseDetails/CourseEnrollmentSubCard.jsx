@@ -23,7 +23,7 @@ export default function CourseEnrollmentSubCard({ course }) {
           <Typography gutterBottom variant='h6' component='div'>
             Prerequisites:
           </Typography>
-          {course['Prerequisites']}
+          {course['prerequisites']}
         </Grid>
         <Grid item sx={{ width: 1 }}>
           <CourseStatus canRegister={1} />
