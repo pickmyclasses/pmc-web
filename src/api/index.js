@@ -20,9 +20,8 @@ export const fetchCourseByID = (courseID) =>
     })
   );
 
-const getFakeCourseImageURL = (course) => (
-  console.log('** id', course), `https://picsum.photos/seed/${+course.id + 13}/1280/720`
-);
+const getFakeCourseImageURL = (course) =>
+  `https://picsum.photos/seed/${+course.id + 13}/1280/720`;
 
 const injectFakeImageURLToCourse = (course) =>
   (course.ImageURL = getFakeCourseImageURL(course));
