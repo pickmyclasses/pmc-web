@@ -12,7 +12,6 @@ import { pluralize } from '../../utils';
 export default function CourseOverview() {
   const navigate = useNavigate();
   const { course, classes, reviews } = useContext(CourseContext);
-
   const coursePageURL = '/course/' + course.id;
 
   return (

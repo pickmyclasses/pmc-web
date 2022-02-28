@@ -1,11 +1,11 @@
 import React, { createContext, createElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Forum, LocalLibrary, ShoppingCart, Widgets } from '@mui/icons-material';
+import { Forum, QueryStats, ShoppingCart, Widgets } from '@mui/icons-material';
 import { Box, Container } from '@mui/material';
 import { fetchCourseByID, fetchReviewsByCourseID } from '../api';
 import CoursePageTop from '../components/CoursePage/CoursePageTop';
 import CourseOverview from '../components/CoursePage/CourseOverview';
-import CourseRelated from '../components/CoursePage/CourseRelated';
+import CourseStats from '../components/CoursePage/CourseStats';
 import CourseReviews from '../components/CoursePage/CourseReviews';
 import CourseRegistration from '../components/CoursePage/CourseRegistration';
 import ContainerWithLoadingIndication from '../components/Page/ContainerWithLoadingIndication';
@@ -55,7 +55,7 @@ export const CourseContext = createContext();
 
 const tabs = {
   '': { title: 'Overview', icon: Widgets, content: CourseOverview },
-  'related': { title: 'Related', icon: LocalLibrary, content: CourseRelated },
+  'stats': { title: 'Stats', icon: QueryStats, content: CourseStats },
   'reviews': { title: 'Reviews', icon: Forum, content: CourseReviews },
   'registration': { title: 'Registration', icon: ShoppingCart, content: CourseRegistration },
 };

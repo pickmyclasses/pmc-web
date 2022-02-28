@@ -9,7 +9,6 @@ export default function CourseReviews() {
 
   const [sortedReviews, setSortedReviews] = useState(reviews);
   const [filterMethod, setFilterMethod] = useState('most-recent');
-  console.log(reviews);
   useEffect(() => {
     const comparatorByFilterMethod = {
       'most-recent': (x, y) =>
