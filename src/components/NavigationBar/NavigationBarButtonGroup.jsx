@@ -22,7 +22,6 @@ export default function NavigationBarButtonGroup() {
   ];
 
   const renderTabsForNotLoggedIn = () => [
-    <SchedulerDropDown key='scheduler' />,
     <Button key='login' variant='contained' component={Link} to='/auth'>
       Login
     </Button>,

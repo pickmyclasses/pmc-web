@@ -16,19 +16,18 @@ import ClickableIndicator from './ClickableIndicator';
 import CourseEligibilityIndicator from './CourseEligibilityIndicator';
 import TagList from './TagList';
 import CourseOfferingSummary from '../CourseOfferingSummary';
-import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
+import LabeledRatingDisplay from './LabeledRatingDisplay';
+import { NavigationBarContext } from '../../NavigationBar/ContainerWithNavigationBar';
 
-export default function CourseCard({ data: { course, classes, reviews } }) {
+export default function CourseCard({ course }) {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const { classesInShoppingCart } = useContext(SchedulerContext);
+  const { shouldShowStaticScheduler } = useContext(NavigationBarContext);
 
   const [isMouseEntered, setIsMouseEntered] = useState(false);
   const [isCourseTitleExpanded, setIsCourseTitleExpanded] = useState(false);
   const [isExtraInfoExpanded, setIsExtraInfoExpanded] = useState(false);
-
-  const rating = getMeanReviewRating(reviews);
 
   const renderContent = () => (
     <>
@@ -39,9 +38,7 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
         style={{ padding: '16px 16px 4px' }}
       >
         <ClickableIndicator propagate>
-          <CourseEligibilityIndicator
-            eligibility={getEligibility(course, classes, classesInShoppingCart)}
-          >
+          <CourseEligibilityIndicator course={course}>
             <Typography variant='h6' fontSize='1.125rem' lineHeight={1.38}>
               {formatCourseName(course.CatalogCourseName)}
             </Typography>
@@ -86,13 +83,16 @@ export default function CourseCard({ data: { course, classes, reviews } }) {
           onAnimationComplete={() => !isMouseEntered && setIsExtraInfoExpanded(false)}
         >
           <CenterAligningFlexBox justifyContent='space-between'>
-            <Rating readOnly value={rating} precision={0.5} size='small' />
+            <LabeledRatingDisplay
+              compressed={shouldShowStaticScheduler}
+              noLabel={!shouldShowStaticScheduler}
+              value={course.overallRating}
+            />
             <CourseOfferingSummary
               course={course}
-              classes={classes}
               maxRows={1}
               rowHeight={1.5}
-              width='min(120px, calc(100% - 120px))'
+              width={`min(120px, calc(100% - ${shouldShowStaticScheduler ? '84px' : '120px'}))`}
               enableHighlight={isMouseEntered && isExtraInfoExpanded}
               isMouseEntered={isMouseEntered && isExtraInfoExpanded}
             />
@@ -156,18 +156,4 @@ const courseTitleAnimationVariants = {
 const extraInfoAnimationVariants = {
   initial: { marginTop: '8px', marginBottom: 0, height: 0, opacity: 0 },
   mouseEntered: { marginTop: '12px', marginBottom: '8px', height: '', opacity: 1 },
-};
-
-export const getMeanReviewRating = (reviews) => {
-  let totalRating = 0;
-  if (reviews) {
-    for (let review of reviews) totalRating += review.rating;
-  }
-  return totalRating / reviews?.length;
-};
-
-export const getEligibility = (course, classes, classesInShoppingCart) => {
-  if (!classes?.length) return 'not-offered';
-  if (classesInShoppingCart.some((x) => x.course.ID === course.ID)) return 'in-shopping-cart';
-  return 'none';
 };

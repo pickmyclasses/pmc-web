@@ -1,11 +1,39 @@
 import { Check, DoDisturb, ShoppingCart } from '@mui/icons-material';
 import { Box, Tooltip, useTheme } from '@mui/material';
-import React, { createElement } from 'react';
+import React, { createElement, useContext } from 'react';
+import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
 
-export default function CourseEligibilityIndicator({ children, eligibility = 'none' }) {
+export default function CourseEligibilityIndicator({ children, course }) {
   const theme = useTheme();
 
-  const [iconType, colorName, colorValue, tooltipTitle] = {
+  const { classesInShoppingCart } = useContext(SchedulerContext);
+
+  const eligibility = getEligibility(course, classesInShoppingCart);
+  const [iconType, colorName, colorValue, tooltipTitle] = getDisplayContent(eligibility, theme);
+
+  return (
+    <Tooltip title={tooltipTitle} disableInteractive placement='top-end'>
+      <Box sx={{ display: 'flex', alignItems: 'center', 'h5, h6': { color: colorValue } }}>
+        {children}
+        {iconType &&
+          createElement(iconType, {
+            fontSize: 'small',
+            color: colorName,
+            sx: { marginLeft: '8px' },
+          })}
+      </Box>
+    </Tooltip>
+  );
+}
+
+const getEligibility = (course, classesInShoppingCart) => {
+  if (!course.classesOffered?.length) return 'not-offered';
+  if (classesInShoppingCart.some((x) => x.course.ID === course.ID)) return 'in-shopping-cart';
+  return 'none';
+};
+
+const getDisplayContent = (eligibility, theme) =>
+  ({
     'none': [null, 'primary', theme.palette.text.primary, ''],
     'eligible': [Check, 'action', theme.palette.text.primary, 'Eligible for this course'],
     'in-shopping-cart': [
@@ -27,19 +55,4 @@ export default function CourseEligibilityIndicator({ children, eligibility = 'no
       theme.palette.grey[600],
       'Prerequisites unsatisfied',
     ],
-  }[eligibility];
-
-  return (
-    <Tooltip title={tooltipTitle} disableInteractive placement='top-end'>
-      <Box sx={{ display: 'flex', alignItems: 'center', 'h5, h6': { color: colorValue } }}>
-        {children}
-        {iconType &&
-          createElement(iconType, {
-            fontSize: 'small',
-            color: colorName,
-            sx: { marginLeft: '8px' },
-          })}
-      </Box>
-    </Tooltip>
-  );
-}
+  }[eligibility]);
