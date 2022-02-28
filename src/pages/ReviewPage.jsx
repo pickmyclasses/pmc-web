@@ -26,11 +26,9 @@ export default function ReviewPage() {
   const [recommendation, setRecommendation] = useState(false);
 
   const urlParams = useParams();
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
-  useMount(() => {
-    fetchCourseByID(urlParams['id']).then((data) => setCourse(data['data']['data']['course']));
-  });
+  useMount(() => fetchCourseByID(urlParams.id).then(setCourse));
 
   if (!course) {
     return (
@@ -126,11 +124,11 @@ export default function ReviewPage() {
                   anonymous: anonymity,
                   comment: commentValue,
                   cons: conValue,
-                  course_id: course.ID,
+                  courseID: course.id,
                   pros: proValue,
                   rating: ratingValue,
                   recommended: recommendation,
-                  user_id: user.userID,
+                  userID: user.userID,
                 });
               }}
             >

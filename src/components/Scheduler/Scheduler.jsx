@@ -22,7 +22,7 @@ export default function Scheduler({ classesToHighlight = null }) {
     const toHighlight = classesToHighlight || [];
     setClasses([
       ...classesInShoppingCart.filter(({ classData }) =>
-        toHighlight.every((y) => y.classData.ID !== classData.ID)
+        toHighlight.every((y) => y.classData.id !== classData.id)
       ),
       ...toHighlight,
     ]);

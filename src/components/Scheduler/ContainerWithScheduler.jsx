@@ -57,9 +57,9 @@ const fetchSchedulerData = (user, setClassesInShoppingCart, setRequirements) => 
   if (user) {
     fetchClassesInShoppingCart(user.userID).then((data) =>
       setClassesInShoppingCart(
-        data.data.data.scheduled_class_list.map((x) => ({
-          classData: x.class_data,
-          course: x.course_data,
+        data.data.data.scheduledClassList.map((x) => ({
+          classData: x.classData,
+          course: x.courseData,
         }))
       )
     );

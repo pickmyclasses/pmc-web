@@ -12,9 +12,9 @@ export default function ReviewDescription({ course }) {
         REVIEW
         <RateReviewIcon />
       </MuiTypography>
-      <Link to={`/course/${course['ID']}`} style={{ textDecoration: 'none' }}>
+      <Link to={`/course/${course.id}`} style={{ textDecoration: 'none' }}>
         <Button variant='outlined' color='primary' startIcon={<KeyboardReturnIcon />}>
-          {`${course['CatalogCourseName']} — ${course['Title']}`}
+          {`${course['catalogCourseName']} — ${course['title']}`}
         </Button>
       </Link>
     </Stack>

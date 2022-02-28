@@ -27,8 +27,8 @@ export default function CourseEligibilityIndicator({ children, course }) {
 }
 
 const getEligibility = (course, classesInShoppingCart) => {
-  if (!course.classesOffered?.length) return 'not-offered';
-  if (classesInShoppingCart.some((x) => x.course.ID === course.ID)) return 'in-shopping-cart';
+  if (!course.classes?.length) return 'not-offered';
+  if (classesInShoppingCart.some((x) => x.course.id === course.id)) return 'in-shopping-cart';
   return 'none';
 };
 
@@ -53,6 +53,6 @@ const getDisplayContent = (eligibility, theme) =>
       DoDisturb,
       'disabled',
       theme.palette.grey[600],
-      'Prerequisites unsatisfied',
+      'prerequisites unsatisfied',
     ],
   }[eligibility]);

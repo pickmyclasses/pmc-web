@@ -13,7 +13,7 @@ export default function CourseOverview() {
   const navigate = useNavigate();
   const { course, classes, reviews } = useContext(CourseContext);
 
-  const coursePageURL = '/course/' + course.ID;
+  const coursePageURL = '/course/' + course.id;
 
   return (
     <Box>
@@ -24,12 +24,12 @@ export default function CourseOverview() {
               <Typography variant='subtitle2'>Top Tags</Typography>
               <TagList tags={fakeTags} />
               <Typography variant='subtitle2'>Full Description</Typography>
-              <Typography variant='body1'>{course.Description}</Typography>
+              <Typography variant='body1'>{course.description}</Typography>
               <Typography variant='subtitle2'>Reward</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <School fontSize='small' color='primary' sx={{ marginRight: '8px' }} />
                 <Typography variant='body1' color='darkslateblue'>
-                  {course.DesignationCatalog}
+                  {course.designationCatalog}
                 </Typography>
                 <WatchLater
                   fontSize='small'
