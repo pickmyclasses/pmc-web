@@ -6,14 +6,14 @@ import TagList from '../CourseCardGrid/CourseCard/TagList';
 import { formatCreditRange } from './CoursePageTop';
 import CourseCardGrid from '../CourseCardGrid/CourseCardGrid';
 import { CourseContext } from '../../pages/CoursePage';
-import { getMeanReviewRating } from '../CourseCardGrid/CourseCard/CourseCard';
+import LabeledRatingDisplay from '../CourseCardGrid/CourseCard/LabeledRatingDisplay';
+import { pluralize } from '../../utils';
 
 export default function CourseOverview() {
   const navigate = useNavigate();
   const { course, classes, reviews } = useContext(CourseContext);
 
   const coursePageURL = '/course/' + course.ID;
-  const rating = getMeanReviewRating(reviews);
 
   return (
     <Box>
@@ -50,30 +50,18 @@ export default function CourseOverview() {
             sx={{ width: '100%', height: '100%', cursor: 'pointer' }}
           >
             <Box sx={{ padding: '24px', '> *': { marginY: '12px' } }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: 'fit-content',
-                  marginX: 'auto',
-                  marginBottom: '8px',
-                }}
-              >
-                <Rating name='read-only' precision={0.5} value={rating} readOnly size='large' />
-                <Box
-                  sx={{
-                    marginLeft: '16px',
-                    display: 'flex',
-                    flexFlow: 'column',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Typography variant='h5'>{rating.toFixed(1)}</Typography>
-                  <Typography variant='body2'>out of 5</Typography>
-                </Box>
+              <Box width='fit-content' marginX='auto' marginBottom='8px'>
+                <LabeledRatingDisplay hideLabel value={course.overallRating} size='large' />
               </Box>
-              <Typography variant='body2' align='center' sx={{ opacity: 0.75 }}>
-                <i>Based on {reviews != null ? reviews.length : 0} reviews</i>
+              <Typography
+                variant='body2'
+                align='center'
+                fontStyle='italic'
+                sx={{ opacity: 0.75 }}
+              >
+                {reviews.length
+                  ? `Based on ${pluralize(reviews.length, 'review')}`
+                  : 'No reviews'}
               </Typography>
               <Divider sx={{ marginTop: '12px' }} />
               <Typography variant='subtitle2'>Top Pros</Typography>
@@ -252,7 +240,7 @@ export default function CourseOverview() {
         You may also like
       </Typography>
       <Box width='100%'>
-        <CourseCardGrid numColumns={4} courses={new Array(4).fill({ course, classes })} />
+        <CourseCardGrid numColumns={5} courses={new Array(5).fill(course)} />
       </Box>
     </Box>
   );

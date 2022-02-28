@@ -30,8 +30,12 @@ export const register = ({ email, firstName, lastName, college, password, repass
 export const fetchCourseByID = (courseID) =>
   new Promise((onFetched) =>
     axios.get(`/course/${courseID}`).then((data) => {
-      injectFakeImageURLToCourse(data.data.data.course);
-      onFetched(data);
+      // Inject classesOffered. TODO Q: Remove this after Jay finished object combination for
+      // fetch course query response.
+      const course = data.data.data.course;
+      course.classesOffered = data.data.data.classes;
+      injectFakeImageURLToCourse(course);
+      onFetched(course);
     })
   );
 
@@ -46,32 +50,36 @@ export const fetchAllCourses = () => axios.get('/course/list');
 export const fetchHomePageCourses = () => fakeFetchHomePageCourses();
 
 // TODO (QC): Get rid of this, although it might be hard to.
-const fakeFetchHomePageCourses = () =>
-  new Promise((onFetched) => {
-    const recommendedCategories = {
-      'Major Requirements To Go': [22948, 22949, 22963],
-      'Hot CS Electives': [22961, 22971, 22951, 22970, 22998, 23000],
-      'Hot Gen-Ed Courses': [31826, 28270, 24777, 21978, 28354, 27266],
-    };
+const fakeFetchHomePageCourses = () => {
+  const recommendedCategories = {
+    'Major Requirements To Go': [22948, 22949, 22963],
+    'Hot CS Electives': [22961, 22971, 22951, 22970, 22998, 23000],
+    'Hot Gen-Ed Courses': [31826, 28270, 24777, 21978, 28354, 27266],
+  };
 
-    onFetched(
-      Object.entries(recommendedCategories).map(([category, courseIDs]) => ({
+  return Promise.all(
+    Object.entries(recommendedCategories).map(([category, courseIDs]) =>
+      Promise.all(courseIDs.map((id) => fetchCourseByID(id))).then((courses) => ({
         category,
-        courseIDs,
+        courses,
       }))
-    );
-  });
+    )
+  );
+};
 
 export const fetchCoursesBySearch = (query) => fakeFetchCoursesBySearch(query);
 
 // TODO (QC): Get rid of this also.
-const fakeFetchCoursesBySearch = () =>
-  new Promise((onFetched) =>
-    onFetched([
-      22966, 23000, 22968, 23068, 23063, 23041, 23001, 22986, 22998, 22964, 22941, 22942, 22961,
-      22971, 22951, 22970, 22998, 31826, 28270, 24777, 27266, 27334, 21978, 28354, 30056, 25305,
-    ])
-  );
+const fakeFetchCoursesBySearch = () => {
+  const resultCourseIDs = [
+    22966, 23000, 22968, 23068, 23063, 23041, 23001, 22986, 22998, 22964, 22941, 22942, 22961,
+    22971, 22951, 22970, 22998, 31826, 28270, 24777, 27266, 27334, 21978, 28354, 30056, 25305,
+  ];
+
+  return Promise.all(resultCourseIDs.map((id) => fetchCourseByID(id)));
+};
+
+new Promise((onFetched) => onFetched());
 
 export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
 
@@ -108,7 +116,8 @@ export const addClassIDToShoppingCart = (body) => axios.post('/schedule', body);
 
 export const removeClassIDFromShoppingCart = (body) => axios.put('/schedule', body);
 
-export const fetchReviewsByCourseID = (courseID) => axios.get(`/course/${courseID}/review`);
+export const fetchReviewsByCourseID = (courseID) =>
+  axios.get(`/course/${courseID}/review`).then((data) => data.data.data.reviews);
 
 // TODO Q: (1) this is not by ID; (2) simplify object passing and remove object reconstruction.
 export const postReviewByID = (reviewObj) =>

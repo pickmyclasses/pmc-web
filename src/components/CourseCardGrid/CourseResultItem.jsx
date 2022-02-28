@@ -1,14 +1,5 @@
-import {
-  Box,
-  Card,
-  CardMedia,
-  Divider,
-  Rating,
-  Skeleton,
-  Typography,
-  useTheme,
-} from '@mui/material';
-import React, { useContext, useState } from 'react';
+import { Box, Card, CardMedia, Divider, Skeleton, Typography, useTheme } from '@mui/material';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { formatCourseName, pluralize } from '../../utils';
@@ -16,20 +7,15 @@ import CourseEligibilityIndicator from './CourseCard/CourseEligibilityIndicator'
 import TagList from './CourseCard/TagList';
 import ClickableIndicator from './CourseCard/ClickableIndicator';
 import CourseOfferingSummary from './CourseOfferingSummary';
-import { getEligibility, getMeanReviewRating } from './CourseCard/CourseCard';
-import { SchedulerContext } from '../Scheduler/ContainerWithScheduler';
+import LabeledRatingDisplay from './CourseCard/LabeledRatingDisplay';
 
 /** A course search result item. */
-export default function CourseResultItem({ data: { course, classes, reviews } }) {
+export default function CourseResultItem({ course }) {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const { classesInShoppingCart } = useContext(SchedulerContext);
-
   const [isMouseEntered, setIsMouseEntered] = useState(false);
   const [mouseEnterEventTimeoutHandle, setMouseEnterEventTimeoutHandle] = useState(0);
-
-  const rating = getMeanReviewRating(reviews);
 
   const renderContent = () => (
     <>
@@ -37,17 +23,13 @@ export default function CourseResultItem({ data: { course, classes, reviews } })
       <Box sx={{ padding: '16px', flex: 1, minWidth: 0 }}>
         <ClickableIndicator propagate>
           <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              whiteSpace: 'nowrap',
-              minWidth: 0,
-              '> *': { minWidth: 0 },
-            }}
+            display='flex'
+            alignItems='center'
+            whiteSpace='nowrap'
+            minWidth={0}
+            sx={{ '> *': { minWidth: 0 } }}
           >
-            <CourseEligibilityIndicator
-              eligibility={getEligibility(course, classes, classesInShoppingCart)}
-            >
+            <CourseEligibilityIndicator course={course}>
               <Typography variant='h6'>{formatCourseName(course.CatalogCourseName)}</Typography>
               <Typography
                 variant='h6'
@@ -69,9 +51,12 @@ export default function CourseResultItem({ data: { course, classes, reviews } })
           <Typography variant='body2' color={theme.palette.text.secondary}>
             CS major requirement &nbsp;&nbsp;•&nbsp;&nbsp;
             {course.MinCredit === course.MaxCredit ? '' : course.MinCredit + '–'}
-            {pluralize(+course.MaxCredit, 'credit')}&nbsp;&nbsp;
+            {pluralize(+course.MaxCredit, 'credit')}&nbsp;&nbsp;•&nbsp;&nbsp;
           </Typography>
-          {rating > 0 && <Rating readOnly value={rating} precision={0.5} size='small' />}
+          <LabeledRatingDisplay value={course.overallRating} />
+          <Typography variant='body2' color={theme.palette.text.secondary}>
+            &nbsp;&nbsp;•
+          </Typography>
           <TagList gutterLeft noWrap tags={['Backend', 'Coding']} size='small' />
         </Box>
         <Typography
@@ -90,7 +75,6 @@ export default function CourseResultItem({ data: { course, classes, reviews } })
       <Box sx={{ padding: '12px 16px', width: '108px', height: 'fit-content', margin: 'auto' }}>
         <CourseOfferingSummary
           course={course}
-          classes={classes}
           maxRows={4}
           textAlign='center'
           enableHighlight

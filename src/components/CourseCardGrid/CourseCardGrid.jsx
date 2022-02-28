@@ -8,9 +8,9 @@ export default function CourseCardGrid({ numColumns = 3, courses = [] }) {
       <Grid container justifyContent='space-between' alignItems='stretch'>
         <Grid item xs={12}>
           <Grid container alignItems='stretch' spacing='32px' columns={numColumns}>
-            {courses.map((data, i) => (
+            {courses.map((course, i) => (
               <Grid key={i} item sm={1}>
-                <CourseCard data={data} />
+                <CourseCard course={course} />
               </Grid>
             ))}
           </Grid>

@@ -6,14 +6,13 @@ import ContainerWithStaticScheduler from '../Scheduler/ContainerWithStaticSchedu
 import { CourseContext } from '../../pages/CoursePage';
 
 export default function CourseRegistration() {
-  const { course, classes } = useContext(CourseContext);
+  const { course } = useContext(CourseContext);
   return (
     <Box>
       <ContainerWithStaticScheduler>
         <CourseEnrollmentSubCard course={course} />
-        {/* TODO (QC): Inconsistent component/file naming. Also it may be better to let
-         *  the table fetch the list fo classes by itself. */}
-        <EnhancedTable classes={classes} />
+        {/* TODO (QC): Inconsistent component/file naming. */}
+        <EnhancedTable classes={course.classesOffered} />
       </ContainerWithStaticScheduler>
     </Box>
   );

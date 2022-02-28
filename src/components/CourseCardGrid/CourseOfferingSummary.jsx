@@ -11,7 +11,6 @@ import DaysIndicator from './CourseCard/DaysIndicator';
 import { NavigationBarContext } from '../NavigationBar/ContainerWithNavigationBar';
 
 export default function CourseOfferingSummary({
-  classes,
   course,
   width,
   rowHeight = 1.75,
@@ -20,6 +19,8 @@ export default function CourseOfferingSummary({
   enableHighlight = false,
   isMouseEntered = false,
 }) {
+  const classes = course.classesOffered;
+
   const theme = useTheme();
 
   const { shouldShowStaticScheduler } = useContext(NavigationBarContext);

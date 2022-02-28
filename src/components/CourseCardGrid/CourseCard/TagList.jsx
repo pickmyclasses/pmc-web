@@ -3,6 +3,7 @@ import React from 'react';
 
 export default function TagList({ tags, noWrap = false, size = 'medium', gutterLeft = false }) {
   const maxHeight = { small: '24px', medium: '32px', large: '40px' }[size];
+  const fontSize = { small: '12px', medium: '', large: '16px' }[size];
 
   return (
     <Box
@@ -17,7 +18,7 @@ export default function TagList({ tags, noWrap = false, size = 'medium', gutterL
       }}
     >
       {tags.map((label) => (
-        <Chip key={label} label={label} size={size} />
+        <Chip key={label} label={label} size={size} sx={{ fontSize }} />
       ))}
     </Box>
   );
