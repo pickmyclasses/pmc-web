@@ -221,7 +221,6 @@ function initRowData(classes) {
 }
 
 export default function EnhancedTable({ classes }) {
-  console.log('** c', classes);
   rows = initRowData(classes);
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('offerDate');

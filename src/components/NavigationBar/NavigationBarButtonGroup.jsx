@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Tab, Button, styled, ThemeProvider } from '@mui/material';
 import { UserContext } from '../../App';
@@ -12,7 +12,20 @@ import { Dashboard, NotificationAdd } from '@mui/icons-material';
  * navigation bar.
  */
 export default function NavigationBarButtonGroup() {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem('user');
+    if (loggedInUser) {
+      const curUser = JSON.parse(loggedInUser);
+      setUser({
+        name: curUser.name,
+        token: curUser.token,
+        role: curUser.role,
+        userID: curUser.userID,
+      });
+    }
+  }, []);
 
   const renderTabsForLoggedIn = () => [
     <SchedulerDropDown key='scheduler' />,
