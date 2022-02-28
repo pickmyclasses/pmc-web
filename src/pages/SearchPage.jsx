@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { fetchCoursesBySearch } from '../api';
 import ContainerWithStaticScheduler from '../components/Scheduler/ContainerWithStaticScheduler';
 import { useMount } from '../utils';
@@ -22,12 +22,12 @@ export default function SearchPage({ shouldShowScheduler }) {
       <ContainerWithStaticScheduler shouldShowScheduler={shouldShowScheduler}>
         <ContainerWithLoadingIndication isLoading={!courses}>
           <Scrollbars autoHide>
-            <Box sx={{ padding: '24px' }}>
+            <Stack padding='24px' spacing='16px'>
               <Typography variant='subtitle2' gutterBottom>
                 Found {courses?.length} results for <b>"{urlParams.query}"</b>
               </Typography>
               <CourseResultList courses={courses} />
-            </Box>
+            </Stack>
           </Scrollbars>
         </ContainerWithLoadingIndication>
       </ContainerWithStaticScheduler>
