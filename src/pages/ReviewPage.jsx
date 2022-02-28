@@ -10,7 +10,7 @@ import ReviewComments from '../components/ReviewInputDetails/ReviewComments';
 import MainCard from '../components/Skeleton/MainCard';
 import { gridSpacing } from '../constants/constants';
 import { useMount } from '../utils';
-import { postReviewByID } from '../../src/api/index';
+import { postReview } from '../../src/api/index';
 import swal from 'sweetalert';
 import ReviewAnonymous from '../components/ReviewInputDetails/ReviewAnonymous';
 import ReviewRecommend from '../components/ReviewInputDetails/ReviewRecommend';
@@ -120,11 +120,10 @@ export default function ReviewPage() {
                 }
                 swal('Good job!', 'You submitted the review!', 'success');
 
-                postReviewByID({
+                postReview(course.id, {
                   anonymous: anonymity,
                   comment: commentValue,
                   cons: conValue,
-                  courseID: course.id,
                   pros: proValue,
                   rating: ratingValue,
                   recommended: recommendation,

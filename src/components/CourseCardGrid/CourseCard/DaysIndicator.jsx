@@ -14,11 +14,11 @@ export default function DaysIndicator({
   // These colors read colors[+isHighlighted][+isMouseEntered]
   const backgroundColors = [
     ['', ''],
-    [colors.grey[300], colors.green[100]],
+    [colors.grey[300], colors.blue[100]],
   ];
   const borderColors = [
-    [colors.grey[300], colors.green[100]],
-    [colors.grey[400], colors.green[300]],
+    [colors.grey[300], colors.blue[100]],
+    [colors.grey[400], colors.blue[300]],
   ];
 
   const renderDayIndication = (i, dayName, isHighlighted) => (

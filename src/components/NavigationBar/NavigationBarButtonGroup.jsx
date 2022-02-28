@@ -1,11 +1,12 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Tab, Button, styled, ThemeProvider } from '@mui/material';
 import { UserContext } from '../../App';
 import { navigationBarTheme } from './NavigationBar';
 import SchedulerDropDown from './NavigationBarButtonGroup/SchedulerDropDown';
 import UserDropDown from './NavigationBarButtonGroup/UserDropDown';
-import { Dashboard, NotificationAdd } from '@mui/icons-material';
+import { NotificationAdd } from '@mui/icons-material';
+import { useMount } from '../../utils';
 
 /**
  * The group of buttons like notification and user profile that sits on the right side of the
@@ -14,23 +15,14 @@ import { Dashboard, NotificationAdd } from '@mui/icons-material';
 export default function NavigationBarButtonGroup() {
   const { user, setUser } = useContext(UserContext);
 
-  useEffect(() => {
+  useMount(() => {
     const loggedInUser = localStorage.getItem('user');
-    if (loggedInUser) {
-      const curUser = JSON.parse(loggedInUser);
-      setUser({
-        name: curUser.name,
-        token: curUser.token,
-        role: curUser.role,
-        userID: curUser.userID,
-      });
-    }
-  }, []);
+    if (loggedInUser) setUser(JSON.parse(loggedInUser));
+  });
 
   const renderTabsForLoggedIn = () => [
     <SchedulerDropDown key='scheduler' />,
     <ButtonGroupTab key='notification' label='Notification' icon={<NotificationAdd />} />,
-    <ButtonGroupTab key='discussion' label='Discussion' icon={<Dashboard />} />,
     <UserDropDown key='user' />,
   ];
 
@@ -55,4 +47,7 @@ export default function NavigationBarButtonGroup() {
   );
 }
 
-export const ButtonGroupTab = styled(Tab)({ fontSize: 'xx-small' });
+export const ButtonGroupTab = styled(Tab)({
+  fontSize: 'xx-small',
+  fontVariant: 'all-small-caps',
+});

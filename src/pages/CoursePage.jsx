@@ -1,6 +1,6 @@
 import React, { createContext, createElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Forum, QueryStats, ShoppingCart, Widgets } from '@mui/icons-material';
+import { Forum, PieChart, ShoppingCart, Widgets } from '@mui/icons-material';
 import { Box, Container } from '@mui/material';
 import { fetchCourseByID, fetchReviewsByCourseID } from '../api';
 import CoursePageTop from '../components/CoursePage/CoursePageTop';
@@ -31,7 +31,7 @@ export default function CoursePage() {
 
   return (
     <ContainerWithLoadingIndication isLoading={!course || !reviews}>
-      <Box width='100%' height='100%' minHeight={0} sx={{ overflowY: 'sceroll' }}>
+      <Box width='100%' height='100%' minHeight={0}>
         <OnTopScrollBars>
           <CoursePageTop course={course} tabs={tabs} activeTabName={activeTabName} />
           <Container maxWidth='xl' sx={{ paddingY: '32px' }}>
@@ -55,7 +55,7 @@ export const CourseContext = createContext();
 
 const tabs = {
   '': { title: 'Overview', icon: Widgets, content: CourseOverview },
-  'stats': { title: 'Stats', icon: QueryStats, content: CourseStats },
+  'stats': { title: 'Stats', icon: PieChart, content: CourseStats },
   'reviews': { title: 'Reviews', icon: Forum, content: CourseReviews },
   'registration': { title: 'Registration', icon: ShoppingCart, content: CourseRegistration },
 };

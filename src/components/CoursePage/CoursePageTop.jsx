@@ -15,6 +15,7 @@ import React, { createElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { formatCourseName, pluralize } from '../../utils';
 import { CenterAligningFlexBox } from '../CourseCardGrid/CourseCard/CourseCard';
+import CourseEligibilityIndicator from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
 
 export default function CoursePageTop({ course, tabs, activeTabName }) {
   const theme = useTheme();
@@ -25,17 +26,19 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
   const renderCourseInfo = () => (
     <Box>
       <CenterAligningFlexBox>
-        <Typography variant='h5' lineHeight={2} fontWeight='bold'>
-          {formatCourseName(course.catalogCourseName)}
-        </Typography>
-        <Typography
-          variant='h5'
-          fontWeight='normal'
-          lineHeight={2}
-          sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}
-        >
-          &nbsp;— {course.title}
-        </Typography>
+        <CourseEligibilityIndicator course={course} size='medium'>
+          <Typography variant='h5' lineHeight={2} fontWeight='bold'>
+            {formatCourseName(course.catalogCourseName)}
+          </Typography>
+          <Typography
+            variant='h5'
+            fontWeight='normal'
+            lineHeight={2}
+            sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}
+          >
+            &nbsp;— {course.title}
+          </Typography>
+        </CourseEligibilityIndicator>
       </CenterAligningFlexBox>
       <Typography variant='body1' color={theme.palette.text.secondary}>
         CS major requirement &nbsp;&nbsp;•&nbsp;&nbsp;

@@ -3,7 +3,7 @@ import { Box, Tooltip, useTheme } from '@mui/material';
 import React, { createElement, useContext } from 'react';
 import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
 
-export default function CourseEligibilityIndicator({ children, course }) {
+export default function CourseEligibilityIndicator({ children, course, size = 'small' }) {
   const theme = useTheme();
 
   const { classesInShoppingCart } = useContext(SchedulerContext);
@@ -17,7 +17,7 @@ export default function CourseEligibilityIndicator({ children, course }) {
         {children}
         {iconType &&
           createElement(iconType, {
-            fontSize: 'small',
+            fontSize: size,
             color: colorName,
             sx: { marginLeft: '8px' },
           })}
@@ -26,16 +26,16 @@ export default function CourseEligibilityIndicator({ children, course }) {
   );
 }
 
-const getEligibility = (course, classesInShoppingCart) => {
+export const getEligibility = (course, classesInShoppingCart) => {
   if (!course.classes?.length) return 'not-offered';
   if (classesInShoppingCart.some((x) => x.course.id === course.id)) return 'in-shopping-cart';
-  return 'none';
+  return 'eligible';
 };
 
 const getDisplayContent = (eligibility, theme) =>
   ({
-    'none': [null, 'primary', theme.palette.text.primary, ''],
-    'eligible': [Check, 'action', theme.palette.text.primary, 'Eligible for this course'],
+    'eligible': [null, 'primary', theme.palette.text.primary, ''],
+    // 'eligible': [Check, 'action', theme.palette.text.primary, 'Eligible for this course'],
     'in-shopping-cart': [
       ShoppingCart,
       'action',

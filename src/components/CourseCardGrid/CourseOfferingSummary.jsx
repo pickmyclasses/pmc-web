@@ -140,7 +140,7 @@ export default function CourseOfferingSummary({
               '*': {
                 color:
                   onlineOffering && highlightedIndex === representativeOfferings.length
-                    ? theme.palette.success.main
+                    ? theme.palette.primary.main
                     : '',
                 transition: getTransitionForStyles(['color']),
               },

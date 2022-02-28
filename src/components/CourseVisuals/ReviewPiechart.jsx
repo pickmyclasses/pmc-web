@@ -15,7 +15,7 @@ function generateStarValues(reviews) {
   }
 }
 
-export default function ReviewPiechart({ reviews }) {
+export default function ReviewPieChart({ reviews }) {
   generateStarValues(reviews);
   return (
     <PieChart width={300} height={300}>

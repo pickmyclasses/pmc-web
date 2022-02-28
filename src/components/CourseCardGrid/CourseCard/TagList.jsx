@@ -1,7 +1,14 @@
 import { Box, Chip } from '@mui/material';
 import React from 'react';
 
-export default function TagList({ tags, noWrap = false, size = 'medium', gutterLeft = false }) {
+export default function TagList({
+  tags,
+  noWrap = false,
+  size = 'medium',
+  gutterLeft = false,
+  variant = 'contained',
+  color = 'default',
+}) {
   const maxHeight = { small: '24px', medium: '32px', large: '40px' }[size];
   const fontSize = { small: '12px', medium: '', large: '16px' }[size];
 
@@ -18,7 +25,14 @@ export default function TagList({ tags, noWrap = false, size = 'medium', gutterL
       }}
     >
       {tags.map((label) => (
-        <Chip key={label} label={label} size={size} sx={{ fontSize }} />
+        <Chip
+          key={label}
+          label={label}
+          size={size}
+          sx={{ fontSize }}
+          variant={variant}
+          color={color}
+        />
       ))}
     </Box>
   );
