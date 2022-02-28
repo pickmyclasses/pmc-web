@@ -10,7 +10,6 @@ const data = [
 ];
 const COLORS = ['#57e32c', '#b7dd29', '#ffe234', '#ffa534', '#ff4545'];
 function generateStarValues(reviews) {
-  console.log(reviews);
   for (let i = 0; i < reviews.length; i++) {
     data[reviews[i].rating].value += 1;
   }
