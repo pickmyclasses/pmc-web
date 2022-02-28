@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Divider, Grid } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 import CourseComments from './CourseComments';
@@ -14,16 +14,16 @@ const titleAdd = 'Additional feedbacks?';
 
 export default function CourseReviewCard({ review }) {
   let createDate = review.createdAt.slice(0, 10);
-  let userName = review.anonymous ? 'anonymous ' : review.user_name;
-
+  let userName = review.anonymous ? 'Anonymous ' : review.username;
   return (
     <SubCard spacing={gridSpacing}>
       <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}>
-        <Typography variant='subtitle1' gutterBottom component='div'>
-          {userName}
+        <Typography variant='subtitle1' gutterBottom component='div' sx={{ opacity: 0.75 }}>
+          {userName} - {createDate}
         </Typography>
+
         <Grid item>
-          <Stack direction='row' spacing={1}>
+          <Stack direction='row' spacing={1} sx={{ padding: '12px 12px' }}>
             <Rating
               name='read-only'
               precision={0.1}
@@ -31,11 +31,10 @@ export default function CourseReviewCard({ review }) {
               readOnly
               size='large'
             />
-            <Typography variant='subtitle1' gutterBottom component='div' sx={{ opacity: 0.75 }}>
-              {createDate}
-            </Typography>
           </Stack>
         </Grid>
+        <Divider />
+
         <Grid item>
           <CourseComments title={titlePos} comment={review.pros} isPositive={true} />
         </Grid>
@@ -43,11 +42,16 @@ export default function CourseReviewCard({ review }) {
           <CourseComments title={titleNeg} comment={review.cons} isPositive={false} />
         </Grid>
         <Grid item>
-          <CourseComments title={titleAdd} comment={review.comment} />
+          {review.comment.length == 0 ? (
+            <></>
+          ) : (
+            <CourseComments title={titleAdd} comment={review.comment} />
+          )}
         </Grid>
-        <Grid item>
+        <Divider />
+        <Stack direction='row' spacing={1} sx={{ padding: '12px 12px' }}>
           <CourseReviewRecommendation isRecommended={review.recommended} />
-        </Grid>
+        </Stack>
       </Box>
     </SubCard>
   );

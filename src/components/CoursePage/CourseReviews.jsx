@@ -9,15 +9,16 @@ export default function CourseReviews() {
 
   const [sortedReviews, setSortedReviews] = useState(reviews);
   const [filterMethod, setFilterMethod] = useState('most-recent');
-
   useEffect(() => {
     const comparatorByFilterMethod = {
       'most-recent': (x, y) =>
-        new Date(y.created_at).getTime() - new Date(x.created_at).getTime(),
-      'least-recent': (x, y) =>
-        new Date(x.created_at).getTime() - new Date(y.created_at).getTime(),
-      // 'most-helpful': TODO K
-      // 'LeastHelpful': TODO K
+        new Date(y.createdAt).getTime() - new Date(x.createdAt).getTime(),
+      // 'least-recent': (x, y) =>
+      //   new Date(x.createdAt).getTime() - new Date(y.createdAt).getTime(),
+      // 'most-helpful': (x, y) =>
+      // new Date(y.createdAt).getTime() - new Date(x.createdAt).getTime(),
+      //  'least-recent': (x, y) =>
+      //   new Date(x.createdAt).getTime() - new Date(y.createdAt).getTime(),
       'highest-rated': (x, y) => y.rating - x.rating,
       'lowest-rated': (x, y) => x.rating - y.rating,
     };

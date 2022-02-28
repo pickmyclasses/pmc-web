@@ -17,7 +17,7 @@ function RenderStatus(isRecommended) {
     statusInstruction = 'The user recommended this course.';
   }
   return (
-    <Stack sx={{ width: '100%' }} spacing={2}>
+    <Stack sx={{ width: '33%' }} spacing={2}>
       <Alert variant='outlined' severity={statusColor}>
         <AlertTitle>{statusTitle}</AlertTitle>
         <strong>{statusInstruction}</strong>
