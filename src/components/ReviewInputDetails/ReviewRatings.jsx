@@ -32,8 +32,8 @@ export default function ReviewRatings({ course, value, onChange }) {
           justifyContent='center'
         >
           <MuiTypography variant='h6' gutterBottom>
-            How likely would you recommend {formatCourseName(course['CatalogCourseName'])} (
-            {course['Title']}) to a friend or colleague?
+            How likely would you recommend {formatCourseName(course['catalogCourseName'])} (
+            {course['title']}) to a friend or colleague?
           </MuiTypography>
         </Grid>
 

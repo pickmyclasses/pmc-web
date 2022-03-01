@@ -10,7 +10,7 @@ import ReviewComments from '../components/ReviewInputDetails/ReviewComments';
 import MainCard from '../components/Skeleton/MainCard';
 import { gridSpacing } from '../constants/constants';
 import { useMount } from '../utils';
-import { postReviewByID } from '../../src/api/index';
+import { postReview } from '../../src/api/index';
 import swal from 'sweetalert';
 import ReviewAnonymous from '../components/ReviewInputDetails/ReviewAnonymous';
 import ReviewRecommend from '../components/ReviewInputDetails/ReviewRecommend';
@@ -26,11 +26,9 @@ export default function ReviewPage() {
   const [recommendation, setRecommendation] = useState(false);
 
   const urlParams = useParams();
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
-  useMount(() => {
-    fetchCourseByID(urlParams['id']).then((data) => setCourse(data['data']['data']['course']));
-  });
+  useMount(() => fetchCourseByID(urlParams.id).then(setCourse));
 
   if (!course) {
     return (
@@ -122,15 +120,14 @@ export default function ReviewPage() {
                 }
                 swal('Good job!', 'You submitted the review!', 'success');
 
-                postReviewByID({
+                postReview(course.id, {
                   anonymous: anonymity,
                   comment: commentValue,
                   cons: conValue,
-                  course_id: course.ID,
                   pros: proValue,
                   rating: ratingValue,
                   recommended: recommendation,
-                  user_id: user.userID,
+                  userID: user.userID,
                 });
               }}
             >

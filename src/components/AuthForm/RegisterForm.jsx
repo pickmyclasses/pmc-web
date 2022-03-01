@@ -30,14 +30,14 @@ export default function RegisterForm() {
     const firstName = data.get('firstName');
     const lastName = data.get('lastName');
     const college = data.get('college');
-    const repassword = data.get('repassword');
+    const rePassword = data.get('rePassword');
 
-    if (repassword !== password) {
+    if (rePassword !== password) {
       swal('Password Mismatch!', 'Please make sure your password is correct', 'error');
-    } else if (!email || !password || !firstName || !lastName || !repassword || !college) {
+    } else if (!email || !password || !firstName || !lastName || !rePassword || !college) {
       swal('Info Not Complete', 'Please make sure you have filled out all the fields', 'error');
     } else {
-      register({ email, firstName, lastName, college, password, repassword })
+      register({ email, firstName, lastName, college, password, rePassword })
         .then(() => {
           swal('Welcome To PMC!', 'Registration succeeded, please login!', 'success');
           setTimeout(function () {
@@ -140,10 +140,10 @@ export default function RegisterForm() {
                 <TextField
                   required
                   fullWidth
-                  name='repassword'
+                  name='rePassword'
                   label='Renter Password'
                   type='password'
-                  id='repassword'
+                  id='rePassword'
                   autoComplete='new-password'
                 />
               </Grid>

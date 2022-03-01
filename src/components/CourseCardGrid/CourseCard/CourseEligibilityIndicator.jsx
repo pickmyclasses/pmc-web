@@ -1,13 +1,41 @@
 import { Check, DoDisturb, ShoppingCart } from '@mui/icons-material';
 import { Box, Tooltip, useTheme } from '@mui/material';
-import React, { createElement } from 'react';
+import React, { createElement, useContext } from 'react';
+import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
 
-export default function CourseEligibilityIndicator({ children, eligibility = 'none' }) {
+export default function CourseEligibilityIndicator({ children, course, size = 'small' }) {
   const theme = useTheme();
 
-  const [iconType, colorName, colorValue, tooltipTitle] = {
-    'none': [null, 'primary', theme.palette.text.primary, ''],
-    'eligible': [Check, 'action', theme.palette.text.primary, 'Eligible for this course'],
+  const { classesInShoppingCart } = useContext(SchedulerContext);
+
+  const eligibility = getEligibility(course, classesInShoppingCart);
+  const [iconType, colorName, colorValue, tooltipTitle] = getDisplayContent(eligibility, theme);
+
+  return (
+    <Tooltip title={tooltipTitle} disableInteractive placement='top-end'>
+      <Box sx={{ display: 'flex', alignItems: 'center', 'h5, h6': { color: colorValue } }}>
+        {children}
+        {iconType &&
+          createElement(iconType, {
+            fontSize: size,
+            color: colorName,
+            sx: { marginLeft: '8px' },
+          })}
+      </Box>
+    </Tooltip>
+  );
+}
+
+export const getEligibility = (course, classesInShoppingCart) => {
+  if (!course.classes?.length) return 'not-offered';
+  if (classesInShoppingCart.some((x) => x.course.id === course.id)) return 'in-shopping-cart';
+  return 'eligible';
+};
+
+const getDisplayContent = (eligibility, theme) =>
+  ({
+    'eligible': [null, 'primary', theme.palette.text.primary, ''],
+    // 'eligible': [Check, 'action', theme.palette.text.primary, 'Eligible for this course'],
     'in-shopping-cart': [
       ShoppingCart,
       'action',
@@ -25,21 +53,6 @@ export default function CourseEligibilityIndicator({ children, eligibility = 'no
       DoDisturb,
       'disabled',
       theme.palette.grey[600],
-      'Prerequisites unsatisfied',
+      'prerequisites unsatisfied',
     ],
-  }[eligibility];
-
-  return (
-    <Tooltip title={tooltipTitle} disableInteractive placement='top-end'>
-      <Box sx={{ display: 'flex', alignItems: 'center', 'h5, h6': { color: colorValue } }}>
-        {children}
-        {iconType &&
-          createElement(iconType, {
-            fontSize: 'small',
-            color: colorName,
-            sx: { marginLeft: '8px' },
-          })}
-      </Box>
-    </Tooltip>
-  );
-}
+  }[eligibility]);

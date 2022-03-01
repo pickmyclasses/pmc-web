@@ -17,9 +17,9 @@ export default function CourseFilterReview() {
         <InputLabel>Sort reviews by</InputLabel>
         <Select value={filterMethod} label='Sort reviews by' onChange={handleChange}>
           <MenuItem value='most-recent'>Most Recent</MenuItem>
-          <MenuItem value='least-recent'>Least Recent</MenuItem>
+          {/* <MenuItem value='least-recent'>Least Recent</MenuItem>
           <MenuItem value='most-helpful'>Most Helpful</MenuItem>
-          <MenuItem value='least-helpful'>Least Helpful</MenuItem>
+          <MenuItem value='least-helpful'>Least Helpful</MenuItem> */}
           <MenuItem value='highest-rated'>Highest Rated</MenuItem>
           <MenuItem value='lowest-rated'>Lowest Rated</MenuItem>
         </Select>

@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import { UserContext } from '../../App';
 
 export default function CourseAddReview() {
-  const course = useContext(CourseContext);
+  const { course } = useContext(CourseContext);
   const { user } = useContext(UserContext);
   return (
     <Grid item>
@@ -25,7 +25,7 @@ export default function CourseAddReview() {
           disabled={user == null}
           startIcon={<AddCommentIcon />}
           component={Link}
-          to={`/course/${course.ID}/reviews/compose`}
+          to={`/course/${course.id}/reviews/compose`}
         >
           Write a Review
         </Button>

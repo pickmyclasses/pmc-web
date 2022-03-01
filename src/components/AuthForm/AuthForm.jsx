@@ -30,13 +30,15 @@ export default function AuthForm() {
 
     login({ email, password })
       .then((data) => {
-        const userInfo = data.data;
-        setUser({
-          name: `${userInfo.firstName} ${userInfo.lastName}`,
-          token: userInfo.token,
-          role: userInfo.role,
-          userID: userInfo.id,
-        });
+        const userInfo = {
+          name: `${data.data.firstName} ${data.data.lastName}`,
+          token: data.data.token,
+          role: data.data.role,
+          userID: data.data.id,
+        };
+        setUser(userInfo);
+
+        localStorage.setItem('user', JSON.stringify(userInfo));
         navigate('/home');
       })
       .catch((err) => {

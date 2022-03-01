@@ -15,27 +15,30 @@ import React, { createElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { formatCourseName, pluralize } from '../../utils';
 import { CenterAligningFlexBox } from '../CourseCardGrid/CourseCard/CourseCard';
+import CourseEligibilityIndicator from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
 
 export default function CoursePageTop({ course, tabs, activeTabName }) {
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const coursePageURL = '/course/' + course.ID;
+  const coursePageURL = '/course/' + course.id;
 
   const renderCourseInfo = () => (
     <Box>
       <CenterAligningFlexBox>
-        <Typography variant='h5' lineHeight={2} fontWeight='bold'>
-          {formatCourseName(course.CatalogCourseName)}
-        </Typography>
-        <Typography
-          variant='h5'
-          fontWeight='normal'
-          lineHeight={2}
-          sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}
-        >
-          &nbsp;— {course.Title}
-        </Typography>
+        <CourseEligibilityIndicator course={course} size='medium'>
+          <Typography variant='h5' lineHeight={2} fontWeight='bold'>
+            {formatCourseName(course.catalogCourseName)}
+          </Typography>
+          <Typography
+            variant='h5'
+            fontWeight='normal'
+            lineHeight={2}
+            sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}
+          >
+            &nbsp;— {course.title}
+          </Typography>
+        </CourseEligibilityIndicator>
       </CenterAligningFlexBox>
       <Typography variant='body1' color={theme.palette.text.secondary}>
         CS major requirement &nbsp;&nbsp;•&nbsp;&nbsp;
@@ -65,7 +68,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
   return (
     <>
       <CardMedia component='img' image={course.ImageURL} height='360px' />
-      <Card sx={{ position: 'sticky', top: 0, zIndex: 1, boxShadow: 2 }}>
+      <Card sx={{ position: 'sticky', top: 0, zIndex: 1001, boxShadow: 2 }}>
         <Container maxWidth='xl'>
           <Box padding='16px 0' display='flex' justifyContent='space-between'>
             {renderCourseInfo()}
@@ -93,7 +96,7 @@ export const TabsWithoutBottomGap = styled(Tabs)({
 });
 
 export const formatCreditRange = (course) =>
-  `${course.MinCredit === course.MaxCredit ? '' : course.MinCredit + '–'}${pluralize(
-    +course.MaxCredit,
+  `${course.minCredit === course.maxCredit ? '' : course.minCredit + '–'}${pluralize(
+    +course.maxCredit,
     'credit'
   )}`;

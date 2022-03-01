@@ -50,13 +50,13 @@ import { SchedulerContext } from '../Scheduler/ContainerWithScheduler';
 import { UserContext } from '../../App';
 import { SetClassesToHighlightContext } from '../Scheduler/ContainerWithStaticScheduler';
 
-function createData(OfferDate, Location, Section, RecommendationScore, Professor) {
+function createData(offerDate, location, section, recommendationScore, professor) {
   return {
-    OfferDate,
-    Location,
-    Section,
-    RecommendationScore,
-    Professor,
+    offerDate,
+    location,
+    section,
+    recommendationScore,
+    professor,
   };
 }
 
@@ -93,11 +93,11 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'OfferDate', numeric: false, disablePadding: true, label: 'Session' },
-  { id: 'Component', numeric: false, disablePadding: true, label: 'Component' },
-  { id: 'Location', numeric: false, disablePadding: true, label: 'Meet Times' },
-  { id: 'Section', numeric: false, disablePadding: true, label: 'Location' },
-  { id: 'Professor', numeric: false, disablePadding: true, label: 'Professor' },
+  { id: 'offerDate', numeric: false, disablePadding: true, label: 'Session' },
+  { id: 'component', numeric: false, disablePadding: true, label: 'Component' },
+  { id: 'section', numeric: false, disablePadding: true, label: 'Meet Times' },
+  { id: 'recommendationScore', numeric: false, disablePadding: true, label: 'Location' },
+  { id: 'professor', numeric: false, disablePadding: true, label: 'Instructors' },
 ];
 
 function EnhancedTableHead(props) {
@@ -204,15 +204,15 @@ EnhancedTableToolbar.propTypes = {
 
 // TODO Q: As iterated many times, fix it and do not use OfferDate as the key.
 const formatOfferDate = (classData) =>
-  `${classData['OfferDate']} ${classData['StartTime']}–${classData['EndTime']}`;
+  `${classData['offerDate']} ${classData['startTime']}–${classData['endTime']}`;
 
 function initRowData(classes) {
   let rows = [];
   for (let classData of classes) {
     const offerDate = formatOfferDate(classData);
     const component = getComponent(classData);
-    const location = classData['Location'];
-    const section = classData['Session'];
+    const location = classData['location'];
+    const section = classData['session'];
     const professor = getInstructor(classData);
     const row = createData(section, component, offerDate, location, professor);
     rows.push(row);
@@ -258,7 +258,7 @@ export default function EnhancedTable({ classes }) {
     if (event.target.checked) {
       setSelected([]);
     } else {
-      const newSelecteds = rows.map((n) => n.OfferDate);
+      const newSelecteds = rows.map((n) => n.offerDate);
       setSelected(newSelecteds);
     }
   };
@@ -325,13 +325,13 @@ export default function EnhancedTable({ classes }) {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.OfferDate);
+                  const isItemSelected = isSelected(row.offerDate);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.OfferDate)}
+                      onClick={(event) => handleClick(event, row.offerDate)}
                       role='checkbox'
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -342,12 +342,12 @@ export default function EnhancedTable({ classes }) {
                         <Checkbox color='primary' checked={isItemSelected} />
                       </TableCell>
                       <TableCell component='th' id={labelId} scope='row' padding='none'>
-                        {row.OfferDate.padStart(3, '0')}
+                        {row.offerDate.padStart(3, '0')}
                       </TableCell>
-                      <TableCell padding='none'>{row.Location}</TableCell>
-                      <TableCell padding='none'>{row.Section}</TableCell>
-                      <TableCell padding='none'>{row.RecommendationScore}</TableCell>
-                      <TableCell padding='none'>{row.Professor}</TableCell>
+                      <TableCell padding='none'>{row.location}</TableCell>
+                      <TableCell padding='none'>{row.section}</TableCell>
+                      <TableCell padding='none'>{row.recommendationScore}</TableCell>
+                      <TableCell padding='none'>{row.professor}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -384,14 +384,14 @@ export default function EnhancedTable({ classes }) {
         disabled={selected.length === 0 || !user}
         startIcon={<Delete />}
         onClick={() => {
-          const selectedClassIDs = getSelectedClasses(selected, classes).map((x) => x.ID);
+          const selectedClassIDs = getSelectedClasses(selected, classes).map((x) => x.id);
           Promise.all(
             selectedClassIDs.map((classID) =>
               removeClassIDFromShoppingCart({
-                user_id: +user.userID,
-                class_id: +classID,
+                userID: +user.userID,
+                classID: +classID,
                 // TODO Q: Do not hard code the semester ID here and below.
-                semester_id: 1,
+                semesterID: 1,
               })
             )
           ).then(() => {
@@ -414,13 +414,13 @@ export default function EnhancedTable({ classes }) {
         disabled={selected.length === 0 || !user}
         startIcon={<AddShoppingCart />}
         onClick={() => {
-          const selectedClassIDs = getSelectedClasses(selected, classes).map((x) => x.ID);
+          const selectedClassIDs = getSelectedClasses(selected, classes).map((x) => x.id);
           Promise.all(
             selectedClassIDs.map((classID) =>
               addClassIDToShoppingCart({
-                user_id: +user.userID,
-                class_id: +classID,
-                semester_id: 1,
+                userID: +user.userID,
+                classID: +classID,
+                semesterID: 1,
               })
             )
           ).then(() => {
@@ -448,6 +448,6 @@ export default function EnhancedTable({ classes }) {
 
 const getSelectedClasses = (selected, allClasses) => {
   return selected
-    .map((OfferDate) => allClasses.find((classData) => +OfferDate === +classData.Session))
+    .map((OfferDate) => allClasses.find((classData) => +OfferDate === +classData.session))
     .filter(Boolean);
 };

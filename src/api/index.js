@@ -1,27 +1,9 @@
 import axios from 'axios';
 
-export const login = ({ email, password }) => {
-  const promise = axios.post('/login', {
-    email: email,
-    password: password,
-  });
-  return promise.then((response) => response.data);
-};
+export const login = (body) => axios.post('/login', body).then((response) => response.data);
 
-export const register = ({ email, firstName, lastName, college, password, repassword }) => {
-  // TODO Q: Maybe write a global util function to convert all keys in an object into snake
-  // case.
-  const data = {
-    email: email,
-    first_name: firstName,
-    last_name: lastName,
-    college: college,
-    password: password,
-    re_password: repassword,
-  };
-  const promise = axios.post('/register', data);
-  return promise.then((response) => response.data);
-};
+export const register = (body) =>
+  axios.post('/register', body).then((response) => response.data);
 
 /**
  * Fetches the course but also injects the fake image URL. Basically pretends `ImageURL` was an
@@ -30,13 +12,16 @@ export const register = ({ email, firstName, lastName, college, password, repass
 export const fetchCourseByID = (courseID) =>
   new Promise((onFetched) =>
     axios.get(`/course/${courseID}`).then((data) => {
-      injectFakeImageURLToCourse(data.data.data.course);
-      onFetched(data);
+      // Inject classesOffered. TODO Q: Remove this after Jay finished object combination for
+      // fetch course query response.
+      const course = data.data.data;
+      injectFakeImageURLToCourse(course);
+      onFetched(course);
     })
   );
 
 const getFakeCourseImageURL = (course) =>
-  `https://picsum.photos/seed/${+course.ID + 13}/1280/720`;
+  `https://picsum.photos/seed/${+course.id + 13}/1280/720`;
 
 const injectFakeImageURLToCourse = (course) =>
   (course.ImageURL = getFakeCourseImageURL(course));
@@ -46,32 +31,37 @@ export const fetchAllCourses = () => axios.get('/course/list');
 export const fetchHomePageCourses = () => fakeFetchHomePageCourses();
 
 // TODO (QC): Get rid of this, although it might be hard to.
-const fakeFetchHomePageCourses = () =>
-  new Promise((onFetched) => {
-    const recommendedCategories = {
-      'Major Requirements To Go': [22948, 22949, 22963],
-      'Hot CS Electives': [22961, 22971, 22951, 22970, 22998, 23000],
-      'Hot Gen-Ed Courses': [31826, 28270, 24777, 21978, 28354, 27266],
-    };
+const fakeFetchHomePageCourses = () => {
+  const recommendedCategories = {
+    'Major Requirements To Go': [22948, 22949, 22963],
+    'Hot CS Electives': [22961, 22971, 22951, 22970, 22998, 23000],
+    'Hot Gen-Ed Courses': [31826, 28270, 24777, 21978, 28354, 27266],
+  };
 
-    onFetched(
-      Object.entries(recommendedCategories).map(([category, courseIDs]) => ({
+  return Promise.all(
+    Object.entries(recommendedCategories).map(([category, courseIDs]) =>
+      Promise.all(courseIDs.map((id) => fetchCourseByID(id))).then((courses) => ({
         category,
-        courseIDs,
+        courses,
       }))
-    );
-  });
+    )
+  );
+};
 
 export const fetchCoursesBySearch = (query) => fakeFetchCoursesBySearch(query);
 
 // TODO (QC): Get rid of this also.
-const fakeFetchCoursesBySearch = () =>
-  new Promise((onFetched) =>
-    onFetched([
-      22966, 23000, 22968, 23068, 23063, 23041, 23001, 22986, 22998, 22964, 22941, 22942, 22961,
-      22971, 22951, 22970, 22998, 31826, 28270, 24777, 27266, 27334, 21978, 28354, 30056, 25305,
-    ])
-  );
+const fakeFetchCoursesBySearch = () => {
+  const resultCourseIDs = [
+    22966, 23000, 22968, 23068, 23063, 23041, 23001, 22986, 22998, 22964, 22941, 22942, 22961,
+    22971, 22951, 22970, 22998, 31826, 28270, 24777, 27266, 27334, 21978, 28354, 30056, 25305,
+    22958,
+  ];
+
+  return Promise.all(resultCourseIDs.map((id) => fetchCourseByID(id)));
+};
+
+new Promise((onFetched) => onFetched());
 
 export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
 
@@ -82,14 +72,15 @@ export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseI
  * the fake image URL. Basically pretends `ImageURL` was an actual field of a course.
  */
 export const fetchClassesInShoppingCart = (userID) =>
-  new Promise((onFetched) =>
-    axios.get(`schedule?user_id=${userID}`).then((data) => {
-      for (let { course_data } of data.data.data.scheduled_class_list) {
-        injectFakeImageURLToCourse(course_data);
-      }
-      onFetched(data);
-    })
-  );
+  axios.get(`schedule?userID=${userID}`).then((data) => {
+    for (let { courseData } of data.data.data.scheduledClassList) {
+      injectFakeImageURLToCourse(courseData);
+    }
+    return data.data.data.scheduledClassList.map(({ classData, courseData: course }) => ({
+      classData,
+      course,
+    }));
+  });
 
 export const fetchRequirements = () => fakeFetchRequirements();
 
@@ -108,17 +99,8 @@ export const addClassIDToShoppingCart = (body) => axios.post('/schedule', body);
 
 export const removeClassIDFromShoppingCart = (body) => axios.put('/schedule', body);
 
-export const fetchReviewsByCourseID = (courseID) => axios.get(`/course/${courseID}/review`);
+export const fetchReviewsByCourseID = (courseID) =>
+  axios.get(`/course/${courseID}/review`).then((data) => data.data.data.reviews);
 
 // TODO Q: (1) this is not by ID; (2) simplify object passing and remove object reconstruction.
-export const postReviewByID = (reviewObj) =>
-  axios.post(`/course/review`, {
-    anonymous: reviewObj.anonymous,
-    comment: reviewObj.comment,
-    cons: reviewObj.cons,
-    course_id: reviewObj.course_id,
-    pros: reviewObj.pros,
-    rating: reviewObj.rating,
-    recommended: reviewObj.recommended,
-    user_id: reviewObj.user_id,
-  });
+export const postReview = (courseID, body) => axios.post(`/course/${courseID}/review`, body);
