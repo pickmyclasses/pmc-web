@@ -1,4 +1,4 @@
-import { Box, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Stack, Typography, useTheme } from '@mui/material';
 import React, { useContext } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -18,6 +18,7 @@ export default function CourseOfferingSummary({
   textAlign = 'right',
   enableHighlight = false,
   isMouseEntered = false,
+  showInstructors = false,
 }) {
   const classes = course.classes;
 
@@ -117,16 +118,26 @@ export default function CourseOfferingSummary({
   return (
     <>
       <Stack width={width} sx={{ '> *:not(:last-of-type)': { paddingBottom: '8px' } }}>
-        {representativeOfferings.map(({ days }, i) => (
-          <DaysIndicator
-            key={i}
-            width='100%'
-            height={rowHeight}
-            days={days}
-            onMouseEnter={() => setMouseEnteredIndex(i)}
-            onMouseLeave={() => setMouseEnteredIndex(-1)}
-            isMouseEntered={i === highlightedIndex}
-          />
+        {representativeOfferings.map(({ instructor, days }, i) => (
+          <Grid container key={i}>
+            {showInstructors && (
+              <Grid item xs={7} paddingRight='8px'>
+                <Typography variant='body2' noWrap>
+                  {instructor}
+                </Typography>
+              </Grid>
+            )}
+            <Grid item xs>
+              <DaysIndicator
+                width='100%'
+                height={rowHeight}
+                days={days}
+                onMouseEnter={() => setMouseEnteredIndex(i)}
+                onMouseLeave={() => setMouseEnteredIndex(-1)}
+                isMouseEntered={i === highlightedIndex}
+              />
+            </Grid>
+          </Grid>
         ))}
         {(numHiddenOfferings || onlineOffering) && (
           <Box
@@ -140,7 +151,7 @@ export default function CourseOfferingSummary({
               '*': {
                 color:
                   onlineOffering && highlightedIndex === representativeOfferings.length
-                    ? theme.palette.success.main
+                    ? theme.palette.primary.main
                     : '',
                 transition: getTransitionForStyles(['color']),
               },
@@ -153,7 +164,7 @@ export default function CourseOfferingSummary({
                   {pluralize(numHiddenOfferings, 'offering')}
                 </Typography>
                 {onlineOffering && (
-                  <Typography variant='body2' align={textAlign} sx={{ marginTop: '-8px' }}>
+                  <Typography variant='body2' align={textAlign} sx={{ marginTop: '-2px' }}>
                     (1 online)
                   </Typography>
                 )}
@@ -194,6 +205,7 @@ const enumerateOfferings = (classes, course, classesInShoppingCart) => {
     .map((x) => x.classData);
   if (comboInShoppingCart?.length) {
     daysAndCombos.push({
+      instructor: getInstructor(comboInShoppingCart[0]),
       dayString: getSortedOfferedDayString(comboInShoppingCart),
       combo: comboInShoppingCart,
       isInShoppingCart: true,
@@ -208,7 +220,7 @@ const enumerateOfferings = (classes, course, classesInShoppingCart) => {
     classes.map((x) => ({ ...x, instructor: getInstructor(x) })),
     'instructor'
   );
-  for (let instructorClasses of Object.values(classesByInstructor)) {
+  for (let [instructor, instructorClasses] of Object.entries(classesByInstructor)) {
     const classesByComponent = groupBy(
       instructorClasses.map((x) => ({ ...x, component: getComponent(x) })),
       'component'
@@ -222,7 +234,7 @@ const enumerateOfferings = (classes, course, classesInShoppingCart) => {
       const dayString = getSortedOfferedDayString(combo);
 
       if (!daysAndCombos.find((x) => x.dayString === dayString)) {
-        daysAndCombos.push({ dayString, combo, isInShoppingCart: false });
+        daysAndCombos.push({ instructor, dayString, combo, isInShoppingCart: false });
       }
     }
   }

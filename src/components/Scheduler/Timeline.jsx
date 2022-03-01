@@ -203,7 +203,7 @@ export default function Timeline({
                 isHighlighted
                   ? hasConflicts
                     ? 'error'
-                    : 'success'
+                    : 'primary'
                   : hasHighlights
                   ? 'gray'
                   : color
