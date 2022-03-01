@@ -1,20 +1,21 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 
-const COLORS = ['#57e32c', '#b7dd29', '#ffe234', '#ffa534', '#ff4545'];
+const colors = ['#ff4545', '#ffa534', '#ffe234', '#b7dd29', '#57e32c'];
+
 function generateStarValues(reviews, data) {
   for (let i = 0; i < reviews.length; i++) {
-    data[reviews[i].rating].value += 1;
+    data[reviews[i].rating - 1].value += 1;
   }
 }
 
 export default function ReviewPieChart({ reviews }) {
   const data = [
-    { name: 'Five-Star', value: 0 },
-    { name: 'Four-Star', value: 0 },
-    { name: 'Three-Star', value: 0 },
-    { name: 'Two-Star', value: 0 },
     { name: 'One-Star', value: 0 },
+    { name: 'Two-Star', value: 0 },
+    { name: 'Three-Star', value: 0 },
+    { name: 'Four-Star', value: 0 },
+    { name: 'Five-Star', value: 0 },
   ];
   generateStarValues(reviews, data);
   return (
@@ -29,7 +30,7 @@ export default function ReviewPieChart({ reviews }) {
         dataKey='value'
       >
         {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
         ))}
       </Pie>
       <Tooltip />
