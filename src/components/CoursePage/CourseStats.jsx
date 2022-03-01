@@ -8,43 +8,38 @@ import ReviewDotLineFilter from '../CourseVisuals/ReviewDotLineFilter';
 export default function CourseStats() {
   const { reviews } = useContext(CourseContext);
   const [filterMethod, setFilterMethod] = useState('This week');
-  const [sortedReviews, setSortedReviews] = useState(reviews);
+  const [filteredReviews, setFilteredReviews] = useState(reviews);
+
   useEffect(() => {
-    const dateFilter = {
-      'Today': (review) => {
+    const predicateByFilterMethod = (filterMethod) => {
+      const days = daysByFilterMethod[filterMethod];
+      return (review) => {
         const reviewDate = new Date(review.createdAt);
         const currDate = new Date();
-        return currDate.getTime() - 1 * 86400000 < reviewDate.getTime();
-      },
-      'This week': (review) => {
-        const reviewDate = new Date(review.createdAt);
-        const currDate = new Date();
-        return currDate.getTime() - 7 * 86400000 < reviewDate.getTime();
-      },
-      'This month': (review) => {
-        const reviewDate = new Date(review.createdAt);
-        const currDate = new Date();
-        return currDate.getTime() - 30 * 86400000 < reviewDate.getTime();
-      },
-      'This year': (review) => {
-        const reviewDate = new Date(review.createdAt);
-        const currDate = new Date();
-        return currDate.getTime() - 365 * 86400000 < reviewDate.getTime();
-      },
+        return currDate.getTime() - days * 86400000 < reviewDate.getTime();
+      };
     };
-    setSortedReviews(reviews.concat().filter(dateFilter[filterMethod]));
+
+    const predicate = predicateByFilterMethod(filterMethod);
+    setFilteredReviews(reviews.concat().filter(predicate));
   }, [filterMethod, reviews]);
 
   return (
     <>
       <Box>
-        <Grid container spacing='32px' marginBottom='16px'>
+        <Grid container spacing='32px' marginBottom='32px'>
           <Grid item xs={4}>
             <Card sx={{ width: '100%', height: '100%' }}>
               <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}>
                 <Typography variant='subtitle2'>Ratings Distribution</Typography>
-                <ReviewPieChart reviews={sortedReviews} />
-                <FilterContext.Provider value={{ filterMethod, setFilterMethod }}>
+                <ReviewPieChart reviews={filteredReviews} />
+                <FilterContext.Provider
+                  value={{
+                    filterMethods: Object.keys(daysByFilterMethod),
+                    filterMethod,
+                    setFilterMethod,
+                  }}
+                >
                   <ReviewDotLineFilter />
                 </FilterContext.Provider>
               </Box>
@@ -54,9 +49,31 @@ export default function CourseStats() {
             <Card sx={{ width: '100%', height: '100%' }}>
               <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}>
                 <Typography variant='subtitle2'>Ratings Over Time</Typography>
-                <ReviewDotLineChart reviews={sortedReviews} />
+                <ReviewDotLineChart reviews={filteredReviews} />
               </Box>
             </Card>
+          </Grid>
+        </Grid>
+        <Grid container spacing='32px' marginBottom='32px'>
+          <Grid item xs={5}>
+            <Card sx={{ width: '100%', height: '400px' }}></Card>
+          </Grid>
+          <Grid item xs={3}>
+            <Card sx={{ width: '100%', height: '100%' }}></Card>
+          </Grid>
+          <Grid item xs={4}>
+            <Card sx={{ width: '100%', height: '100%' }}></Card>
+          </Grid>
+        </Grid>
+        <Grid container spacing='32px' marginBottom='16px'>
+          <Grid item xs={2}>
+            <Card sx={{ width: '100%', height: '400px' }}></Card>
+          </Grid>
+          <Grid item xs={6}>
+            <Card sx={{ width: '100%', height: '100%' }}></Card>
+          </Grid>
+          <Grid item xs={4}>
+            <Card sx={{ width: '100%', height: '100%' }}></Card>
           </Grid>
         </Grid>
       </Box>
@@ -66,8 +83,16 @@ export default function CourseStats() {
 
 /**
  * @type {React.Context<{
+ *   filterMethods: Array<String>,
  *   filterMethod: String,
  *   setFilterMethod: function(String): void,
  * }>}
  */
 export const FilterContext = createContext();
+
+const daysByFilterMethod = {
+  'Today': 1,
+  'This week': 7,
+  'This month': 30,
+  'This year': 365,
+};
