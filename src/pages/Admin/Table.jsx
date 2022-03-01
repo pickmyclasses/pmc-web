@@ -4,10 +4,10 @@ import { Button } from '@mui/material';
 import { Link } from "react-router-dom";
 
 
-export default function AdminPage(props) 
+export default function Table(props) 
 {
     const [isLoaded, setIsLoaded] = useState(false);
-    const [tableName, setTableName] = useState({...props.tableName});
+    const [tableName, setTableName] = useState(props.tableName);
     const [testData, setTestData] = useState([]);
     const [error, setError] = useState(null);
 
@@ -94,18 +94,14 @@ export default function AdminPage(props)
 
             rows = testData;
         }
-        // const options = {
-        //     filterType: 'checkbox',
-        //   };
 
         return (
-          <div style={{ height: 2500, width: '100%' }}>
-          <DataGrid
-          columns={columns}
-          rows={rows}
-          />
-        </div>
-
+          <div style={{ height: 700, width: '100%' }}>
+            <DataGrid
+            columns={columns}
+            rows={rows}
+            />
+          </div>
         );
     }
 }

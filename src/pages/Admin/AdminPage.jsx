@@ -1,9 +1,9 @@
 import React , {useState} from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import Table from './Table';
 
-function Table(props)
+export default function AdminPage(props)
 {
-    const [tableName, setTableName] = useState("");
+    const [tableName, setTableName] = useState("college");
 
     let handleChange = (e) => 
     {
@@ -19,12 +19,13 @@ function Table(props)
         <label className="selector-label">Choose a table:</label>
 
         <select name="tables" id="tables-selector" onChange={handleChange}>
-            <option value=""></option>
-            <option value="class">class</option>
             <option value="college">college</option>
+            <option value="class">class</option>
             <option value="course">course</option>
             <option value="subject">subject</option>
         </select>
+
+        <Table tableName={tableName}/>
         
         </div> 
     );
