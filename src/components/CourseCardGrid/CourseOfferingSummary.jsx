@@ -158,17 +158,17 @@ export default function CourseOfferingSummary({
             }}
           >
             {numHiddenOfferings ? (
-              <>
+              <Stack direction={showInstructors ? 'row' : 'column'}>
                 <Typography variant='body2' align={textAlign}>
                   {!representativeOfferings.length ? '' : '+'}
-                  {pluralize(numHiddenOfferings, 'offering')}
+                  {pluralize(numHiddenOfferings, 'offering')}&nbsp;
                 </Typography>
                 {onlineOffering && (
-                  <Typography variant='body2' align={textAlign} sx={{ marginTop: '-2px' }}>
+                  <Typography variant='body2' align={textAlign}>
                     (1 online)
                   </Typography>
                 )}
-              </>
+              </Stack>
             ) : (
               onlineOffering &&
               (!representativeOfferings.length ? (
@@ -176,7 +176,7 @@ export default function CourseOfferingSummary({
                   Offered online
                 </Typography>
               ) : (
-                <Typography variant='body2' align={textAlign} sx={{ fontSize: 'x-small' }}>
+                <Typography variant='body2' align={textAlign} sx={{ fontSize: '0.75rem' }}>
                   +1 online offering
                 </Typography>
               ))
@@ -193,7 +193,7 @@ export default function CourseOfferingSummary({
  * example, if an instructor offers lectures on (M, W) and labs on {(H,), (F,)}, this function
  * returns [(M, W, H), (M, W, F)].
  */
-const enumerateOfferings = (classes, course, classesInShoppingCart) => {
+export const enumerateOfferings = (classes, course, classesInShoppingCart) => {
   if (!classes) return [];
 
   let daysAndCombos = [];

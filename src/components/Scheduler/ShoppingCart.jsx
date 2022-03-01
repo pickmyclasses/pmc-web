@@ -5,6 +5,7 @@ import Timeline from './Timeline';
 import ImageColors from 'react-native-image-colors';
 import Color from 'color';
 import { pluralize } from '../../utils';
+import CourseScheduleSummary from './CourseScheduleSummary';
 
 /** The shopping cart resides in the top part of the scheduler. */
 export default function ShoppingCart({ classes }) {
@@ -58,7 +59,7 @@ export default function ShoppingCart({ classes }) {
         marginTop='12px'
         variant='caption'
         align='center'
-        color={hasHighlights ? theme.palette.success.main : ''}
+        color={hasHighlights ? theme.palette.primary.main : ''}
       >
         {pluralize(numCourses, 'course')}
         {numOnlineCourses > 0 ? <>&nbsp;({pluralize(numOnlineCourses, 'online')})</> : ''}
@@ -104,16 +105,7 @@ const generateSessions = (classes, resolver) => {
           ),
           title: courseCode,
           subtitle: course.title,
-          description: relatedClasses
-            .map((classData, i) => (
-              <div key={i}>
-                {getComponent(classData)}:{' '}
-                <b>
-                  {classData.offerDate} {classData.startTime}–{classData.endTime}
-                </b>
-              </div>
-            ))
-            .concat(`Professor: ${getInstructor(classData)}`),
+          description: <CourseScheduleSummary plainText classes={relatedClasses} />,
           topBorderColor: 'gray',
           coursePageURL: `/course/${course.id}`,
         },

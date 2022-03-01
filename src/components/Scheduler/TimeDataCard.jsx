@@ -12,7 +12,6 @@ export default function TimeDataCard({
     <Card
       sx={{
         position: 'relative',
-        width: '324px',
         padding: '0px 16px 16px',
         borderTop: '8px solid ' + topBorderColor,
         boxShadow: 2,
