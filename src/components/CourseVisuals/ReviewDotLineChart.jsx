@@ -6,7 +6,7 @@ function generateLineData(reviews) {
   for (let i = 0; i < reviews.length; i++) {
     let date = new Date(reviews[i].createdAt);
     reviewArray.push({
-      'createDate': date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate(),
+      'createDate': date.toLocaleDateString(),
       'rating': reviews[i].rating,
       'recommended': reviews[i].recommended,
     });

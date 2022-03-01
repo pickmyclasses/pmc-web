@@ -14,7 +14,7 @@ const titleAdd = 'Additional feedbacks?';
 
 export default function CourseReviewCard({ review }) {
   let date = new Date(review.createdAt);
-  let createDateLocal = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+  let createDateLocal = date.toLocaleDateString();
   let userName = review.username;
   return (
     <SubCard spacing={gridSpacing}>
