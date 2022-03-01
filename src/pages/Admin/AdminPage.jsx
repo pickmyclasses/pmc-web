@@ -23,6 +23,13 @@ export default function AdminPage(props)
             <option value="class">class</option>
             <option value="course">course</option>
             <option value="subject">subject</option>
+            <option value="professor">professor</option>
+            <option value="google_user">google_user</option>
+            <option value="review">review</option>
+            <option value="semester">semester</option>
+            <option value="user">user</option>
+            <option value="schedule">schedule</option>
+            <option value="feedback">feedback</option>
         </select>
         <div style={{marginBottom: '20px', marginTop: '20px'}}>---------------------------------------------------</div>
 
