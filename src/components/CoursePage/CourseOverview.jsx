@@ -22,6 +22,9 @@ import { pluralize } from '../../utils';
 import CourseEligibilityBanner from './CourseEligibilityBanner';
 import LabelWithIcon from './LabelWithIcon';
 import ClickableIndicator from '../CourseCardGrid/CourseCard/ClickableIndicator';
+import { motion } from 'framer-motion';
+import CourseComponentsSummary from './CourseComponentsSummary';
+import CourseOfferingSummary from '../CourseCardGrid/CourseOfferingSummary';
 
 export default function CourseOverview() {
   const navigate = useNavigate();
@@ -46,162 +49,82 @@ export default function CourseOverview() {
   );
 
   const renderReviewSummary = () => (
-    <Card
+    <MotionCard
+      initial='initial'
+      whileHover='mouseEntered'
       onClick={() => navigate(`${coursePageURL}/reviews`)}
       sx={{ width: '100%', height: '100%', cursor: 'pointer', '&:hover': { boxShadow: 6 } }}
     >
-      <Box sx={{ padding: '24px', '> *': { marginY: '12px' } }}>
-        <Box width='fit-content' marginX='auto' marginBottom='8px'>
-          <LabeledRatingDisplay hideLabel value={course.overallRating} size='large' />
+      <Stack padding='24px' spacing='12px' height='calc(100% - 48px)'>
+        <Box>
+          <Box width='fit-content' marginX='auto' marginBottom='8px'>
+            <LabeledRatingDisplay hideLabel value={course.overallRating} size='large' />
+          </Box>
+          <Typography variant='body2' align='center' fontStyle='italic' sx={{ opacity: 0.75 }}>
+            {reviews.length ? `Based on ${pluralize(reviews.length, 'review')}` : 'No reviews'}
+          </Typography>
         </Box>
-        <Typography variant='body2' align='center' fontStyle='italic' sx={{ opacity: 0.75 }}>
-          {reviews.length ? `Based on ${pluralize(reviews.length, 'review')}` : 'No reviews'}
-        </Typography>
-        <Divider sx={{ marginTop: '12px' }} />
-        <Typography variant='subtitle2'>Top Pros</Typography>
-        <TagList
-          tags={['Fun projects', 'Hands on', 'No exams']}
-          variant='outlined'
-          color='success'
-        />
-        <Typography variant='subtitle2'>Top Cons</Typography>
-        <TagList
-          tags={['Useless lectures', 'Assignment-heavy', 'Less practical']}
-          variant='outlined'
-          color='error'
-        />
+        <Stack direction='row' flex={1}>
+          <Box width='50%'>
+            <Typography variant='subtitle2' sx={{ marginBottom: '12px' }}>
+              Top Pros
+            </Typography>
+            <TagList
+              tags={['Fun projects', 'Hands on', 'No exams']}
+              variant='outlined'
+              color='success'
+            />
+          </Box>
+          <Divider orientation='vertical' />
+          <Box width='50%' paddingLeft='12px'>
+            <Typography variant='subtitle2' sx={{ marginBottom: '12px' }}>
+              Top Cons
+            </Typography>
+            <TagList
+              tags={['Useless lectures', 'Assignment-heavy', 'Less practical']}
+              variant='outlined'
+              color='error'
+            />
+          </Box>
+        </Stack>
         <Link>
-          <ClickableIndicator>
+          <ClickableIndicator propagate>
             <Typography variant='subtitle2'>See all reviews</Typography>
           </ClickableIndicator>
         </Link>
-      </Box>
-    </Card>
+      </Stack>
+    </MotionCard>
   );
 
   const renderRegistrationSummary = () => (
-    <Card
+    <MotionCard
+      initial='initial'
+      whileHover='mouseEntered'
       onClick={() => navigate(`${coursePageURL}/registration`)}
       sx={{ width: '100%', height: '100%', cursor: 'pointer', '&:hover': { boxShadow: 6 } }}
     >
-      <CourseEligibilityBanner course={course} />
-      <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px' } }}>
-        <Typography variant='subtitle2'>Components</Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
-          <MenuBook fontSize='small' color='action' sx={{ marginRight: '8px' }} />
-          <Typography variant='body1'>Lecture</Typography>
-          <People
-            fontSize='small'
-            color='action'
-            sx={{ marginLeft: '32px', marginRight: '8px' }}
-          />
-          <Typography variant='body1'>Discussion</Typography>
-        </Box>
-        <Typography variant='subtitle2'>Offerings</Typography>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Typography variant='body1'>Peter A. Jensen</Typography>
-          <Box sx={{ display: 'flex', width: '144px' }}>
-            <Typography
-              variant='caption'
-              align='center'
-              sx={{ boxShadow: '0 0 0 1px lightgray inset', width: '20%' }}
-            ></Typography>
-            <Typography
-              variant='caption'
-              align='center'
-              sx={{
-                boxShadow: '0 0 0 1px gray inset',
-                width: '20%',
-                backgroundColor: 'gainsboro',
-              }}
-            >
-              T
-            </Typography>
-            <Typography
-              variant='caption'
-              align='center'
-              sx={{ boxShadow: '0 0 0 1px lightgray inset', width: '20%' }}
-            ></Typography>
-            <Typography
-              variant='caption'
-              align='center'
-              sx={{
-                boxShadow: '0 0 0 1px gray inset',
-                width: '20%',
-                backgroundColor: 'gainsboro',
-              }}
-            >
-              H
-            </Typography>
-            <Typography
-              variant='caption'
-              align='center'
-              sx={{ boxShadow: '0 0 0 1px lightgray inset', width: '20%' }}
-            ></Typography>
+      <Stack height='100%'>
+        <CourseEligibilityBanner course={course} />
+        <Stack padding='24px' spacing='12px' flex={1}>
+          <Typography variant='subtitle2'>Components</Typography>
+          <CourseComponentsSummary course={course} />
+          <Typography variant='subtitle2'>Offerings</Typography>
+          <Box flex={1}>
+            <CourseOfferingSummary
+              showInstructors
+              course={course}
+              maxRows={5}
+              textAlign='left'
+            />
           </Box>
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Typography variant='body1'>Lorem B. Ipsum</Typography>
-          <Box sx={{ display: 'flex', width: '144px' }}>
-            <Typography
-              variant='caption'
-              align='center'
-              sx={{ boxShadow: '0 0 0 1px lightgray inset', width: '20%' }}
-            ></Typography>
-            <Typography
-              variant='caption'
-              align='center'
-              sx={{
-                boxShadow: '0 0 0 1px gray inset',
-                width: '20%',
-                backgroundColor: 'gainsboro',
-              }}
-            >
-              T
-            </Typography>
-            <Typography
-              variant='caption'
-              align='center'
-              sx={{ boxShadow: '0 0 0 1px lightgray inset', width: '20%' }}
-            ></Typography>
-            <Typography
-              variant='caption'
-              align='center'
-              sx={{
-                boxShadow: '0 0 0 1px gray inset',
-                width: '20%',
-                backgroundColor: 'gainsboro',
-              }}
-            >
-              H
-            </Typography>
-            <Typography
-              variant='caption'
-              align='center'
-              sx={{ boxShadow: '0 0 0 1px lightgray inset', width: '20%' }}
-            ></Typography>
-          </Box>
-        </Box>
-        <Typography variant='body2'>+2 more offerings</Typography>
-        <Link>
-          <ClickableIndicator>
-            <Typography variant='subtitle2'>Go to register</Typography>
-          </ClickableIndicator>
-        </Link>
-      </Box>
-    </Card>
+          <Link>
+            <ClickableIndicator propagate>
+              <Typography variant='subtitle2'>Go to register</Typography>
+            </ClickableIndicator>
+          </Link>
+        </Stack>
+      </Stack>
+    </MotionCard>
   );
 
   return (
@@ -241,3 +164,5 @@ export const fakeTags = [
   'Exercitation',
   'Ullamco',
 ];
+
+const MotionCard = motion(Card);

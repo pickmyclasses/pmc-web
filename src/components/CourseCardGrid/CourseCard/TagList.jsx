@@ -18,7 +18,7 @@ export default function TagList({
         display: 'flex',
         alignItems: 'center',
         flexWrap: 'wrap',
-        maxHeight: noWrap ? maxHeight : '',
+        maxHeight: noWrap ? maxHeight : 'fit-content',
         overflow: 'hidden',
         marginLeft: gutterLeft ? '8px' : '',
         '> *': { marginRight: '8px', marginBottom: noWrap ? '' : '8px' },

@@ -8,7 +8,7 @@ export default function LabelWithIcon({ color, iconType, label }) {
   return (
     <CenterAligningFlexBox>
       {createElement(iconType, { color, fontSize: 'small', sx: { marginRight: '8px' } })}
-      <Typography variant='body1' color={theme.palette[color].dark}>
+      <Typography variant='body1' color={theme.palette[color]?.dark}>
         {label}
       </Typography>
     </CenterAligningFlexBox>
