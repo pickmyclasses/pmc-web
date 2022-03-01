@@ -13,7 +13,7 @@ export default function AdminPage(props)
 
     return(
         <div style={{ width: '100%' }} className="admindiv">
-        <h1>Admin Page</h1>
+        <h1 style={{textAlign: 'center'}}>Admin Page</h1>
         <h1>Table {tableName}</h1>
 
         <label className="selector-label">Choose a table:</label>
@@ -24,6 +24,7 @@ export default function AdminPage(props)
             <option value="course">course</option>
             <option value="subject">subject</option>
         </select>
+        <div style={{marginBottom: '20px', marginTop: '20px'}}>---------------------------------------------------</div>
 
         <Table tableName={tableName}/>
         
