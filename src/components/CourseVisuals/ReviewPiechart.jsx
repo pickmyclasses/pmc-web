@@ -6,7 +6,6 @@ function generateStarValues(reviews, data) {
   for (let i = 0; i < reviews.length; i++) {
     data[reviews[i].rating].value += 1;
   }
-  console.log(data);
 }
 
 export default function ReviewPieChart({ reviews }) {
