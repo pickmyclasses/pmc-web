@@ -24,14 +24,33 @@ import LabelWithIcon from './LabelWithIcon';
 import ClickableIndicator from '../CourseCardGrid/CourseCard/ClickableIndicator';
 import { motion } from 'framer-motion';
 import CourseComponentsSummary from './CourseComponentsSummary';
-import CourseOfferingSummary from '../CourseCardGrid/CourseOfferingSummary';
+import CourseOfferingSummary, {
+  enumerateOfferings,
+} from '../CourseCardGrid/CourseOfferingSummary';
 import { SchedulerContext } from '../Scheduler/ContainerWithScheduler';
 import { getEligibility } from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
+import CourseScheduleSummary from '../Scheduler/CourseScheduleSummary';
 
 export default function CourseOverview() {
   const navigate = useNavigate();
   const { course, reviews } = useContext(CourseContext);
   const { classesInShoppingCart } = useContext(SchedulerContext);
+
+  const [eligibility, setEligibility] = useState('none');
+  // The classes the user has registered for this course, if any.
+  const [classesOfCourseInShoppingCart, setClassesOfCourseInShoppingCart] = useState([]);
+
+  // Controls what to display in the registration summary sub-card. If the course is in the
+  // user's schedule already, display the summary of their registration.
+  useEffect(() => {
+    setEligibility(getEligibility(course, classesInShoppingCart));
+    const [, comboInShoppingCart] = enumerateOfferings(
+      course.classes,
+      course,
+      classesInShoppingCart
+    );
+    setClassesOfCourseInShoppingCart(comboInShoppingCart);
+  }, [course, classesInShoppingCart]);
 
   const coursePageURL = '/course/' + course.id;
 
@@ -109,26 +128,35 @@ export default function CourseOverview() {
       <Stack height='100%'>
         <CourseEligibilityBanner course={course} />
         <Stack padding='24px' spacing='12px' flex={1}>
-          <Typography variant='subtitle2'>Components</Typography>
-          <CourseComponentsSummary course={course} />
-          <Typography variant='subtitle2'>Offerings</Typography>
-          <Box flex={1}>
-            <CourseOfferingSummary
-              showInstructors
-              course={course}
-              maxRows={5}
-              textAlign='left'
-            />
-          </Box>
-          <Link>
-            <ClickableIndicator propagate>
-              <Typography variant='subtitle2'>
-                {getEligibility(course, classesInShoppingCart) === 'in-shopping-cart'
-                  ? 'Edit registration'
-                  : 'Go register'}
-              </Typography>
-            </ClickableIndicator>
-          </Link>
+          <Stack spacing='12px' flex={1}>
+            {eligibility === 'in-shopping-cart' ? (
+              <>
+                <Typography variant='subtitle2'>In Your Schedule</Typography>
+                <CourseScheduleSummary plainText classes={classesOfCourseInShoppingCart} />
+              </>
+            ) : (
+              <>
+                <Typography variant='subtitle2'>Components</Typography>
+                <CourseComponentsSummary course={course} />
+                <Typography variant='subtitle2'>Offerings</Typography>
+                <CourseOfferingSummary
+                  showInstructors
+                  course={course}
+                  maxRows={5}
+                  textAlign='left'
+                />
+              </>
+            )}
+          </Stack>
+          {eligibility !== 'not-offered' && (
+            <Link>
+              <ClickableIndicator propagate>
+                <Typography variant='subtitle2'>
+                  {eligibility === 'in-shopping-cart' ? 'Edit registration' : 'Go register'}
+                </Typography>
+              </ClickableIndicator>
+            </Link>
+          )}
         </Stack>
       </Stack>
     </MotionCard>
