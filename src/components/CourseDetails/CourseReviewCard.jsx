@@ -42,7 +42,7 @@ export default function CourseReviewCard({ review }) {
           <CourseComments title={titleNeg} comment={review.cons} isPositive={false} />
         </Grid>
         <Grid item>
-          {review.comment.length == 0 ? (
+          {review.comment.length === 0 ? (
             <></>
           ) : (
             <CourseComments title={titleAdd} comment={review.comment} />
