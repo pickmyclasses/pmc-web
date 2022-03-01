@@ -17,6 +17,7 @@ export default function ReviewPieChart({ reviews }) {
     { name: 'Four-Star', value: 0 },
     { name: 'Five-Star', value: 0 },
   ];
+
   generateStarValues(reviews, data);
   return (
     <PieChart width={300} height={300}>
