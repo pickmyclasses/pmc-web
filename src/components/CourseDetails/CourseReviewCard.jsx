@@ -13,15 +13,15 @@ const titleNeg = 'What do you hate most?';
 const titleAdd = 'Additional feedbacks?';
 
 export default function CourseReviewCard({ review }) {
-  let createDate = review.createdAt.slice(0, 10);
-  let userName = review.anonymous ? 'Anonymous ' : review.username;
+  let date = new Date(review.createdAt);
+  let createDateLocal = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+  let userName = review.username;
   return (
     <SubCard spacing={gridSpacing}>
       <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}>
         <Typography variant='subtitle1' gutterBottom component='div' sx={{ opacity: 0.75 }}>
-          {userName} - {createDate}
+          {userName} - {createDateLocal}
         </Typography>
-
         <Grid item>
           <Stack direction='row' spacing={1} sx={{ padding: '12px 12px' }}>
             <Rating
