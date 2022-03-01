@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircleOutline, MenuBook, People, School, WatchLater } from '@mui/icons-material';
 import {
@@ -25,10 +25,13 @@ import ClickableIndicator from '../CourseCardGrid/CourseCard/ClickableIndicator'
 import { motion } from 'framer-motion';
 import CourseComponentsSummary from './CourseComponentsSummary';
 import CourseOfferingSummary from '../CourseCardGrid/CourseOfferingSummary';
+import { SchedulerContext } from '../Scheduler/ContainerWithScheduler';
+import { getEligibility } from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
 
 export default function CourseOverview() {
   const navigate = useNavigate();
   const { course, reviews } = useContext(CourseContext);
+  const { classesInShoppingCart } = useContext(SchedulerContext);
 
   const coursePageURL = '/course/' + course.id;
 
@@ -119,7 +122,11 @@ export default function CourseOverview() {
           </Box>
           <Link>
             <ClickableIndicator propagate>
-              <Typography variant='subtitle2'>Go to register</Typography>
+              <Typography variant='subtitle2'>
+                {getEligibility(course, classesInShoppingCart) === 'in-shopping-cart'
+                  ? 'Edit registration'
+                  : 'Go register'}
+              </Typography>
             </ClickableIndicator>
           </Link>
         </Stack>
