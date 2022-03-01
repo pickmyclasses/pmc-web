@@ -1,18 +1,7 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CheckCircleOutline, MenuBook, People, School, WatchLater } from '@mui/icons-material';
-import {
-  Alert,
-  Box,
-  Card,
-  Chip,
-  Divider,
-  Grid,
-  Link,
-  Typography,
-  Rating,
-  Stack,
-} from '@mui/material';
+import { School, WatchLater } from '@mui/icons-material';
+import { Box, Card, Divider, Grid, Link, Typography, Stack } from '@mui/material';
 import TagList from '../CourseCardGrid/CourseCard/TagList';
 import { formatCreditRange } from './CoursePageTop';
 import CourseCardGrid from '../CourseCardGrid/CourseCardGrid';

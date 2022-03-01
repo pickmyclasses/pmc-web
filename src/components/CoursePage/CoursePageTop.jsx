@@ -1,6 +1,5 @@
 import { BookmarkBorder, Share } from '@mui/icons-material';
 import {
-  AppBar,
   Box,
   Card,
   CardMedia,
@@ -67,7 +66,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
 
   return (
     <>
-      <CardMedia component='img' image={course.ImageURL} height='360px' />
+      <CardMedia component='img' image={course.ImageURL} height={imageHeight} />
       <Card sx={{ position: 'sticky', top: 0, zIndex: 1001, boxShadow: 2 }}>
         <Container maxWidth='xl'>
           <Box padding='16px 0' display='flex' justifyContent='space-between'>
@@ -84,6 +83,9 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
     </>
   );
 }
+
+/** Used by `CoursePage` to help adjust the scrollbar position for going back to top. */
+export const imageHeight = 360;
 
 export const ActionItem = ({ icon, ...props }) => (
   <Tab icon={createElement(icon)} sx={{ fontSize: 'x-small' }} {...props} />

@@ -1,4 +1,4 @@
-import { Check, DoDisturb, ShoppingCart } from '@mui/icons-material';
+import { DoDisturb, ShoppingCart } from '@mui/icons-material';
 import { Box, Tooltip, useTheme } from '@mui/material';
 import React, { createElement, useContext } from 'react';
 import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
