@@ -1,10 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import {
-  fetchClassByID,
-  fetchClassesInShoppingCart,
-  fetchCourseByID,
-  fetchRequirements,
-} from '../../api';
+import { fetchClassesInShoppingCart, fetchRequirements } from '../../api';
 import { UserContext } from '../../App';
 
 /**

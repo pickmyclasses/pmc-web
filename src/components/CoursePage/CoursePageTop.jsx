@@ -26,15 +26,10 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
     <Box>
       <CenterAligningFlexBox>
         <CourseEligibilityIndicator course={course} size='medium'>
-          <Typography variant='h5' lineHeight={2} fontWeight='bold'>
+          <Typography variant='h5' lineHeight={2} fontWeight='bold' noWrap>
             {formatCourseName(course.catalogCourseName)}
           </Typography>
-          <Typography
-            variant='h5'
-            fontWeight='normal'
-            lineHeight={2}
-            sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}
-          >
+          <Typography variant='h5' fontWeight='normal' lineHeight={2} noWrap>
             &nbsp;— {course.title}
           </Typography>
         </CourseEligibilityIndicator>
@@ -47,7 +42,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
   );
 
   const renderActionItems = () => (
-    <Box>
+    <Box maxHeight='72px' overflow='hidden'>
       <ActionItem label='Bookmark' icon={BookmarkBorder} onClick={() => alert('** bookmark')} />
       <ActionItem label='Share' icon={Share} onClick={() => alert('** share')} />
     </Box>

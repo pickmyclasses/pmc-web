@@ -8,7 +8,7 @@ import { pluralize } from '../../utils';
 import CourseScheduleSummary from './CourseScheduleSummary';
 
 /** The shopping cart resides in the top part of the scheduler. */
-export default function ShoppingCart({ classes }) {
+export default function ShoppingCart({ classes, noSummary = false }) {
   const theme = useTheme();
 
   const [sessionGenerationResolver, setSessionGenerationResolver] = useState({});
@@ -55,18 +55,20 @@ export default function ShoppingCart({ classes }) {
       <Box flex={1}>
         <Timeline events={sessions} />
       </Box>
-      <Typography
-        marginTop='12px'
-        variant='caption'
-        align='center'
-        color={hasHighlights ? theme.palette.primary.main : ''}
-      >
-        {pluralize(numCourses, 'course')}
-        {numOnlineCourses > 0 ? <>&nbsp;({pluralize(numOnlineCourses, 'online')})</> : ''}
-        &nbsp;&nbsp;•&nbsp;&nbsp;
-        {minCredits === maxCredits ? '' : minCredits + '–'}
-        {pluralize(maxCredits, 'credit')}
-      </Typography>
+      {!noSummary && (
+        <Typography
+          marginTop='12px'
+          variant='caption'
+          align='center'
+          color={hasHighlights ? theme.palette.primary.main : ''}
+        >
+          {pluralize(numCourses, 'course')}
+          {numOnlineCourses > 0 ? <>&nbsp;({pluralize(numOnlineCourses, 'online')})</> : ''}
+          &nbsp;&nbsp;•&nbsp;&nbsp;
+          {minCredits === maxCredits ? '' : minCredits + '–'}
+          {pluralize(maxCredits, 'credit')}
+        </Typography>
+      )}
     </Box>
   );
 }
@@ -114,8 +116,8 @@ const generateSessions = (classes, resolver) => {
       sessions.push(
         new Promise((onAssignedColors) =>
           ImageColors.getColors(course.ImageURL, { cache: true }).then((palette) => {
-            const representativeColor = Color(palette.vibrant).desaturate(0.375);
-            sessionData.color = sessionData.data.topBorderColor = representativeColor;
+            const color = Color(palette.vibrant).desaturate(0.375).lightness(41.7);
+            sessionData.color = sessionData.data.topBorderColor = color;
             onAssignedColors(sessionData);
           })
         )
