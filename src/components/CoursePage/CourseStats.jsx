@@ -55,25 +55,16 @@ export default function CourseStats() {
           </Grid>
         </Grid>
         <Grid container spacing='32px' marginBottom='32px'>
-          <Grid item xs={5}>
-            <Card sx={{ width: '100%', height: '400px' }}></Card>
-          </Grid>
-          <Grid item xs={3}>
-            <Card sx={{ width: '100%', height: '100%' }}></Card>
-          </Grid>
           <Grid item xs={4}>
-            <Card sx={{ width: '100%', height: '100%' }}></Card>
+            <Card sx={{ width: '100%', height: '300px' }}>
+              <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}></Box>
+            </Card>
           </Grid>
-        </Grid>
-        <Grid container spacing='32px' marginBottom='16px'>
-          <Grid item xs={2}>
-            <Card sx={{ width: '100%', height: '400px' }}></Card>
-          </Grid>
-          <Grid item xs={6}>
-            <Card sx={{ width: '100%', height: '100%' }}></Card>
-          </Grid>
-          <Grid item xs={4}>
-            <Card sx={{ width: '100%', height: '100%' }}></Card>
+
+          <Grid item xs={8}>
+            <Card sx={{ width: '100%', height: '300px' }}>
+              <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}></Box>
+            </Card>
           </Grid>
         </Grid>
       </Box>

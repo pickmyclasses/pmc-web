@@ -18,14 +18,14 @@ export default function ReviewDotLineChart({ reviews }) {
   const reviewArray = generateLineData(reviews);
   return (
     <LineChart
-      width={700}
+      width={800}
       height={300}
       data={reviewArray}
       margin={{
         top: 20,
         right: 50,
         left: 20,
-        bottom: 10,
+        bottom: 20,
       }}
     >
       <CartesianGrid strokeDasharray='3 3' />
