@@ -101,6 +101,51 @@ export const formatInstructorName = (s) => {
   return tokens.join(' ');
 };
 
+export const capitalizeFirst = (s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+
+/**
+ * Converts a prerequisites into a list. Co-requisites are ignored.
+ * @example
+ * formatPrerequisites('A AND (B OR C)')
+ * // Returns:
+ * {
+ *   policy: 'every',
+ *   items: [
+ *     'A',
+ *     {
+ *       policy: 'some',
+ *       items: ['B', 'C'],
+ *     },
+ *   ],
+ * }
+ */
+export const formatPrerequisites = (s) => {
+  const rawString = s
+    .replace(/co-?requisites:[\s^\s]*/gi, '')
+    .replace(/pre-?requisites:/gi, '')
+    .replace(/[\r\n]+/g, '');
+  // eslint-disable-next-line
+  const rawList = eval(
+    `['${rawString}']`
+      .replace(/\(/g, "',['")
+      .replace(/\)/g, "'],'")
+      .replace(/OR/g, "','OR','")
+      .replace(/AND/g, "','AND','")
+  );
+  return prunePrerequisiteList(rawList);
+};
+
+const prunePrerequisiteList = (p) => ({
+  operator: p.includes('AND') ? 'every' : 'some',
+  items: p
+    .map((x) => (typeof x === 'object' ? prunePrerequisiteList(x) : x.trim()))
+    .filter(
+      (x) =>
+        typeof x === 'object' ||
+        (x.replace(/[^A-Za-z]+/g, '').length && x !== 'AND' && x !== 'OR')
+    ),
+});
+
 /**
  * Singularize or pluralize a word based on its count.
  * @example

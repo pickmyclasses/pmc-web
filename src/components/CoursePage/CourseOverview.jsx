@@ -137,7 +137,7 @@ export default function CourseOverview() {
               </>
             )}
           </Stack>
-          {eligibility !== 'not-offered' && (
+          {(eligibility === 'eligible' || eligibility === 'in-shopping-cart') && (
             <Link>
               <ClickableIndicator propagate>
                 <Typography variant='subtitle2'>
@@ -152,7 +152,7 @@ export default function CourseOverview() {
   );
 
   return (
-    <Box>
+    <>
       <Grid container spacing='32px' marginBottom='16px'>
         <Grid item xs={6}>
           {renderInfoSummary()}
@@ -170,7 +170,7 @@ export default function CourseOverview() {
       <Box width='100%'>
         <CourseCardGrid numColumns={5} courses={new Array(5).fill(course)} />
       </Box>
-    </Box>
+    </>
   );
 }
 
