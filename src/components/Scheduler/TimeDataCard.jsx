@@ -1,6 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Alert, Card, CardActions, Divider, IconButton, Tooltip } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Card,
+  CardActions,
+  Divider,
+  IconButton,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { Edit, Info } from '@material-ui/icons';
 
 export default function TimeDataCard({
@@ -12,15 +21,18 @@ export default function TimeDataCard({
     <Card
       sx={{
         position: 'relative',
-        padding: '0px 16px 16px',
+        minWidth: '288px',
+        padding: '12px 16px 16px',
         borderTop: '8px solid ' + topBorderColor,
-        boxShadow: 2,
+        boxShadow: 3,
       }}
     >
-      <h3>{title}</h3>
-      <div style={{ marginTop: '-12px' }}>{subtitle}</div>
+      <Typography variant='h6' fontSize='1.125rem'>
+        {title}
+      </Typography>
+      <Typography variant='body2'>{subtitle}</Typography>
       <Divider sx={{ margin: '12px 0px' }} />
-      <div style={{ lineHeight: '1.5em' }}>{description}</div>
+      <Box>{description}</Box>
       {hasConflicts && (
         <Alert
           severity='warning'

@@ -24,13 +24,13 @@ export default function HomePage() {
             {courseCategories &&
               courseCategories.map(({ category, courses }, i) => (
                 <Box key={i}>
-                  {i > 0 && <Divider sx={{ marginY: '16px' }} />}
+                  {i > 0 && <Divider sx={{ marginY: '8px' }} />}
                   <ClickableIndicator>
                     <Typography variant='overline' fontSize='medium' sx={{ opacity: 0.75 }}>
                       {category}
                     </Typography>
                   </ClickableIndicator>
-                  <Box sx={{ padding: '16px 0 24px 0' }}>
+                  <Box sx={{ padding: '8px 0 16px 0' }}>
                     <CourseCardGrid
                       key={i}
                       title={category}

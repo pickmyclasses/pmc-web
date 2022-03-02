@@ -3,7 +3,12 @@ import { Box, Tooltip, useTheme } from '@mui/material';
 import React, { createElement, useContext } from 'react';
 import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
 
-export default function CourseEligibilityIndicator({ children, course, size = 'small' }) {
+export default function CourseEligibilityIndicator({
+  children,
+  course,
+  size = 'small',
+  placement = 'top',
+}) {
   const theme = useTheme();
 
   const { classesInShoppingCart } = useContext(SchedulerContext);
@@ -12,7 +17,7 @@ export default function CourseEligibilityIndicator({ children, course, size = 's
   const [iconType, colorName, colorValue, tooltipTitle] = getDisplayContent(eligibility, theme);
 
   return (
-    <Tooltip title={tooltipTitle} disableInteractive placement='top-end'>
+    <Tooltip title={tooltipTitle} disableInteractive placement={placement + '-end'}>
       <Box sx={{ display: 'flex', alignItems: 'center', 'h5, h6': { color: colorValue } }}>
         {children}
         {iconType &&

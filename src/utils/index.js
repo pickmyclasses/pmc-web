@@ -90,6 +90,18 @@ export const formatCourseName = (catalogCourseName) =>
   catalogCourseName.split(/(?<!\d)(?=\d)/).join(' ');
 
 /**
+ * Formats an instructor's name from the database version to be more human-readable.
+ * @example formatInstructorName('SMITH, JOHN W') // 'John W. Smith'
+ */
+export const formatInstructorName = (s) => {
+  let tokens = s
+    .split(/[^A-Za-z]+/)
+    .map((x) => x.charAt(0) + (x.slice(1).toLowerCase() || '.'));
+  tokens.push(tokens.shift());
+  return tokens.join(' ');
+};
+
+/**
  * Singularize or pluralize a word based on its count.
  * @example
  * pluralize(2, 'dog') // '2 dogs'

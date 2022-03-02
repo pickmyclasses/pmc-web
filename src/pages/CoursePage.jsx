@@ -83,7 +83,6 @@ const OnTopScrollBars = ({ children }) => {
     bottom: '2px',
     right: '2px',
     borderRadius: '3px',
-    background: 'rgba(255, 255, 255, 0.111)',
   };
 
   return (

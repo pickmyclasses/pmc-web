@@ -24,7 +24,7 @@ export default function CourseOfferingSummary({
 
   const theme = useTheme();
 
-  const { shouldShowStaticScheduler } = useContext(NavigationBarContext);
+  const { hasStaticScheduler, shouldShowStaticScheduler } = useContext(NavigationBarContext);
   const { classesInShoppingCart } = useContext(SchedulerContext);
   const setClassesToHighlight = useContext(SetClassesToHighlightContext);
 
@@ -61,6 +61,7 @@ export default function CourseOfferingSummary({
   useEffect(() => {
     if (
       (representativeOfferings.length || onlineOffering || comboInShoppingCart) &&
+      hasStaticScheduler &&
       shouldShowStaticScheduler &&
       enableHighlight &&
       (mouseEnteredIndex >= 0 || isMouseEntered)
@@ -96,6 +97,7 @@ export default function CourseOfferingSummary({
     representativeOfferings,
     enableHighlight,
     isMouseEntered,
+    hasStaticScheduler,
     shouldShowStaticScheduler,
     setClassesToHighlight,
     mouseEnteredIndex,

@@ -204,7 +204,7 @@ export default function Timeline({
                   ? hasConflicts
                     ? 'error'
                     : 'primary'
-                  : hasHighlights
+                  : hasHighlights || (selectedEventData && !isSelected)
                   ? 'gray'
                   : color
               }

@@ -8,7 +8,11 @@ import { pluralize } from '../../utils';
 import CourseScheduleSummary from './CourseScheduleSummary';
 
 /** The shopping cart resides in the top part of the scheduler. */
-export default function ShoppingCart({ classes, noSummary = false }) {
+export default function ShoppingCart({
+  classes,
+  noSummary = false,
+  timelineColumnTitles = undefined,
+}) {
   const theme = useTheme();
 
   const [sessionGenerationResolver, setSessionGenerationResolver] = useState({});
@@ -53,7 +57,7 @@ export default function ShoppingCart({ classes, noSummary = false }) {
   return (
     <Box display='flex' flexDirection='column' position='relative' width='100%' height='100%'>
       <Box flex={1}>
-        <Timeline events={sessions} />
+        <Timeline events={sessions} columnTitles={timelineColumnTitles} />
       </Box>
       {!noSummary && (
         <Typography
@@ -139,4 +143,6 @@ export const getComponent = (classData) =>
 
 // TODO Q: This is assuming a class only has one instructor, which may be false.
 export const getInstructor = (classData) =>
-  Object.values(classData).find((value) => value && /^[A-Z\s]+,[A-Z,\s]+$/.test(String(value)));
+  Object.values(classData).find(
+    (value) => value && /^[A-Z\s]+,[A-Z,\s]+$/.test(String(value))
+  ) || 'TBD';

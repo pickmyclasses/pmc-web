@@ -25,8 +25,8 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
   const renderCourseInfo = () => (
     <Box>
       <CenterAligningFlexBox>
-        <CourseEligibilityIndicator course={course} size='medium'>
-          <Typography variant='h5' lineHeight={2} fontWeight='bold' noWrap>
+        <CourseEligibilityIndicator course={course} size='medium' placement='bottom'>
+          <Typography variant='h5' lineHeight={2} fontWeight='bold'>
             {formatCourseName(course.catalogCourseName)}
           </Typography>
           <Typography variant='h5' fontWeight='normal' lineHeight={2} noWrap>
@@ -35,7 +35,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
         </CourseEligibilityIndicator>
       </CenterAligningFlexBox>
       <Typography variant='body1' color={theme.palette.text.secondary}>
-        CS major requirement &nbsp;&nbsp;•&nbsp;&nbsp;
+        CS major requirement &nbsp;•&nbsp;&nbsp;
         {formatCreditRange(course)}
       </Typography>
     </Box>

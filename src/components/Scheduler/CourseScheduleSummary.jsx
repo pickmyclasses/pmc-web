@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { parseDayList } from '../../utils';
+import { formatInstructorName, parseDayList } from '../../utils';
 import DaysIndicator from '../CourseCardGrid/CourseCard/DaysIndicator';
 import { getComponent, getInstructor } from './ShoppingCart';
 
@@ -18,9 +18,9 @@ export default function CourseScheduleSummary({ classes, plainText = false }) {
   );
 
   return (
-    <Stack spacing='4px'>
+    <Stack spacing={plainText ? 0 : '4px'}>
       <Typography variant='body2' noWrap>
-        Instructor: {getInstructor(classes[0])}
+        Instructor: {formatInstructorName(getInstructor(classes[0]))}
       </Typography>
       {sortedClasses.map(({ component, classData }) => (
         <Stack key={component} direction='row'>

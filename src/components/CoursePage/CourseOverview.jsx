@@ -116,7 +116,7 @@ export default function CourseOverview() {
     >
       <Stack height='100%'>
         <CourseEligibilityBanner course={course} />
-        <Stack padding='24px' spacing='12px' flex={1}>
+        <Stack padding='16px 24px 24px' spacing='12px' flex={1}>
           <Stack spacing='12px' flex={1}>
             {eligibility === 'in-shopping-cart' ? (
               <>
