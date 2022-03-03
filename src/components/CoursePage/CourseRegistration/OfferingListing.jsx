@@ -220,8 +220,8 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
         transition={{ duration: 0.5, type: 'spring' }}
       >
         <Grid maxWidth='xl'>
-          <Grid item xs={6}>
-            <Card sx={{ width: 'calc(100% - 40px)', boxShadow: 3 }}>
+          <Grid item xs={7.5}>
+            <Card sx={{ width: 'calc(100% - 46px)', boxShadow: 3 }}>
               <Stack padding='12px 20px' direction='row' justifyContent='space-between'>
                 <Stack direction='row' alignItems='center' spacing='4px'>
                   {user ? savePromptMessage : 'Login to save your schedule'}
