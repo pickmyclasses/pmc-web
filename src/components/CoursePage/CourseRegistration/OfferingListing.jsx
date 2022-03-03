@@ -49,43 +49,6 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
   }, [course, classesInShoppingCart]);
 
   useEffect(() => {
-    if (selectedClasses.length === 0) {
-      setHighlightedClasses(
-        classGroups.map(([primaryClass]) => ({
-          classData: { ...primaryClass },
-          course,
-          highlight: 'outlined',
-          selectionID: primaryClass.id,
-        }))
-      );
-    } else if (selectedClasses.length === 1) {
-      const [primaryClass, otherClasses] = selectedGroup;
-      const toHighlight = [
-        {
-          classData: { ...primaryClass },
-          course,
-          highlight: 'contained',
-          selectionID: primaryClass.id,
-        },
-        ...otherClasses.map((x) => ({
-          classData: { ...x },
-          course,
-          highlight: 'outlined',
-          selectionID: x.id,
-        })),
-      ];
-      setHighlightedClasses(toHighlight);
-    } else {
-      setHighlightedClasses(
-        selectedClasses.map((x) => ({
-          classData: { ...x },
-          course,
-          highlight: 'contained',
-          selectionID: x.id,
-        }))
-      );
-    }
-
     if (!selectedGroup) {
       setIsValid(true);
       setSavePromptMessage(
@@ -111,17 +74,76 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
         }
       } else {
         setIsValid(false);
-        for (let component in selectedClassesByComponent) requiredComponents.delete(component);
+        for (let { component } of selectedClasses) requiredComponents.delete(component);
         setSavePromptMessage(`Select a ${[...requiredComponents][0]} component.`);
       }
+    }
+
+    if (selectedClasses.length === 0) {
+      setHighlightedClasses(
+        classGroups.map(([primaryClass]) => ({
+          classData: { ...primaryClass },
+          course,
+          highlight: 'outlined',
+          selectionID: primaryClass.id,
+        }))
+      );
+    } else if (selectedClasses.length === 1) {
+      const [primaryClass, otherClasses] = classGroups.find(
+        ([primaryClass]) => +selectedClasses[0].id === +primaryClass.id
+      );
+      const toHighlight = [
+        {
+          classData: { ...primaryClass },
+          course,
+          highlight: 'contained',
+          selectionID: primaryClass.id,
+        },
+        ...otherClasses.map((x) => ({
+          classData: { ...x },
+          course,
+          highlight: 'outlined',
+          selectionID: x.id,
+        })),
+      ];
+      setHighlightedClasses(toHighlight);
+    } else {
+      setHighlightedClasses(
+        selectedClasses.map((x) => ({
+          classData: { ...x },
+          course,
+          highlight: 'contained',
+          selectionID: x.id,
+        }))
+      );
     }
   }, [
     classGroups,
     classesOfCourseInShoppingCart.length,
     course,
+    course.catalogCourseName,
     selectedClasses,
-    selectedClassesByComponent,
     selectedGroup,
+  ]);
+
+  useEffect(() => {
+    setSelectedClasses(Object.values(selectedClassesByComponent));
+
+    if (selectedClassesByComponent[components[0]]) {
+      setSelectedGroup(
+        classGroups.find(
+          ([primaryClass]) => +selectedClassesByComponent[components[0]].id === +primaryClass.id
+        )
+      );
+    } else {
+      setSelectedGroup(null);
+      setIsDirty(classesOfCourseInShoppingCart.length !== 0);
+    }
+  }, [
+    classGroups,
+    classesOfCourseInShoppingCart.length,
+    components,
+    selectedClassesByComponent,
   ]);
 
   const handleNewSelection = useCallback(
@@ -140,19 +162,9 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
       }
 
       setSelectedClassesByComponent(newValue);
-      setSelectedClasses(Object.values(newValue));
-
-      if (newValue[components[0]]) {
-        setSelectedGroup(
-          classGroups.find(([primaryClass]) => +newValue[components[0]].id === +primaryClass.id)
-        );
-        setIsDirty(true);
-      } else {
-        setSelectedGroup(null);
-        setIsDirty(classesOfCourseInShoppingCart.length !== 0);
-      }
+      setIsDirty(true);
     },
-    [classGroups, classesOfCourseInShoppingCart.length, components, selectedClassesByComponent]
+    [components, selectedClassesByComponent]
   );
 
   const handleSaveButtonClick = () => {
@@ -214,6 +226,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
         position='fixed'
         bottom='24px'
         width='100vw'
+        zIndex={999}
         variants={savePromptVariants}
         initial='initial'
         animate={isDirty ? 'visible' : 'initial'}
