@@ -11,6 +11,10 @@ export default function UpdateData(props)
 
     let data = location.state.data;
 
+    const [tableName, setTableName] = useState(location.state.table);
+
+    console.log(tableName);
+
     //const [obj, setObj] = useState(location.state.data);
 
     let dataToRender = [];
@@ -36,7 +40,10 @@ export default function UpdateData(props)
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         };
-        fetch('https://reqres.in/api/posts', requestOptions)
+
+        let URL = 'https://pmc-schedule-api.herokuapp.com/' + tableName + '/update';
+        console.log(URL);
+        fetch(URL, requestOptions)
             .then(response => response.json())
             .then(data => console.log(data));
     }

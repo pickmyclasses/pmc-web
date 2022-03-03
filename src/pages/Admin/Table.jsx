@@ -60,7 +60,7 @@ export default function Table(props)
                 field: "Update",
                 renderCell: (cellValues) => {
                   return (
-                    <Link to="/admin-update" state = {{data: cellValues.row}}
+                    <Link to="/admin-update" state = {{data: cellValues.row, table: tableName}}
                     >
                       <Button
                         variant="contained"
