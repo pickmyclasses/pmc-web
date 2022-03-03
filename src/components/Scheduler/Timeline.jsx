@@ -25,6 +25,7 @@ export default function Timeline({
   defaultRangeEnd = 16 * 3600,
   columnTitles = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
   events = [],
+  onSelect = () => {},
 }) {
   const theme = useTheme();
 
@@ -96,7 +97,7 @@ export default function Timeline({
         (a, b) => a.columnIndex * 86400 + a.start - (b.columnIndex * 86400 + b.start)
       )
     );
-    setHasHighlights(events.some((x) => x.isHighlighted));
+    setHasHighlights(events.some((x) => x.highlight));
     // eslint-disable-next-line
   }, [events]);
 
@@ -108,6 +109,7 @@ export default function Timeline({
     let prevEnd = -1;
     let prevColumnIndex = -1;
     let wasPrevActive = false;
+    let wasPrevHighlight = false;
     let wasPrevShiftedRight = false;
     for (let event of eventsShown) {
       const hasConflicts =
@@ -116,10 +118,15 @@ export default function Timeline({
         event.columnIndex === prevColumnIndex &&
         event.start < prevEnd;
 
-      if (hasConflicts && event.isActive && wasPrevActive) {
+      if (
+        hasConflicts &&
+        (!event.highlight || !wasPrevHighlight) &&
+        event.isActive &&
+        wasPrevActive
+      ) {
         eventsWithConflicts[eventsWithConflicts.length - 1] = true;
       }
-      eventsWithConflicts.push(hasConflicts);
+      eventsWithConflicts.push((!event.highlight || !wasPrevHighlight) && hasConflicts);
 
       const shiftedRight = hasConflicts && !wasPrevShiftedRight;
       eventsShiftedRight.push(shiftedRight);
@@ -128,6 +135,7 @@ export default function Timeline({
         prevColumnIndex = event.columnIndex;
         prevEnd = event.end;
         wasPrevActive = event.isActive;
+        wasPrevHighlight = event.highlight;
         wasPrevShiftedRight = shiftedRight;
       }
     }
@@ -156,8 +164,19 @@ export default function Timeline({
   };
 
   const renderEvent = (i, event) => {
-    const { columnIndex, text, color, data, start, end, key, isActive, isHighlighted, sx } =
-      event;
+    const {
+      columnIndex,
+      text,
+      color,
+      data,
+      start,
+      end,
+      key,
+      isActive,
+      highlight,
+      shouldDispatch,
+      sx,
+    } = event;
 
     if (start >= rangeEnd || end <= rangeStart) return null; // can't fit in range
 
@@ -189,7 +208,7 @@ export default function Timeline({
               position: 'absolute',
               top: top * 100 + '%',
               left: (columnIndex + 0.0833) * columnWidth + '%',
-              zIndex: isMouseEntered || isHighlighted ? 999 : isSelected ? 998 : '',
+              zIndex: isMouseEntered || highlight ? 999 : isSelected ? 998 : '',
               width: 0.667 * columnWidth + '%',
               height: (bottom - top) * 100 + '%',
               // Adapt the same transition style from MUI to the shifting movement.
@@ -200,21 +219,34 @@ export default function Timeline({
             <TimeBlock
               text={text}
               color={
-                isHighlighted
+                highlight
                   ? hasConflicts
                     ? 'error'
                     : 'primary'
-                  : hasHighlights
+                  : hasHighlights || (selectedEventData && !isSelected)
                   ? 'gray'
                   : color
               }
               darken={isMouseEntered || isSelected}
-              variant={isHighlighted ? 'outlined' : 'contained'}
+              variant={
+                highlight
+                  ? typeof highlight === 'string'
+                    ? highlight
+                    : 'outlined'
+                  : 'contained'
+              }
               sx={sx}
               data={data}
               onMouseEnter={() => setMouseEnteredEventData(data)}
               onMouseLeave={() => setMouseEnteredEventData(null)}
-              onClick={() => handleTimeBlockClick(data)}
+              onClick={() => {
+                if (shouldDispatch) {
+                  onSelect?.(data.groupID);
+                  setSelectedEventData(null);
+                } else {
+                  handleTimeBlockClick(data);
+                }
+              }}
             />
           </MotionBox>
         )}
@@ -240,9 +272,9 @@ export default function Timeline({
                 position: 'absolute',
                 transform: 'translateY(-50%)',
                 top: y * 100 + '%',
-                width: 'calc(100% + 24px)',
+                width: 'calc(100% + 20px)',
                 '::before': { width: '100%' },
-                '> span': { fontSize: '12px', opacity: 0.667, padding: '0 4px 0 2px' },
+                '> span': { fontSize: '10px', opacity: 0.75, padding: '0 4px 0 2px' },
                 '::after': { display: 'none' },
                 transition: getTransitionForStyles(['top'], 0.375),
               }}

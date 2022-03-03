@@ -1,9 +1,9 @@
-import React, { createContext, createElement, useEffect, useState } from 'react';
+import React, { createContext, createElement, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Forum, PieChart, ShoppingCart, Widgets } from '@mui/icons-material';
 import { Box, Container } from '@mui/material';
 import { fetchCourseByID, fetchReviewsByCourseID } from '../api';
-import CoursePageTop from '../components/CoursePage/CoursePageTop';
+import CoursePageTop, { imageHeight } from '../components/CoursePage/CoursePageTop';
 import CourseOverview from '../components/CoursePage/CourseOverview';
 import CourseStats from '../components/CoursePage/CourseStats';
 import CourseReviews from '../components/CoursePage/CourseReviews';
@@ -18,6 +18,12 @@ export default function CoursePage() {
   const [course, setCourse] = useState(null);
   const [reviews, setReviews] = useState(null);
 
+  // This avoids the useRef()'s not updating problem with useEffect().
+  // See https://stackoverflow.com/a/67906087)
+  // We can potentially include this pattern in the utils collection to reuse it.
+  const [containerNode, setContainerNode] = useState();
+  const containerRef = useCallback((node) => setContainerNode(node), []);
+
   useEffect(() => {
     // Fetch data for the course, classes offered, and reviews.
     const courseID = urlParams.id;
@@ -29,12 +35,18 @@ export default function CoursePage() {
     setActiveTabName(tabs.hasOwnProperty(tabParam) ? tabParam : '');
   }, [urlParams]);
 
+  useEffect(() => {
+    // Go to top of page (right below the banner image) when URL changes.
+    const pageContent = containerNode?.children[0].children[0];
+    if (pageContent) pageContent.scrollTo(0, Math.min(pageContent.scrollTop, imageHeight));
+  }, [urlParams, containerNode]);
+
   return (
     <ContainerWithLoadingIndication isLoading={!course || !reviews}>
-      <Box width='100%' height='100%' minHeight={0}>
+      <Box ref={containerRef} width='100%' height='100%' minHeight={0}>
         <OnTopScrollBars>
           <CoursePageTop course={course} tabs={tabs} activeTabName={activeTabName} />
-          <Container maxWidth='xl' sx={{ paddingY: '32px' }}>
+          <Container maxWidth='xl' sx={{ paddingTop: '32px' }}>
             <CourseContext.Provider value={{ course, reviews }}>
               {createElement(tabs[activeTabName].content)}
             </CourseContext.Provider>
@@ -71,7 +83,6 @@ const OnTopScrollBars = ({ children }) => {
     bottom: '2px',
     right: '2px',
     borderRadius: '3px',
-    background: 'rgba(255, 255, 255, 0.111)',
   };
 
   return (

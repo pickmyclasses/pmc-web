@@ -4,6 +4,7 @@ import React from 'react';
 export default function DaysIndicator({
   days = [],
   width = '144px',
+  setMinWidth = false,
   height = 1.5,
   showOnlyHighlightedDayNames = true,
   isMouseEntered = false,
@@ -56,11 +57,13 @@ export default function DaysIndicator({
     </Typography>
   );
 
+  const widthStyle = `calc(${width} + ${numBlocks * 2}px)`;
   return (
     <Box
       position='relative'
       display='flex'
-      width={`calc(${width} + ${numBlocks * 2}px)`}
+      minWidth={setMinWidth && widthStyle}
+      width={widthStyle}
       sx={{ userSelect: 'none', '> *': { transition: 'all 250ms' } }}
       {...props}
     >

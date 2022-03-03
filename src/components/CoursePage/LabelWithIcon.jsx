@@ -1,16 +1,31 @@
-import { Typography, useTheme } from '@mui/material';
+import { Stack, Typography, useTheme } from '@mui/material';
 import React, { createElement } from 'react';
-import { CenterAligningFlexBox } from '../CourseCardGrid/CourseCard/CourseCard';
 
-export default function LabelWithIcon({ color, iconType, label }) {
+export default function LabelWithIcon({
+  iconType,
+  label,
+  color = undefined,
+  align = 'center',
+  height = '1.5em',
+  size = 'medium',
+  noWrap = false,
+}) {
   const theme = useTheme();
 
   return (
-    <CenterAligningFlexBox>
-      {createElement(iconType, { color, fontSize: 'small', sx: { marginRight: '8px' } })}
-      <Typography variant='body1' color={theme.palette[color]?.dark}>
+    <Stack direction='row' alignItems={align} height={height}>
+      {createElement(iconType, {
+        color,
+        fontSize: size,
+        sx: { marginRight: size === 'small' ? '4px' : '8px' },
+      })}
+      <Typography
+        variant={`body${size === 'small' ? 2 : 1}`}
+        color={theme.palette[color]?.dark}
+        noWrap={noWrap}
+      >
         {label}
       </Typography>
-    </CenterAligningFlexBox>
+    </Stack>
   );
 }
