@@ -1,14 +1,5 @@
 import React, { useContext, useState } from 'react';
-import {
-  Box,
-  Card,
-  CardMedia,
-  Rating,
-  Skeleton,
-  styled,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Box, Card, CardMedia, Skeleton, styled, Typography, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { formatCourseName, pluralize } from '../../../utils';

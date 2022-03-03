@@ -54,4 +54,10 @@ const contentByEligibility = {
     'Not offered',
     'This course is not offered next semester. Check back later!',
   ],
+  'incomplete-prerequisites': [
+    'warning',
+    DoDisturb,
+    'Ineligible',
+    'You do not fulfill all prerequisites. Click to view prerequisites.',
+  ],
 };

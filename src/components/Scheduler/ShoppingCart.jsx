@@ -5,9 +5,15 @@ import Timeline from './Timeline';
 import ImageColors from 'react-native-image-colors';
 import Color from 'color';
 import { pluralize } from '../../utils';
+import CourseScheduleSummary from './CourseScheduleSummary';
 
 /** The shopping cart resides in the top part of the scheduler. */
-export default function ShoppingCart({ classes }) {
+export default function ShoppingCart({
+  classes,
+  noSummary = false,
+  timelineColumnTitles = undefined,
+  onSelect = () => {},
+}) {
   const theme = useTheme();
 
   const [sessionGenerationResolver, setSessionGenerationResolver] = useState({});
@@ -52,20 +58,22 @@ export default function ShoppingCart({ classes }) {
   return (
     <Box display='flex' flexDirection='column' position='relative' width='100%' height='100%'>
       <Box flex={1}>
-        <Timeline events={sessions} />
+        <Timeline events={sessions} columnTitles={timelineColumnTitles} onSelect={onSelect} />
       </Box>
-      <Typography
-        marginTop='12px'
-        variant='caption'
-        align='center'
-        color={hasHighlights ? theme.palette.success.main : ''}
-      >
-        {pluralize(numCourses, 'course')}
-        {numOnlineCourses > 0 ? <>&nbsp;({pluralize(numOnlineCourses, 'online')})</> : ''}
-        &nbsp;&nbsp;•&nbsp;&nbsp;
-        {minCredits === maxCredits ? '' : minCredits + '–'}
-        {pluralize(maxCredits, 'credit')}
-      </Typography>
+      {!noSummary && (
+        <Typography
+          marginTop='12px'
+          variant='caption'
+          align='center'
+          color={hasHighlights ? theme.palette.primary.main : ''}
+        >
+          {pluralize(numCourses, 'course')}
+          {numOnlineCourses > 0 ? <>&nbsp;({pluralize(numOnlineCourses, 'online')})</> : ''}
+          &nbsp;&nbsp;•&nbsp;&nbsp;
+          {minCredits === maxCredits ? '' : minCredits + '–'}
+          {pluralize(maxCredits, 'credit')}
+        </Typography>
+      )}
     </Box>
   );
 }
@@ -75,7 +83,7 @@ export default function ShoppingCart({ classes }) {
  */
 const generateSessions = (classes, resolver) => {
   let sessions = [];
-  for (let { classData, course, highlight } of classes) {
+  for (let { classData, course, highlight, selectionID } of classes) {
     for (let dayOffered of parseDayList(classData.offerDate)) {
       if (dayOffered === -1) continue; // online course
 
@@ -89,7 +97,8 @@ const generateSessions = (classes, resolver) => {
         start: parseTime(classData.startTime),
         end: parseTime(classData.endTime),
         color: 'gray',
-        isHighlighted: highlight,
+        highlight,
+        shouldDispatch: !!selectionID,
         text: courseCode,
         // The following `data` object determines what to display in the timeline detail
         // card (which shows up when clicking on a time block).
@@ -98,22 +107,13 @@ const generateSessions = (classes, resolver) => {
         // all this complex data construction into the updated TimeDataCard.
         data: {
           eventID: classData.id,
-          groupID: course.id,
+          groupID: selectionID || course.id,
           earliestStart: Math.min(
             ...relatedClasses.map((classData) => parseTime(classData.startTime))
           ),
           title: courseCode,
           subtitle: course.title,
-          description: relatedClasses
-            .map((classData, i) => (
-              <div key={i}>
-                {getComponent(classData)}:{' '}
-                <b>
-                  {classData.offerDate} {classData.startTime}–{classData.endTime}
-                </b>
-              </div>
-            ))
-            .concat(`Professor: ${getInstructor(classData)}`),
+          description: <CourseScheduleSummary plainText classes={relatedClasses} />,
           topBorderColor: 'gray',
           coursePageURL: `/course/${course.id}`,
         },
@@ -122,8 +122,8 @@ const generateSessions = (classes, resolver) => {
       sessions.push(
         new Promise((onAssignedColors) =>
           ImageColors.getColors(course.ImageURL, { cache: true }).then((palette) => {
-            const representativeColor = Color(palette.vibrant).desaturate(0.375);
-            sessionData.color = sessionData.data.topBorderColor = representativeColor;
+            const color = Color(palette.vibrant).desaturate(0.375).lightness(41.7);
+            sessionData.color = sessionData.data.topBorderColor = color;
             onAssignedColors(sessionData);
           })
         )

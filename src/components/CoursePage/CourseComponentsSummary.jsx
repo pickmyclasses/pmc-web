@@ -32,7 +32,7 @@ export const getAllComponents = (course) =>
     .split(/\s+/)
     .sort((x, y) => +(x !== 'Lecture') - +(y !== 'Lecture'));
 
-const iconTypeByComponent = {
+export const iconTypeByComponent = {
   'Lecture': MenuBook,
   'Laboratory': Science,
   'Discussion': People,

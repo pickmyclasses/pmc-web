@@ -1,6 +1,5 @@
 import { BookmarkBorder, Share } from '@mui/icons-material';
 import {
-  AppBar,
   Box,
   Card,
   CardMedia,
@@ -26,29 +25,24 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
   const renderCourseInfo = () => (
     <Box>
       <CenterAligningFlexBox>
-        <CourseEligibilityIndicator course={course} size='medium'>
+        <CourseEligibilityIndicator course={course} size='medium' placement='bottom'>
           <Typography variant='h5' lineHeight={2} fontWeight='bold'>
             {formatCourseName(course.catalogCourseName)}
           </Typography>
-          <Typography
-            variant='h5'
-            fontWeight='normal'
-            lineHeight={2}
-            sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}
-          >
+          <Typography variant='h5' fontWeight='normal' lineHeight={2} noWrap>
             &nbsp;— {course.title}
           </Typography>
         </CourseEligibilityIndicator>
       </CenterAligningFlexBox>
       <Typography variant='body1' color={theme.palette.text.secondary}>
-        CS major requirement &nbsp;&nbsp;•&nbsp;&nbsp;
+        CS major requirement &nbsp;•&nbsp;&nbsp;
         {formatCreditRange(course)}
       </Typography>
     </Box>
   );
 
   const renderActionItems = () => (
-    <Box>
+    <Box maxHeight='72px' overflow='hidden'>
       <ActionItem label='Bookmark' icon={BookmarkBorder} onClick={() => alert('** bookmark')} />
       <ActionItem label='Share' icon={Share} onClick={() => alert('** share')} />
     </Box>
@@ -67,7 +61,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
 
   return (
     <>
-      <CardMedia component='img' image={course.ImageURL} height='360px' />
+      <CardMedia component='img' image={course.ImageURL} height={imageHeight} />
       <Card sx={{ position: 'sticky', top: 0, zIndex: 1001, boxShadow: 2 }}>
         <Container maxWidth='xl'>
           <Box padding='16px 0' display='flex' justifyContent='space-between'>
@@ -84,6 +78,9 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
     </>
   );
 }
+
+/** Used by `CoursePage` to help adjust the scrollbar position for going back to top. */
+export const imageHeight = 360;
 
 export const ActionItem = ({ icon, ...props }) => (
   <Tab icon={createElement(icon)} sx={{ fontSize: 'x-small' }} {...props} />
