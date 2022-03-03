@@ -89,9 +89,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
         }))
       );
     } else if (selectedClasses.length === 1) {
-      const [primaryClass, otherClasses] = classGroups.find(
-        ([primaryClass]) => +selectedClasses[0].id === +primaryClass.id
-      );
+      const [primaryClass, otherClasses] = selectedGroup;
       const toHighlight = [
         {
           classData: { ...primaryClass },
