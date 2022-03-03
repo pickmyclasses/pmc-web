@@ -22,7 +22,6 @@ export default function Table(props)
             .then(res => res.json())
             .then(
                 (data) => {
-                    console.log("useEffect is called: " + tableName);
                     setIsLoaded(true);
                     setTestData(data);
                 },
@@ -35,7 +34,6 @@ export default function Table(props)
 
     let deleteClick = (e) => {
         let delete_id = e.row.id;
-        console.log("delete id: " + delete_id);
     }
 
     if (error) 

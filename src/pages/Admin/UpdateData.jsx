@@ -11,6 +11,8 @@ export default function UpdateData(props)
 
     let data = location.state.data;
 
+    //const [obj, setObj] = useState(location.state.data);
+
     let dataToRender = [];
 
     for(let key in data)
@@ -21,12 +23,13 @@ export default function UpdateData(props)
         dataToRender.push(temp);
     }
 
-    let handleChange = () => {
-
+    let handleChange = (key, e) => {
+        data[key] = e.target.value;
     }
 
-    let handleSubmit = () => {
-
+    let handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(data);
     }
 
 
@@ -34,10 +37,10 @@ export default function UpdateData(props)
         <div className='updateDataDiv'>
             <h1 style={{textAlign: 'center'}}>Update Data</h1>
             <form onSubmit={handleSubmit}>
-                {dataToRender.map(obj => <div key={keyItem++}><label>{obj.key}
-                                            {   obj.key === "id" ?  <input className="updateDataInput" type="text" value={obj.value} readOnly/> : 
-                                                obj.value == null ? <input className="updateDataInput" type="text" value={""} onChange={handleChange}/> :
-                                                <input className="updateDataInput" type="text" value={obj.value} onChange={handleChange}/>
+                {dataToRender.map(obj => <div key={keyItem++}>
+                                            <label>{obj.key}
+                                            {   obj.key === "id" ?  <input className="updateDataInput" type="text" defaultValue={obj.value} readOnly/> : 
+                                                <input className="updateDataInput" type="text" defaultValue={obj.value} onChange={(e) => handleChange(obj.key, e)}/>
                                             }
                                             </label><br/>
                                         </div>)
