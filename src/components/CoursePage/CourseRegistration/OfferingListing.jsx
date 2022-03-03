@@ -49,9 +49,6 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
   }, [course, classesInShoppingCart]);
 
   useEffect(() => {
-    const selectedClasses = Object.values(selectedClassesByComponent);
-    setSelectedClasses(selectedClasses);
-
     if (selectedClasses.length === 0) {
       setHighlightedClasses(
         classGroups.map(([primaryClass]) => ({
@@ -122,6 +119,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
     classGroups,
     classesOfCourseInShoppingCart.length,
     course,
+    selectedClasses,
     selectedClassesByComponent,
     selectedGroup,
   ]);
@@ -141,6 +139,9 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
         }
       }
 
+      setSelectedClassesByComponent(newValue);
+      setSelectedClasses(Object.values(newValue));
+
       if (newValue[components[0]]) {
         setSelectedGroup(
           classGroups.find(([primaryClass]) => +newValue[components[0]].id === +primaryClass.id)
@@ -150,7 +151,6 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
         setSelectedGroup(null);
         setIsDirty(classesOfCourseInShoppingCart.length !== 0);
       }
-      setSelectedClassesByComponent(newValue);
     },
     [classGroups, classesOfCourseInShoppingCart.length, components, selectedClassesByComponent]
   );
