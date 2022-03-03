@@ -30,6 +30,15 @@ export default function UpdateData(props)
     let handleSubmit = (e) => {
         e.preventDefault();
         console.log(data);
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        };
+        fetch('https://reqres.in/api/posts', requestOptions)
+            .then(response => response.json())
+            .then(data => console.log(data));
     }
 
 
@@ -48,7 +57,5 @@ export default function UpdateData(props)
                 <input className="updateDateSubmit" type="submit" value="Submit" />
             </form>
         </div>
-
-
     )
 }
