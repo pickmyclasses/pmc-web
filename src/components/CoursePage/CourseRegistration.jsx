@@ -31,7 +31,7 @@ export default function CourseRegistration() {
         top='192px'
         left='calc(50% + 16px)'
         width='calc(50% - 16px)'
-        zIndex={998}
+        zIndex={1000}
       />
       {/* <SchedulePreview classesToHighlight={classesToHighlight} /> */}
       <LeftHalfContainer marginTop={`calc(0px - (${schedulerHeight}))`}>

@@ -109,6 +109,7 @@ export default function Timeline({
     let prevEnd = -1;
     let prevColumnIndex = -1;
     let wasPrevActive = false;
+    let wasPrevHighlight = false;
     let wasPrevShiftedRight = false;
     for (let event of eventsShown) {
       const hasConflicts =
@@ -117,10 +118,15 @@ export default function Timeline({
         event.columnIndex === prevColumnIndex &&
         event.start < prevEnd;
 
-      if (hasConflicts && event.isActive && wasPrevActive) {
+      if (
+        hasConflicts &&
+        (!event.highlight || !wasPrevHighlight) &&
+        event.isActive &&
+        wasPrevActive
+      ) {
         eventsWithConflicts[eventsWithConflicts.length - 1] = true;
       }
-      eventsWithConflicts.push(hasConflicts);
+      eventsWithConflicts.push((!event.highlight || !wasPrevHighlight) && hasConflicts);
 
       const shiftedRight = hasConflicts && !wasPrevShiftedRight;
       eventsShiftedRight.push(shiftedRight);
@@ -129,6 +135,7 @@ export default function Timeline({
         prevColumnIndex = event.columnIndex;
         prevEnd = event.end;
         wasPrevActive = event.isActive;
+        wasPrevHighlight = event.highlight;
         wasPrevShiftedRight = shiftedRight;
       }
     }
@@ -233,8 +240,12 @@ export default function Timeline({
               onMouseEnter={() => setMouseEnteredEventData(data)}
               onMouseLeave={() => setMouseEnteredEventData(null)}
               onClick={() => {
-                if (shouldDispatch) onSelect?.(data.groupID);
-                else handleTimeBlockClick(data);
+                if (shouldDispatch) {
+                  onSelect?.(data.groupID);
+                  setSelectedEventData(null);
+                } else {
+                  handleTimeBlockClick(data);
+                }
               }}
             />
           </MotionBox>
