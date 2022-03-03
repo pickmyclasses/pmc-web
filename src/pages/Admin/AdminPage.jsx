@@ -1,96 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
-import { DataGrid } from '@mui/x-data-grid';
-import { useDemoData } from '@mui/x-data-grid-generator';
-import MUIDataTable from "mui-datatables";
+import React , {useState} from 'react';
+import Table from './Table';
 
-export default function AdminPage() 
+export default function AdminPage(props)
 {
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [tableName, setTableName] = useState("");
-    const [testData, setTestData] = useState([]);
-    const [error, setError] = useState(null);
-    const [nbRows, setNbRows] = useState(10);
+    const [tableName, setTableName] = useState("college");
 
-    const removeRow = () => setNbRows((x) => Math.max(0, x - 1));
-    const addRow = () => setNbRows((x) => Math.min(100, x + 1));
+    let handleChange = (e) => 
+    {
 
-    const { data } = useDemoData({
-        dataSet: 'Commodity',
-        rowLength: 100,
-        maxColumns: 6,
-    });
-
-    useEffect(() => {
-        fetch("https://pmc-schedule-api.herokuapp.com/" + tableName)
-            .then(res => res.json())
-            .then(
-                (data) => {
-                    console.log("useEffect is called: " + tableName);
-                    setIsLoaded(true);
-                    setTestData(data);
-                },
-                (error) => {
-                    setIsLoaded(true);
-                    setError(error);
-                }
-            );
-    }, [tableName]);
-
-
-    let handleChange = (e) => {
-        setIsLoaded(false);
         setTableName(e.target.value);
     }
 
-    if (error) 
-    {
-        return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) 
-    {
-        return <div>Loading...</div>;
-    } else 
-    {
-        let columns = [];
-        let rows = [];
+    return(
+        <div style={{ width: '100%' }} className="admindiv">
+        <h1 style={{textAlign: 'center'}}>Admin Page</h1>
+        <h1>Table {tableName}</h1>
 
-        if(testData.length > 0)
-        {
-            for(let key in testData[0])
-            {
-                let temp = {}
-                temp.field=key;
-                columns.push(temp);
-            }
+        <label className="selector-label">Choose a table:</label>
 
-            rows = testData;
-        }
-        const options = {
-            filterType: 'checkbox',
-          };
+        <select name="tables" id="tables-selector" onChange={handleChange}>
+            <option value="college">college</option>
+            <option value="class">class</option>
+            <option value="course">course</option>
+            <option value="subject">subject</option>
+            <option value="professor">professor</option>
+            <option value="google_user">google_user</option>
+            <option value="review">review</option>
+            <option value="semester">semester</option>
+            <option value="user">user</option>
+            <option value="schedule">schedule</option>
+            <option value="feedback">feedback</option>
+        </select>
+        <div style={{marginBottom: '20px', marginTop: '20px'}}>---------------------------------------------------</div>
 
-        return (
-            <div style={{ width: '100%' }} className="admindiv">
-                <h1>Admin Page</h1>
-                <h1>Table {tableName}</h1>
-
-                <label className="selector-label">Choose a table:</label>
-
-                <select name="tables" id="tables-selector" onChange={handleChange}>
-                    <option value=""></option>
-                    <option value="class">class</option>
-                    <option value="college">college</option>
-                    <option value="course">course</option>
-                    <option value="subject">subject</option>
-                </select>
-
-            <div style={{ height: 2500, width: '100%' }}>
-                <DataGrid
-                columns={columns}
-                rows={rows}
-                />
-            </div>
-            </div>
-        );
-    }
+        <Table tableName={tableName}/>
+        
+        </div> 
+    );
 }
