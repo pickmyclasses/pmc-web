@@ -38,11 +38,11 @@ export default function OfferingListingItem({
               container
               margin='8px 16px'
               width='calc(100% - 32px)'
-              columns={24}
+              columns={19}
               display='flex'
               alignItems='center'
             >
-              <Grid item xs={5}>
+              <Grid item xs={4}>
                 <LabelWithIcon
                   color='action'
                   iconType={iconTypeByComponent[component] || People}
@@ -60,7 +60,7 @@ export default function OfferingListingItem({
                   noWrap
                 />
               </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={5}>
                 <CenterAligningFlexBox>
                   <DaysIndicator
                     isMouseEntered={selected}

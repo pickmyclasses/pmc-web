@@ -29,8 +29,8 @@ export default function CourseRegistration() {
         height={schedulerHeight}
         position='sticky'
         top='192px'
-        left='calc(50% + 16px)'
-        width='calc(50% - 16px)'
+        left='calc(62.5% + 16px)'
+        width='calc(37.5% - 16px)'
         zIndex={1000}
       />
       {/* <SchedulePreview classesToHighlight={classesToHighlight} /> */}
@@ -49,6 +49,6 @@ export default function CourseRegistration() {
   );
 }
 
-const LeftHalfContainer = styled(Box)({ width: 'calc(50% - 16px)' });
+const LeftHalfContainer = styled(Box)({ width: 'calc(62.5% - 16px)' });
 
 const schedulerHeight = 'calc(100vh - 72px - 160px - 32px)';
