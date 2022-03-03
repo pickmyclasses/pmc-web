@@ -17,7 +17,9 @@ export default function CourseAddReview() {
         Review this course
       </MuiTypography>
       <MuiTypography variant='subtitle1' gutterBottom>
-        Share your thoughts with other students
+        {user == null
+          ? 'Login or register to write a review'
+          : 'Share your thoughts with other students'}
       </MuiTypography>
       <Stack spacing={2} direction='row'>
         <Button
