@@ -14,15 +14,21 @@ export default function ContainerWithScheduler({ children }) {
   const [classesInShoppingCart, setClassesInShoppingCart] = useState([]);
   const [requirements, setRequirements] = useState([]);
 
-  const refreshSchedulerData = useCallback(() => {
-    if (user) {
-      fetchClassesInShoppingCart(user.userID).then(setClassesInShoppingCart);
-      fetchRequirements(user.userID).then(setRequirements);
-    } else {
-      setClassesInShoppingCart([]);
-      setRequirements([]);
-    }
-  }, [user]);
+  const refreshSchedulerData = useCallback(
+    (onComplete) => {
+      if (user) {
+        Promise.all([
+          fetchClassesInShoppingCart(user.userID).then(setClassesInShoppingCart),
+          fetchRequirements().then(setRequirements),
+        ]).then(() => onComplete?.());
+      } else {
+        setClassesInShoppingCart([]);
+        setRequirements([]);
+        onComplete?.();
+      }
+    },
+    [user]
+  );
 
   useEffect(refreshSchedulerData, [refreshSchedulerData]);
 
@@ -39,7 +45,7 @@ export default function ContainerWithScheduler({ children }) {
  * @type {React.Context<{
  *   classesInShoppingCart: Array<{classData, course}>,
  *   requirements: Array<Object>,
- *   refreshSchedulerData: function(): void,
+ *   refreshSchedulerData: function(function(): *): void,
  * }>}
  */
-export const SchedulerContext = createContext();
+export const SchedulerContext = createContext(null);

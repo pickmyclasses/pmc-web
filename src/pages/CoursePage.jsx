@@ -46,7 +46,7 @@ export default function CoursePage() {
       <Box ref={containerRef} width='100%' height='100%' minHeight={0}>
         <OnTopScrollBars>
           <CoursePageTop course={course} tabs={tabs} activeTabName={activeTabName} />
-          <Container maxWidth='xl' sx={{ paddingY: '32px' }}>
+          <Container maxWidth='xl' sx={{ paddingTop: '32px' }}>
             <CourseContext.Provider value={{ course, reviews }}>
               {createElement(tabs[activeTabName].content)}
             </CourseContext.Provider>

@@ -26,9 +26,7 @@ export default function HomePage() {
                 <Box key={i}>
                   {i > 0 && <Divider sx={{ marginY: '8px' }} />}
                   <ClickableIndicator>
-                    <Typography variant='overline' fontSize='medium' sx={{ opacity: 0.75 }}>
-                      {category}
-                    </Typography>
+                    <SectionOverline>{category}</SectionOverline>
                   </ClickableIndicator>
                   <Box sx={{ padding: '8px 0 16px 0' }}>
                     <CourseCardGrid
@@ -46,3 +44,9 @@ export default function HomePage() {
     </ContainerWithStaticScheduler>
   );
 }
+
+export const SectionOverline = ({ children, ...props }) => (
+  <Typography {...props} variant='overline' fontSize='medium' sx={{ opacity: 0.75 }}>
+    {children}
+  </Typography>
+);

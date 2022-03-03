@@ -1,24 +1,26 @@
-import { Box, Grid } from '@mui/material';
-import React, { useContext } from 'react';
+import { Box } from '@mui/material';
+import { mergeShoppingCartClasses } from 'components/Scheduler/Scheduler';
+import React, { useContext, useEffect, useState } from 'react';
 import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
 import ShoppingCart from '../../Scheduler/ShoppingCart';
 
-export default function SchedulePreview() {
+export default function SchedulePreview({ classesToHighlight, onSelect }) {
   const { classesInShoppingCart } = useContext(SchedulerContext);
 
+  const [classes, setClasses] = useState([]);
+
+  useEffect(
+    () => setClasses(mergeShoppingCartClasses(classesInShoppingCart, classesToHighlight, true)),
+    [classesInShoppingCart, classesToHighlight]
+  );
+
   return (
-    <Box
-      height='calc(100vh - 72px - 160px - 64px)'
-      position='sticky'
-      top='192px'
-      left='calc(50% + 16px)'
-      width='calc(50% - 16px)'
-      zIndex={998}
-    >
+    <Box height='calc(100% - 32px)'>
       <ShoppingCart
-        classes={classesInShoppingCart}
+        classes={classes}
         noSummary
         timelineColumnTitles={timelineColumnTitles}
+        onSelect={onSelect}
       />
     </Box>
   );

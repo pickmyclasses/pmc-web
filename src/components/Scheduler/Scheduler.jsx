@@ -18,15 +18,10 @@ export default function Scheduler({ classesToHighlight = null }) {
 
   // Combine classes in shopping cart with classes to highlight, only keeping the copy to
   // highlight if there are repeats.
-  useEffect(() => {
-    const toHighlight = classesToHighlight || [];
-    setClasses([
-      ...classesInShoppingCart.filter(({ classData }) =>
-        toHighlight.every((y) => y.classData.id !== classData.id)
-      ),
-      ...toHighlight,
-    ]);
-  }, [classesInShoppingCart, classesToHighlight]);
+  useEffect(
+    () => setClasses(mergeShoppingCartClasses(classesInShoppingCart, classesToHighlight)),
+    [classesInShoppingCart, classesToHighlight]
+  );
 
   const renderLoadingIndication = () => <CircularProgress sx={{ margin: 'auto' }} />;
 
@@ -52,3 +47,22 @@ export default function Scheduler({ classesToHighlight = null }) {
     </Box>
   );
 }
+
+export const mergeShoppingCartClasses = (
+  classesInShoppingCart,
+  classesToHighlight,
+  ignoreSameCourses = false
+) => {
+  classesInShoppingCart ||= [];
+  classesToHighlight ||= [];
+  return [
+    ...classesInShoppingCart.filter(({ classData, course }) =>
+      classesToHighlight.every(
+        (y) =>
+          +y.classData.id !== +classData.id &&
+          (!ignoreSameCourses || +y.course.id !== +course.id)
+      )
+    ),
+    ...classesToHighlight,
+  ];
+};

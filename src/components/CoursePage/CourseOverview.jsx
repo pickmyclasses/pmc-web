@@ -69,7 +69,7 @@ export default function CourseOverview() {
       <Stack padding='24px' spacing='12px' height='calc(100% - 48px)'>
         <Box>
           <Box width='fit-content' marginX='auto' marginBottom='8px'>
-            <LabeledRatingDisplay hideLabel value={course.overallRating} size='large' />
+            <LabeledRatingDisplay value={course.overallRating} size='large' />
           </Box>
           <Typography variant='body2' align='center' fontStyle='italic' sx={{ opacity: 0.75 }}>
             {reviews.length ? `Based on ${pluralize(reviews.length, 'review')}` : 'No reviews'}
@@ -167,7 +167,7 @@ export default function CourseOverview() {
       <Typography variant='overline' fontSize='medium' sx={{ opacity: 0.75 }}>
         You may also like
       </Typography>
-      <Box width='100%'>
+      <Box width='100%' paddingBottom='32px'>
         <CourseCardGrid numColumns={5} courses={new Array(5).fill(course)} />
       </Box>
     </>

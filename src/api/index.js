@@ -55,7 +55,7 @@ const fakeFetchCoursesBySearch = () => {
   const resultCourseIDs = [
     22966, 23000, 22968, 23068, 23063, 23041, 23001, 22986, 22998, 22964, 22941, 22942, 22961,
     22971, 22951, 22970, 22998, 31826, 28270, 24777, 27266, 27334, 21978, 28354, 30056, 25305,
-    22958, 22938,
+    22958, 22938, 27252,
   ];
 
   return Promise.all(resultCourseIDs.map((id) => fetchCourseByID(id)));
@@ -95,8 +95,22 @@ const fakeFetchRequirements = () =>
     ])
   );
 
+/**
+ * @param {{
+ *   userID: Number,
+ *   classID: Number,
+ *   semesterID: 1,
+ * }} body
+ */
 export const addClassIDToShoppingCart = (body) => axios.post('/schedule', body);
 
+/**
+ * @param {{
+ *   userID: Number,
+ *   classID: Number,
+ *   semesterID: 1,
+ * }} body
+ */
 export const removeClassIDFromShoppingCart = (body) => axios.put('/schedule', body);
 
 export const fetchReviewsByCourseID = (courseID) =>

@@ -25,7 +25,7 @@ export const isFalsy = (value) => (value === 0 ? false : !!value);
 /**
  * Registers function calls for when a component is mounted (first rendered) and for when the
  * component is unmounted.
- * @param {function(): function(): void} onMounted
+ * @param {function(): any} onMounted
  * @example
  * useMount(() => {
  *   console.log('Component mounted');
@@ -94,6 +94,7 @@ export const formatCourseName = (catalogCourseName) =>
  * @example formatInstructorName('SMITH, JOHN W') // 'John W. Smith'
  */
 export const formatInstructorName = (s) => {
+  if (!s) return 'TBD';
   let tokens = s
     .split(/[^A-Za-z]+/)
     .map((x) => x.charAt(0) + (x.slice(1).toLowerCase() || '.'));
@@ -135,16 +136,20 @@ export const formatPrerequisites = (s) => {
   return prunePrerequisiteList(rawList);
 };
 
-const prunePrerequisiteList = (p) => ({
-  operator: p.includes('AND') ? 'every' : 'some',
-  items: p
-    .map((x) => (typeof x === 'object' ? prunePrerequisiteList(x) : x.trim()))
-    .filter(
-      (x) =>
-        typeof x === 'object' ||
-        (x.replace(/[^A-Za-z]+/g, '').length && x !== 'AND' && x !== 'OR')
-    ),
-});
+const prunePrerequisiteList = (p) => {
+  const res = {
+    operator: p.includes('AND') ? 'every' : 'some',
+    items: p
+      .map((x) => (typeof x === 'object' ? prunePrerequisiteList(x)[0] : x.trim()))
+      .filter(
+        (x) =>
+          typeof x === 'object' ||
+          (x.replace(/[^A-Za-z]+/g, '').length && x !== 'AND' && x !== 'OR')
+      ),
+  };
+  const count = (x) => (typeof x === 'object' ? x.items.reduce((n, y) => n + count(y), 0) : 1);
+  return [res, count(res)];
+};
 
 /**
  * Singularize or pluralize a word based on its count.

@@ -12,6 +12,7 @@ export default function ShoppingCart({
   classes,
   noSummary = false,
   timelineColumnTitles = undefined,
+  onSelect = () => {},
 }) {
   const theme = useTheme();
 
@@ -57,7 +58,7 @@ export default function ShoppingCart({
   return (
     <Box display='flex' flexDirection='column' position='relative' width='100%' height='100%'>
       <Box flex={1}>
-        <Timeline events={sessions} columnTitles={timelineColumnTitles} />
+        <Timeline events={sessions} columnTitles={timelineColumnTitles} onSelect={onSelect} />
       </Box>
       {!noSummary && (
         <Typography
@@ -82,7 +83,7 @@ export default function ShoppingCart({
  */
 const generateSessions = (classes, resolver) => {
   let sessions = [];
-  for (let { classData, course, highlight } of classes) {
+  for (let { classData, course, highlight, selectionID } of classes) {
     for (let dayOffered of parseDayList(classData.offerDate)) {
       if (dayOffered === -1) continue; // online course
 
@@ -96,7 +97,8 @@ const generateSessions = (classes, resolver) => {
         start: parseTime(classData.startTime),
         end: parseTime(classData.endTime),
         color: 'gray',
-        isHighlighted: highlight,
+        highlight,
+        shouldDispatch: !!selectionID,
         text: courseCode,
         // The following `data` object determines what to display in the timeline detail
         // card (which shows up when clicking on a time block).
@@ -105,7 +107,7 @@ const generateSessions = (classes, resolver) => {
         // all this complex data construction into the updated TimeDataCard.
         data: {
           eventID: classData.id,
-          groupID: course.id,
+          groupID: selectionID || course.id,
           earliestStart: Math.min(
             ...relatedClasses.map((classData) => parseTime(classData.startTime))
           ),
@@ -143,6 +145,4 @@ export const getComponent = (classData) =>
 
 // TODO Q: This is assuming a class only has one instructor, which may be false.
 export const getInstructor = (classData) =>
-  Object.values(classData).find(
-    (value) => value && /^[A-Z\s]+,[A-Z,\s]+$/.test(String(value))
-  ) || 'TBD';
+  Object.values(classData).find((value) => value && /^[A-Z\s]+,[A-Z,\s]+$/.test(String(value)));
