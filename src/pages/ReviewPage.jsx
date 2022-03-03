@@ -38,7 +38,7 @@ export default function ReviewPage() {
     );
   }
   return (
-    <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0 }}>
+    <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
       <MainCard>
         <Grid container spacing={gridSpacing}>
           <Grid item xs={12} sm={12}>

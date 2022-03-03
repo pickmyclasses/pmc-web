@@ -141,7 +141,7 @@ export default function RegisterForm() {
                   required
                   fullWidth
                   name='rePassword'
-                  label='Renter Password'
+                  label='Confirm Password'
                   type='password'
                   id='rePassword'
                   autoComplete='new-password'
