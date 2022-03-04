@@ -75,7 +75,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
       } else {
         setIsValid(false);
         for (let { component } of selectedClasses) requiredComponents.delete(component);
-        setSavePromptMessage(`Select a ${[...requiredComponents][0]} component.`);
+        setSavePromptMessage(`Select a ${requiredComponents.values().next().value} component.`);
       }
     }
 
