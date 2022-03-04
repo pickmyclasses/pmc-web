@@ -1,9 +1,10 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { userSelectionContext } from './FilterVerticalContainer';
 
 library.add(fas);
 
@@ -12,7 +13,10 @@ export default function TypeButton({ setOptionSelected }) {
   const [offlineChecked, setOfflineChecked] = useState(true);
   const [hybridChecked, setHybridChecked] = useState(true);
 
+  const { setSelection } = useContext(userSelectionContext);
+
   useEffect(() => {
+    setSelection(onlineChecked)
     !onlineChecked || !offlineChecked || !hybridChecked
       ? setOptionSelected(true)
       : setOptionSelected(false);

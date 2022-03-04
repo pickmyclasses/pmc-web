@@ -49,11 +49,15 @@ const fakeFetchHomePageCourses = () => {
   );
 };
 
-export const fetchCoursesBySearch = (query) => fakeFetchCoursesBySearch(query);
+export const fetchCoursesBySearch = (body) =>
+  axios.post('/course/search', body).then((response) => {
+    // return response.data.data.data;
+    return fakeFetchCoursesBySearch(response.data.data);
+  });
 
 // TODO (QC): Get rid of this also.
-const fakeFetchCoursesBySearch = () => {
-  const resultCourseIDs = [
+const fakeFetchCoursesBySearch = (res) => {
+  const resultCourseIDs = res || [
     22966, 23000, 22968, 23068, 23063, 23041, 23001, 22986, 22998, 22964, 22941, 22942, 22961,
     22971, 22951, 22970, 22998, 31826, 28270, 24777, 27266, 27334, 21978, 28354, 30056, 25305,
     22958, 22938, 27252,
