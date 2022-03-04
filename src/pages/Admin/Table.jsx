@@ -33,7 +33,16 @@ export default function Table(props)
     }, [tableName]);
 
     let deleteClick = (e) => {
-        let delete_id = e.row.id;
+      fetch("https://pmc-schedule-api.herokuapp.com/" + tableName + "/delete/" + e.row.id)
+      .then(res => res.json())
+      .then(
+          (data) => {
+              console.log(data);
+          },
+          (error) => {
+              console.log(error);
+          }
+      );
     }
 
     if (error) 
@@ -94,7 +103,7 @@ export default function Table(props)
         }
 
         return (
-          <div style={{ height: 700, width: '100%' }}>
+          <div style={{ height: 500, width: '100%' }}>
             <DataGrid
             columns={columns}
             rows={rows}
