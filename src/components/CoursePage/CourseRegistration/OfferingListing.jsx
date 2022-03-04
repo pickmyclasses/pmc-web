@@ -74,12 +74,15 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
         }
       } else {
         setIsValid(false);
-        for (let { component } of selectedClasses) requiredComponents.delete(component);
-        setSavePromptMessage(`Select a ${[...requiredComponents][0]} component.`);
+        setSavePromptMessage(
+          `Select a ${[...requiredComponents].find(
+            (x) => !selectedClasses.find((y) => getComponent(y) === x)
+          )} component.`
+        );
       }
     }
 
-    if (selectedClasses.length === 0) {
+    if (!selectedGroup || !selectedClasses.length) {
       setHighlightedClasses(
         classGroups.map(([primaryClass]) => ({
           classData: { ...primaryClass },
@@ -89,6 +92,8 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
         }))
       );
     } else if (selectedClasses.length === 1) {
+      // TODO Q: Figure out why selectedGroup is null sometimes, or better, rewrite this whole
+      // useEffect.
       const [primaryClass, otherClasses] = selectedGroup;
       const toHighlight = [
         {

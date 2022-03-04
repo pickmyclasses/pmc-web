@@ -33,7 +33,18 @@ export default function Table(props)
     }, [tableName]);
 
     let deleteClick = (e) => {
-        let delete_id = e.row.id;
+      const URL = "https://pmc-schedule-api.herokuapp.com/" + tableName + "/delete/" + e.row.id;
+      console.log(URL);
+      fetch("https://pmc-schedule-api.herokuapp.com/" + tableName + "/delete/" + e.row.id)
+      .then(res => res.json())
+      .then(
+          (data) => {
+              alert(data.message);
+          },
+          (error) => {
+              alert(error);
+          }
+      );
     }
 
     if (error) 
@@ -45,8 +56,6 @@ export default function Table(props)
     } else 
     {
         let columns = [];
-        let rows = [];
-
         if(testData.length > 0)
         {
             for(let key in testData[0])
@@ -89,15 +98,13 @@ export default function Table(props)
                   );
                 }
             });
-
-            rows = testData;
         }
 
         return (
-          <div style={{ height: 700, width: '100%' }}>
+          <div style={{ height: 500, width: '100%' }}>
             <DataGrid
             columns={columns}
-            rows={rows}
+            rows={testData}
             />
           </div>
         );

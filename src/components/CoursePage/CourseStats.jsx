@@ -36,7 +36,12 @@ export default function CourseStats() {
     };
 
     const predicate = predicateByFilterMethod(filterMethod);
-    setFilteredReviews(reviews.concat().filter(predicate));
+    setFilteredReviews(
+      reviews
+        .concat()
+        .filter(predicate)
+        .sort((x, y) => new Date(x.createdAt).getTime() - new Date(y.createdAt).getTime())
+    );
   }, [filterMethod, reviews]);
 
   return (
@@ -91,7 +96,7 @@ export default function CourseStats() {
             </Card>
           </Grid>
         </Grid>
-        <Grid container spacing='32px' marginBottom='32px'>
+        {/* <Grid container spacing='32px' marginBottom='32px'>
           <Grid item xs={4}>
             <Card sx={{ width: '100%', height: '300px' }}>
               <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}> </Box>
@@ -103,7 +108,7 @@ export default function CourseStats() {
               <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}></Box>
             </Card>
           </Grid>
-        </Grid>
+        </Grid> */}
       </Box>
     </>
   );

@@ -7,7 +7,7 @@ import { formatCreditRange } from './CoursePageTop';
 import CourseCardGrid from '../CourseCardGrid/CourseCardGrid';
 import { CourseContext } from '../../pages/CoursePage';
 import LabeledRatingDisplay from '../CourseCardGrid/CourseCard/LabeledRatingDisplay';
-import { pluralize } from '../../utils';
+import { formatCourseName, pluralize } from '../../utils';
 import CourseEligibilityBanner from './CourseEligibilityBanner';
 import LabelWithIcon from './LabelWithIcon';
 import ClickableIndicator from '../CourseCardGrid/CourseCard/ClickableIndicator';
@@ -19,6 +19,7 @@ import CourseOfferingSummary, {
 import { SchedulerContext } from '../Scheduler/ContainerWithScheduler';
 import { getEligibility } from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
 import CourseScheduleSummary from '../Scheduler/CourseScheduleSummary';
+import { fetchCoursesBySearch } from 'api';
 
 export default function CourseOverview() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export default function CourseOverview() {
   const [eligibility, setEligibility] = useState('none');
   // The classes the user has registered for this course, if any.
   const [classesOfCourseInShoppingCart, setClassesOfCourseInShoppingCart] = useState([]);
+  const [recommendedCourses, setRecommendedCourses] = useState([]);
 
   // Controls what to display in the registration summary sub-card. If the course is in the
   // user's schedule already, display the summary of their registration.
@@ -39,6 +41,10 @@ export default function CourseOverview() {
       classesInShoppingCart
     );
     setClassesOfCourseInShoppingCart(comboInShoppingCart);
+    fetchCoursesBySearch({
+      keyword: course.title.split(/\s+/)[0],
+      pageSize: 5,
+    }).then(setRecommendedCourses);
   }, [course, classesInShoppingCart]);
 
   const coursePageURL = '/course/' + course.id;
@@ -168,7 +174,7 @@ export default function CourseOverview() {
         You may also like
       </Typography>
       <Box width='100%' paddingBottom='32px'>
-        <CourseCardGrid numColumns={5} courses={new Array(5).fill(course)} />
+        <CourseCardGrid numColumns={5} courses={recommendedCourses} />
       </Box>
     </>
   );
