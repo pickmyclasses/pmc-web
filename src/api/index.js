@@ -33,7 +33,8 @@ export const fetchHomePageCourses = () => fakeFetchHomePageCourses();
 // TODO (QC): Get rid of this, although it might be hard to.
 const fakeFetchHomePageCourses = () => {
   const recommendedCategories = {
-    'Major Requirements To Go': [22948, 22949, 22963],
+    'Major Requirements To Go': [22963],
+    // 'Major Requirements To Go': [22948, 22949, 22963],
     'Highest Rated Electives': [22961, 22971, 22951, 22970, 22998, 23000],
     'Highest Rated Gen-Ed Courses': [31826, 28270, 24777, 21978, 28354, 27266],
   };
