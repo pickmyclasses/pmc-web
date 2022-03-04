@@ -104,42 +104,14 @@ export default function Timeline({
   // Compute which events should be slightly shifted right in the display. Some events are
   // shifted right to avoid covering other events and making other events unrecognizable.
   useEffect(() => {
-    let eventsWithConflicts = [];
-    let eventsShiftedRight = [];
-    let prevEnd = -1;
-    let prevColumnIndex = -1;
-    let wasPrevActive = false;
-    let wasPrevHighlight = false;
-    let wasPrevShiftedRight = false;
-    for (let event of eventsShown) {
-      const hasConflicts =
-        event.isActive &&
-        wasPrevActive &&
-        event.columnIndex === prevColumnIndex &&
-        event.start < prevEnd;
-
-      if (
-        hasConflicts &&
-        (!event.highlight || !wasPrevHighlight) &&
-        event.isActive &&
-        wasPrevActive
-      ) {
-        eventsWithConflicts[eventsWithConflicts.length - 1] = true;
-      }
-      eventsWithConflicts.push((!event.highlight || !wasPrevHighlight) && hasConflicts);
-
-      const shiftedRight = hasConflicts && !wasPrevShiftedRight;
-      eventsShiftedRight.push(shiftedRight);
-
-      if (event.columnIndex !== prevColumnIndex || event.end >= prevEnd) {
-        prevColumnIndex = event.columnIndex;
-        prevEnd = event.end;
-        wasPrevActive = event.isActive;
-        wasPrevHighlight = event.highlight;
-        wasPrevShiftedRight = shiftedRight;
+    const unHighlighted = eventsShown.filter((x) => !x.highlight);
+    let eventsWithConflicts = eventsShown.map((x) => hasConflictsWithSome(x, unHighlighted));
+    let eventsShiftedRight = eventsShown.map((x) => +hasConflictsWithSome(x, eventsShown));
+    for (let i = eventsShiftedRight.length - 2; i >= 0; i--) {
+      if (eventsShiftedRight[i] > 0) {
+        eventsShiftedRight[i] = (eventsShiftedRight[i + 1] + 1) % 2;
       }
     }
-
     setEventsWithConflicts(eventsWithConflicts);
     setEventsShiftedRight(eventsShiftedRight);
   }, [eventsShown]);
@@ -158,7 +130,7 @@ export default function Timeline({
 
   const handleTimeBlockClick = (data) => {
     setDoesSelectedEventHaveConflicts(
-      events.some((event, i) => event.data.groupID === data.groupID && eventsWithConflicts[i])
+      eventsShown.some((x, i) => x.data.groupID === data.groupID && eventsWithConflicts[i])
     );
     setSelectedEventData(selectedEventData?.groupID !== data.groupID && data);
   };
@@ -337,3 +309,17 @@ const getEventKey = ({ data, columnIndex }) => `${data.eventID}-${columnIndex}`;
 
 export const getTransitionForStyles = (styles, duration = 0.25) =>
   styles.map((x) => `${x} ${duration}s cubic-bezier(0.4, 0, 0.2, 1)`).join(', ');
+
+export const hasConflictsWithSome = (x, events) => {
+  return (
+    x.isActive &&
+    !!events.find(
+      (y) =>
+        y.isActive &&
+        y !== x &&
+        y.columnIndex === x.columnIndex &&
+        x.start <= y.end &&
+        y.start <= x.end
+    )
+  );
+};
