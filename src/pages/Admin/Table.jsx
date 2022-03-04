@@ -33,14 +33,16 @@ export default function Table(props)
     }, [tableName]);
 
     let deleteClick = (e) => {
+      const URL = "https://pmc-schedule-api.herokuapp.com/" + tableName + "/delete/" + e.row.id;
+      console.log(URL);
       fetch("https://pmc-schedule-api.herokuapp.com/" + tableName + "/delete/" + e.row.id)
       .then(res => res.json())
       .then(
           (data) => {
-              console.log(data);
+              alert(data);
           },
           (error) => {
-              console.log(error);
+              alert(error);
           }
       );
     }
