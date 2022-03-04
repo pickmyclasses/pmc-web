@@ -56,8 +56,6 @@ export default function Table(props)
     } else 
     {
         let columns = [];
-        let rows = [];
-
         if(testData.length > 0)
         {
             for(let key in testData[0])
@@ -100,15 +98,13 @@ export default function Table(props)
                   );
                 }
             });
-
-            rows = testData;
         }
 
         return (
           <div style={{ height: 500, width: '100%' }}>
             <DataGrid
             columns={columns}
-            rows={rows}
+            rows={testData}
             />
           </div>
         );

@@ -15,8 +15,6 @@ export default function UpdateData()
 
     console.log(tableName);
 
-    //const [obj, setObj] = useState(location.state.data);
-
     let dataToRender = [];
 
     for(let key in data)
