@@ -36,7 +36,12 @@ export default function CourseStats() {
     };
 
     const predicate = predicateByFilterMethod(filterMethod);
-    setFilteredReviews(reviews.concat().filter(predicate));
+    setFilteredReviews(
+      reviews
+        .concat()
+        .filter(predicate)
+        .sort((x, y) => new Date(x.createdAt).getTime() - new Date(y.createdAt).getTime())
+    );
   }, [filterMethod, reviews]);
 
   return (
