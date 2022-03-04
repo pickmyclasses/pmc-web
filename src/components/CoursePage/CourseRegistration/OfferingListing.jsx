@@ -82,7 +82,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
       }
     }
 
-    if (selectedClasses.length === 0) {
+    if (!selectedGroup || !selectedClasses.length) {
       setHighlightedClasses(
         classGroups.map(([primaryClass]) => ({
           classData: { ...primaryClass },
@@ -92,6 +92,8 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
         }))
       );
     } else if (selectedClasses.length === 1) {
+      // TODO Q: Figure out why selectedGroup is null sometimes, or better, rewrite this whole
+      // useEffect.
       const [primaryClass, otherClasses] = selectedGroup;
       const toHighlight = [
         {
