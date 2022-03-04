@@ -12,7 +12,7 @@ export default function FilterVerticalContainer() {
 
   return (
     <userSelectionContext.Provider value={{ selection, setSelection }}>
-      <FilterGroup />;
+      <FilterGroup />
     </userSelectionContext.Provider>
   );
 }

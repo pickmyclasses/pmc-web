@@ -33,10 +33,13 @@ export const fetchHomePageCourses = () => fakeFetchHomePageCourses();
 // TODO (QC): Get rid of this, although it might be hard to.
 const fakeFetchHomePageCourses = () => {
   const recommendedCategories = {
-    'Major Requirements To Go': [22963],
+    // 'Major Requirements To Go': [22963],
     // 'Major Requirements To Go': [22948, 22949, 22963],
-    'Highest Rated Electives': [22961, 22971, 22951, 22970, 22998, 23000],
-    'Highest Rated Gen-Ed Courses': [31826, 28270, 24777, 21978, 28354, 27266],
+    // 'Highest Rated Electives': [22961, 22971, 22951, 22970, 22998, 23000],
+    'Highest Rated Math/Science Courses': [27247, 27245, 22417, 22933, 21976, 27266],
+    'Highest Rated Gen-Ed Courses': [
+      31826, 28270, 24777, 21978, 28354, 29897, 30546, 24764, 21072,
+    ],
   };
 
   return Promise.all(
@@ -93,10 +96,10 @@ export const fetchRequirements = () => fakeFetchRequirements();
 const fakeFetchRequirements = () =>
   new Promise((onFetched) =>
     onFetched([
-      { title: 'Major Requirements', progress: 3, total: 6 },
-      { title: 'Major Electives', progress: 4, total: 7 },
-      { title: 'Math/Science Electives', progress: 2, total: 5 },
-      { title: 'General Education', progress: 6, total: 13 },
+      { title: 'Major Requirements', progress: 0, total: 6 },
+      { title: 'Major Electives', progress: 0, total: 7 },
+      { title: 'Math/Science Electives', progress: 0, total: 5 },
+      { title: 'General Education', progress: 0, total: 13 },
     ])
   );
 
