@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { useLocation } from "react-router";
 import "./UpdateData.css";
 
-export default function UpdateData(props)
+export default function UpdateData()
 {
     //console.log("called from UpdateData");
     let keyItem = 1;
@@ -14,8 +14,6 @@ export default function UpdateData(props)
     const [tableName, setTableName] = useState(location.state.table);
 
     console.log(tableName);
-
-    //const [obj, setObj] = useState(location.state.data);
 
     let dataToRender = [];
 
@@ -44,8 +42,7 @@ export default function UpdateData(props)
         let URL = 'https://pmc-schedule-api.herokuapp.com/' + tableName + '/update';
         console.log(URL);
         fetch(URL, requestOptions)
-            .then(response => response.json())
-            .then(data => console.log(data));
+            .then(response => alert(response.status === 201 ? "Data update successfully" : "Data update failed"));
     }
 
 
