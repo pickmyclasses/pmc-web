@@ -39,7 +39,7 @@ export default function Table(props)
       .then(res => res.json())
       .then(
           (data) => {
-              alert(data);
+              alert(data.message);
           },
           (error) => {
               alert(error);

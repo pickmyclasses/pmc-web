@@ -44,7 +44,7 @@ export default function UpdateData()
         let URL = 'https://pmc-schedule-api.herokuapp.com/' + tableName + '/update';
         console.log(URL);
         fetch(URL, requestOptions)
-            .then(response => alert(response.status === 201 ? "Data update successfully" : "failed"));
+            .then(response => alert(response.status === 201 ? "Data update successfully" : "Data update failed"));
     }
 
 
