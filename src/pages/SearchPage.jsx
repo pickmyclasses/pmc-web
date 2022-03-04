@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Stack, Typography } from '@mui/material';
 import { fetchCoursesBySearch } from '../api';
@@ -14,7 +14,11 @@ export default function SearchPage({ shouldShowScheduler }) {
 
   const urlParams = useParams();
 
-  useMount(() => fetchCoursesBySearch(urlParams['query']).then(setCourses));
+  // TODO: fix this hard coded number
+  useEffect(() => {
+    fetchCoursesBySearch({ keyword: urlParams['query'], pageSize: 11 }).then(setCourses);
+    setCourses(null);
+  }, [urlParams]);
 
   return (
     <>
