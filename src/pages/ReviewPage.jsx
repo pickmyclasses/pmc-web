@@ -15,6 +15,14 @@ import swal from 'sweetalert';
 import ReviewAnonymous from '../components/ReviewInputDetails/ReviewAnonymous';
 import ReviewRecommend from '../components/ReviewInputDetails/ReviewRecommend';
 import { UserContext } from '../App';
+import { Link } from 'react-router-dom';
+
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import StepContent from '@mui/material/StepContent';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 
 export default function ReviewPage() {
   const [course, setCourse] = useState(null);
@@ -27,6 +35,25 @@ export default function ReviewPage() {
 
   const urlParams = useParams();
   const { user } = useContext(UserContext);
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  const handleNext = () => {
+    if (activeStep === 3) {
+      if (proValue.length === 0) {
+        swal('Oops!', 'Please fill in the postive side of the course', 'error');
+        return;
+      }
+      if (conValue.length === 0) {
+        swal('Oops!', 'Please fill in the negative side of the course', 'error');
+        return;
+      }
+    }
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
   useMount(() => fetchCourseByID(urlParams.id).then(setCourse));
 
@@ -37,87 +64,101 @@ export default function ReviewPage() {
       </Box>
     );
   }
+  const steps = [
+    {
+      label: 'Select Course Ratings',
+      description: (
+        <ReviewRatings
+          course={course}
+          value={ratingValue}
+          onChange={(ratingValue) => {
+            setRatingValue(ratingValue);
+          }}
+        />
+      ),
+    },
+    {
+      label: 'Comments on the postive side of the course',
+      description: (
+        <ReviewPros
+          value={proValue}
+          onChange={(proValue) => {
+            setProValue(proValue);
+          }}
+        />
+      ),
+    },
+    {
+      label: 'Comments on the negative side of the course',
+      description: (
+        <ReviewCons
+          value={conValue}
+          onChange={(conValue) => {
+            setConValue(conValue);
+          }}
+        />
+      ),
+    },
+    {
+      label: 'Additional Comments on the course',
+      description: (
+        <ReviewComments
+          value={commentValue}
+          onChange={(commentValue) => {
+            setCommentValue(commentValue);
+          }}
+        />
+      ),
+    },
+  ];
   return (
-    <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
-      <MainCard>
-        <Grid container spacing={gridSpacing}>
-          <Grid item xs={12} sm={12}>
-            <ReviewDescription course={course} />
-          </Grid>
-
-          <Grid item xs={12} sm={12}>
-            <ReviewRatings
-              course={course}
-              value={ratingValue}
-              onChange={(ratingValue) => {
-                setRatingValue(ratingValue);
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12}>
-            <ReviewPros
-              value={proValue}
-              onChange={(proValue) => {
-                setProValue(proValue);
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12}>
-            <ReviewCons
-              value={conValue}
-              onChange={(conValue) => {
-                setConValue(conValue);
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12}>
-            <ReviewComments
-              value={commentValue}
-              onChange={(commentValue) => {
-                setCommentValue(commentValue);
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12}>
-            <ReviewAnonymous
-              userName={user.name}
-              value={anonymity}
-              onChange={(anonymity) => {
-                setAnonymity(anonymity);
-              }}
-            />
-            <ReviewRecommend
-              value={recommendation}
-              onChange={(recommendation) => {
-                setRecommendation(recommendation);
-              }}
-            />
-          </Grid>
-
-          <Grid
-            item
-            container
-            spacing={0}
-            direction='column'
-            alignItems='center'
-            justifyContent='center'
-          >
+    <Box sx={{ maxWidth: 1200 }}>
+      <ReviewAnonymous
+        userName={user.name}
+        value={anonymity}
+        onChange={(anonymity) => {
+          setAnonymity(anonymity);
+        }}
+      />
+      <ReviewRecommend
+        value={recommendation}
+        onChange={(recommendation) => {
+          setRecommendation(recommendation);
+        }}
+      />{' '}
+      <Stepper activeStep={activeStep} orientation='vertical'>
+        {steps.map((step, index) => (
+          <Step key={step.label}>
+            <StepLabel
+              optional={
+                index === 3 ? <Typography variant='caption'>Last step</Typography> : null
+              }
+            >
+              {step.label}
+            </StepLabel>
+            <StepContent>
+              <Typography>{step.description}</Typography>
+              <Box sx={{ mb: 9 }}>
+                <div>
+                  <Button variant='contained' onClick={handleNext} sx={{ mt: 1, mr: 1 }}>
+                    {index === steps.length - 1 ? 'Finish' : 'Continue'}
+                  </Button>
+                  <Button disabled={index === 0} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                    Back
+                  </Button>
+                </div>
+              </Box>
+            </StepContent>
+          </Step>
+        ))}
+      </Stepper>
+      {activeStep === steps.length && (
+        <Paper square elevation={0} sx={{ p: 3 }}>
+          <Typography>All steps completed - you&apos;re finished</Typography>
+          <Link to={`/course/${course.id}/`} style={{ textDecoration: 'none' }}>
             <Button
               variant='contained'
               onClick={() => {
-                if (proValue.length === 0) {
-                  swal('Oops!', 'Please fill in what do you like about this course.', 'error');
-                  return;
-                }
-                if (conValue.length === 0) {
-                  swal(
-                    'Oops!',
-                    "Please fill in what you don't like about this course.",
-                    'error'
-                  );
-
-                  return;
-                }
                 swal('Good job!', 'You submitted the review!', 'success');
 
                 postReview(course.id, {
@@ -132,10 +173,10 @@ export default function ReviewPage() {
               }}
             >
               Submit
-            </Button>{' '}
-          </Grid>
-        </Grid>
-      </MainCard>
-    </Container>
+            </Button>
+          </Link>
+        </Paper>
+      )}
+    </Box>
   );
 }

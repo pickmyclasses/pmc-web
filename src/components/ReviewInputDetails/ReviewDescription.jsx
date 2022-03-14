@@ -1,8 +1,5 @@
 import MuiTypography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
-import { Link } from 'react-router-dom';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 
 export default function ReviewDescription({ course }) {
@@ -12,11 +9,6 @@ export default function ReviewDescription({ course }) {
         REVIEW
         <RateReviewIcon />
       </MuiTypography>
-      <Link to={`/course/${course.id}`} style={{ textDecoration: 'none' }}>
-        <Button variant='outlined' color='primary' startIcon={<KeyboardReturnIcon />}>
-          {`${course['catalogCourseName']} — ${course['title']}`}
-        </Button>
-      </Link>
     </Stack>
   );
 }
