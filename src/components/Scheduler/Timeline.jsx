@@ -5,27 +5,14 @@ import { useMount } from '../../utils';
 import TimeBlock from './TimeBlock';
 import TimeDataCard from './TimeDataCard';
 
-/**
- * Represents the timeline view in the shopping cart.
- *
- * @param {object} props
- * @param {number} props.defaultRangeStart
- * @param {number} props.defaultRangeEnd
- * @param {string[]} props.columnTitles
- * @param {{
- *   columnIndex: string,
- *   text: string,
- *   data: object,
- *   start: number,
- *   end: number,
- * }[]} props.events
- */
+/** Represents the timeline view in the shopping cart. */
 export default function Timeline({
   defaultRangeStart = 9 * 3600,
   defaultRangeEnd = 16 * 3600,
   columnTitles = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
   events = [],
   onSelect = () => {},
+  alwaysGrayUnHighlighted = false,
 }) {
   const theme = useTheme();
 
@@ -180,7 +167,7 @@ export default function Timeline({
               position: 'absolute',
               top: top * 100 + '%',
               left: (columnIndex + 0.0833) * columnWidth + '%',
-              zIndex: isMouseEntered || highlight ? 999 : isSelected ? 998 : '',
+              zIndex: isMouseEntered ? 999 : isSelected ? 998 : highlight ? 997 : '',
               width: 0.667 * columnWidth + '%',
               height: (bottom - top) * 100 + '%',
               // Adapt the same transition style from MUI to the shifting movement.
@@ -195,7 +182,9 @@ export default function Timeline({
                   ? hasConflicts
                     ? 'error'
                     : 'primary'
-                  : hasHighlights || (selectedEventData && !isSelected)
+                  : alwaysGrayUnHighlighted ||
+                    hasHighlights ||
+                    (selectedEventData && !isSelected)
                   ? 'gray'
                   : color
               }

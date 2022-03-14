@@ -21,6 +21,7 @@ export default function SchedulePreview({ classesToHighlight, onSelect }) {
         noSummary
         timelineColumnTitles={timelineColumnTitles}
         onSelect={onSelect}
+        alwaysGrayUnHighlighted
       />
     </Box>
   );

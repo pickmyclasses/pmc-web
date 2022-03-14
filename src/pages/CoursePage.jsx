@@ -21,12 +21,19 @@ export default function CoursePage() {
   // This avoids the useRef()'s not updating problem with useEffect().
   // See https://stackoverflow.com/a/67906087)
   // We can potentially include this pattern in the utils collection to reuse it.
-  const [containerNode, setContainerNode] = useState();
+  const [containerNode, setContainerNode] = useState(null);
   const containerRef = useCallback((node) => setContainerNode(node), []);
 
   useEffect(() => {
-    // Fetch data for the course, classes offered, and reviews.
     const courseID = urlParams.id;
+
+    // Clear existing course data to force showing loading indication.
+    if (+courseID !== +course?.id) {
+      setCourse(null);
+      setReviews(null);
+    }
+
+    // Fetch data for the course, classes offered, and reviews.
     fetchCourseByID(courseID).then(setCourse);
     fetchReviewsByCourseID(courseID).then(setReviews);
 
@@ -63,7 +70,7 @@ export default function CoursePage() {
  *   reviews: Array<Object>
  * }>}
  */
-export const CourseContext = createContext();
+export const CourseContext = createContext(null);
 
 const tabs = {
   '': { title: 'Overview', icon: Widgets, content: CourseOverview },

@@ -1,4 +1,6 @@
 import axios from 'axios';
+import Color from 'color';
+import { formatCourseName } from '../utils';
 
 export const login = (body) => axios.post('/login', body).then((response) => response.data);
 
@@ -21,7 +23,15 @@ export const fetchCourseByID = (courseID) =>
   );
 
 const getFakeCourseImageURL = (course) =>
-  `https://picsum.photos/seed/${+course.id + 13}/1280/720`;
+  `https://singlecolorimage.com/get/${getColorByCourse(course).substring(1)}/512x216`;
+
+export const getColorByCourse = (course) =>
+  '#' +
+  Color('#' + (parseInt(course.catalogCourseName, 36) * 2531).toString(16).slice(-3))
+    .desaturate(0.667)
+    .lightness(50)
+    .rgbNumber()
+    .toString(16);
 
 const injectFakeImageURLToCourse = (course) =>
   (course.ImageURL = getFakeCourseImageURL(course));

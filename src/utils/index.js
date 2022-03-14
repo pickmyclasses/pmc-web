@@ -57,8 +57,15 @@ export const useDebounce = (value, delay) => {
  * Returns the number of seconds past midnight a string of time represents.
  * @example parseTime('12:01 AM') // 60
  */
-export const parseTime = (s) =>
-  new Date(`1970-01-01 ${s.split(/(?<=\d)(?=[A-Za-z])/).join(' ')} Z`).getTime() / 1000;
+export const parseTime = (s) => {
+  s = s.trim().toLowerCase();
+  let offset = 0;
+  if (s.includes('a') || s.includes('p')) {
+    if (s.includes('p')) offset = 43200;
+    s = s.replace(/^12/, '0').replace(/[^\d.:]+/g, '');
+  }
+  return Date.parse(`1970-1-1 ${s}Z`) / 1000 + offset;
+};
 
 /**
  * Returns the numerical representation of a weekday given its name or abbreviation.
@@ -71,15 +78,27 @@ export const parseDay = (s) =>
  * Returns the list of weekdays a string represents, assuming each new day starts with an
  * uppercase letter.
  * @example parseDayList('TuTh') // [2, 4]
+ * @example parseDayList('Mo-Fr') // [1, 2, 3, 4, 5]
  */
-export const parseDayList = (s) => [
-  ...new Set(
-    s
-      .split(/(?=[A-Z])/)
-      .map((day) => parseDay(day))
-      .sort()
-  ),
-];
+export const parseDayList = (s) => {
+  if (s.includes('-')) {
+    // D1-D2
+    return Array(7)
+      .fill(null)
+      .map((_, i) => i)
+      .slice(...s.split('-').map((day, i) => parseDay(day) + i));
+  }
+
+  // D1D2D3...
+  return Array.from(
+    new Set(
+      s
+        .split(/(?=[A-Z])/)
+        .map((day) => parseDay(day))
+        .sort()
+    )
+  );
+};
 
 /**
  * Formats a `CatalogCourseName` so that there is a space separating the department code and

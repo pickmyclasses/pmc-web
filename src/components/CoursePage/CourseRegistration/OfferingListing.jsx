@@ -263,7 +263,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
                       </Button>
                     </>
                   ) : (
-                    <Button variant='contained' component={Link} to='/auth'>
+                    <Button variant='text' component={Link} to='/auth'>
                       Login
                     </Button>
                   )}
@@ -306,9 +306,15 @@ const enumerateClassGroups = (classes, components) => {
     for (let primaryClass of primaryClasses) {
       res.push([
         primaryClass,
-        otherClasses.concat().sort((x, y) => parseTime(x.startTime) - parseTime(y.startTime)),
+        otherClasses
+          .concat()
+          .sort(
+            (x, y) => (parseTime(x.startTime) || 86400) - (parseTime(y.startTime) || 86400)
+          ),
       ]);
     }
   }
-  return res;
+  return res.sort(
+    (x, y) => (parseTime(x[0].startTime) || 86400) - (parseTime(y[0].startTime) || 86400)
+  );
 };

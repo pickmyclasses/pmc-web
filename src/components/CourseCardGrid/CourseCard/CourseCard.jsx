@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Box, Card, CardMedia, Skeleton, styled, Typography, useTheme } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { formatCourseName, pluralize } from '../../../utils';
 import ClickableIndicator from './ClickableIndicator';
@@ -11,7 +11,6 @@ import LabeledRatingDisplay from './LabeledRatingDisplay';
 import { NavigationBarContext } from '../../NavigationBar/ContainerWithNavigationBar';
 
 export default function CourseCard({ course }) {
-  const navigate = useNavigate();
   const theme = useTheme();
 
   const { shouldShowStaticScheduler } = useContext(NavigationBarContext);
@@ -23,11 +22,7 @@ export default function CourseCard({ course }) {
   const renderContent = () => (
     <>
       <CardMedia component='img' image={course.ImageURL} sx={{ flex: 1, minHeight: 0 }} />
-      <motion.div
-        variants={textRegionAnimationVariants}
-        transition={{ type: 'just' }}
-        style={{ padding: '16px 16px 4px' }}
-      >
+      <Box padding='16px 16px 4px'>
         <ClickableIndicator propagate>
           <CourseEligibilityIndicator course={course}>
             <Typography variant='h6' fontSize='1.125rem' lineHeight={1.38}>
@@ -85,11 +80,11 @@ export default function CourseCard({ course }) {
               rowHeight={1.5}
               width={`min(120px, calc(100% - ${shouldShowStaticScheduler ? '84px' : '120px'}))`}
               enableHighlight={isMouseEntered && isExtraInfoExpanded}
-              isMouseEntered={isMouseEntered && isExtraInfoExpanded}
+              forceHighlight={isMouseEntered && isExtraInfoExpanded}
             />
           </CenterAligningFlexBox>
         </motion.div>
-      </motion.div>
+      </Box>
     </>
   );
 
@@ -98,11 +93,11 @@ export default function CourseCard({ course }) {
       <Skeleton
         variant='rectangular'
         width='100%'
-        height='calc(100% - 144px)'
-        sx={{ marginBottom: '20px' }}
+        height='calc(100% - 112px)'
+        sx={{ marginBottom: '12px' }}
       />
-      <Skeleton width='50%' height='60px' sx={{ marginLeft: '20px' }} />
-      <Skeleton width='75%' height='36px' sx={{ marginLeft: '20px' }} />
+      <Skeleton width='50%' height='48px' sx={{ marginLeft: '20px' }} />
+      <Skeleton width='75%' height='32px' sx={{ marginLeft: '20px' }} />
     </>
   );
 
@@ -110,17 +105,21 @@ export default function CourseCard({ course }) {
     <MotionCard
       onMouseEnter={() => setIsMouseEntered(true)}
       onMouseLeave={() => setIsMouseEntered(false)}
-      onClick={() => course && navigate(`/course/${course.id}`)}
+      component={Link}
+      to={`/course/${course?.id}`}
       initial='initial'
       whileHover='mouseEntered'
       sx={{
-        boxShadow: isMouseEntered ? 9 : 3,
+        boxShadow: 3,
         width: '100%',
-        height: '256px',
+        height: '216px',
         display: 'flex',
         flexFlow: 'column',
         cursor: 'pointer',
         userSelect: 'none',
+        textDecoration: 'none',
+        pointerEvents: course ? '' : 'none',
+        '&:hover': { boxShadow: 9 },
       }}
     >
       {course ? renderContent() : renderSkeleton()}
@@ -134,14 +133,9 @@ const MotionCard = motion(Card);
 
 const MotionTypography = motion(Typography);
 
-const textRegionAnimationVariants = {
-  initial: { boxShadow: `0 -1px 24px rgba(0, 0, 0, 0)` },
-  mouseEntered: { boxShadow: `0 -1px 24px rgba(0, 0, 0, 0.5)` },
-};
-
 const courseTitleAnimationVariants = {
   initial: { height: '1.5em' },
-  mouseEntered: { height: 'auto' },
+  mouseEntered: { height: '4.75em' },
 };
 
 const extraInfoAnimationVariants = {

@@ -6,6 +6,7 @@ import ImageColors from 'react-native-image-colors';
 import Color from 'color';
 import { pluralize } from '../../utils';
 import CourseScheduleSummary from './CourseScheduleSummary';
+import { getColorByCourse } from '../../api';
 
 /** The shopping cart resides in the top part of the scheduler. */
 export default function ShoppingCart({
@@ -13,6 +14,7 @@ export default function ShoppingCart({
   noSummary = false,
   timelineColumnTitles = undefined,
   onSelect = () => {},
+  alwaysGrayUnHighlighted = false,
 }) {
   const theme = useTheme();
 
@@ -58,7 +60,12 @@ export default function ShoppingCart({
   return (
     <Box display='flex' flexDirection='column' position='relative' width='100%' height='100%'>
       <Box flex={1}>
-        <Timeline events={sessions} columnTitles={timelineColumnTitles} onSelect={onSelect} />
+        <Timeline
+          events={sessions}
+          columnTitles={timelineColumnTitles}
+          onSelect={onSelect}
+          alwaysGrayUnHighlighted={alwaysGrayUnHighlighted}
+        />
       </Box>
       {!noSummary && (
         <Typography
@@ -120,13 +127,13 @@ const generateSessions = (classes, resolver) => {
       };
 
       sessions.push(
-        new Promise((onAssignedColors) =>
-          ImageColors.getColors(course.ImageURL, { cache: true }).then((palette) => {
-            const color = Color(palette.vibrant).desaturate(0.375).lightness(41.7);
-            sessionData.color = sessionData.data.topBorderColor = color;
-            onAssignedColors(sessionData);
-          })
-        )
+        new Promise((onAssignedColors) => {
+          // ImageColors.getColors(course.ImageURL, { cache: true }).then((palette) => {
+          const color = Color(getColorByCourse(course)).desaturate(0.375).lightness(50);
+          sessionData.color = sessionData.data.topBorderColor = color;
+          onAssignedColors(sessionData);
+          // })
+        })
       );
     }
   }

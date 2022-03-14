@@ -12,7 +12,7 @@ const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 
-if (module.hot) module.hot.accept();
+document.title = 'PickMyClasses';
 
 ReactDOM.render(
   <Provider store={store}>

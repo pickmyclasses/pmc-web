@@ -4,7 +4,7 @@ import ContainerWithStaticScheduler from '../components/Scheduler/ContainerWithS
 import { useMount } from '../utils';
 import CourseCardGrid from '../components/CourseCardGrid/CourseCardGrid';
 import ClickableIndicator from '../components/CourseCardGrid/CourseCard/ClickableIndicator';
-import { Box, Divider, Typography } from '@mui/material';
+import { Box, Divider, Typography, colors } from '@mui/material';
 import { NavigationBarContext } from '../components/NavigationBar/ContainerWithNavigationBar';
 import Scrollbars from 'react-custom-scrollbars-2';
 import ContainerWithLoadingIndication from '../components/Page/ContainerWithLoadingIndication';
@@ -46,7 +46,7 @@ export default function HomePage() {
 }
 
 export const SectionOverline = ({ children, ...props }) => (
-  <Typography {...props} variant='overline' fontSize='medium' sx={{ opacity: 0.75 }}>
+  <Typography {...props} variant='overline' fontSize='medium' color={colors.grey[600]}>
     {children}
   </Typography>
 );

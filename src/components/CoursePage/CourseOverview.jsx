@@ -7,7 +7,7 @@ import { formatCreditRange } from './CoursePageTop';
 import CourseCardGrid from '../CourseCardGrid/CourseCardGrid';
 import { CourseContext } from '../../pages/CoursePage';
 import LabeledRatingDisplay from '../CourseCardGrid/CourseCard/LabeledRatingDisplay';
-import { formatCourseName, pluralize } from '../../utils';
+import { pluralize } from '../../utils';
 import CourseEligibilityBanner from './CourseEligibilityBanner';
 import LabelWithIcon from './LabelWithIcon';
 import ClickableIndicator from '../CourseCardGrid/CourseCard/ClickableIndicator';
@@ -20,6 +20,7 @@ import { SchedulerContext } from '../Scheduler/ContainerWithScheduler';
 import { getEligibility } from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
 import CourseScheduleSummary from '../Scheduler/CourseScheduleSummary';
 import { fetchCoursesBySearch } from 'api';
+import { SectionOverline } from 'pages/HomePage';
 
 export default function CourseOverview() {
   const navigate = useNavigate();
@@ -29,7 +30,9 @@ export default function CourseOverview() {
   const [eligibility, setEligibility] = useState('none');
   // The classes the user has registered for this course, if any.
   const [classesOfCourseInShoppingCart, setClassesOfCourseInShoppingCart] = useState([]);
-  const [recommendedCourses, setRecommendedCourses] = useState([]);
+  const [recommendedCourses, setRecommendedCourses] = useState(
+    Array(numRecommendedCourses).fill(null)
+  );
 
   // Controls what to display in the registration summary sub-card. If the course is in the
   // user's schedule already, display the summary of their registration.
@@ -43,15 +46,20 @@ export default function CourseOverview() {
     setClassesOfCourseInShoppingCart(comboInShoppingCart);
     fetchCoursesBySearch({
       keyword: course.title.split(/\s+/)[0],
-      pageSize: 5,
-    }).then(setRecommendedCourses);
+      pageSize: numRecommendedCourses + 1,
+    }).then((data) =>
+      // The current course itself might show up in the search results. Remove it.
+      setRecommendedCourses(
+        data.filter((x) => +x.id !== +course.id).slice(0, numRecommendedCourses)
+      )
+    );
   }, [course, classesInShoppingCart]);
 
   const coursePageURL = '/course/' + course.id;
 
   const renderInfoSummary = () => (
     <Card sx={{ width: '100%', height: '100%' }}>
-      <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}>
+      <Stack padding='24px' spacing='12px'>
         <Typography variant='subtitle2'>Top Tags</Typography>
         <TagList tags={fakeTags} />
         <Typography variant='subtitle2'>Full Description</Typography>
@@ -61,7 +69,7 @@ export default function CourseOverview() {
           <LabelWithIcon color='primary' iconType={School} label='CS major requirement' />
           <LabelWithIcon color='info' iconType={WatchLater} label={formatCreditRange(course)} />
         </Stack>
-      </Box>
+      </Stack>
     </Card>
   );
 
@@ -159,7 +167,7 @@ export default function CourseOverview() {
 
   return (
     <>
-      <Grid container spacing='32px' marginBottom='16px'>
+      <Grid container spacing='32px' marginBottom={recommendedCourses.length ? '8px' : '32px'}>
         <Grid item xs={6}>
           {renderInfoSummary()}
         </Grid>
@@ -170,15 +178,19 @@ export default function CourseOverview() {
           {renderRegistrationSummary()}
         </Grid>
       </Grid>
-      <Typography variant='overline' fontSize='medium' sx={{ opacity: 0.75 }}>
-        You may also like
-      </Typography>
-      <Box width='100%' paddingBottom='32px'>
-        <CourseCardGrid numColumns={5} courses={recommendedCourses} />
-      </Box>
+      {recommendedCourses.length > 0 && (
+        <>
+          <SectionOverline>You may also like</SectionOverline>
+          <Box width='100%' paddingBottom='32px'>
+            <CourseCardGrid numColumns={5} courses={recommendedCourses} />
+          </Box>
+        </>
+      )}
     </>
   );
 }
+
+const numRecommendedCourses = 5;
 
 export const fakeTags = [
   'Consectetur',
