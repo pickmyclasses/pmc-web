@@ -11,7 +11,7 @@ import {
   useTheme,
 } from '@mui/material';
 import React, { createElement } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { formatCourseName, pluralize } from '../../utils';
 import { CenterAligningFlexBox } from '../CourseCardGrid/CourseCard/CourseCard';
 import CourseEligibilityIndicator from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
@@ -55,7 +55,9 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
       iconPosition='start'
       icon={createElement(icon)}
       label={title}
-      onClick={() => navigate(`${coursePageURL}/${name}`)}
+      component={Link}
+      to={`${coursePageURL}/${name}`}
+      sx={{ textDecoration: 'none', minHeight: 0 }}
     />
   );
 
@@ -80,7 +82,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
 }
 
 /** Used by `CoursePage` to help adjust the scrollbar position for going back to top. */
-export const imageHeight = 360;
+export const imageHeight = 240;
 
 export const ActionItem = ({ icon, ...props }) => (
   <Tab icon={createElement(icon)} sx={{ fontSize: 'x-small' }} {...props} />

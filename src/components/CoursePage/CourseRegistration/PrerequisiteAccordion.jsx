@@ -19,7 +19,7 @@ export default function PrerequisiteAccordion({ course }) {
   const [isEligible, setIsEligible] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const [prerequisiteList, setPrerequisiteList] = useState({});
-  const [numPrerequisites, setNumPrerequisites] = useState();
+  const [numPrerequisites, setNumPrerequisites] = useState(null);
 
   useEffect(() => {
     const isEligible =
@@ -63,19 +63,25 @@ export default function PrerequisiteAccordion({ course }) {
     );
 
   return (
-    <Accordion disableGutters expanded={isExpanded} onChange={() => setIsExpanded(!isExpanded)}>
-      <AccordionSummary expandIcon={<ExpandMore />}>
+    <Accordion
+      disableGutters
+      expanded={isExpanded}
+      onChange={() => numPrerequisites && setIsExpanded(!isExpanded)}
+    >
+      <AccordionSummary expandIcon={numPrerequisites > 0 && <ExpandMore />}>
         <Stack padding='12px 8px' spacing='12px'>
           <Typography variant='subtitle2'>Enrollment Requirements</Typography>
           <Typography variant='body2'>
-            {numPrerequisites && <>{pluralize(numPrerequisites || 'No', 'prerequisite')}</>}
+            {pluralize(numPrerequisites || 'No', 'prerequisite')}
           </Typography>
           <LabelWithIcon
             color={isEligible ? 'success' : 'error'}
             iconType={iconType}
             label={
               isEligible
-                ? 'You fulfill all prerequisites for this course'
+                ? numPrerequisites
+                  ? 'You fulfill all prerequisites for this course'
+                  : 'This course is open to everyone'
                 : 'You have unfulfilled prerequisites'
             }
           />

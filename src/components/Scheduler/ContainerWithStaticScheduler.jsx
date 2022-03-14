@@ -47,7 +47,7 @@ export default function ContainerWithStaticScheduler({ children }) {
 }
 
 /**
- * @type {function(?Array<{classData, course}>): void} Renews the list of classes (and their
- *     corresponding courses) to highlight in the scheduler.
+ * @type {function(Array<{classData, course, highlight}>): void} Renews the list of
+ *     classes (and their corresponding courses) to highlight in the scheduler.
  */
-export const SetClassesToHighlightContext = createContext(() => {});
+export const SetClassesToHighlightContext = createContext(null);

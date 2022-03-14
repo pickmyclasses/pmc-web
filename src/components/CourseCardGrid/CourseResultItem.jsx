@@ -1,6 +1,6 @@
 import { Box, Card, CardMedia, Divider, Skeleton, Typography, useTheme } from '@mui/material';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { formatCourseName, pluralize } from '../../utils';
 import CourseEligibilityIndicator from './CourseCard/CourseEligibilityIndicator';
@@ -11,7 +11,6 @@ import LabeledRatingDisplay from './CourseCard/LabeledRatingDisplay';
 
 /** A course search result item. */
 export default function CourseResultItem({ course }) {
-  const navigate = useNavigate();
   const theme = useTheme();
 
   const [isMouseEntered, setIsMouseEntered] = useState(false);
@@ -19,7 +18,7 @@ export default function CourseResultItem({ course }) {
 
   const renderContent = () => (
     <>
-      <CardMedia component='img' image={course.ImageURL} sx={{ width: '216px' }} />
+      <CardMedia component='img' image={course.ImageURL} sx={{ width: '12px' }} />
       <Box sx={{ padding: '16px', flex: 1, minWidth: 0 }}>
         <ClickableIndicator propagate>
           <Box
@@ -78,7 +77,7 @@ export default function CourseResultItem({ course }) {
           maxRows={4}
           textAlign='center'
           enableHighlight
-          isMouseEntered={isMouseEntered}
+          forceHighlight={isMouseEntered}
         />
       </Box>
     </>
@@ -104,7 +103,8 @@ export default function CourseResultItem({ course }) {
         setIsMouseEntered(false);
         clearTimeout(mouseEnterEventTimeoutHandle);
       }}
-      onClick={() => course && navigate(`/course/${course.id}`)}
+      component={Link}
+      to={`/course/${course.id}`}
       initial='initial'
       whileHover='mouseEntered'
       sx={{
@@ -113,6 +113,7 @@ export default function CourseResultItem({ course }) {
         display: 'flex',
         cursor: 'pointer',
         userSelect: 'none',
+        textDecoration: 'none',
         '&:hover': { boxShadow: 3 },
       }}
     >

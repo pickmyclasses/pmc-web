@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Container,
@@ -33,9 +33,7 @@ export default function NavigationBar() {
           <Container maxWidth='xl'>
             <Grid container spacing='24px' sx={{ alignItems: 'center' }}>
               <Grid item xs='auto'>
-                <Link to='/home' style={{ textDecoration: 'none', color: 'white' }}>
-                  <Logo />
-                </Link>
+                <Logo />
               </Grid>
               <Grid item xs display='flex' flexDirection='column' alignItems='center'>
                 <SearchBar

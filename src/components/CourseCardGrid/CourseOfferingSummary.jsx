@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { SetClassesToHighlightContext } from '../Scheduler/ContainerWithStaticScheduler';
-import { cartesian, groupBy, parseDayList, pluralize } from '../../utils';
+import { cartesian, formatInstructorName, groupBy, parseDayList, pluralize } from '../../utils';
 import { SchedulerContext } from '../Scheduler/ContainerWithScheduler';
 import { getComponent, getInstructor } from '../Scheduler/ShoppingCart';
 import { getTransitionForStyles } from '../Scheduler/Timeline';
@@ -12,12 +12,12 @@ import { NavigationBarContext } from '../NavigationBar/ContainerWithNavigationBa
 
 export default function CourseOfferingSummary({
   course,
-  width,
+  width = undefined,
   rowHeight = 1.75,
   maxRows = 999,
   textAlign = 'right',
   enableHighlight = false,
-  isMouseEntered = false,
+  forceHighlight = false,
   showInstructors = false,
 }) {
   const classes = course.classes;
@@ -32,6 +32,7 @@ export default function CourseOfferingSummary({
   const [numHiddenOfferings, setNumHiddenOfferings] = useState(0);
   const [comboInShoppingCart, setComboInShoppingCart] = useState(null);
   const [representativeOfferings, setRepresentativeOfferings] = useState([]);
+  const [isMouseEntered, setIsMouseEntered] = useState(false);
   const [mouseEnteredIndex, setMouseEnteredIndex] = useState(-1);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [highlightedClassIDs, setHighlightedClassIDs] = useState(null);
@@ -64,7 +65,7 @@ export default function CourseOfferingSummary({
       hasStaticScheduler &&
       shouldShowStaticScheduler &&
       enableHighlight &&
-      (mouseEnteredIndex >= 0 || isMouseEntered)
+      (isMouseEntered || forceHighlight)
     ) {
       // Highlight
       const indexToHighlight = Math.max(mouseEnteredIndex, 0);
@@ -74,11 +75,7 @@ export default function CourseOfferingSummary({
           : representativeOfferings[indexToHighlight].combo;
       setHighlightedIndex(indexToHighlight);
       setClassesToHighlight(
-        comboToHighlight.map((classData) => ({
-          classData,
-          course,
-          highlight: true,
-        }))
+        comboToHighlight.map((classData) => ({ classData, course, highlight: 'outlined' }))
       );
       setHighlightedClassIDs(comboToHighlight.map((x) => x.id));
     } else if (highlightedIndex >= 0) {
@@ -90,13 +87,13 @@ export default function CourseOfferingSummary({
       );
       setHighlightedIndex(-1);
       setHighlightedClassIDs(null);
-      if (!isMouseEntered) setMouseEnteredIndex(-1);
+      if (!forceHighlight && !isMouseEntered) setMouseEnteredIndex(-1);
     }
     // eslint-disable-next-line
   }, [
     representativeOfferings,
     enableHighlight,
-    isMouseEntered,
+    forceHighlight,
     hasStaticScheduler,
     shouldShowStaticScheduler,
     setClassesToHighlight,
@@ -118,75 +115,78 @@ export default function CourseOfferingSummary({
   }
 
   return (
-    <>
-      <Stack width={width} sx={{ '> *:not(:last-of-type)': { paddingBottom: '8px' } }}>
-        {representativeOfferings.map(({ instructor, days }, i) => (
-          <Grid container key={i}>
-            {showInstructors && (
-              <Grid item xs={7} paddingRight='8px'>
-                <Typography variant='body2' noWrap>
-                  {instructor}
-                </Typography>
-              </Grid>
-            )}
-            <Grid item xs>
-              <DaysIndicator
-                width='100%'
-                height={rowHeight}
-                days={days}
-                onMouseEnter={() => setMouseEnteredIndex(i)}
-                onMouseLeave={() => setMouseEnteredIndex(-1)}
-                isMouseEntered={i === highlightedIndex}
-              />
+    <Stack
+      width={width}
+      sx={{ '> *:not(:last-of-type)': { paddingBottom: '8px' } }}
+      onMouseEnter={() => setIsMouseEntered(true)}
+      onMouseLeave={() => setIsMouseEntered(false)}
+    >
+      {representativeOfferings.map(({ instructor, days }, i) => (
+        <Grid container key={i}>
+          {showInstructors && (
+            <Grid item xs={7} paddingRight='8px'>
+              <Typography variant='body2' noWrap>
+                {formatInstructorName(instructor)}
+              </Typography>
             </Grid>
+          )}
+          <Grid item xs>
+            <DaysIndicator
+              width='100%'
+              height={rowHeight}
+              days={days}
+              onMouseEnter={() => setMouseEnteredIndex(i)}
+              onMouseLeave={() => !forceHighlight && setMouseEnteredIndex(-1)}
+              isMouseEntered={i === highlightedIndex}
+            />
           </Grid>
-        ))}
-        {(numHiddenOfferings || onlineOffering) && (
-          <Box
-            onMouseEnter={
-              onlineOffering
-                ? () => setMouseEnteredIndex(representativeOfferings.length)
-                : comboInShoppingCart && (() => setMouseEnteredIndex(0))
-            }
-            onMouseLeave={() => setMouseEnteredIndex(-1)}
-            sx={{
-              '*': {
-                color:
-                  onlineOffering && highlightedIndex === representativeOfferings.length
-                    ? theme.palette.primary.main
-                    : '',
-                transition: getTransitionForStyles(['color']),
-              },
-            }}
-          >
-            {numHiddenOfferings ? (
-              <Stack direction={showInstructors ? 'row' : 'column'}>
+        </Grid>
+      ))}
+      {(numHiddenOfferings || onlineOffering) && (
+        <Box
+          onMouseEnter={
+            onlineOffering
+              ? () => setMouseEnteredIndex(representativeOfferings.length)
+              : comboInShoppingCart && (() => setMouseEnteredIndex(0))
+          }
+          onMouseLeave={() => !forceHighlight && setMouseEnteredIndex(-1)}
+          sx={{
+            '*': {
+              color:
+                onlineOffering && highlightedIndex === representativeOfferings.length
+                  ? theme.palette.primary.main
+                  : '',
+              transition: getTransitionForStyles(['color']),
+            },
+          }}
+        >
+          {numHiddenOfferings ? (
+            <Stack direction={showInstructors ? 'row' : 'column'}>
+              <Typography variant='body2' align={textAlign}>
+                {!representativeOfferings.length ? '' : '+'}
+                {pluralize(numHiddenOfferings, 'offering')}&nbsp;
+              </Typography>
+              {onlineOffering && (
                 <Typography variant='body2' align={textAlign}>
-                  {!representativeOfferings.length ? '' : '+'}
-                  {pluralize(numHiddenOfferings, 'offering')}&nbsp;
+                  (1 online)
                 </Typography>
-                {onlineOffering && (
-                  <Typography variant='body2' align={textAlign}>
-                    (1 online)
-                  </Typography>
-                )}
-              </Stack>
+              )}
+            </Stack>
+          ) : (
+            onlineOffering &&
+            (!representativeOfferings.length ? (
+              <Typography variant='body2' align={textAlign}>
+                Offered online
+              </Typography>
             ) : (
-              onlineOffering &&
-              (!representativeOfferings.length ? (
-                <Typography variant='body2' align={textAlign}>
-                  Offered online
-                </Typography>
-              ) : (
-                <Typography variant='body2' align={textAlign} sx={{ fontSize: '0.75rem' }}>
-                  +1 online offering
-                </Typography>
-              ))
-            )}
-          </Box>
-        )}
-      </Stack>
-    </>
+              <Typography variant='body2' align={textAlign} sx={{ fontSize: '0.75rem' }}>
+                +1 online offering
+              </Typography>
+            ))
+          )}
+        </Box>
+      )}
+    </Stack>
   );
 }
 
