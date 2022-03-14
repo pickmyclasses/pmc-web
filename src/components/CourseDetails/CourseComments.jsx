@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-
 export default function CourseComments({ title, comment, isPositive }) {
   return (
     <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}>

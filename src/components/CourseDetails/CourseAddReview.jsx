@@ -7,6 +7,7 @@ import AddCommentIcon from '@mui/icons-material/AddComment';
 import { CourseContext } from '../../pages/CoursePage';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../App';
+import CourseReviewsAccordian from 'components/CourseReviews/CourseReviewsAccordian';
 
 // TODO: Learn to make jsdoc comments
 function checkUserWroteReview(user, reviews) {
@@ -39,6 +40,7 @@ export default function CourseAddReview() {
   const { user } = useContext(UserContext);
   const { reviews } = useContext(CourseContext);
   let userWroteReview = checkUserWroteReview(user, reviews);
+  let disabled = user == null || userWroteReview;
   return (
     <Grid item>
       <MuiTypography variant='h5' gutterBottom>
@@ -47,17 +49,7 @@ export default function CourseAddReview() {
       <MuiTypography variant='subtitle1' gutterBottom>
         {userReviewNotification(userWroteReview, user)}
       </MuiTypography>
-      <Stack spacing={2} direction='row'>
-        <Button
-          variant='contained'
-          disabled={user == null || userWroteReview}
-          startIcon={<AddCommentIcon />}
-          component={Link}
-          to={`/course/${course.id}/reviews/compose`}
-        >
-          Write a Review
-        </Button>
-      </Stack>
+      {disabled ? <></> : <CourseReviewsAccordian />}
     </Grid>
   );
 }
