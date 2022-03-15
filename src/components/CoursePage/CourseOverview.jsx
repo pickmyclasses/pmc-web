@@ -61,7 +61,7 @@ export default function CourseOverview() {
     <Card sx={{ width: '100%', height: '100%' }}>
       <Stack padding='24px' spacing='12px'>
         <Typography variant='subtitle2'>Top Tags</Typography>
-        <TagList tags={fakeTags} />
+        <TagList tags={course.tags.map((x) => x.name)} />
         <Typography variant='subtitle2'>Full Description</Typography>
         <Typography variant='body1'>{course.description}</Typography>
         <Typography variant='subtitle2'>Reward</Typography>
@@ -191,20 +191,5 @@ export default function CourseOverview() {
 }
 
 const numRecommendedCourses = 5;
-
-export const fakeTags = [
-  'Consectetur',
-  'Adipiscing',
-  'Eiusmod',
-  'Tempor',
-  'Incididunt',
-  'Labore',
-  'Dolore',
-  'Aliqua',
-  'Veniam',
-  'Nostrud',
-  'Exercitation',
-  'Ullamco',
-];
 
 const MotionCard = motion(Card);
