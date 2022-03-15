@@ -32,14 +32,14 @@ export default function CourseReviews() {
   );
   const renderReviewCards = () =>
     sortedReviews.map((review, i) => (
-      <Grid item xs={9} key={i}>
+      <Grid item xs={12} key={i}>
         <CourseReviewCard review={review} key={review.id} />
       </Grid>
     ));
   return (
     <Box>
       <Grid container spacing='32px' marginBottom='16px'>
-        <Grid item xs={9}>
+        <Grid item xs={12}>
           <FilterContext.Provider value={{ filterMethod, setFilterMethod }}>
             <CourseOverallRatings reviews={reviews}></CourseOverallRatings>
           </FilterContext.Provider>

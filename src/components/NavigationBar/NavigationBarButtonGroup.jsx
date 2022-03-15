@@ -34,13 +34,7 @@ export default function NavigationBarButtonGroup() {
 
   return (
     <ThemeProvider theme={navigationBarTheme}>
-      <Grid
-        container
-        sx={{
-          alignItems: 'center',
-          flexWrap: 'nowrap !important',
-        }}
-      >
+      <Grid container sx={{ alignItems: 'center', flexWrap: 'nowrap !important' }}>
         {user == null ? renderTabsForNotLoggedIn() : renderTabsForLoggedIn()}
       </Grid>
     </ThemeProvider>

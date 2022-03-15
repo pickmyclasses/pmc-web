@@ -56,7 +56,7 @@ export default function CourseResultItem({ course }) {
           <Typography variant='body2' color={theme.palette.text.secondary}>
             &nbsp;&nbsp;•
           </Typography>
-          <TagList gutterLeft noWrap tags={['Backend', 'Coding']} size='small' />
+          <TagList gutterLeft noWrap tags={course.tags.map((x) => x.name)} size='small' />
         </Box>
         <Typography
           variant='body2'

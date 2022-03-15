@@ -55,7 +55,7 @@ export default function CourseCard({ course }) {
             {course.minCredit === course.maxCredit ? '' : course.minCredit + '–'}
             {pluralize(course.maxCredit, 'credit')}&nbsp;&nbsp;•&nbsp;&nbsp;
           </Typography>
-          <TagList noWrap size='small' tags={['Backend', 'Coding']} />
+          <TagList noWrap size='small' tags={course.tags.map((x) => x.name)} />
         </CenterAligningFlexBox>
         <motion.div
           variants={extraInfoAnimationVariants}
