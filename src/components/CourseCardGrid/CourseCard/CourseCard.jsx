@@ -53,7 +53,8 @@ export default function CourseCard({ course }) {
             sx={{ whiteSpace: 'nowrap' }}
           >
             {course.minCredit === course.maxCredit ? '' : course.minCredit + '–'}
-            {pluralize(course.maxCredit, 'credit')}&nbsp;&nbsp;•&nbsp;&nbsp;
+            {pluralize(course.maxCredit, 'credit')}
+            {course.tags.length > 0 && <>&nbsp;&nbsp;•&nbsp;&nbsp;</>}
           </Typography>
           <TagList noWrap size='small' tags={course.tags.map((x) => x.name)} />
         </CenterAligningFlexBox>

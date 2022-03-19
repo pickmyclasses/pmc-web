@@ -53,9 +53,11 @@ export default function CourseResultItem({ course }) {
             {pluralize(+course.maxCredit, 'credit')}&nbsp;&nbsp;•&nbsp;&nbsp;
           </Typography>
           <LabeledRatingDisplay value={course.overallRating} />
-          <Typography variant='body2' color={theme.palette.text.secondary}>
-            &nbsp;&nbsp;•
-          </Typography>
+          {course.tags.length > 0 && (
+            <Typography variant='body2' color={theme.palette.text.secondary}>
+              &nbsp;&nbsp;•
+            </Typography>
+          )}
           <TagList gutterLeft noWrap tags={course.tags.map((x) => x.name)} size='small' />
         </Box>
         <Typography

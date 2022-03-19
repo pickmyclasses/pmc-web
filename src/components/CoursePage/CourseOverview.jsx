@@ -44,6 +44,10 @@ export default function CourseOverview() {
       classesInShoppingCart
     );
     setClassesOfCourseInShoppingCart(comboInShoppingCart);
+  }, [course, classesInShoppingCart]);
+
+  // Generate the recommended course list.
+  useEffect(() => {
     fetchCoursesBySearch({
       keyword: course.title.split(/\s+/)[0],
       pageSize: numRecommendedCourses + 1,
@@ -53,15 +57,19 @@ export default function CourseOverview() {
         data.filter((x) => +x.id !== +course.id).slice(0, numRecommendedCourses)
       )
     );
-  }, [course, classesInShoppingCart]);
+  }, [course]);
 
   const coursePageURL = '/course/' + course.id;
 
   const renderInfoSummary = () => (
     <Card sx={{ width: '100%', height: '100%' }}>
       <Stack padding='24px' spacing='12px'>
-        <Typography variant='subtitle2'>Top Tags</Typography>
-        <TagList tags={course.tags.map((x) => x.name)} />
+        {course.tags.length > 0 && (
+          <>
+            <Typography variant='subtitle2'>Top Tags</Typography>
+            <TagList tags={course.tags.map((x) => x.name)} />
+          </>
+        )}
         <Typography variant='subtitle2'>Full Description</Typography>
         <Typography variant='body1'>{course.description}</Typography>
         <Typography variant='subtitle2'>Reward</Typography>
@@ -165,6 +173,15 @@ export default function CourseOverview() {
     </MotionCard>
   );
 
+  const renderRecommendedCourses = () => (
+    <>
+      <SectionOverline>You may also like</SectionOverline>
+      <Box width='100%' paddingBottom='32px'>
+        <CourseCardGrid numColumns={5} courses={recommendedCourses} />
+      </Box>
+    </>
+  );
+
   return (
     <>
       <Grid container spacing='32px' marginBottom={recommendedCourses.length ? '8px' : '32px'}>
@@ -178,14 +195,7 @@ export default function CourseOverview() {
           {renderRegistrationSummary()}
         </Grid>
       </Grid>
-      {recommendedCourses.length > 0 && (
-        <>
-          <SectionOverline>You may also like</SectionOverline>
-          <Box width='100%' paddingBottom='32px'>
-            <CourseCardGrid numColumns={5} courses={recommendedCourses} />
-          </Box>
-        </>
-      )}
+      {recommendedCourses.length > 0 && renderRecommendedCourses()}
     </>
   );
 }
