@@ -39,6 +39,7 @@ export const getAllComponents = (course) => {
   } else {
     components = course.component.trim().split(/\s+/);
   }
+  // Put lecture first, if lecture is one of the components.
   return components.sort((x, y) => +(x !== 'Lecture') - +(y !== 'Lecture'));
 };
 
