@@ -7,23 +7,19 @@ import { NavigationBarContext } from '../ContainerWithNavigationBar';
 import { ButtonGroupTab } from '../NavigationBarButtonGroup';
 
 export default function SchedulerDropDown() {
-  const { hasStaticScheduler, shouldShowStaticScheduler, setShouldShowStaticScheduler } =
-    useContext(NavigationBarContext);
+  // Update 03/20/22: static scheduler in home page and search page always shows.
+  // const { hasStaticScheduler, shouldShowStaticScheduler, setShouldShowStaticScheduler } =
+  //   useContext(NavigationBarContext);
 
-  const handleTabClick = () => {
-    if (hasStaticScheduler) setShouldShowStaticScheduler(!shouldShowStaticScheduler);
-  };
+  // const handleTabClick = () => {
+  // if (hasStaticScheduler) setShouldShowStaticScheduler(!shouldShowStaticScheduler);
+  // };
 
   return (
     <PopupState variant='popover'>
       {(popupState) => (
         <>
-          <ButtonGroupTab
-            label='Schedule'
-            icon={<EventNote />}
-            onClick={handleTabClick}
-            {...(!hasStaticScheduler && bindTrigger(popupState))}
-          />
+          <ButtonGroupTab label='Schedule' icon={<EventNote />} {...bindTrigger(popupState)} />
           <Menu
             {...bindMenu(popupState)}
             sx={{ '> *': { overflow: 'visible' } }}
