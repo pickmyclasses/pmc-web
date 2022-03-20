@@ -12,7 +12,7 @@ export default function ContainerWithNavigationBar({ children }) {
   const { user } = useContext(UserContext);
 
   const [hasStaticScheduler, setHasStaticScheduler] = useState(false);
-  const [shouldShowStaticScheduler, setShouldShowStaticScheduler] = useState(user != null);
+  const [shouldShowStaticScheduler, setShouldShowStaticScheduler] = useState(true);
 
   return (
     <Box height='100vh' display='flex' flexDirection='column'>

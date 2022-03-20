@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Card, Stack, Typography } from '@mui/material';
 import { mergeShoppingCartClasses } from 'components/Scheduler/Scheduler';
 import React, { useContext, useEffect, useState } from 'react';
 import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
@@ -16,15 +16,19 @@ export default function SchedulePreview({ classesToHighlight, onSelect }) {
 
   return (
     <Box height='calc(100% - 32px)'>
-      <ShoppingCart
-        classes={classes}
-        noSummary
-        timelineColumnTitles={timelineColumnTitles}
-        onSelect={onSelect}
-        alwaysGrayUnHighlighted
-      />
+      <Card sx={{ height: 'calc(100% - 48px)', padding: '24px', overflow: 'visible' }}>
+        <Stack spacing='12px' height='100%'>
+          <Typography variant='subtitle2'>Schedule Preview</Typography>
+          <Box flex={1}>
+            <ShoppingCart
+              classes={classes}
+              noSummary
+              onSelect={onSelect}
+              alwaysGrayUnHighlighted
+            />
+          </Box>
+        </Stack>
+      </Card>
     </Box>
   );
 }
-
-const timelineColumnTitles = 'Monday Tuesday Wednesday Thursday Friday'.split(' ');
