@@ -48,7 +48,7 @@ const fakeFetchHomePageCourses = () => {
     // 'Highest Rated Electives': [22961, 22971, 22951, 22970, 22998, 23000],
     'Highest Rated Math/Science Courses': [27247, 27245, 22417, 22933, 21976, 27266],
     'Highest Rated Gen-Ed Courses': [
-      31826, 28270, 24777, 21978, 28354, 29897, 30546, 24764, 21072,
+      31826, 28270, 24777, 21978, 28354, 29897, 30546, 24764, 21072, 31570,
     ],
   };
 

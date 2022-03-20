@@ -26,11 +26,8 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
     <Box>
       <CenterAligningFlexBox>
         <CourseEligibilityIndicator course={course} size='medium' placement='bottom'>
-          <Typography variant='h5' lineHeight={2} fontWeight='bold'>
-            {formatCourseName(course.catalogCourseName)}
-          </Typography>
           <Typography variant='h5' fontWeight='normal' lineHeight={2} noWrap>
-            &nbsp;— {course.title}
+            <b>{formatCourseName(course.catalogCourseName)}</b> — {course.title}
           </Typography>
         </CourseEligibilityIndicator>
       </CenterAligningFlexBox>

@@ -1,4 +1,4 @@
-import { MenuBook, People, Science } from '@mui/icons-material';
+import { MenuBook, Mic, People, Science } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 import { getComponent } from 'components/Scheduler/ShoppingCart';
 import React, { useEffect, useState } from 'react';
@@ -36,7 +36,8 @@ export const getAllComponents = (course) => {
   let components;
   if (course.classes?.length) {
     components = Array.from(new Set(course.classes.map((x) => getComponent(x)))).sort();
-  } else {
+  }
+  if (!components || !components.filter(Boolean).length) {
     components = course.component.trim().split(/\s+/);
   }
   // Put lecture first, if lecture is one of the components.
@@ -47,4 +48,5 @@ export const iconTypeByComponent = {
   'Lecture': MenuBook,
   'Laboratory': Science,
   'Discussion': People,
+  'Studio': Mic,
 };
