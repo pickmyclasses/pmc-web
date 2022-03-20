@@ -51,4 +51,4 @@ export default function CourseRegistration() {
 
 const LeftHalfContainer = styled(Box)({ width: 'calc(62.5% - 16px)' });
 
-const schedulerHeight = 'calc(100vh - 72px - 160px - 32px)';
+const schedulerHeight = 'calc(100vh - 72px - 161px - 32px)';
