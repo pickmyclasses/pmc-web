@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import React, { createElement } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { formatCourseName, pluralize } from '../../utils';
+import { formatCourseName, formatCreditRange, pluralize } from '../../utils';
 import { CenterAligningFlexBox } from '../CourseCardGrid/CourseCard/CourseCard';
 import CourseEligibilityIndicator from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
 
@@ -26,11 +26,8 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
     <Box>
       <CenterAligningFlexBox>
         <CourseEligibilityIndicator course={course} size='medium' placement='bottom'>
-          <Typography variant='h5' lineHeight={2} fontWeight='bold'>
-            {formatCourseName(course.catalogCourseName)}
-          </Typography>
           <Typography variant='h5' fontWeight='normal' lineHeight={2} noWrap>
-            &nbsp;— {course.title}
+            <b>{formatCourseName(course.catalogCourseName)}</b> — {course.title}
           </Typography>
         </CourseEligibilityIndicator>
       </CenterAligningFlexBox>
@@ -93,9 +90,3 @@ export const TabsWithoutBottomGap = styled(Tabs)({
   '> *:first-of-type': { position: 'absolute', bottom: 0, width: '100%' },
   button: { width: '25%', minHeight: 0 },
 });
-
-export const formatCreditRange = (course) =>
-  `${course.minCredit === course.maxCredit ? '' : course.minCredit + '–'}${pluralize(
-    +course.maxCredit,
-    'credit'
-  )}`;

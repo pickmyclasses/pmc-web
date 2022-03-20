@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Box, Card, CardMedia, Skeleton, styled, Typography, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { formatCourseName, pluralize } from '../../../utils';
+import { formatCourseName, formatCreditRange, pluralize } from '../../../utils';
 import ClickableIndicator from './ClickableIndicator';
 import CourseEligibilityIndicator from './CourseEligibilityIndicator';
 import TagList from './TagList';
@@ -52,8 +52,7 @@ export default function CourseCard({ course }) {
             color={theme.palette.text.secondary}
             sx={{ whiteSpace: 'nowrap' }}
           >
-            {course.minCredit === course.maxCredit ? '' : course.minCredit + '–'}
-            {pluralize(course.maxCredit, 'credit')}
+            {formatCreditRange(course)}
             {course.tags.length > 0 && <>&nbsp;&nbsp;•&nbsp;&nbsp;</>}
           </Typography>
           <TagList noWrap size='small' tags={course.tags.map((x) => x.name)} />

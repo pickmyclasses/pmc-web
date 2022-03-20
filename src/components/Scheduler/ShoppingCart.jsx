@@ -152,4 +152,6 @@ export const getComponent = (classData) =>
 
 // TODO Q: This is assuming a class only has one instructor, which may be false.
 export const getInstructor = (classData) =>
-  Object.values(classData).find((value) => value && /^[A-Z\s]+,[A-Z,\s]+$/.test(String(value)));
+  Object.values(classData).find(
+    (value) => value && /^[A-Za-z\s]+,[A-Za-z,\s]+$/.test(String(value))
+  );

@@ -214,7 +214,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
           }}
         />
       </Portal>
-      <List sx={{ marginBottom: '92px' }}>
+      <List sx={{ marginBottom: '100px' }}>
         {classGroups.map(([primaryClass, otherClasses]) => (
           <OfferingListingGroup
             key={primaryClass.id}
@@ -225,9 +225,11 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
           />
         ))}
       </List>
+      {/* TODO Q: Extract the following snackbar-style pop up into its own reusable
+       *  component. */}
       <MotionBox
         position='fixed'
-        bottom='24px'
+        bottom='32px'
         width='100vw'
         zIndex={999}
         variants={savePromptVariants}
@@ -294,7 +296,7 @@ const enumerateClassGroups = (classes, components) => {
   const classesByInstructor = groupBy(
     classes.map((x) => ({
       ...x,
-      component: getComponent(x),
+      component: getComponent(x) || components[0],
       instructor: getInstructor(x),
     })),
     'instructor'

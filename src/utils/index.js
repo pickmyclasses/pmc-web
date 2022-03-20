@@ -121,7 +121,15 @@ export const formatInstructorName = (s) => {
   return tokens.join(' ');
 };
 
+/** @example capitalizeFirst('john') // 'John' */
 export const capitalizeFirst = (s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+
+/** Returns "x-y credits" for the number of credits a course rewards. */
+export const formatCreditRange = (course) => {
+  const min = Math.min(course.minCredit, course.maxCredit);
+  const max = Math.max(course.minCredit, course.maxCredit);
+  return (min === max ? '' : min + '–') + pluralize(max, 'credit');
+};
 
 /**
  * Converts a prerequisites into a list. Co-requisites are ignored.
