@@ -16,6 +16,8 @@ export default function SearchBar({
   onSearch,
   maxWidth,
   focusHoverColor,
+  placeholderText,
+  borderRadiusRatio,
 }) {
   const theme = useTheme();
 
@@ -24,14 +26,14 @@ export default function SearchBar({
   return (
     <FilledInput
       fullWidth
-      placeholder='Search'
+      placeholder={placeholderText}
       value={searchText}
       onChange={(e) => setSearchText(e.target.value)}
       onKeyDown={(e) => e.key === 'Enter' && onSearch(searchText)}
       inputProps={{ style: { padding: '10px 20px' } }}
       sx={{
         maxWidth: maxWidth,
-        borderRadius: '4px',
+        borderRadius: borderRadiusRatio,
         color: textColor,
         backgroundColor: backgroundColor,
         '&:hover, &.Mui-focused': { backgroundColor: focusHoverColor },

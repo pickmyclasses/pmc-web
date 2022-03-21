@@ -22,6 +22,8 @@ export default function ProfessorButton() {
           onSearchClick={handleSearch}
           maxWidth={'100%'}
           focusHoverColor={grey[300]}
+          placeholderText={'Search for a professor'}
+          borderRadius={'4px'}
         />
       </MenuItem>
       <MenuItem>

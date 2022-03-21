@@ -42,6 +42,8 @@ export default function NavigationBar() {
                   onSearch={handleSearchClick}
                   maxWidth={'576px'}
                   focusHoverColor={alpha(theme.palette.common.black, 0.333)}
+                  placeholderText={'Search for a course'}
+                  borderRadiusRatio={'4px'}
                 />
               </Grid>
               <Grid item xs='auto'>
