@@ -12,7 +12,7 @@ export default function Logo() {
       direction='row'
       alignItems='center'
       component={PreventableLink}
-      to='/home'
+      to='/'
       color={theme.palette.primary.contrastText}
       sx={{ textDecoration: 'none' }}
     >

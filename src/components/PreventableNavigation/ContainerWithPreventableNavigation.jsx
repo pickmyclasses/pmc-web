@@ -12,13 +12,13 @@ export default function ContainerWithPreventableNavigation({ children }) {
       }
     },
     // eslint-disable-next-line
-    [setPreventionKeys]
+    []
   );
 
   const allowNavigation = useCallback(
     (key) => setPreventionKeys(preventionKeys.concat().filter((x) => x.key !== key)),
     // eslint-disable-next-line
-    [setPreventionKeys]
+    []
   );
 
   const navigateIfAllowed = useCallback(
