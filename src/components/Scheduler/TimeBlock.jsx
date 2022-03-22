@@ -50,7 +50,7 @@ export default function TimeBlock({
 
   const textStyles = {
     pointerEvents: 'none',
-    fontSize: 'min(14px, 1.5vmin)',
+    fontSize: 'min(14px, 14 / 1536 * 100vw, 14 / 864 * 100vh)',
   };
 
   return (

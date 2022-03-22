@@ -23,6 +23,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
   const [selectedClassesByComponent, setSelectedClassesByComponent] = useState({});
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedClasses, setSelectedClasses] = useState([]);
+  const [mouseEnteredClasses, setMouseEnteredClasses] = useState([]);
   const [highlightedClasses, setHighlightedClasses] = useState([]);
   const [isDirty, setIsDirty] = useState(false);
   const [isValid, setIsValid] = useState(true);
@@ -82,44 +83,39 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
       }
     }
 
+    let selectedClassesToHighlight;
     if (!selectedGroup || !selectedClasses.length) {
-      setHighlightedClasses(
-        classGroups.map(([primaryClass]) => ({
-          classData: { ...primaryClass },
-          course,
-          highlight: 'outlined',
-          selectionID: primaryClass.id,
-        }))
-      );
+      selectedClassesToHighlight = [];
     } else if (selectedClasses.length === 1) {
       // TODO Q: Figure out why selectedGroup is null sometimes, or better, rewrite this whole
       // useEffect.
-      const [primaryClass, otherClasses] = selectedGroup;
-      const toHighlight = [
+      const primaryClass = selectedGroup[0];
+      selectedClassesToHighlight = [
         {
           classData: { ...primaryClass },
           course,
           highlight: 'contained',
           selectionID: primaryClass.id,
         },
-        ...otherClasses.map((x) => ({
-          classData: { ...x },
-          course,
-          highlight: 'outlined',
-          selectionID: x.id,
-        })),
       ];
-      setHighlightedClasses(toHighlight);
     } else {
-      setHighlightedClasses(
-        selectedClasses.map((x) => ({
-          classData: { ...x },
-          course,
-          highlight: 'contained',
-          selectionID: x.id,
-        }))
-      );
+      selectedClassesToHighlight = selectedClasses.map((x) => ({
+        classData: { ...x },
+        course,
+        highlight: 'contained',
+        selectionID: x.id,
+      }));
     }
+
+    const mouseEnteredClassesToHighlight = mouseEnteredClasses
+      .filter((x) => !selectedClasses.find((y) => +y.id === +x.id))
+      .map((x) => ({
+        classData: { ...x },
+        course,
+        highlight: 'outlined',
+        selectionID: x.id,
+      }));
+    setHighlightedClasses([...selectedClassesToHighlight, ...mouseEnteredClassesToHighlight]);
   }, [
     classGroups,
     classesOfCourseInShoppingCart.length,
@@ -127,6 +123,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
     course.catalogCourseName,
     selectedClasses,
     selectedGroup,
+    mouseEnteredClasses,
   ]);
 
   useEffect(() => {
@@ -205,6 +202,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
     <>
       <Portal container={schedulePreviewContainer}>
         <SchedulePreview
+          course={course}
           classesToHighlight={highlightedClasses}
           onSelect={(classID) => {
             for (let group of classGroups) {
@@ -222,6 +220,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
             otherClasses={otherClasses}
             toggleSelection={handleNewSelection}
             selectedClasses={selectedClasses}
+            setMouseEnteredClasses={setMouseEnteredClasses}
           />
         ))}
       </List>
@@ -261,7 +260,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
                         variant='text'
                         onClick={() => resetSelections(classesOfCourseInShoppingCart)}
                       >
-                        Reset
+                        Cancel
                       </Button>
                     </>
                   ) : (

@@ -167,7 +167,15 @@ export default function Timeline({
               position: 'absolute',
               top: top * 100 + '%',
               left: (columnIndex + 0.0833) * columnWidth + '%',
-              zIndex: isMouseEntered ? 999 : isSelected ? 998 : highlight ? 997 : '',
+              zIndex: isMouseEntered
+                ? 999
+                : isSelected
+                ? 998
+                : highlight === 'outlined'
+                ? 997
+                : highlight
+                ? 996
+                : '',
               width: 0.667 * columnWidth + '%',
               height: (bottom - top) * 100 + '%',
               // Adapt the same transition style from MUI to the shifting movement.

@@ -20,6 +20,7 @@ export default function OfferingListingGroup({
   otherClasses,
   toggleSelection,
   selectedClasses,
+  ...props
 }) {
   const expanded = !!selectedClasses.find((x) => +x.id === +primaryClass.id);
 
@@ -35,6 +36,7 @@ export default function OfferingListingGroup({
             classData={primaryClass}
             selected={expanded}
             onSelect={() => toggleSelection(primaryClass)}
+            {...props}
           >
             <Box padding='8px 8px 4px'>
               <CenterAligningFlexBox>
@@ -62,6 +64,7 @@ export default function OfferingListingGroup({
                   component={getComponent(x)}
                   classData={x}
                   onSelect={() => toggleSelection(x)}
+                  {...props}
                 />
               </ListItem>
             ))}
