@@ -6,6 +6,8 @@ import { CourseContext } from '../../pages/CoursePage';
 
 export default function CourseReviews() {
   const { reviews } = useContext(CourseContext);
+  console.log(reviews);
+
   const [sortedReviews, setSortedReviews] = useState(reviews);
   const [filterMethod, setFilterMethod] = useState('most-recent');
   useEffect(() => {

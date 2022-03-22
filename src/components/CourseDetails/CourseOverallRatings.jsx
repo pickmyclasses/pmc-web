@@ -39,9 +39,14 @@ export default function CourseOverallRatings({ reviews }) {
         </Box>
       </SubCard>
 
-      <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}>
-        <CourseAddReview />
-      </Box>
+      <Grid>
+        <Box sx={{ marginY: '12px' }}>
+          <Grid container direction='column' spacing={1}>
+            {' '}
+            <CourseAddReview />
+          </Grid>
+        </Box>
+      </Grid>
     </>
   );
 }

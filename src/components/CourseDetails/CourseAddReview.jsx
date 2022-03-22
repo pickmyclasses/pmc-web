@@ -1,11 +1,7 @@
 import React, { useContext } from 'react';
 import { Grid } from '@mui/material';
 import MuiTypography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import AddCommentIcon from '@mui/icons-material/AddComment';
 import { CourseContext } from '../../pages/CoursePage';
-import { Link } from 'react-router-dom';
 import { UserContext } from '../../App';
 import CourseReviewsAccordian from 'components/CourseReviews/CourseReviewsAccordian';
 
@@ -16,7 +12,7 @@ function checkUserWroteReview(user, reviews) {
   }
   let userID = user.userID;
   for (let i = 0; i < reviews.length; i++) {
-    if (reviews[i].userID == userID) {
+    if (reviews[i].userID === userID) {
       return true;
     }
   }
@@ -36,7 +32,6 @@ function userReviewNotification(userWroteReview, user) {
 }
 
 export default function CourseAddReview() {
-  const { course } = useContext(CourseContext);
   const { user } = useContext(UserContext);
   const { reviews } = useContext(CourseContext);
   let userWroteReview = checkUserWroteReview(user, reviews);

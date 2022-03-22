@@ -1,19 +1,18 @@
 import React, { useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Button, CircularProgress, Container, Grid } from '@mui/material';
+import { Box, Button, CircularProgress } from '@mui/material';
 import { fetchCourseByID } from '../api';
-import ReviewDescription from '../components/ReviewInputDetails/ReviewDescription';
 import ReviewRatings from '../components/ReviewInputDetails/ReviewRatings';
 import ReviewPros from '../components/ReviewInputDetails/ReviewPros';
 import ReviewCons from '../components/ReviewInputDetails/ReviewCons';
 import ReviewComments from '../components/ReviewInputDetails/ReviewComments';
-import MainCard from '../components/Skeleton/MainCard';
-import { gridSpacing } from '../constants/constants';
 import { useMount } from '../utils';
 import { postReview } from '../../src/api/index';
 import swal from 'sweetalert';
 import ReviewAnonymous from '../components/ReviewInputDetails/ReviewAnonymous';
 import ReviewRecommend from '../components/ReviewInputDetails/ReviewRecommend';
+import ReviewRadioButtons from '../components/ReviewInputDetails/ReviewRadioButtons';
+
 import { UserContext } from '../App';
 import { Link } from 'react-router-dom';
 
@@ -27,11 +26,17 @@ import Typography from '@mui/material/Typography';
 export default function ReviewPage() {
   const [course, setCourse] = useState(null);
   const [ratingValue, setRatingValue] = useState(3);
-  const [proValue, setProValue] = useState('');
-  const [conValue, setConValue] = useState('');
+  const [proValue, setProValue] = useState([]);
+  const [conValue, setConValue] = useState([]);
   const [commentValue, setCommentValue] = useState('');
   const [anonymity, setAnonymity] = useState(false);
   const [recommendation, setRecommendation] = useState(false);
+  const [HoursSpentMore, setHoursSpentMore] = useState(false);
+  const [HoursSpentLess, setHoursSpentLess] = useState(false);
+  const [GradeReceived, setGradeReceived] = useState('');
+  const [IsExamHeavy, setExamHeavy] = useState(false);
+  const [IsHomeworkHeavy, setHomeworkHeavy] = useState(false);
+  const [ExtraCreditOffered, setExtraCreditOffered] = useState(false);
 
   const urlParams = useParams();
   const { user } = useContext(UserContext);
@@ -78,25 +83,109 @@ export default function ReviewPage() {
       ),
     },
     {
-      label: 'Comments on the postive side of the course',
+      label: 'Comments on the postive and negative side of the course',
       description: (
-        <ReviewPros
-          value={proValue}
-          onChange={(proValue) => {
-            setProValue(proValue);
-          }}
-        />
+        <Box>
+          <ReviewPros
+            value={proValue}
+            onChange={(proValue) => {
+              setProValue(proValue);
+            }}
+          />
+          <ReviewCons
+            value={conValue}
+            onChange={(conValue) => {
+              setConValue(conValue);
+            }}
+          />
+        </Box>
       ),
     },
+    // {
+    //   label: 'Comments on the negative side of the course',
+    //   description: (
+    //     <ReviewCons
+    //       value={conValue}
+    //       onChange={(conValue) => {
+    //         setConValue(conValue);
+    //       }}
+    //     />
+    //   ),
+    // },
     {
-      label: 'Comments on the negative side of the course',
+      label: 'Tells us more about your experience',
       description: (
-        <ReviewCons
-          value={conValue}
-          onChange={(conValue) => {
-            setConValue(conValue);
-          }}
-        />
+        <Box>
+          <ReviewRadioButtons
+            radioLabel={'Did you spend more time than expected?'}
+            options={[
+              { optionValue: false, optionLabel: 'No' },
+              { optionValue: true, optionLabel: 'Yes' },
+            ]}
+            radioValue={HoursSpentMore}
+            onChange={(HoursSpentMore) => {
+              setHoursSpentMore(HoursSpentMore);
+            }}
+          />
+          <ReviewRadioButtons
+            radioLabel={'Did you spend less time than expected?'}
+            options={[
+              { optionValue: false, optionLabel: 'No' },
+              { optionValue: true, optionLabel: 'Yes' },
+            ]}
+            radioValue={HoursSpentLess}
+            onChange={(HoursSpentLess) => {
+              setHoursSpentLess(HoursSpentLess);
+            }}
+          />
+          <ReviewRadioButtons
+            radioLabel={'Was there a lot of Homework?'}
+            options={[
+              { optionValue: false, optionLabel: 'No' },
+              { optionValue: true, optionLabel: 'Yes' },
+            ]}
+            radioValue={IsHomeworkHeavy}
+            onChange={(IsHomeworkHeavy) => {
+              setHomeworkHeavy(IsHomeworkHeavy);
+            }}
+          />
+          <ReviewRadioButtons
+            radioLabel={'Were there a lot of Exams?'}
+            options={[
+              { optionValue: false, optionLabel: 'No' },
+              { optionValue: true, optionLabel: 'Yes' },
+            ]}
+            radioValue={IsExamHeavy}
+            onChange={(IsExamHeavy) => {
+              setExamHeavy(IsExamHeavy);
+            }}
+          />
+          <ReviewRadioButtons
+            radioLabel={'Extra credited?'}
+            options={[
+              { optionValue: false, optionLabel: 'No' },
+              { optionValue: true, optionLabel: 'Yes' },
+            ]}
+            radioValue={ExtraCreditOffered}
+            onChange={(ExtraCreditOffered) => {
+              setExtraCreditOffered(ExtraCreditOffered);
+            }}
+          />
+          <ReviewRadioButtons
+            radioLabel={'Grade Received'}
+            options={[
+              { optionValue: 'A', optionLabel: 'A' },
+              { optionValue: 'B', optionLabel: 'B' },
+              { optionValue: 'C', optionLabel: 'C' },
+              { optionValue: 'D', optionLabel: 'D' },
+              { optionValue: 'F', optionLabel: 'F' },
+            ]}
+            radioValue={GradeReceived}
+            onChange={(GradeReceived) => {
+              setGradeReceived(GradeReceived);
+            }}
+          />
+        </Box>
       ),
     },
     {
@@ -110,9 +199,20 @@ export default function ReviewPage() {
         />
       ),
     },
+    // {
+    //   label: 'Attendence',
+    //   description: (
+    //     <ReviewBinaryInputs
+    //       value={commentValue}
+    //       onChange={(commentValue) => {
+    //         setCommentValue(commentValue);
+    //       }}
+    //     />
+    //   ),
+    // },
   ];
   return (
-    <Box sx={{ maxWidth: 1200 }}>
+    <Box sx={{ maxWidth: 1400 }}>
       <ReviewAnonymous
         userName={user.name}
         value={anonymity}
@@ -162,13 +262,14 @@ export default function ReviewPage() {
                 swal('Good job!', 'You submitted the review!', 'success');
 
                 postReview(course.id, {
-                  anonymous: anonymity,
-                  comment: commentValue,
-                  cons: conValue,
-                  pros: proValue,
-                  rating: ratingValue,
-                  recommended: recommendation,
-                  userID: user.userID,
+                  Rating: ratingValue,
+                  Anonymous: anonymity,
+                  Recommended: recommendation,
+                  Pros: proValue,
+                  Cons: conValue,
+                  Comment: commentValue,
+                  CourseID: course.id,
+                  UserID: user.userID,
                 });
               }}
             >

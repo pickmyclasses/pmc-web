@@ -2,29 +2,48 @@ import React from 'react';
 import { Box, Grid, TextField, Typography } from '@mui/material';
 import { ArrowCircleUp } from '@mui/icons-material';
 import { gridSpacing } from '../../constants/constants';
-import SubCard from '../Skeleton/SubCard';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 
-export default function ReviewPros({ value, onChange }) {
+export default function ReviewPros({ proValues, onChange }) {
+  // TODO: remove this when I can read from the back-end
+  proValues = [topCourseTags[1], topCourseTags[2], topCourseTags[3]];
+
   return (
-    <SubCard>
-      <Grid container spacing={gridSpacing}>
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          container
-          direction='column'
-          alignItems='center'
-          justifyContent='center'
-        >
-          <Typography variant='h6' gutterBottom>
-            What do you like best?
-          </Typography>
-          <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-            <ArrowCircleUp sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-          </Box>
-
-          <TextField
+    <Grid container spacing={gridSpacing}>
+      <Grid
+        item
+        xs={12}
+        sm={12}
+        container
+        direction='column'
+        alignItems='center'
+        justifyContent='center'
+      >
+        <Typography variant='h6' gutterBottom>
+          What do you like best?
+        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+          <ArrowCircleUp sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+          <Autocomplete
+            multiple
+            limitTags={4}
+            id='multiple-limit-tags'
+            options={topCourseTags}
+            getOptionLabel={(option) => option.title}
+            onChange={(event, values) => {
+              proValues = values;
+              onChange(proValues);
+            }}
+            defaultValue={[topCourseTags[1], topCourseTags[2], topCourseTags[3]]}
+            renderInput={(params) => (
+              <TextField {...params} label={'Postive Sides'} placeholder='Input' />
+            )}
+            sx={{ width: '500px' }}
+          />
+        </Box>
+        {/* <TextField
             id='outlined-multiline-flexible'
             fullWidth
             multiline
@@ -34,9 +53,21 @@ export default function ReviewPros({ value, onChange }) {
             onChange={(event) => {
               onChange(event.target.value);
             }}
-          />
-        </Grid>
+          /> */}
       </Grid>
-    </SubCard>
+    </Grid>
   );
 }
+const topCourseTags = [
+  { title: 'Too many homeworks', count: 12 },
+  { title: 'Hard', count: 4 },
+  { title: 'Easy', count: 5 },
+  { title: 'Useful', count: 2 },
+  { title: 'Good organization', count: 14 },
+  { title: 'Helpful TA', count: 2 },
+  { title: 'Interesting lectures', count: 4 },
+  { title: 'Useful lectures', count: 4 },
+  { title: 'Good Organizations', count: 4 },
+  { title: 'Friendly Lectures', count: 4 },
+  { title: 'Interesting lab work', count: 4 },
+];

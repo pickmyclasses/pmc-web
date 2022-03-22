@@ -4,8 +4,10 @@ import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
 import ReviewPage from '../../pages/ReviewPage';
+import SubCard from '../Skeleton/SubCard';
+import { gridSpacing } from '../../constants/constants';
+import { Grid, Box, Typography } from '@mui/material';
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -49,7 +51,7 @@ export default function CourseReviewsAccordian() {
   };
 
   return (
-    <div>
+    <Grid item xs={12}>
       <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <AccordionSummary aria-controls='panel1d-content' id='panel1d-header'>
           <Typography>Write a Review</Typography>
@@ -58,6 +60,6 @@ export default function CourseReviewsAccordian() {
           <ReviewPage />
         </AccordionDetails>
       </Accordion>
-    </div>
+    </Grid>
   );
 }
