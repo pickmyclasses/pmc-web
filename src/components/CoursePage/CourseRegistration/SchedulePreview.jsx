@@ -4,13 +4,20 @@ import React, { useContext, useEffect, useState } from 'react';
 import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
 import ShoppingCart from '../../Scheduler/ShoppingCart';
 
-export default function SchedulePreview({ classesToHighlight, onSelect }) {
+export default function SchedulePreview({ course, classesToHighlight, onSelect }) {
   const { classesInShoppingCart } = useContext(SchedulerContext);
 
   const [classes, setClasses] = useState([]);
 
   useEffect(
-    () => setClasses(mergeShoppingCartClasses(classesInShoppingCart, classesToHighlight, true)),
+    () =>
+      setClasses(
+        mergeShoppingCartClasses(
+          classesInShoppingCart.filter((x) => +x.course.id !== +course.id),
+          classesToHighlight,
+          true
+        )
+      ),
     [classesInShoppingCart, classesToHighlight]
   );
 

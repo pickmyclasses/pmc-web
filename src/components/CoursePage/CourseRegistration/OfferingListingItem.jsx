@@ -22,11 +22,19 @@ export default function OfferingListingItem({
   component,
   classData,
   onSelect,
+  setMouseEnteredClasses,
 }) {
   const { location, offerDate, startTime, seatAvailable } = classData;
 
   return (
-    <ListItemButton autoFocus={selected} disableGutters selected={selected} onClick={onSelect}>
+    <ListItemButton
+      autoFocus={selected}
+      disableGutters
+      selected={selected}
+      onClick={onSelect}
+      onMouseEnter={() => setMouseEnteredClasses([classData])}
+      onMouseLeave={() => setMouseEnteredClasses([])}
+    >
       <Stack paddingX='16px' width='100%'>
         {children}
         <Stack direction='row'>
