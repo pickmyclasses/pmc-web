@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Divider, FilledInput, IconButton, colors, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { Clear, Search } from '@material-ui/icons';
 
 /**
  * The search-bar that sits in the middle of the navigation bar. Fires events when the user
- * searches via calling `onSearchClick`.
+ * searches via calling `onSearch`.
  *
- * @param {{onSearchClick: (searchText: string) => void}} props
+ * @param {{onSearch: (searchText: string) => void}} props
  */
-// export default function SearchBar({ onSearchClick }) {
 export default function SearchBar({
+  defaultSearchText,
   textColor,
   backgroundColor,
   onSearch,
@@ -22,6 +22,8 @@ export default function SearchBar({
   const theme = useTheme();
 
   const [searchText, setSearchText] = useState('');
+
+  useEffect(() => defaultSearchText && setSearchText(defaultSearchText), [defaultSearchText]);
 
   return (
     <FilledInput
