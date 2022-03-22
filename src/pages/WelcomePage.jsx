@@ -71,20 +71,7 @@ const useStyle = makeStyles({
 const WelcomePage = () => {
   const navigate = useNavigate();
 
-  useMount(() => {
-    const loggedInUser = localStorage.getItem('user');
-    if (loggedInUser) {
-      navigate('/home');
-    }
-  });
-
-  const handleSearch = (searchText) => {
-    if (searchText.trim()) {
-      navigate(`/search/${searchText}`);
-    } else {
-      navigate('/home');
-    }
-  };
+  const handleSearch = (searchText) => searchText.trim() && navigate(`/search/${searchText}`);
 
   const classes = useStyle();
   return (
@@ -102,7 +89,7 @@ const WelcomePage = () => {
           </Link>
         </Button>
         <Link to='/auth' className={classes.loginLink}>
-          Already an user? log in now!
+          Already a user? log in now!
         </Link>
         <div className={classes.searchFormHeading}>
           Or, check out the stats and reviews <br />
@@ -116,7 +103,7 @@ const WelcomePage = () => {
             onSearch={handleSearch}
             maxWidth={'30%'}
             focusHoverColor={grey[300]}
-            placeholderText={'Enter a class name or a major name'}
+            placeholderText={'Enter a course or major'}
             borderRadiusRatio={'43px'}
           />
         </div>

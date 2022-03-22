@@ -22,8 +22,7 @@ export default function App() {
         <ContainerWithPreventableNavigation>
           <ContainerWithNavigationBar>
             <Routes>
-              <Route exact path='/' element={<WelcomePage />} />
-              <Route exact path='/home' element={<HomePage />} />
+              <Route exact path='/' element={user ? <HomePage /> : <WelcomePage />} />
               <Route exact path='/auth' element={<AuthForm />} />
               <Route exact path='/register' element={<RegisterForm />} />
               <Route exact path='/search/:query' element={<SearchPage />} />
