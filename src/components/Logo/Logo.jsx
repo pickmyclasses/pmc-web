@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stack, Typography, useTheme } from '@mui/material';
 import { School } from '@material-ui/icons';
-import { Link } from 'react-router-dom';
+import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 
 /** A clickable website logo that links to home page. */
 export default function Logo() {
@@ -11,7 +11,7 @@ export default function Logo() {
     <Stack
       direction='row'
       alignItems='center'
-      component={Link}
+      component={PreventableLink}
       to='/home'
       color={theme.palette.primary.contrastText}
       sx={{ textDecoration: 'none' }}

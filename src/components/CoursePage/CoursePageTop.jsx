@@ -10,15 +10,14 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import React, { createElement } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import PreventableLink from 'components/PreventableNavigation/PreventableLink';
+import React, { createElement, useContext } from 'react';
 import { formatCourseName, formatCreditRange, pluralize } from '../../utils';
 import { CenterAligningFlexBox } from '../CourseCardGrid/CourseCard/CourseCard';
 import CourseEligibilityIndicator from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
 
 export default function CoursePageTop({ course, tabs, activeTabName }) {
   const theme = useTheme();
-  const navigate = useNavigate();
 
   const coursePageURL = '/course/' + course.id;
 
@@ -52,7 +51,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
       iconPosition='start'
       icon={createElement(icon)}
       label={title}
-      component={Link}
+      component={PreventableLink}
       to={`${coursePageURL}/${name}`}
       sx={{ textDecoration: 'none', minHeight: 0 }}
     />
