@@ -251,7 +251,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
               animate={isSavePromptFlashing ? 'flashing' : 'initial'}
               transition={{ type: 'just', delay: isSavePromptFlashing ? 0 : 0.5 }}
               onAnimationComplete={() => setIsSavePromptFlashing(false)}
-              sx={{ width: 'calc(100% - 46px)', boxShadow: 3 }}
+              sx={{ width: 'calc(min(960px, 62.5vw) - 46px)', boxShadow: 3 }}
             >
               <Stack padding='12px 20px' direction='row' justifyContent='space-between'>
                 <Stack direction='row' alignItems='center' spacing='4px'>
