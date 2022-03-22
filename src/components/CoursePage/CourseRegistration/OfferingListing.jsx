@@ -7,11 +7,12 @@ import { SchedulerContext } from 'components/Scheduler/ContainerWithScheduler';
 import { getComponent, getInstructor } from 'components/Scheduler/ShoppingCart';
 import { motion } from 'framer-motion';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Prompt } from 'react-router-dom';
 import { formatCourseName, groupBy, parseTime } from 'utils';
 import { getAllComponents } from '../CourseComponentsSummary';
 import OfferingListingGroup from './OfferingListingGroup';
 import SchedulePreview from './SchedulePreview';
+import UnloadConfirmation from './UnloadConfirmation';
 
 export default function OfferingListing({ course, schedulePreviewContainer }) {
   const { user } = useContext(UserContext);
@@ -29,6 +30,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
   const [isValid, setIsValid] = useState(true);
   const [savePromptMessage, setSavePromptMessage] = useState(null);
   const [isSavingLoading, setIsSavingLoading] = useState(false);
+  const [isSavePromptFlashing, setIsSavePromptFlashing] = useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState(null);
 
@@ -200,6 +202,10 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
 
   return (
     <>
+      <UnloadConfirmation
+        when={isDirty}
+        message='Your schedule has unsaved changes. Leave anyway?'
+      />
       <Portal container={schedulePreviewContainer}>
         <SchedulePreview
           course={course}
@@ -212,7 +218,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
           }}
         />
       </Portal>
-      <List sx={{ marginBottom: '100px' }}>
+      <List sx={{ marginBottom: '96px' }}>
         {classGroups.map(([primaryClass, otherClasses]) => (
           <OfferingListingGroup
             key={primaryClass.id}

@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { formatInstructorName, parseDayList } from '../../utils';
 import DaysIndicator from '../CourseCardGrid/CourseCard/DaysIndicator';
@@ -23,7 +23,7 @@ export default function CourseScheduleSummary({ classes, plainText = false }) {
         Instructor: {formatInstructorName(getInstructor(classes[0]))}
       </Typography>
       {sortedClasses.map(({ component, classData }) => (
-        <Stack key={component} direction='row'>
+        <Stack key={component} direction='row' alignItems='center'>
           <Typography variant='body2' noWrap>
             {component}:
           </Typography>
@@ -36,13 +36,12 @@ export default function CourseScheduleSummary({ classes, plainText = false }) {
               @&nbsp;
             </Typography>
           ) : (
-            <Stack direction='row' alignItems='center' marginLeft='12px' marginRight='-2px'>
-              <DaysIndicator
-                days={parseDayList(classData.offerDate)}
-                width='88px'
-                height={1.25}
-              />
-            </Stack>
+            <DaysIndicator
+              days={parseDayList(classData.offerDate)}
+              width='88px'
+              height={1.25}
+              sx={{ marginLeft: '12px', marginRight: '-2px' }}
+            />
           )}
           <Typography variant='subtitle2' noWrap>
             {formatTimeRange(classData)}
