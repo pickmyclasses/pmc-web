@@ -14,7 +14,7 @@ import ContainerWithNavigationBar from './components/NavigationBar/ContainerWith
 import ContainerWithPreventableNavigation from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
 
 export default function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState();
 
   return (
     <BrowserRouter>
@@ -22,7 +22,11 @@ export default function App() {
         <ContainerWithPreventableNavigation>
           <ContainerWithNavigationBar>
             <Routes>
-              <Route exact path='/' element={user ? <HomePage /> : <WelcomePage />} />
+              <Route
+                exact
+                path='/'
+                element={user === undefined ? <></> : user ? <HomePage /> : <WelcomePage />}
+              />
               <Route exact path='/auth' element={<AuthForm />} />
               <Route exact path='/register' element={<RegisterForm />} />
               <Route exact path='/search/:query' element={<SearchPage />} />
