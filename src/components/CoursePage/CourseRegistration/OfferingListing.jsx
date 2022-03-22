@@ -1,5 +1,5 @@
 import { ChevronRight } from '@mui/icons-material';
-import { Box, Button, Card, Grid, List, Portal, Snackbar, Stack } from '@mui/material';
+import { Box, Button, Card, colors, Grid, List, Portal, Snackbar, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { addClassIDToShoppingCart, removeClassIDFromShoppingCart } from 'api';
 import { UserContext } from 'App';
@@ -7,7 +7,7 @@ import { SchedulerContext } from 'components/Scheduler/ContainerWithScheduler';
 import { getComponent, getInstructor } from 'components/Scheduler/ShoppingCart';
 import { motion } from 'framer-motion';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Link, Prompt } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { formatCourseName, groupBy, parseTime } from 'utils';
 import { getAllComponents } from '../CourseComponentsSummary';
 import OfferingListingGroup from './OfferingListingGroup';
@@ -204,7 +204,8 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
     <>
       <UnloadConfirmation
         when={isDirty}
-        message='Your schedule has unsaved changes. Leave anyway?'
+        navigationPreventionKey='offering-listing-dirty'
+        onNavigationPrevented={() => setIsSavePromptFlashing(true)}
       />
       <Portal container={schedulePreviewContainer}>
         <SchedulePreview
@@ -237,14 +238,21 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
         bottom='32px'
         width='100vw'
         zIndex={999}
-        variants={savePromptVariants}
+        variants={savePromptContainerVariants}
         initial='initial'
         animate={isDirty ? 'visible' : 'initial'}
         transition={{ duration: 0.5, type: 'spring' }}
       >
         <Grid maxWidth='xl'>
           <Grid item xs={7.5}>
-            <Card sx={{ width: 'calc(100% - 46px)', boxShadow: 3 }}>
+            <MotionCard
+              variants={savePromptCardVariants}
+              initial='initial'
+              animate={isSavePromptFlashing ? 'flashing' : 'initial'}
+              transition={{ type: 'just', delay: isSavePromptFlashing ? 0 : 0.5 }}
+              onAnimationComplete={() => setIsSavePromptFlashing(false)}
+              sx={{ width: 'calc(100% - 46px)', boxShadow: 3 }}
+            >
               <Stack padding='12px 20px' direction='row' justifyContent='space-between'>
                 <Stack direction='row' alignItems='center' spacing='4px'>
                   {user ? savePromptMessage : 'Login to save your schedule'}
@@ -276,7 +284,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
                   )}
                 </Stack>
               </Stack>
-            </Card>
+            </MotionCard>
           </Grid>
         </Grid>
       </MotionBox>
@@ -292,9 +300,16 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
 
 const MotionBox = motion(Box);
 
-const savePromptVariants = {
+const MotionCard = motion(Card);
+
+const savePromptContainerVariants = {
   initial: { marginBottom: '-64px', opacity: 0 },
   visible: { marginBottom: 0, opacity: 1 },
+};
+
+const savePromptCardVariants = {
+  initial: { backgroundColor: colors.grey[0] },
+  flashing: { backgroundColor: colors.red[300] },
 };
 
 const enumerateClassGroups = (classes, components) => {

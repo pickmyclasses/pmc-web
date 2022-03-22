@@ -20,9 +20,10 @@ import { getEligibility } from '../CourseCardGrid/CourseCard/CourseEligibilityIn
 import CourseScheduleSummary from '../Scheduler/CourseScheduleSummary';
 import { fetchCoursesBySearch } from 'api';
 import { SectionOverline } from 'pages/HomePage';
+import { PreventableNavigationContext } from '../PreventableNavigation/ContainerWithPreventableNavigation';
 
 export default function CourseOverview() {
-  const navigate = useNavigate();
+  const { navigateIfAllowed } = useContext(PreventableNavigationContext);
   const { course, reviews } = useContext(CourseContext);
   const { classesInShoppingCart } = useContext(SchedulerContext);
 
@@ -84,7 +85,7 @@ export default function CourseOverview() {
     <MotionCard
       initial='initial'
       whileHover='mouseEntered'
-      onClick={() => navigate(`${coursePageURL}/reviews`)}
+      onClick={() => navigateIfAllowed(`${coursePageURL}/reviews`)}
       sx={{ width: '100%', height: '100%', cursor: 'pointer', '&:hover': { boxShadow: 6 } }}
     >
       <Stack padding='24px' spacing='12px' height='calc(100% - 48px)'>
@@ -132,7 +133,7 @@ export default function CourseOverview() {
     <MotionCard
       initial='initial'
       whileHover='mouseEntered'
-      onClick={() => navigate(`${coursePageURL}/registration`)}
+      onClick={() => navigateIfAllowed(`${coursePageURL}/registration`)}
       sx={{ width: '100%', height: '100%', cursor: 'pointer', '&:hover': { boxShadow: 6 } }}
     >
       <Stack height='100%'>

@@ -1,5 +1,4 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext } from 'react';
 import {
   AppBar,
   Container,
@@ -13,16 +12,17 @@ import { alpha } from '@mui/material/styles';
 import Logo from '../Logo/Logo';
 import SearchBar from '../Search/SearchBar';
 import NavigationBarButtonGroup from './NavigationBarButtonGroup';
+import { PreventableNavigationContext } from '../PreventableNavigation/ContainerWithPreventableNavigation';
 
 export default function NavigationBar() {
-  const navigate = useNavigate();
+  const { navigateIfAllowed } = useContext(PreventableNavigationContext);
   const theme = useTheme();
 
   const handleSearchClick = (searchText) => {
     if (searchText.trim()) {
-      navigate(`/search/${searchText}`);
+      navigateIfAllowed(`/search/${searchText}`);
     } else {
-      navigate('/home');
+      navigateIfAllowed('/home');
     }
   };
 

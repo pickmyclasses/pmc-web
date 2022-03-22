@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import {
   Alert,
   Box,
@@ -11,6 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Edit, Info } from '@material-ui/icons';
+import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 
 export default function TimeDataCard({
   data: { title, subtitle, description, coursePageURL, topBorderColor = 'gray' },
@@ -46,7 +46,7 @@ export default function TimeDataCard({
           {/* TODO Q: The edit link should link to course page with scroll bar location
            *  pointed at the offering listing table. */}
           <IconButton
-            component={Link}
+            component={PreventableLink}
             to={coursePageURL + '/registration'}
             onClick={onLinkClick}
           >
@@ -54,7 +54,7 @@ export default function TimeDataCard({
           </IconButton>
         </Tooltip>
         <Tooltip title='Course Details' disableInteractive>
-          <IconButton component={Link} to={coursePageURL} onClick={onLinkClick}>
+          <IconButton component={PreventableLink} to={coursePageURL} onClick={onLinkClick}>
             <Info />
           </IconButton>
         </Tooltip>
