@@ -37,11 +37,11 @@ export default function ReviewPage() {
   const [IsExamHeavy, setExamHeavy] = useState(false);
   const [IsHomeworkHeavy, setHomeworkHeavy] = useState(false);
   const [ExtraCreditOffered, setExtraCreditOffered] = useState(false);
-
+  let date = new Date();
+  let createDateLocal = date.toLocaleDateString();
   const urlParams = useParams();
   const { user } = useContext(UserContext);
   const [activeStep, setActiveStep] = React.useState(0);
-
   const handleNext = () => {
     if (activeStep === 3) {
       if (proValue.length === 0) {
@@ -101,17 +101,6 @@ export default function ReviewPage() {
         </Box>
       ),
     },
-    // {
-    //   label: 'Comments on the negative side of the course',
-    //   description: (
-    //     <ReviewCons
-    //       value={conValue}
-    //       onChange={(conValue) => {
-    //         setConValue(conValue);
-    //       }}
-    //     />
-    //   ),
-    // },
     {
       label: 'Tells us more about your experience',
       description: (
@@ -199,17 +188,6 @@ export default function ReviewPage() {
         />
       ),
     },
-    // {
-    //   label: 'Attendence',
-    //   description: (
-    //     <ReviewBinaryInputs
-    //       value={commentValue}
-    //       onChange={(commentValue) => {
-    //         setCommentValue(commentValue);
-    //       }}
-    //     />
-    //   ),
-    // },
   ];
   return (
     <Box sx={{ maxWidth: 1400 }}>
@@ -270,6 +248,16 @@ export default function ReviewPage() {
                   Comment: commentValue,
                   CourseID: course.id,
                   UserID: user.userID,
+                  Username: user.name,
+                  CreatedAt: createDateLocal,
+                  LikedCount: 0,
+                  DislikedCount: 0,
+                  HourSpentMoreThanCredit: HoursSpentMore,
+                  HourSpentLessThanCredit: HoursSpentLess,
+                  GradeReceived: GradeReceived,
+                  IsExamHeavy: IsExamHeavy,
+                  IsHomeworkHeavy: IsHomeworkHeavy,
+                  ExtraCreditOffered: ExtraCreditOffered,
                 });
               }}
             >
