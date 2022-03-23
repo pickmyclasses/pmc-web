@@ -40,7 +40,7 @@ export default function CoursePage() {
     // Figure out the active tab from the URL.
     const tabParam = String(urlParams.tab).toLowerCase();
     setActiveTabName(tabs.hasOwnProperty(tabParam) ? tabParam : '');
-  }, [urlParams]);
+  }, [urlParams, course?.id]);
 
   useEffect(() => {
     // Go to top of page (right below the banner image) when URL changes.

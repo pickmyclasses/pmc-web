@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { formatCourseName, parseDayList, parseTime } from '../../utils';
 import Timeline from './Timeline';
-import ImageColors from 'react-native-image-colors';
 import Color from 'color';
 import { pluralize } from '../../utils';
 import CourseScheduleSummary from './CourseScheduleSummary';

@@ -16,11 +16,11 @@ export default function TypeButton({ setOptionSelected }) {
   const { setSelection } = useContext(userSelectionContext);
 
   useEffect(() => {
-    setSelection(onlineChecked)
+    setSelection(onlineChecked);
     !onlineChecked || !offlineChecked || !hybridChecked
       ? setOptionSelected(true)
       : setOptionSelected(false);
-  }, [onlineChecked, offlineChecked, hybridChecked, setOptionSelected]);
+  }, [onlineChecked, offlineChecked, hybridChecked, setOptionSelected, setSelection]);
 
   return (
     <>

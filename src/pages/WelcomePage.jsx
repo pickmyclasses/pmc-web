@@ -4,7 +4,6 @@ import { grey } from '@mui/material/colors';
 import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import { useMount } from '../utils';
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/Search/SearchBar';
 

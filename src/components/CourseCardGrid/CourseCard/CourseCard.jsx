@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Box, Card, CardMedia, Skeleton, styled, Typography, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { formatCourseName, formatCreditRange, pluralize } from '../../../utils';
+import { formatCourseName, formatCreditRange } from '../../../utils';
 import ClickableIndicator from './ClickableIndicator';
 import CourseEligibilityIndicator from './CourseEligibilityIndicator';
 import TagList from './TagList';

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import Color from 'color';
-import { formatCourseName } from '../utils';
 
 export const login = (body) => axios.post('/login', body).then((response) => response.data);
 
