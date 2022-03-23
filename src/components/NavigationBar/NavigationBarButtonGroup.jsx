@@ -18,6 +18,7 @@ export default function NavigationBarButtonGroup() {
   useMount(() => {
     const loggedInUser = localStorage.getItem('user');
     if (loggedInUser) setUser(JSON.parse(loggedInUser));
+    else setUser(null);
   });
 
   const renderTabsForLoggedIn = () => [

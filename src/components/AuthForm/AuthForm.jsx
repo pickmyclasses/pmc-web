@@ -39,7 +39,7 @@ export default function AuthForm() {
         setUser(userInfo);
 
         localStorage.setItem('user', JSON.stringify(userInfo));
-        navigate('/home');
+        navigate('/');
       })
       .catch((err) => {
         if (err.response) {
