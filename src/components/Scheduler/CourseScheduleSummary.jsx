@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { formatInstructorName, parseDayList } from '../../utils';
 import DaysIndicator from '../CourseCardGrid/CourseCard/DaysIndicator';

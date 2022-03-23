@@ -11,8 +11,8 @@ import {
   useTheme,
 } from '@mui/material';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
-import React, { createElement, useContext } from 'react';
-import { formatCourseName, formatCreditRange, pluralize } from '../../utils';
+import React, { createElement } from 'react';
+import { formatCourseName, formatCreditRange } from '../../utils';
 import { CenterAligningFlexBox } from '../CourseCardGrid/CourseCard/CourseCard';
 import CourseEligibilityIndicator from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
 

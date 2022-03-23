@@ -18,7 +18,7 @@ export default function SchedulePreview({ course, classesToHighlight, onSelect }
           true
         )
       ),
-    [classesInShoppingCart, classesToHighlight]
+    [course, classesInShoppingCart, classesToHighlight]
   );
 
   return (

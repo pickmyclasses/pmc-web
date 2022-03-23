@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { School, WatchLater } from '@mui/icons-material';
 import { Box, Card, Divider, Grid, Link, Typography, Stack } from '@mui/material';
 import TagList from '../CourseCardGrid/CourseCard/TagList';

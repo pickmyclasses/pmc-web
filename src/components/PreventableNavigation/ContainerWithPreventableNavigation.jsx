@@ -30,7 +30,7 @@ export default function ContainerWithPreventableNavigation({ children }) {
       }
       navigate(to, ...args);
     },
-    [preventionKeys]
+    [preventionKeys, navigate]
   );
 
   return (

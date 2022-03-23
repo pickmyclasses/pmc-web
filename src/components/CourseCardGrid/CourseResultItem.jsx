@@ -2,7 +2,7 @@ import { Box, Card, CardMedia, Divider, Skeleton, Typography, useTheme } from '@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { formatCourseName, formatCreditRange, pluralize } from '../../utils';
+import { formatCourseName, formatCreditRange } from '../../utils';
 import CourseEligibilityIndicator from './CourseCard/CourseEligibilityIndicator';
 import TagList from './CourseCard/TagList';
 import ClickableIndicator from './CourseCard/ClickableIndicator';

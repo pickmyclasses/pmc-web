@@ -1,14 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Button, CircularProgress, Container, Grid } from '@mui/material';
+import { Box, Button, CircularProgress } from '@mui/material';
 import { fetchCourseByID } from '../api';
-import ReviewDescription from '../components/ReviewInputDetails/ReviewDescription';
 import ReviewRatings from '../components/ReviewInputDetails/ReviewRatings';
 import ReviewPros from '../components/ReviewInputDetails/ReviewPros';
 import ReviewCons from '../components/ReviewInputDetails/ReviewCons';
 import ReviewComments from '../components/ReviewInputDetails/ReviewComments';
-import MainCard from '../components/Skeleton/MainCard';
-import { gridSpacing } from '../constants/constants';
 import { useMount } from '../utils';
 import { postReview } from '../../src/api/index';
 import swal from 'sweetalert';

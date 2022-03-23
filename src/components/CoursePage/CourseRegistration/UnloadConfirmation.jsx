@@ -29,7 +29,13 @@ export default function UnloadConfirmation({
       window.onbeforeunload = oldBeforeUnloadHandler;
       allowNavigation(navigationPreventionKey);
     };
-  }, [when]);
+  }, [
+    preventNavigation,
+    allowNavigation,
+    when,
+    navigationPreventionKey,
+    onNavigationPrevented,
+  ]);
 
   return <></>;
 }

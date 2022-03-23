@@ -1,9 +1,8 @@
 import { EventNote } from '@mui/icons-material';
 import { Menu } from '@mui/material';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import React, { useContext } from 'react';
+import React from 'react';
 import Scheduler from '../../Scheduler/Scheduler';
-import { NavigationBarContext } from '../ContainerWithNavigationBar';
 import { ButtonGroupTab } from '../NavigationBarButtonGroup';
 
 export default function SchedulerDropDown() {

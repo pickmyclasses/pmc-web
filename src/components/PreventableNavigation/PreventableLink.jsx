@@ -1,12 +1,13 @@
-import React, { useContext } from 'react';
+import React, { forwardRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { PreventableNavigationContext } from './ContainerWithPreventableNavigation';
 
-export default function PreventableLink({ onClick, ...props }) {
+const PreventableLink = forwardRef(({ onClick, ...props }, ref) => {
   const { isNavigationAllowed, navigateIfAllowed } = useContext(PreventableNavigationContext);
 
   return (
     <Link
+      ref={ref}
       onClick={(e) => {
         onClick?.(e);
         if (!isNavigationAllowed) {
@@ -17,4 +18,6 @@ export default function PreventableLink({ onClick, ...props }) {
       {...props}
     />
   );
-}
+});
+
+export default PreventableLink;
