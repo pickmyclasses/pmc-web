@@ -15,35 +15,33 @@ export default function CourseRegistration() {
     <>
       <Stack spacing='32px'>
         <Grid container spacing='32px'>
-          <Grid item xs={6}>
+          <Grid item xs={7.47}>
             <PrerequisiteAccordion course={course} />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={4.53}>
             <CourseFormatSummary course={course} />
           </Grid>
         </Grid>
       </Stack>
-      <Divider sx={{ marginY: '32px' }} />
+      <Divider sx={{ marginTop: '32px', marginBottom: '8px' }} />
+      <SectionOverline marginTop='-20px' marginBottom='-8px'>
+        Offering Selection
+      </SectionOverline>
       <Box
         ref={schedulePreviewContainerRef}
         height={schedulerHeight}
         position='sticky'
-        top='192px'
+        top='184px'
         left='calc(62.5% + 16px)'
         width='calc(37.5% - 16px)'
         zIndex={1000}
       />
       {/* <SchedulePreview classesToHighlight={classesToHighlight} /> */}
       <LeftHalfContainer marginTop={`calc(0px - (${schedulerHeight}))`}>
-        <Stack width='100%'>
-          <SectionOverline marginTop='-20px' marginBottom='-8px'>
-            Offering Selection
-          </SectionOverline>
-          <OfferingListing
-            course={course}
-            schedulePreviewContainer={schedulePreviewContainerRef?.current}
-          />
-        </Stack>
+        <OfferingListing
+          course={course}
+          schedulePreviewContainer={schedulePreviewContainerRef?.current}
+        />
       </LeftHalfContainer>
     </>
   );

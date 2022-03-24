@@ -22,7 +22,7 @@ export default function SchedulePreview({ course, classesToHighlight, onSelect }
   );
 
   return (
-    <Box height='calc(100% - 32px)'>
+    <Box height='calc(100% - 32px)' paddingTop='8px'>
       <Card sx={{ height: 'calc(100% - 48px)', padding: '24px', overflow: 'visible' }}>
         <Stack spacing='12px' height='100%'>
           <Typography variant='subtitle2'>Schedule Preview</Typography>

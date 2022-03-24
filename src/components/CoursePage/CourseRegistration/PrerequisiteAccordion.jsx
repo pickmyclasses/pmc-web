@@ -28,6 +28,7 @@ export default function PrerequisiteAccordion({ course }) {
     setIsExpanded(!isEligible);
 
     const [prerequisiteList, count] = formatPrerequisites(course.prerequisites);
+
     setPrerequisiteList(prerequisiteList);
     setNumPrerequisites(count);
   }, [course, classesInShoppingCart]);

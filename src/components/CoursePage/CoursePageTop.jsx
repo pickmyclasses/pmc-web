@@ -78,7 +78,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
 }
 
 /** Used by `CoursePage` to help adjust the scrollbar position for going back to top. */
-export const imageHeight = 240;
+export const imageHeight = 420;
 
 export const ActionItem = ({ icon, ...props }) => (
   <Tab icon={createElement(icon)} sx={{ fontSize: 'x-small' }} {...props} />

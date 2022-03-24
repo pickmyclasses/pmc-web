@@ -22,7 +22,8 @@ export const fetchCourseByID = (courseID) =>
   );
 
 const getFakeCourseImageURL = (course) =>
-  `https://singlecolorimage.com/get/${getColorByCourse(course).substring(1)}/512x216`;
+  'https://d2z1w4aiblvrwu.cloudfront.net/ad/ZRoa/default-large.jpg';
+// `https://singlecolorimage.com/get/${getColorByCourse(course).substring(1)}/512x216`;
 
 export const getColorByCourse = (course) =>
   '#' +
