@@ -219,7 +219,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
           }}
         />
       </Portal>
-      <List sx={{ marginBottom: '96px' }}>
+      <List sx={{ paddingTop: 0, paddingBottom: '102px' }}>
         {classGroups.map(([primaryClass, otherClasses]) => (
           <OfferingListingGroup
             key={primaryClass.id}
