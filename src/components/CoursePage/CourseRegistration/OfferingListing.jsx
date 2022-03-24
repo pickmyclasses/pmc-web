@@ -31,6 +31,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
   const [savePromptMessage, setSavePromptMessage] = useState(null);
   const [isSavingLoading, setIsSavingLoading] = useState(false);
   const [isSavePromptFlashing, setIsSavePromptFlashing] = useState(false);
+  const [selectedClassesHaveConflicts, setSelectedClassesHaveConflicts] = useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState(null);
 
@@ -65,7 +66,9 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
       if (requiredComponents.size === selectedClasses.length) {
         setIsValid(true);
         if (classesOfCourseInShoppingCart.length) {
-          setSavePromptMessage('Click "Save" to save your changes');
+          setSavePromptMessage(
+            `Click "Save" to reschedule ${formatCourseName(course.catalogCourseName)}`
+          );
           setSnackbarMessage(`Your schedule has been saved.`);
         } else {
           setSavePromptMessage(
@@ -169,6 +172,20 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
     [components, selectedClassesByComponent]
   );
 
+  const handlePreviewSelect = (classID) => {
+    for (let group of classGroups) {
+      const targetClass = group.flat().find((x) => +x.id === +classID);
+      if (targetClass) return void handleNewSelection(targetClass);
+    }
+  };
+
+  const handlePreviewGroupIDsWithConflictsChange = (groupIDsWithConflicts) => (
+    console.log('*= con', groupIDsWithConflicts, selectedClasses),
+    setSelectedClassesHaveConflicts(
+      selectedClasses.some((x) => groupIDsWithConflicts.includes(x.id))
+    )
+  );
+
   const handleSaveButtonClick = () => {
     setIsSavingLoading(true);
 
@@ -211,12 +228,8 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
         <SchedulePreview
           course={course}
           classesToHighlight={highlightedClasses}
-          onSelect={(classID) => {
-            for (let group of classGroups) {
-              const targetClass = group.flat().find((x) => +x.id === +classID);
-              if (targetClass) return void handleNewSelection(targetClass);
-            }
-          }}
+          onSelect={handlePreviewSelect}
+          onGroupIDsWithConflictsChange={handlePreviewGroupIDsWithConflictsChange}
         />
       </Portal>
       <List sx={{ paddingTop: 0, paddingBottom: '102px' }}>
@@ -255,7 +268,10 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
             >
               <Stack padding='12px 20px' direction='row' justifyContent='space-between'>
                 <Stack direction='row' alignItems='center' spacing='4px'>
-                  {user ? savePromptMessage : 'Login to save your schedule'}
+                  {user
+                    ? savePromptMessage +
+                      (selectedClassesHaveConflicts ? ' (with conflicts)' : '')
+                    : 'Login to save your schedule'}
                   {(isValid || !user) && <ChevronRight />}
                 </Stack>
                 <Stack direction='row' spacing='16px'>
@@ -263,6 +279,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
                     <>
                       <LoadingButton
                         variant='contained'
+                        color={selectedClassesHaveConflicts ? 'warning' : 'primary'}
                         disabled={!isValid}
                         loading={isSavingLoading}
                         onClick={handleSaveButtonClick}
@@ -303,8 +320,8 @@ const MotionBox = motion(Box);
 const MotionCard = motion(Card);
 
 const savePromptContainerVariants = {
-  initial: { marginBottom: '-64px', opacity: 0 },
-  visible: { marginBottom: 0, opacity: 1 },
+  initial: { transform: 'translateY(100%)', opacity: 0 },
+  visible: { transform: 'translateY(0%)', opacity: 1 },
 };
 
 const savePromptCardVariants = {
