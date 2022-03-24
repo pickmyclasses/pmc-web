@@ -179,12 +179,10 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
     }
   };
 
-  const handlePreviewGroupIDsWithConflictsChange = (groupIDsWithConflicts) => (
-    console.log('*= con', groupIDsWithConflicts, selectedClasses),
+  const handlePreviewGroupIDsWithConflictsChange = (groupIDsWithConflicts) =>
     setSelectedClassesHaveConflicts(
       selectedClasses.some((x) => groupIDsWithConflicts.includes(x.id))
-    )
-  );
+    );
 
   const handleSaveButtonClick = () => {
     setIsSavingLoading(true);
