@@ -12,7 +12,9 @@ function checkUserWroteReview(user, reviews) {
   }
   let userID = user.userID;
   for (let i = 0; i < reviews.length; i++) {
-    if (+reviews[i].userID === +userID) return true;
+    if (reviews[i].userID === userID) {
+      return true;
+    }
   }
   return false;
 }
