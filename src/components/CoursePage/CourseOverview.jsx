@@ -59,14 +59,13 @@ export default function CourseOverview() {
   }, [course]);
 
   const coursePageURL = '/course/' + course.id;
-
   const renderInfoSummary = () => (
     <Card sx={{ width: '100%', height: '100%' }}>
       <Stack padding='24px' spacing='12px'>
         {course.tags.length > 0 && (
           <>
             <Typography variant='subtitle2'>Top Tags</Typography>
-            <TagList tags={course.tags.map((x) => x.name)} />
+            <TagList tags={course.tags.map((x) => x.name + ' | ' + x.voteCount)} />
           </>
         )}
         <Typography variant='subtitle2'>Full Description</Typography>

@@ -134,5 +134,10 @@ export const removeClassIDFromShoppingCart = (body) => axios.put('/schedule', bo
 export const fetchReviewsByCourseID = (courseID) =>
   axios.get(`/course/${courseID}/review`).then((data) => data.data.data.reviews);
 
-// TODO Q: (1) this is not by ID; (2) simplify object passing and remove object reconstruction.
 export const postReview = (courseID, body) => axios.post(`/course/${courseID}/review`, body);
+export const postTagsByCourseID = (courseID, body) =>
+  axios.post(`/course/${courseID}/tag`, body);
+export const putTagsByCourseID = (courseID, body) => axios.put(`/course/${courseID}/tag`, body);
+
+export const fetchReviewTagsByCourseID = (courseID, body) =>
+  axios.get(`/course/${courseID}/tag`).then((data) => data.data.data);
