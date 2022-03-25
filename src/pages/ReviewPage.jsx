@@ -87,7 +87,8 @@ export default function ReviewPage() {
       ),
     },
     {
-      label: 'Comments on the postive side of the course',
+      label:
+        'Comments on the postive & negative sides of the course by selecting or adding your own tags',
       description: (
         <Box>
           <ReviewTags
