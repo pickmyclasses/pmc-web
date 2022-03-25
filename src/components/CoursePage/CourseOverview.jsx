@@ -60,7 +60,6 @@ export default function CourseOverview() {
   }, [course]);
 
   const coursePageURL = '/course/' + course.id;
-
   const renderInfoSummary = () => (
     <Card sx={{ width: '100%', height: '100%' }}>
       <Stack padding='24px' spacing='12px' height='calc(100% - 48px)'>

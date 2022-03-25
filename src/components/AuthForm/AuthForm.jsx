@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -8,18 +8,20 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import FormHelperText from '@mui/material/FormHelperText';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { login } from '../../api';
 import { useNavigate } from 'react-router-dom';
-import swal from 'sweetalert';
 import { UserContext } from '../../App';
 
 export default function AuthForm() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
+
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -30,6 +32,7 @@ export default function AuthForm() {
 
     login({ email, password })
       .then((data) => {
+        setErrorMessage('');
         const userInfo = {
           name: `${data.data.firstName} ${data.data.lastName}`,
           token: data.data.token,
@@ -43,19 +46,11 @@ export default function AuthForm() {
       })
       .catch((err) => {
         if (err.response) {
-          swal('Oop... Something went wrong', err.response.data.message, 'error');
+          setErrorMessage('Wrong username or password');
         } else if (err.request) {
-          swal(
-            'Oop... Something went wrong',
-            'Internal error, please try again later',
-            'error'
-          );
+          setErrorMessage('Sorry, something went wrong on the server, try again later');
         } else {
-          swal(
-            'Oop... Something went wrong',
-            'Internal error, please try again later',
-            'error'
-          );
+          setErrorMessage('Sorry, something went wrong, please refresh the page and try again');
         }
       });
   };
@@ -100,6 +95,7 @@ export default function AuthForm() {
               id='password'
               autoComplete='current-password'
             />
+            {errorMessage !== '' && <ErrorMessage message={errorMessage} />}
             <FormControlLabel
               control={<Checkbox value='remember' color='primary' />}
               label='Remember me'
@@ -125,3 +121,7 @@ export default function AuthForm() {
     </ThemeProvider>
   );
 }
+
+const ErrorMessage = ({ message }) => {
+  return <FormHelperText sx={{ color: 'red', fontSize: 17 }}>{message}</FormHelperText>;
+};

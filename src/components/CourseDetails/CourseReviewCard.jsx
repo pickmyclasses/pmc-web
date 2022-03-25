@@ -7,9 +7,8 @@ import { gridSpacing } from '../../constants/constants';
 import CourseReviewRecommendation from '../CourseDetails/CourseReviewRecommendation';
 import Stack from '@mui/material/Stack';
 import { Box } from '@material-ui/core';
+import CourseReviewSentence from 'components/CourseDetails/CourseReviewSentence';
 
-const titlePos = 'What do you like most?';
-const titleNeg = 'What do you hate most?';
 const titleAdd = 'Additional feedbacks?';
 
 export default function CourseReviewCard({ review }) {
@@ -36,10 +35,7 @@ export default function CourseReviewCard({ review }) {
         <Divider />
 
         <Grid item>
-          <CourseComments title={titlePos} comment={review.pros} isPositive={true} />
-        </Grid>
-        <Grid item>
-          <CourseComments title={titleNeg} comment={review.cons} isPositive={false} />
+          <CourseReviewSentence review={review} />
         </Grid>
         <Grid item>
           {review.comment.length === 0 ? (
