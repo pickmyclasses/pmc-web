@@ -12,8 +12,7 @@ export default function ShoppingCart({
   classes,
   noSummary = false,
   timelineColumnTitles = undefined,
-  onSelect = () => {},
-  alwaysGrayUnHighlighted = false,
+  ...timeLineProps
 }) {
   const theme = useTheme();
 
@@ -59,12 +58,7 @@ export default function ShoppingCart({
   return (
     <Box display='flex' flexDirection='column' position='relative' width='100%' height='100%'>
       <Box flex={1}>
-        <Timeline
-          events={sessions}
-          columnTitles={timelineColumnTitles}
-          onSelect={onSelect}
-          alwaysGrayUnHighlighted={alwaysGrayUnHighlighted}
-        />
+        <Timeline events={sessions} columnTitles={timelineColumnTitles} {...timeLineProps} />
       </Box>
       {!noSummary && (
         <Typography

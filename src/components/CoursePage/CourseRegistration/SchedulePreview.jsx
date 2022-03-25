@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
 import ShoppingCart from '../../Scheduler/ShoppingCart';
 
-export default function SchedulePreview({ course, classesToHighlight, onSelect }) {
+export default function SchedulePreview({ course, classesToHighlight, ...shoppingCartProps }) {
   const { classesInShoppingCart } = useContext(SchedulerContext);
 
   const [classes, setClasses] = useState([]);
@@ -30,8 +30,8 @@ export default function SchedulePreview({ course, classesToHighlight, onSelect }
             <ShoppingCart
               classes={classes}
               noSummary
-              onSelect={onSelect}
               alwaysGrayUnHighlighted
+              {...shoppingCartProps}
             />
           </Box>
         </Stack>
