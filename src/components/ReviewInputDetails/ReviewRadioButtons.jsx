@@ -26,8 +26,9 @@ export default function RowRadioButtonsGroup({ radioLabel, options, radioValue, 
             aria-labelledby='demo-row-radio-buttons-group-label'
             name='row-radio-buttons-group'
           >
-            {options.map((option) => (
+            {options.map((option, i) => (
               <FormControlLabel
+                key={i}
                 value={option['optionValue']}
                 onChange={(event, value) => {
                   onChange(option['optionValue']);

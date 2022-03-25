@@ -5,9 +5,7 @@ import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import ReviewPage from '../../pages/ReviewPage';
-import SubCard from '../Skeleton/SubCard';
-import { gridSpacing } from '../../constants/constants';
-import { Grid, Box, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />

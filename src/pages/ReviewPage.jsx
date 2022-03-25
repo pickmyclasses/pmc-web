@@ -3,17 +3,15 @@ import { useParams } from 'react-router-dom';
 import { Box, Button, CircularProgress } from '@mui/material';
 import { fetchCourseByID } from '../api';
 import ReviewRatings from '../components/ReviewInputDetails/ReviewRatings';
-import ReviewPros from '../components/ReviewInputDetails/ReviewPros';
-import ReviewCons from '../components/ReviewInputDetails/ReviewCons';
 import ReviewComments from '../components/ReviewInputDetails/ReviewComments';
 import { useMount } from '../utils';
-import { postReview } from '../../src/api/index';
+import { postReview, postTagsByCourseID } from '../../src/api/index';
 import swal from 'sweetalert';
 import ReviewAnonymous from '../components/ReviewInputDetails/ReviewAnonymous';
 import ReviewRecommend from '../components/ReviewInputDetails/ReviewRecommend';
 import ReviewRadioButtons from '../components/ReviewInputDetails/ReviewRadioButtons';
-
 import { UserContext } from '../App';
+
 import { Link } from 'react-router-dom';
 
 import Stepper from '@mui/material/Stepper';
@@ -22,33 +20,35 @@ import StepLabel from '@mui/material/StepLabel';
 import StepContent from '@mui/material/StepContent';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import { CourseContext } from './CoursePage';
+import ReviewTags from 'components/ReviewInputDetails/ReviewTags';
 
 export default function ReviewPage() {
   const [course, setCourse] = useState(null);
   const [ratingValue, setRatingValue] = useState(3);
-  const [proValue, setProValue] = useState([]);
-  const [conValue, setConValue] = useState([]);
   const [commentValue, setCommentValue] = useState('');
   const [anonymity, setAnonymity] = useState(false);
   const [recommendation, setRecommendation] = useState(false);
-  const [HoursSpentMore, setHoursSpentMore] = useState(false);
-  const [HoursSpentLess, setHoursSpentLess] = useState(false);
+  const [HourSpent, setHourSpent] = useState(1);
   const [GradeReceived, setGradeReceived] = useState('');
   const [IsExamHeavy, setExamHeavy] = useState(false);
   const [IsHomeworkHeavy, setHomeworkHeavy] = useState(false);
   const [ExtraCreditOffered, setExtraCreditOffered] = useState(false);
-  let date = new Date();
-  let createDateLocal = date.toLocaleDateString();
+  const { reviewTags: tagSuggestion } = useContext(CourseContext);
+  const [positiveTags, setPositiveTags] = useState([]);
+  const [negativeTags, setNegativeTags] = useState([]);
+
   const urlParams = useParams();
   const { user } = useContext(UserContext);
   const [activeStep, setActiveStep] = React.useState(0);
+
   const handleNext = () => {
-    if (activeStep === 3) {
-      if (proValue.length === 0) {
+    if (activeStep === 1) {
+      if (positiveTags.length === 0) {
         swal('Oops!', 'Please fill in the postive side of the course', 'error');
         return;
       }
-      if (conValue.length === 0) {
+      if (negativeTags.length === 0) {
         swal('Oops!', 'Please fill in the negative side of the course', 'error');
         return;
       }
@@ -61,6 +61,9 @@ export default function ReviewPage() {
   };
 
   useMount(() => fetchCourseByID(urlParams.id).then(setCourse));
+  const tagsPosLabel = 'Positive Side';
+  const tagsNegLabel = 'Negative Side';
+  //getTagsByCourseID(course.ID).then(setTags);
 
   if (!course) {
     return (
@@ -69,6 +72,7 @@ export default function ReviewPage() {
       </Box>
     );
   }
+
   const steps = [
     {
       label: 'Select Course Ratings',
@@ -83,50 +87,54 @@ export default function ReviewPage() {
       ),
     },
     {
-      label: 'Comments on the postive and negative side of the course',
+      label: 'Comments on the postive side of the course',
       description: (
         <Box>
-          <ReviewPros
-            value={proValue}
-            onChange={(proValue) => {
-              setProValue(proValue);
+          <ReviewTags
+            tags={positiveTags}
+            tagsLabel={tagsPosLabel}
+            tagSuggestion={positiveTags.concat(
+              tagSuggestion.filter(
+                (x) => !positiveTags.find((y) => x.name.trim() === y.name.trim())
+              )
+            )}
+            onChange={(positiveTags) => {
+              setPositiveTags(positiveTags);
             }}
           />
-          <ReviewCons
-            value={conValue}
-            onChange={(conValue) => {
-              setConValue(conValue);
+          <ReviewTags
+            tags={negativeTags}
+            tagsLabel={tagsNegLabel}
+            tagSuggestion={negativeTags.concat(
+              tagSuggestion.filter(
+                (x) => !negativeTags.find((y) => x.name.trim() === y.name.trim())
+              )
+            )}
+            onChange={(negativeTags) => {
+              setNegativeTags(negativeTags);
             }}
           />
         </Box>
       ),
     },
+
     {
       label: 'Tells us more about your experience',
       description: (
         <Box>
           <ReviewRadioButtons
-            radioLabel={'Did you spend more time than expected?'}
+            radioLabel={'Did you spend more or less time than expected?'}
             options={[
-              { optionValue: false, optionLabel: 'No' },
-              { optionValue: true, optionLabel: 'Yes' },
+              { optionValue: 0, optionLabel: 'less' },
+              { optionValue: 1, optionLabel: 'as expected' },
+              { optionValue: 2, optionLabel: 'more' },
             ]}
-            radioValue={HoursSpentMore}
-            onChange={(HoursSpentMore) => {
-              setHoursSpentMore(HoursSpentMore);
+            radioValue={HourSpent}
+            onChange={(HourSpent) => {
+              setHourSpent(HourSpent);
             }}
           />
-          <ReviewRadioButtons
-            radioLabel={'Did you spend less time than expected?'}
-            options={[
-              { optionValue: false, optionLabel: 'No' },
-              { optionValue: true, optionLabel: 'Yes' },
-            ]}
-            radioValue={HoursSpentLess}
-            onChange={(HoursSpentLess) => {
-              setHoursSpentLess(HoursSpentLess);
-            }}
-          />
+
           <ReviewRadioButtons
             radioLabel={'Was there a lot of Homework?'}
             options={[
@@ -237,14 +245,22 @@ export default function ReviewPage() {
             <Button
               variant='contained'
               onClick={() => {
-                swal('Good job!', 'You submitted the review!', 'success');
-
+                for (let i = 0; i < positiveTags.length; i++) {
+                  postTagsByCourseID(course.id, {
+                    content: positiveTags[i].name.trim(),
+                    type: 1,
+                  }).catch((error) => swal(error));
+                }
+                for (let i = 0; i < negativeTags.length; i++) {
+                  postTagsByCourseID(course.id, {
+                    content: negativeTags[i].name.trim(),
+                    type: 0,
+                  }).catch((error) => swal(error));
+                }
                 postReview(course.id, {
                   rating: ratingValue,
                   anonymous: anonymity,
                   recommended: recommendation,
-                  pros: proValue,
-                  cons: conValue,
                   comment: commentValue,
                   courseID: course.id,
                   userID: user.userID,
@@ -252,13 +268,14 @@ export default function ReviewPage() {
                   //createdAt: createDateLocal,
                   likedCount: 0,
                   dislikedCount: 0,
-                  hourSpentMoreThanCredit: HoursSpentMore,
-                  hourSpentLessThanCredit: HoursSpentLess,
+                  hourSpent: HourSpent,
                   gradeReceived: GradeReceived,
                   isExamHeavy: IsExamHeavy,
                   isHomeworkHeavy: IsHomeworkHeavy,
                   extraCreditOffered: ExtraCreditOffered,
-                });
+                }).catch((error) => swal(error));
+
+                swal('Good job!', 'You submitted the review!', 'success');
               }}
             >
               Submit
@@ -269,3 +286,4 @@ export default function ReviewPage() {
     </Box>
   );
 }
+// TODO: when you send it to the backend, do trim() for the tags e.g: tags.map(x=>x.trim())
