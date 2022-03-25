@@ -3,9 +3,9 @@ import Typography from '@mui/material/Typography';
 export default function CourseReviewSentence({ review }) {
   console.log(review);
   let hourSpent;
-  if (review.hourSpent == 0) {
+  if (review.hourSpent === 0) {
     hourSpent = 'Less than expected';
-  } else if (review.hourSpent == 1) {
+  } else if (review.hourSpent === 1) {
     hourSpent = 'About the same';
   } else {
     hourSpent = 'More than expected';
