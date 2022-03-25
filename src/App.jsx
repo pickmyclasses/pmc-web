@@ -12,6 +12,7 @@ import RegisterForm from './components/AuthForm/RegisterForm';
 import FeedbackEditor from './pages/FeedbackEditorPage';
 import ContainerWithNavigationBar from './components/NavigationBar/ContainerWithNavigationBar';
 import ContainerWithPreventableNavigation from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
+import ProfilePage from 'pages/ProfilePage';
 
 export default function App() {
   const [user, setUser] = useState();
@@ -29,6 +30,8 @@ export default function App() {
               />
               <Route exact path='/auth' element={<AuthForm />} />
               <Route exact path='/register' element={<RegisterForm />} />
+              <Route exact path='/profile' element={<ProfilePage />} />
+              <Route exact path='/profile/:tab' element={<ProfilePage />} />
               <Route exact path='/search/:query' element={<SearchPage />} />
               <Route exact path='/course/:id' element={<CoursePage />} />
               <Route exact path='/course/:id/:tab' element={<CoursePage />} />
