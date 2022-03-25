@@ -13,6 +13,7 @@ export default function Timeline({
   events = [],
   onSelect = () => {},
   alwaysGrayUnHighlighted = false,
+  onGroupIDsWithConflictsChange = () => {},
 }) {
   const theme = useTheme();
 
@@ -24,7 +25,7 @@ export default function Timeline({
   const [eventsShiftedRight, setEventsShiftedRight] = useState([]);
   const [mouseEnteredEventData, setMouseEnteredEventData] = useState(null);
   const [selectedEventData, setSelectedEventData] = useState(null);
-  const [doesSelectedEventHaveConflicts, setDoesSelectedEventHaveConflicts] = useState(false);
+  const [selectedEventHasConflicts, setSelectedEventHasConflicts] = useState(false);
 
   const containerRef = useRef();
   const dataCardRef = useRef();
@@ -101,6 +102,19 @@ export default function Timeline({
     }
     setEventsWithConflicts(eventsWithConflicts);
     setEventsShiftedRight(eventsShiftedRight);
+
+    if (onGroupIDsWithConflictsChange) {
+      // Report which (non-outlined) events have conflicts.
+      const nonOutlinedEvents = eventsShown.filter((x) => x.highlight !== 'outlined');
+      const groupIDsWithConflicts = Array.from(
+        new Set(
+          nonOutlinedEvents
+            .filter((x) => hasConflictsWithSome(x, nonOutlinedEvents))
+            .map((x) => x.data.groupID)
+        )
+      );
+      onGroupIDsWithConflictsChange(groupIDsWithConflicts);
+    }
   }, [eventsShown]);
 
   // Logic for rendering elements in the timeline.
@@ -116,7 +130,7 @@ export default function Timeline({
   const getTopByTime = (time) => (time - rangeStart) / (rangeEnd - rangeStart);
 
   const handleTimeBlockClick = (data) => {
-    setDoesSelectedEventHaveConflicts(
+    setSelectedEventHasConflicts(
       eventsShown.some((x, i) => x.data.groupID === data.groupID && eventsWithConflicts[i])
     );
     setSelectedEventData(selectedEventData?.groupID !== data.groupID && data);
@@ -188,7 +202,7 @@ export default function Timeline({
               color={
                 highlight
                   ? hasConflicts
-                    ? 'error'
+                    ? 'warning'
                     : 'primary'
                   : alwaysGrayUnHighlighted ||
                     hasHighlights ||
@@ -276,13 +290,14 @@ export default function Timeline({
             sx={{
               position: 'absolute',
               right: 'calc(100% + 8px)',
+              paddingBottom: '56px',
               top: getTopByTime(selectedEventData.earliestStart) * 100 + '%',
               zIndex: 9999,
             }}
           >
             <TimeDataCard
               data={selectedEventData}
-              hasConflicts={doesSelectedEventHaveConflicts}
+              hasConflicts={selectedEventHasConflicts}
               onLinkClick={() => setSelectedEventData(null)}
             />
           </Box>

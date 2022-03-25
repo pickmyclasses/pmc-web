@@ -43,6 +43,6 @@ export default function NavigationBarButtonGroup() {
 }
 
 export const ButtonGroupTab = styled(Tab)({
-  fontSize: 'xx-small',
+  fontSize: '11px',
   fontVariant: 'all-small-caps',
 });

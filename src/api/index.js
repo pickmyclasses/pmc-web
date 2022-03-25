@@ -13,10 +13,10 @@ export const register = (body) =>
 export const fetchCourseByID = (courseID) =>
   new Promise((onFetched) =>
     axios.get(`/course/${courseID}`).then((data) => {
-      // Inject classesOffered. TODO Q: Remove this after Jay finished object combination for
-      // fetch course query response.
       const course = data.data.data;
       injectFakeImageURLToCourse(course);
+      // Hide courses that don't have a start time (corrupted data from backend?)
+      course.classes = course.classes.filter((x) => !x.offerDate || x.startTime);
       onFetched(course);
     })
   );
