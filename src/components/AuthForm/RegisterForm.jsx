@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,12 +14,15 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import swal from 'sweetalert';
 import { register } from '../../api';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
+import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 
 const theme = createTheme();
 
 export default function RegisterForm() {
-  const navigate = useNavigate();
+  const { navigateIfAllowed } = useContext(PreventableNavigationContext);
+  const location = useLocation();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -40,9 +43,7 @@ export default function RegisterForm() {
       register({ email, firstName, lastName, college, password, rePassword })
         .then(() => {
           swal('Welcome To PMC!', 'Registration succeeded, please login!', 'success');
-          setTimeout(function () {
-            navigate('/auth');
-          }, 1000);
+          setTimeout(() => navigateIfAllowed('/auth', null, { state: location.state }), 1000);
         })
         .catch((err) => {
           if (err.response) {
@@ -150,7 +151,7 @@ export default function RegisterForm() {
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value='allowExtraEmails' color='primary' />}
-                  label='By check this, I agree to authrize pmc.com to utilize my personal data from Canvas.'
+                  label='By check this, I agree to authorize PickMyClasses to utilize my personal data from Canvas.'
                 />
               </Grid>
             </Grid>
@@ -159,7 +160,12 @@ export default function RegisterForm() {
             </Button>
             <Grid container justifyContent='flex-end'>
               <Grid item>
-                <Link href='/auth' variant='body2'>
+                <Link
+                  component={PreventableLink}
+                  to='/auth'
+                  state={location.state}
+                  variant='body2'
+                >
                   Already have an account? Sign in
                 </Link>
               </Grid>

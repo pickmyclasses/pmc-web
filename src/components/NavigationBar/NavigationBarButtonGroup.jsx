@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
 import { Grid, Tab, Button, styled, ThemeProvider } from '@mui/material';
 import { UserContext } from '../../App';
 import { navigationBarTheme } from './NavigationBar';
@@ -7,6 +6,7 @@ import SchedulerDropDown from './NavigationBarButtonGroup/SchedulerDropDown';
 import UserDropDown from './NavigationBarButtonGroup/UserDropDown';
 import { NotificationAdd } from '@mui/icons-material';
 import { useMount } from '../../utils';
+import LinkToAuthForm from 'components/AuthForm/LinkToAuthForm';
 
 /**
  * The group of buttons like notification and user profile that sits on the right side of the
@@ -28,7 +28,7 @@ export default function NavigationBarButtonGroup() {
   ];
 
   const renderTabsForNotLoggedIn = () => [
-    <Button key='login' variant='contained' component={Link} to='/auth'>
+    <Button key='login' variant='contained' component={LinkToAuthForm}>
       Login
     </Button>,
   ];
