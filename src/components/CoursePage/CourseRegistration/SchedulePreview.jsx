@@ -13,7 +13,7 @@ export default function SchedulePreview({ course, classesToHighlight, ...shoppin
     () =>
       setClasses(
         mergeShoppingCartClasses(
-          classesInShoppingCart.filter((x) => +x.course.id !== +course.id),
+          classesInShoppingCart.filter((x) => +x.course.id !== +course?.id),
           classesToHighlight,
           true
         )

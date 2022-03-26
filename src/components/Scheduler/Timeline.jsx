@@ -14,6 +14,10 @@ export default function Timeline({
   onSelect = () => {},
   alwaysGrayUnHighlighted = false,
   onGroupIDsWithConflictsChange = () => {},
+  showShadowUnderColumnTitles = false,
+  showHalfHourMarks = false,
+  expandAllTimeOnMarks = false,
+  largerTimeOnMarks = false,
 }) {
   const theme = useTheme();
 
@@ -239,7 +243,7 @@ export default function Timeline({
 
   const renderGridLines = () => {
     const gridLines = [];
-    for (let time = 0, i = 0; time <= 86400; time += 3600) {
+    for (let time = 0, i = 0; time <= 86400; time += showHalfHourMarks ? 1800 : 3600) {
       const y = (time - rangeStart) / (rangeEnd - rangeStart);
       const isInRange = time >= rangeStart && time <= rangeEnd;
       gridLines.push(
@@ -256,14 +260,24 @@ export default function Timeline({
                 transform: 'translateY(-50%)',
                 top: y * 100 + '%',
                 width: 'calc(100% + 20px)',
+                filter: time % 3600 && 'opacity(0.5)',
                 '::before': { width: '100%' },
-                '> span': { fontSize: '10px', opacity: 0.75, padding: '0 4px 0 2px' },
+                '> span': {
+                  fontSize: largerTimeOnMarks ? '12px' : '10px',
+                  opacity: 0.75,
+                  padding: '0 4px 0 2px',
+                },
                 '::after': { display: 'none' },
                 transition: getTransitionForStyles(['top'], 0.375),
               }}
             >
-              {(time / 3600) % 12 || 12}
-              {(time % 43200 === 0 || i === 0) && (time % 86400 < 43200 ? 'am' : 'pm')}
+              {time % 3600 === 0 && (
+                <>
+                  {(time / 3600) % 12 || 12}
+                  {(expandAllTimeOnMarks || time % 43200 === 0 || i === 0) &&
+                    (time % 86400 < 43200 ? 'am' : 'pm')}
+                </>
+              )}
             </MotionDivider>
           )}
         </AnimatePresence>
@@ -275,9 +289,38 @@ export default function Timeline({
 
   return (
     <Box width='calc(100% - 16px)' height='100%'>
-      <Grid container sx={{ width: '100%', flex: 1, marginBottom: '4px' }}>
-        {columnTitles.map((title, i) => renderColumnTitle(i, title))}
-      </Grid>
+      <Box
+        width='calc(100% + 16px)'
+        position='sticky'
+        top='-1px'
+        zIndex={1001}
+        paddingTop='12px'
+        marginTop='-12px'
+        marginBottom={showShadowUnderColumnTitles ? '-4px' : '4px'}
+        sx={{
+          background: 'white',
+          ...(showShadowUnderColumnTitles && {
+            '&:after': {
+              content: '" "',
+              position: 'absolute',
+              width: '100%',
+              height: '3px',
+              boxShadow: '0 3px 3px -3px inset',
+            },
+          }),
+        }}
+      >
+        <Grid
+          container
+          sx={{
+            width: 'calc(100% - 16px)',
+            flex: 1,
+            paddingBottom: showShadowUnderColumnTitles ? '4px' : '',
+          }}
+        >
+          {columnTitles.map((title, i) => renderColumnTitle(i, title))}
+        </Grid>
+      </Box>
       <Box
         ref={containerRef}
         sx={{ width: '100%', height: 'calc(100% - 32px)', position: 'relative' }}

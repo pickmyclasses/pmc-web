@@ -218,7 +218,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
   return (
     <>
       <UnloadConfirmation
-        when={isDirty}
+        when={user && isDirty}
         navigationPreventionKey='offering-listing-dirty'
         onNavigationPrevented={() => setIsSavePromptFlashing(true)}
       />
