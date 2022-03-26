@@ -6,6 +6,7 @@ import {
   School,
 } from '@mui/icons-material';
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
+import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 import PopupState, { bindMenu, bindTrigger } from 'material-ui-popup-state';
 import React, { useContext, createElement } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,8 +24,16 @@ export default function UserDropDown() {
   };
 
   const menuItems = [
-    { icon: AdminPanelSettings, text: 'Profile' },
-    { icon: School, text: 'Capstone' },
+    {
+      icon: AdminPanelSettings,
+      text: 'Profile',
+      props: { component: PreventableLink, to: '/profile' },
+    },
+    {
+      icon: School,
+      text: 'Roadmap',
+      props: { component: PreventableLink, to: '/profile/roadmap' },
+    },
     { icon: AccountBalance, text: 'My university', props: { divider: true } },
     { icon: ExitToApp, text: 'Log out', handleClick: handleLogOutMenuItemClick },
   ];
