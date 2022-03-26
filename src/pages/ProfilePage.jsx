@@ -18,7 +18,7 @@ export default function ProfilePage() {
   const urlParams = useParams();
   const { user } = useContext(UserContext);
 
-  /** The name of the active tab as given in the URL's :tab parameter. */
+  /** The name of the active tab as given in the URL's `:tab` parameter. */
   const [activeTabName, setActiveTabName] = useState('');
 
   // Figure out the active tab from the URL.
@@ -50,7 +50,7 @@ export default function ProfilePage() {
       <Container maxWidth='xl' sx={{ paddingBottom: '32px', height: '100%' }}>
         <Grid container spacing='32px' height='100%'>
           {/* The left bar (that contains the avatar and tab list): */}
-          <LeftBarGridItem item xs='auto' height='100%'>
+          <LeftBarGridItem item xs='auto' height='100%' sx={{ boxShadow: 3 }}>
             <Stack width='240px' spacing='24px' paddingRight='32px'>
               <ProfileAvatarDisplay />
               <Divider />
@@ -62,11 +62,9 @@ export default function ProfilePage() {
             </Tabs>
           </LeftBarGridItem>
           {/* The active tab's content: */}
-          <Grid item xs sx={{ marginLeft: '312px' }}>
+          <Grid item xs sx={{ marginLeft: '272px' }}>
             <Scrollbars autoHide style={{ height: 'calc(100vh - 72px)' }}>
-              <Box width='calc(100% - 32px)' paddingY='32px' overflow='hidden'>
-                {createElement(tabs[activeTabName].content)}
-              </Box>
+              <Box padding='32px'>{createElement(tabs[activeTabName].content)}</Box>
             </Scrollbars>
           </Grid>
         </Grid>
@@ -77,7 +75,7 @@ export default function ProfilePage() {
 
 /**
  * The list of tabs in the profile page, defined in the format of `name: {title, icon}`, where
- * `name` also determines the :tab parameter in the URL.
+ * `name` also determines the `:tab` parameter in the URL.
  */
 const tabs = {
   '': { title: 'Dashboard', icon: Dashboard, content: ProfileRoadmap },
@@ -90,33 +88,23 @@ const tabs = {
 
 const leftBarLeftShadowWidth = 128;
 
-const leftBarRightShadowWidth = 2;
-
 const LeftBarGridItem = styled(Grid)({
   backgroundColor: 'white',
   position: 'absolute',
   marginTop: '32px',
-  // The left shadow of the left bar is a gradient from white, where the right shadow is a small
-  // strip of black shadow looking like the shadow of a MUI card. Since these shadows are
-  // different on each side, we achieve this with inner shadows on the :before and :after
-  // elements rather than conventional CSS shadow filter. (Credit:
-  // https://stackoverflow.com/a/17323375)
-  '&:before, &:after': {
+  zIndex: 9997,
+  // The left shadow of the left bar is a gradient from white, and this is achieved with an
+  // inner shadow on the :before element. (Credit: https://stackoverflow.com/a/17323375)
+  '&:before': {
     content: '" "',
     position: 'absolute',
     top: 0,
     height: '100%',
-  },
-  '&:before': {
+    zIndex: 9998,
     width: leftBarLeftShadowWidth * 2 + 'px',
     boxShadow: `${
       -2 * leftBarLeftShadowWidth
     }px 0 ${leftBarLeftShadowWidth}px ${-leftBarLeftShadowWidth}px inset white`,
     left: -2 * leftBarLeftShadowWidth + 'px',
-  },
-  '&:after': {
-    width: leftBarRightShadowWidth + 'px',
-    boxShadow: `${leftBarRightShadowWidth}px 0 ${leftBarRightShadowWidth}px ${-leftBarRightShadowWidth}px inset`,
-    right: -leftBarRightShadowWidth + 'px',
   },
 });

@@ -17,8 +17,12 @@ export default function ProfileAvatarDisplay() {
          *  the `src` prop in the Avatar above. */}
         <Person sx={{ transform: 'scale(3.5)' }} />
       </Avatar>
-      <Typography variant='h6'>{user.name}</Typography>
-      <Typography variant='caption'>Profile</Typography>
+      <Typography variant='h6' fontWeight='normal'>
+        {user.name}
+      </Typography>
+      <Typography variant='caption' sx={{ opacity: 0.75 }}>
+        Profile
+      </Typography>
     </Stack>
   );
 }
