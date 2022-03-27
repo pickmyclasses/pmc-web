@@ -106,9 +106,11 @@ export default function Timeline({
     }
     setEventsWithConflicts(eventsWithConflicts);
     setEventsShiftedRight(eventsShiftedRight);
+  }, [eventsShown]);
 
+  // Report which (non-outlined) events have conflicts.
+  useEffect(() => {
     if (onGroupIDsWithConflictsChange) {
-      // Report which (non-outlined) events have conflicts.
       const nonOutlinedEvents = eventsShown.filter((x) => x.highlight !== 'outlined');
       const groupIDsWithConflicts = Array.from(
         new Set(
@@ -119,7 +121,7 @@ export default function Timeline({
       );
       onGroupIDsWithConflictsChange(groupIDsWithConflicts);
     }
-  }, [eventsShown]);
+  }, [eventsShown, onGroupIDsWithConflictsChange]);
 
   // Logic for rendering elements in the timeline.
 
@@ -263,7 +265,7 @@ export default function Timeline({
                 filter: time % 3600 && 'opacity(0.5)',
                 '::before': { width: '100%' },
                 '> span': {
-                  fontSize: largerTimeOnMarks ? '12px' : '10px',
+                  fontSize: largerTimeOnMarks ? '14px' : '10px',
                   opacity: 0.75,
                   padding: '0 4px 0 2px',
                 },

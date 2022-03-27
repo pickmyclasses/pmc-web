@@ -1,12 +1,10 @@
 import { Dashboard, EventNote, PlaylistAdd, School } from '@mui/icons-material';
 import { Box, Container, Divider, Grid, Stack, styled, Tab, Tabs } from '@mui/material';
-import { UserContext } from '../App';
-import ContainerWithLoadingIndication from '../components/Page/ContainerWithLoadingIndication';
 import PreventableLink from '../components/PreventableNavigation/PreventableLink';
 import ProfileAvatarDisplay from '../components/ProfilePage/ProfileAvatarDisplay';
 import ProfileRoadmap from '../components/ProfilePage/ProfileRoadmap';
 import ProfileSchedule from '../components/ProfilePage/ProfileSchedule';
-import React, { createElement, useContext, useEffect, useState } from 'react';
+import React, { createElement, useEffect, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { useParams } from 'react-router-dom';
 
@@ -16,7 +14,6 @@ import { useParams } from 'react-router-dom';
  */
 export default function ProfilePage() {
   const urlParams = useParams();
-  const { user } = useContext(UserContext);
 
   /** The name of the active tab as given in the URL's `:tab` parameter. */
   const [activeTabName, setActiveTabName] = useState('');
@@ -46,30 +43,28 @@ export default function ProfilePage() {
   );
 
   return (
-    <ContainerWithLoadingIndication isLoading={!user}>
-      <Container maxWidth='xl' sx={{ paddingBottom: '32px', height: '100%' }}>
-        <Grid container spacing='32px' height='100%'>
-          {/* The left bar (that contains the avatar and tab list): */}
-          <LeftBarGridItem item xs='auto' height='100%' sx={{ boxShadow: 3 }}>
-            <Stack width='240px' spacing='24px' paddingRight='32px'>
-              <ProfileAvatarDisplay />
-              <Divider />
-            </Stack>
-            <Tabs orientation='vertical' variant='fullWidth' value={activeTabName}>
-              {Object.entries(tabs).map(([name, { title, icon }]) =>
-                renderTab(name, title, icon)
-              )}
-            </Tabs>
-          </LeftBarGridItem>
-          {/* The active tab's content: */}
-          <Grid item xs sx={{ marginLeft: '272px' }}>
-            <Scrollbars autoHide style={{ height: 'calc(100vh - 72px)' }}>
-              <Box padding='32px'>{createElement(tabs[activeTabName].content)}</Box>
-            </Scrollbars>
-          </Grid>
+    <Container maxWidth='xl' sx={{ paddingBottom: '32px', height: '100%' }}>
+      <Grid container spacing='32px' height='100%'>
+        {/* The left bar (that contains the avatar and tab list): */}
+        <LeftBarGridItem item xs='auto' height='100%' sx={{ boxShadow: 3 }}>
+          <Stack width='240px' spacing='24px' paddingRight='32px'>
+            <ProfileAvatarDisplay />
+            <Divider />
+          </Stack>
+          <Tabs orientation='vertical' variant='fullWidth' value={activeTabName}>
+            {Object.entries(tabs).map(([name, { title, icon }]) =>
+              renderTab(name, title, icon)
+            )}
+          </Tabs>
+        </LeftBarGridItem>
+        {/* The active tab's content: */}
+        <Grid item xs sx={{ marginLeft: '272px' }}>
+          <Scrollbars autoHide style={{ height: 'calc(100vh - 72px)' }}>
+            <Box padding='32px'>{createElement(tabs[activeTabName].content)}</Box>
+          </Scrollbars>
         </Grid>
-      </Container>
-    </ContainerWithLoadingIndication>
+      </Grid>
+    </Container>
   );
 }
 

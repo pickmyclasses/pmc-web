@@ -7,12 +7,12 @@ import { SchedulerContext } from 'components/Scheduler/ContainerWithScheduler';
 import { getComponent, getInstructor } from 'components/Scheduler/ShoppingCart';
 import { motion } from 'framer-motion';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { formatCourseName, groupBy, parseTime } from 'utils';
 import { getAllComponents } from '../CourseComponentsSummary';
 import OfferingListingGroup from './OfferingListingGroup';
 import SchedulePreview from './SchedulePreview';
 import UnloadConfirmation from './UnloadConfirmation';
+import LinkToAuthForm from 'components/AuthForm/LinkToAuthForm';
 
 export default function OfferingListing({ course, schedulePreviewContainer }) {
   const { user } = useContext(UserContext);
@@ -268,7 +268,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
                 <Stack direction='row' alignItems='center' spacing='4px'>
                   {user
                     ? savePromptMessage +
-                      (selectedClassesHaveConflicts ? ' (with conflicts)' : '')
+                      (isValid && selectedClassesHaveConflicts ? ' (with conflicts)' : '')
                     : 'Login to save your schedule'}
                   {(isValid || !user) && <ChevronRight />}
                 </Stack>
@@ -293,7 +293,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
                       </Button>
                     </>
                   ) : (
-                    <Button variant='text' component={Link} to='/auth'>
+                    <Button variant='text' component={LinkToAuthForm}>
                       Login
                     </Button>
                   )}

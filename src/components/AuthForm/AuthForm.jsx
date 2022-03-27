@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -14,17 +13,23 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { login } from '../../api';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../App';
+import { LoadingButton } from '@mui/lab';
+import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 
 export default function AuthForm() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { setUser } = useContext(UserContext);
 
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setIsLoginLoading(true);
+
     const data = new FormData(event.currentTarget);
 
     const email = data.get('email');
@@ -42,9 +47,12 @@ export default function AuthForm() {
         setUser(userInfo);
 
         localStorage.setItem('user', JSON.stringify(userInfo));
-        navigate('/');
+
+        if (location?.state?.linkTo) navigate(location.state.linkTo, { replace: true });
+        else navigate('/', { replace: true });
       })
       .catch((err) => {
+        setIsLoginLoading(false);
         if (err.response) {
           setErrorMessage('Wrong username or password');
         } else if (err.request) {
@@ -100,9 +108,15 @@ export default function AuthForm() {
               control={<Checkbox value='remember' color='primary' />}
               label='Remember me'
             />
-            <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+            <LoadingButton
+              loading={isLoginLoading}
+              type='submit'
+              fullWidth
+              variant='contained'
+              sx={{ mt: 3, mb: 2 }}
+            >
               Sign In
-            </Button>
+            </LoadingButton>
             <Grid container>
               <Grid item xs>
                 <Link href='#' variant='body2'>
@@ -110,8 +124,13 @@ export default function AuthForm() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href='/register' variant='body2'>
-                  {"Don't have an account? Sign Up"}
+                <Link
+                  variant='body2'
+                  component={PreventableLink}
+                  to='/register'
+                  state={location.state}
+                >
+                  Don't have an account? Sign Up
                 </Link>
               </Grid>
             </Grid>

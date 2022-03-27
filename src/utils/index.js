@@ -152,15 +152,20 @@ export const formatPrerequisites = (s) => {
     .replace(/co-?requisites:[\s^\s]*/gi, '')
     .replace(/pre-?requisites:/gi, '')
     .replace(/[\r\n]+/g, '');
-  // eslint-disable-next-line
-  const rawList = eval(
-    `['${rawString}']`
-      .replace(/\(/g, "',['")
-      .replace(/\)/g, "'],'")
-      .replace(/OR/g, "','OR','")
-      .replace(/AND/g, "','AND','")
-  );
-  return prunePrerequisiteList(rawList);
+
+  try {
+    // eslint-disable-next-line
+    const rawList = eval(
+      `['${rawString}']`
+        .replace(/\(/g, "',['")
+        .replace(/\)/g, "'],'")
+        .replace(/OR/g, "','OR','")
+        .replace(/AND/g, "','AND','")
+    );
+    return prunePrerequisiteList(rawList);
+  } catch (error) {
+    return prunePrerequisiteList([]);
+  }
 };
 
 const prunePrerequisiteList = (p) => {
