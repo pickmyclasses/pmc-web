@@ -265,7 +265,7 @@ export default function Timeline({
                 filter: time % 3600 && 'opacity(0.5)',
                 '::before': { width: '100%' },
                 '> span': {
-                  fontSize: largerTimeOnMarks ? '12px' : '10px',
+                  fontSize: largerTimeOnMarks ? '14px' : '10px',
                   opacity: 0.75,
                   padding: '0 4px 0 2px',
                 },
