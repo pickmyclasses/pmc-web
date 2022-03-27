@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Link, Stack, Typography, useTheme } from '@mui/material';
 import { formatCourseName, parseDayList, parseTime } from '../../utils';
 import Timeline from './Timeline';
 import Color from 'color';
 import { pluralize } from '../../utils';
 import CourseScheduleSummary from './CourseScheduleSummary';
 import { getColorByCourse } from '../../api';
+import PreventableLink from '../PreventableNavigation/PreventableLink';
 
 /** The shopping cart resides in the top part of the scheduler. */
 export default function ShoppingCart({
@@ -61,18 +62,28 @@ export default function ShoppingCart({
         <Timeline events={sessions} columnTitles={timelineColumnTitles} {...timeLineProps} />
       </Box>
       {!noSummary && (
-        <Typography
-          marginTop='12px'
-          variant='caption'
-          align='center'
-          color={hasHighlights ? theme.palette.primary.main : ''}
-        >
-          {pluralize(numCourses, 'course')}
-          {numOnlineCourses > 0 ? <>&nbsp;({pluralize(numOnlineCourses, 'online')})</> : ''}
-          &nbsp;&nbsp;•&nbsp;&nbsp;
-          {minCredits === maxCredits ? '' : minCredits + '–'}
-          {pluralize(maxCredits, 'credit')}
-        </Typography>
+        <Stack alignItems='center'>
+          <Typography
+            marginTop='12px'
+            variant='body2'
+            color={hasHighlights ? theme.palette.primary.main : ''}
+          >
+            {pluralize(numCourses, 'course')}
+            {numOnlineCourses > 0 ? <>&nbsp;({pluralize(numOnlineCourses, 'online')})</> : ''}
+            &nbsp;&nbsp;•&nbsp;&nbsp;
+            {minCredits === maxCredits ? '' : minCredits + '–'}
+            {pluralize(maxCredits, 'credit')}
+          </Typography>
+          <Link
+            component={PreventableLink}
+            to='/profile/schedule'
+            variant='caption'
+            color='gray'
+            underline='hover'
+          >
+            View schedule details
+          </Link>
+        </Stack>
       )}
     </Box>
   );

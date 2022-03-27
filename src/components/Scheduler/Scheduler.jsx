@@ -4,6 +4,8 @@ import { EventNote } from '@mui/icons-material';
 import ShoppingCart from './ShoppingCart';
 import RequirementList from './RequirementList';
 import { SchedulerContext } from './ContainerWithScheduler';
+import ClickableIndicator from 'components/CourseCardGrid/CourseCard/ClickableIndicator';
+import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
 
 /**
  * A component that displays the current user's schedule on the top and progress toward
@@ -13,6 +15,7 @@ import { SchedulerContext } from './ContainerWithScheduler';
  */
 export default function Scheduler({ classesToHighlight = null }) {
   const { classesInShoppingCart, requirements } = useContext(SchedulerContext);
+  const { navigateIfAllowed } = useContext(PreventableNavigationContext);
 
   const [classes, setClasses] = useState([]);
 
@@ -39,9 +42,11 @@ export default function Scheduler({ classesToHighlight = null }) {
     <Box height='100%' display='flex' flexDirection='column'>
       <Box display='flex' alignItems='center' marginBottom='16px'>
         <EventNote color='action' fontSize='small' />
-        <Typography variant='overline' marginLeft='8px'>
-          Schedule
-        </Typography>
+        <ClickableIndicator onClick={() => navigateIfAllowed('/profile/schedule')}>
+          <Typography variant='overline' marginLeft='8px'>
+            Schedule
+          </Typography>
+        </ClickableIndicator>
       </Box>
       {classes == null ? renderLoadingIndication() : renderSchedulerContent()}
     </Box>

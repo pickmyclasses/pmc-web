@@ -268,7 +268,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
                 <Stack direction='row' alignItems='center' spacing='4px'>
                   {user
                     ? savePromptMessage +
-                      (selectedClassesHaveConflicts ? ' (with conflicts)' : '')
+                      (isValid && selectedClassesHaveConflicts ? ' (with conflicts)' : '')
                     : 'Login to save your schedule'}
                   {(isValid || !user) && <ChevronRight />}
                 </Stack>
