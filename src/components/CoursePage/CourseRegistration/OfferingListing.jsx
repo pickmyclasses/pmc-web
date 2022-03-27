@@ -112,15 +112,18 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
       }));
     }
 
-    const mouseEnteredClassesToHighlight = mouseEnteredClasses
-      .filter((x) => !selectedClasses.find((y) => +y.id === +x.id))
-      .map((x) => ({
-        classData: { ...x },
-        course,
-        highlight: 'outlined',
-        selectionID: x.id,
-      }));
-    setHighlightedClasses([...selectedClassesToHighlight, ...mouseEnteredClassesToHighlight]);
+    const mouseEnteredClassesToHighlight = mouseEnteredClasses.map((x) => ({
+      classData: { ...x },
+      course,
+      highlight: 'outlined',
+      selectionID: x.id,
+    }));
+    setHighlightedClasses([
+      ...mouseEnteredClassesToHighlight,
+      ...selectedClassesToHighlight.filter(
+        (x) => !mouseEnteredClasses.find((y) => +y.id === +x.classData.id)
+      ),
+    ]);
   }, [
     classGroups,
     classesOfCourseInShoppingCart.length,
@@ -168,6 +171,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
 
       setSelectedClassesByComponent(newValue);
       setIsDirty(true);
+      setImmediate(() => setMouseEnteredClasses([]));
     },
     [components, selectedClassesByComponent]
   );
