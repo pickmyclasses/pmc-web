@@ -23,6 +23,7 @@ export default function TimeDataCard({
         position: 'relative',
         minWidth: '288px',
         padding: '12px 16px 16px',
+        marginBottom: '8px',
         borderTop: '8px solid ' + topBorderColor,
         boxShadow: 3,
       }}

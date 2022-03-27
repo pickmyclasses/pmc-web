@@ -69,8 +69,7 @@ export default function ShoppingCart({
             color={hasHighlights ? theme.palette.primary.main : ''}
           >
             {pluralize(numCourses, 'course')}
-            {numOnlineCourses > 0 ? <>&nbsp;({pluralize(numOnlineCourses, 'online')})</> : ''}
-            &nbsp;&nbsp;•&nbsp;&nbsp;
+            {numOnlineCourses > 0 ? <>&nbsp;({pluralize(numOnlineCourses, 'online')})</> : ''},{' '}
             {minCredits === maxCredits ? '' : minCredits + '–'}
             {pluralize(maxCredits, 'credit')}
           </Typography>
