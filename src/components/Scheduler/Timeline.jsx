@@ -106,9 +106,11 @@ export default function Timeline({
     }
     setEventsWithConflicts(eventsWithConflicts);
     setEventsShiftedRight(eventsShiftedRight);
+  }, [eventsShown]);
 
+  // Report which (non-outlined) events have conflicts.
+  useEffect(() => {
     if (onGroupIDsWithConflictsChange) {
-      // Report which (non-outlined) events have conflicts.
       const nonOutlinedEvents = eventsShown.filter((x) => x.highlight !== 'outlined');
       const groupIDsWithConflicts = Array.from(
         new Set(
@@ -119,7 +121,7 @@ export default function Timeline({
       );
       onGroupIDsWithConflictsChange(groupIDsWithConflicts);
     }
-  }, [eventsShown]);
+  }, [eventsShown, onGroupIDsWithConflictsChange]);
 
   // Logic for rendering elements in the timeline.
 
