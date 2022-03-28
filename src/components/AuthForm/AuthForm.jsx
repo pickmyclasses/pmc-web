@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -8,7 +7,6 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import FormHelperText from '@mui/material/FormHelperText';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -18,6 +16,7 @@ import { UserContext } from '../../App';
 import { LoadingButton } from '@mui/lab';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 import { useSnackbar } from 'notistack';
+import logo from '../../assets/icon.png';
 
 export default function AuthForm() {
   const navigate = useNavigate();
@@ -88,9 +87,7 @@ export default function AuthForm() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <img src={logo} alt={'logo'} style={{ height: '5em' }} />
           <Typography component='h1' variant='h5'>
             Login
           </Typography>
