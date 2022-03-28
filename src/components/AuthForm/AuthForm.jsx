@@ -17,6 +17,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../App';
 import { LoadingButton } from '@mui/lab';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
+import { useSnackbar } from 'notistack';
 
 export default function AuthForm() {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ export default function AuthForm() {
 
   const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -48,17 +50,27 @@ export default function AuthForm() {
 
         localStorage.setItem('user', JSON.stringify(userInfo));
 
-        if (location?.state?.linkTo) navigate(location.state.linkTo, { replace: true });
-        else navigate('/', { replace: true });
+        if (location?.state?.linkTo) {
+          navigate(location.state.linkTo, { replace: true });
+          enqueueSnackbar(snackBarMessage['LoginSuccess'].message, {
+            variant: snackBarMessage['LoginSuccess'].variant,
+          });
+        } else navigate('/', { replace: true });
       })
       .catch((err) => {
         setIsLoginLoading(false);
         if (err.response) {
-          setErrorMessage('Wrong username or password');
+          enqueueSnackbar(snackBarMessage['wrongPassword'].message, {
+            variant: snackBarMessage['wrongPassword'].variant,
+          });
         } else if (err.request) {
-          setErrorMessage('Sorry, something went wrong on the server, try again later');
+          enqueueSnackbar(snackBarMessage['serverError'].message, {
+            variant: snackBarMessage['serverError'].variant,
+          });
         } else {
-          setErrorMessage('Sorry, something went wrong, please refresh the page and try again');
+          enqueueSnackbar(snackBarMessage['serverError'].message, {
+            variant: snackBarMessage['serverError'].variant,
+          });
         }
       });
   };
@@ -143,4 +155,13 @@ export default function AuthForm() {
 
 const ErrorMessage = ({ message }) => {
   return <FormHelperText sx={{ color: 'red', fontSize: 17 }}>{message}</FormHelperText>;
+};
+
+const snackBarMessage = {
+  LoginSuccess: { message: 'Login successfully', variant: 'success' },
+  wrongPassword: { message: 'Wrong username or password', variant: 'error' },
+  serverError: {
+    message: 'Sorry, something went wrong, please refresh the page and try again',
+    variant: 'error',
+  },
 };
