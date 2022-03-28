@@ -171,7 +171,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
 
       setSelectedClassesByComponent(newValue);
       setIsDirty(true);
-      setImmediate(() => setMouseEnteredClasses([]));
+      setMouseEnteredClasses([]);
     },
     [components, selectedClassesByComponent]
   );

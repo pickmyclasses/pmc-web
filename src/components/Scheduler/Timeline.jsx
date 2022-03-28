@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Divider, Grid, Portal, Stack, Typography, useTheme } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useMount } from '../../utils';
 import TimeBlock from './TimeBlock';
@@ -18,6 +18,8 @@ export default function Timeline({
   showHalfHourMarks = false,
   expandAllTimeOnMarks = false,
   largerTimeOnMarks = false,
+  showDetailsInTimeBlocks = false,
+  timeDataCardContainer = undefined,
 }) {
   const theme = useTheme();
 
@@ -30,8 +32,10 @@ export default function Timeline({
   const [mouseEnteredEventData, setMouseEnteredEventData] = useState(null);
   const [selectedEventData, setSelectedEventData] = useState(null);
   const [selectedEventHasConflicts, setSelectedEventHasConflicts] = useState(false);
+  const [dataCardSide, setDataCardSide] = useState('left');
 
   const containerRef = useRef();
+  const dataCardDefaultContainerRef = useRef();
   const dataCardRef = useRef();
 
   const columnWidth = 100 / columnTitles.length;
@@ -135,11 +139,12 @@ export default function Timeline({
 
   const getTopByTime = (time) => (time - rangeStart) / (rangeEnd - rangeStart);
 
-  const handleTimeBlockClick = (data) => {
+  const handleTimeBlockClick = ({ data, ...event }) => {
     setSelectedEventHasConflicts(
       eventsShown.some((x, i) => x.data.groupID === data.groupID && eventsWithConflicts[i])
     );
     setSelectedEventData(selectedEventData?.groupID !== data.groupID && data);
+    setDataCardSide(event.columnIndex < columnTitles.length / 2 ? 'right' : 'left');
   };
 
   const renderEvent = (i, event) => {
@@ -224,6 +229,7 @@ export default function Timeline({
                     : 'outlined'
                   : 'contained'
               }
+              showDetails={showDetailsInTimeBlocks}
               sx={sx}
               data={data}
               onMouseEnter={() => setMouseEnteredEventData(data)}
@@ -233,7 +239,7 @@ export default function Timeline({
                   onSelect?.(data.groupID);
                   setSelectedEventData(null);
                 } else {
-                  handleTimeBlockClick(data);
+                  handleTimeBlockClick(event);
                 }
               }}
             />
@@ -262,7 +268,7 @@ export default function Timeline({
                 transform: 'translateY(-50%)',
                 top: y * 100 + '%',
                 width: 'calc(100% + 20px)',
-                filter: time % 3600 && 'opacity(0.5)',
+                filter: time % 3600 && 'opacity(0.667)',
                 '::before': { width: '100%' },
                 '> span': {
                   fontSize: largerTimeOnMarks ? '14px' : '10px',
@@ -329,22 +335,30 @@ export default function Timeline({
       >
         {renderGridLines()}
         {eventsShown.map((event, i) => renderEvent(i, event))}
+        <Box
+          ref={dataCardDefaultContainerRef}
+          sx={{
+            position: 'absolute',
+            right: 'calc(100% + 8px)',
+            top: selectedEventData && getTopByTime(selectedEventData.earliestStart) * 100 + '%',
+            zIndex: 9999,
+          }}
+        />
         {selectedEventData && (
-          <Box
-            ref={dataCardRef}
-            sx={{
-              position: 'absolute',
-              right: 'calc(100% + 8px)',
-              top: getTopByTime(selectedEventData.earliestStart) * 100 + '%',
-              zIndex: 9999,
-            }}
-          >
-            <TimeDataCard
-              data={selectedEventData}
-              hasConflicts={selectedEventHasConflicts}
-              onLinkClick={() => setSelectedEventData(null)}
-            />
-          </Box>
+          <Portal container={timeDataCardContainer || dataCardDefaultContainerRef?.current}>
+            <Stack
+              direction='row'
+              justifyContent={dataCardSide === 'right' && 'flex-end'}
+              padding={timeDataCardContainer && '32px 64px'}
+            >
+              <TimeDataCard
+                ref={dataCardRef}
+                data={selectedEventData}
+                hasConflicts={selectedEventHasConflicts}
+                onLinkClick={() => setSelectedEventData(null)}
+              />
+            </Stack>
+          </Portal>
         )}
       </Box>
     </Box>

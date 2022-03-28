@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Typography, useTheme } from '@mui/material';
+import { Button, Stack, Typography, styled, useTheme } from '@mui/material';
 import Color from 'color';
 
 export default function TimeBlock({
@@ -7,6 +7,7 @@ export default function TimeBlock({
   variant = 'outlined',
   color = 'gray',
   darken = false,
+  showDetails = false,
   data,
   sx = {},
   ...props
@@ -19,7 +20,9 @@ export default function TimeBlock({
     const mainColor = Color(
       color === 'gray' ? theme.palette.grey[500] : theme.palette[color]?.main || color
     );
-    let shades = [mainColor.lighten(0.25).string(), mainColor.string()];
+    let shades = showDetails
+      ? [mainColor.string(), mainColor.desaturate(0.25).darken(0.25).string()]
+      : [mainColor.lighten(0.25).string(), mainColor.string()];
 
     const outlinedBackgroundColors = [
       theme.palette.background.default,
@@ -42,22 +45,42 @@ export default function TimeBlock({
     boxShadow: 1,
     borderWidth: '2px !important',
     borderRadius: '0px',
-    wordSpacing: '100vw',
+    wordSpacing: !showDetails && '100vw',
     alignItems: 'flex-start',
     overflow: 'hidden',
     '&, &:hover, &:focus': { ...palette },
   };
 
-  const textStyles = {
-    pointerEvents: 'none',
-    fontSize: 'min(14px, 14 / 1536 * 100vw, 14 / 864 * 100vh)',
-  };
+  const titleFontSize = getDynamicFontSize(showDetails ? 16 : 14);
+  const descriptionFontSize = getDynamicFontSize(14);
 
   return (
     <Button text={text} variant={variant} color='primary' sx={buttonStyles} {...props}>
-      <Typography variant='subtitle2' lineHeight={1.19} style={textStyles}>
-        {text}
-      </Typography>
+      <Stack>
+        <FixedHeightTypography variant='subtitle2' sx={{ fontSize: titleFontSize }}>
+          {text}
+        </FixedHeightTypography>
+        {showDetails && (
+          <FixedHeightTypography variant='body2' sx={{ fontSize: descriptionFontSize }}>
+            Lecture
+            <br />
+            2:00–3:20pm
+          </FixedHeightTypography>
+        )}
+      </Stack>
     </Button>
   );
 }
+
+const FixedHeightTypography = styled(Typography)({
+  pointerEvents: 'none',
+  textTransform: 'none',
+  lineHeight: 1.25,
+});
+
+/**
+ * Returns the CSS style for font size that automatically scales with the screen size, with
+ * maximum value being `maxFontSize` pixels.
+ */
+const getDynamicFontSize = (maxFontSize) =>
+  `min(${maxFontSize}px, ${maxFontSize} / 1280 * 100vw, ${maxFontSize} / 960 * 100vh)`;

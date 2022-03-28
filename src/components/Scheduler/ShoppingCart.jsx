@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Link, Stack, Typography, useTheme } from '@mui/material';
 import { formatCourseName, parseDayList, parseTime } from '../../utils';
 import Timeline from './Timeline';
-import Color from 'color';
+// import Color from 'color';
 import { pluralize } from '../../utils';
 import CourseScheduleSummary from './CourseScheduleSummary';
 import { getColorByCourse } from '../../api';
@@ -69,8 +69,11 @@ export default function ShoppingCart({
             color={hasHighlights ? theme.palette.primary.main : ''}
           >
             {pluralize(numCourses, 'course')}
-            {numOnlineCourses > 0 ? <>&nbsp;({pluralize(numOnlineCourses, 'online')})</> : ''},{' '}
-            {minCredits === maxCredits ? '' : minCredits + '–'}
+            {numOnlineCourses > 0 ? (
+              <>&nbsp;({pluralize(numOnlineCourses, 'online')})</>
+            ) : (
+              ''
+            )}, {minCredits === maxCredits ? '' : minCredits + '–'}
             {pluralize(maxCredits, 'credit')}
           </Typography>
           <Link
@@ -132,7 +135,7 @@ const generateSessions = (classes, resolver) => {
       sessions.push(
         new Promise((onAssignedColors) => {
           // ImageColors.getColors(course.ImageURL, { cache: true }).then((palette) => {
-          const color = Color(getColorByCourse(course)).desaturate(0.375).lightness(50);
+          const color = getColorByCourse(course);
           sessionData.color = sessionData.data.topBorderColor = color;
           onAssignedColors(sessionData);
           // })
