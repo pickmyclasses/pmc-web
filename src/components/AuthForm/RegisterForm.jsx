@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,49 +17,58 @@ import { register } from '../../api';
 import { useLocation } from 'react-router-dom';
 import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
+import Slide from '@mui/material/Slide';
+import { useSnackbar } from 'notistack';
 
 const theme = createTheme();
 
 export default function RegisterForm() {
   const { navigateIfAllowed } = useContext(PreventableNavigationContext);
   const location = useLocation();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
     const email = data.get('email');
     const password = data.get('password');
     const firstName = data.get('firstName');
     const lastName = data.get('lastName');
     const college = data.get('college');
     const rePassword = data.get('rePassword');
-
+    let notifyMsg = '';
+    let variant = '';
     if (rePassword !== password) {
-      swal('Password Mismatch!', 'Please make sure your password is correct', 'error');
+      notifyMsg = 'Password Mismatch! Please make sure your password is correct.';
+      variant = 'error';
+      enqueueSnackbar(notifyMsg, { variant });
     } else if (!email || !password || !firstName || !lastName || !rePassword || !college) {
-      swal('Info Not Complete', 'Please make sure you have filled out all the fields', 'error');
+      notifyMsg = 'Info Not Complete. Please make sure you have filled out all the fields.';
+      variant = 'error';
+      enqueueSnackbar(notifyMsg, { variant });
     } else {
       register({ email, firstName, lastName, college, password, rePassword })
         .then(() => {
-          swal('Welcome To PMC!', 'Registration succeeded, please login!', 'success');
+          notifyMsg = 'Welcome To PMC!';
+          variant = 'success';
+          enqueueSnackbar(notifyMsg, { variant });
+          notifyMsg = 'Registration succeeded, please login!';
+          enqueueSnackbar(notifyMsg, { variant });
           setTimeout(() => navigateIfAllowed('/auth', null, { state: location.state }), 1000);
         })
         .catch((err) => {
           if (err.response) {
-            swal('Oop... Something went wrong', err.response.data.message, 'error');
+            notifyMsg = 'Oop... Something went wrong';
+            variant = 'error';
+            enqueueSnackbar(notifyMsg, { variant });
           } else if (err.request) {
-            swal(
-              'Oop... Something went wrong',
-              'Internal error, please try again later',
-              'error'
-            );
+            notifyMsg = 'Oop... Something went wrong. Internal error, please try again later';
+            variant = 'error';
+            enqueueSnackbar(notifyMsg, { variant });
           } else {
-            swal(
-              'Oop... Something went wrong',
-              'Internal error, please try again later',
-              'error'
-            );
+            notifyMsg = 'Oop... Something went wrong. Internal error, please try again later';
+            variant = 'error';
+            enqueueSnackbar(notifyMsg, { variant });
           }
         });
     }
@@ -155,9 +164,12 @@ export default function RegisterForm() {
                 />
               </Grid>
             </Grid>
-            <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-              Sign Up
-            </Button>
+            <React.Fragment>
+              <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+                Sign Up
+              </Button>
+            </React.Fragment>
+
             <Grid container justifyContent='flex-end'>
               <Grid item>
                 <Link
