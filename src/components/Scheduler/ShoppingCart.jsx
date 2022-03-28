@@ -4,7 +4,7 @@ import { formatCourseName, parseDayList, parseTime } from '../../utils';
 import Timeline from './Timeline';
 // import Color from 'color';
 import { pluralize } from '../../utils';
-import CourseScheduleSummary from './CourseScheduleSummary';
+import CourseScheduleSummary, { formatTimeRange } from './CourseScheduleSummary';
 import { getColorByCourse } from '../../api';
 import PreventableLink from '../PreventableNavigation/PreventableLink';
 
@@ -109,6 +109,13 @@ const generateSessions = (classes, resolver) => {
         columnIndex: dayOffered - 1,
         start: parseTime(classData.startTime),
         end: parseTime(classData.endTime),
+        details: (
+          <>
+            {getComponent(classData)}
+            <br />
+            {formatTimeRange(classData)}
+          </>
+        ),
         color: 'gray',
         highlight,
         shouldDispatch: !!selectionID,

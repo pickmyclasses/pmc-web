@@ -8,6 +8,7 @@ export default function TimeBlock({
   color = 'gray',
   darken = false,
   showDetails = false,
+  details,
   data,
   sx = {},
   ...props
@@ -62,9 +63,7 @@ export default function TimeBlock({
         </FixedHeightTypography>
         {showDetails && (
           <FixedHeightTypography variant='body2' sx={{ fontSize: descriptionFontSize }}>
-            Lecture
-            <br />
-            2:00–3:20pm
+            {details}
           </FixedHeightTypography>
         )}
       </Stack>

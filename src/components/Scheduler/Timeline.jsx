@@ -151,6 +151,7 @@ export default function Timeline({
     const {
       columnIndex,
       text,
+      details,
       color,
       data,
       start,
@@ -231,6 +232,7 @@ export default function Timeline({
               }
               showDetails={showDetailsInTimeBlocks}
               sx={sx}
+              details={details}
               data={data}
               onMouseEnter={() => setMouseEnteredEventData(data)}
               onMouseLeave={() => setMouseEnteredEventData(null)}
