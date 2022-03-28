@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -8,7 +7,6 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -17,6 +15,7 @@ import { useLocation } from 'react-router-dom';
 import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 import { useSnackbar } from 'notistack';
+import logo from '../../assets/icon.png';
 
 const theme = createTheme();
 
@@ -89,9 +88,7 @@ export default function RegisterForm() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <img src={logo} alt={'logo'} style={{ height: '5em' }} />
           <Typography component='h1' variant='h5'>
             Sign up
           </Typography>
