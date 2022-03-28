@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/Search/SearchBar';
+import poster from '../assets/poster.gif';
 
 const useStyle = makeStyles({
   main: {
@@ -13,13 +14,15 @@ const useStyle = makeStyles({
     backgroundColor: '#182b3a',
     fontFamily:
       '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji',
+    display: 'flex',
   },
   registerForm: {
-    width: '100%',
+    width: '70%',
+    marginLeft: '17%',
+    marginTop: '8%',
   },
   headings: {
     color: 'white',
-    marginTop: '5%',
     fontWeight: 'bold',
     fontSize: '2.6em',
   },
@@ -77,9 +80,8 @@ const WelcomePage = () => {
     <div className={classes.main}>
       <Container className={classes.registerForm}>
         <div className={classes.headings}>
-          Data-driven course catalogs <br />
-          Easier searching <br />
-          Easier college <br />
+          Data-driven course catalogs Easier searching <br />
+          Easier college
           <div className={classes.inlineText}>Start picking your classes with PMC</div>
         </div>
         <Button variant='contained' disableElevation className={classes.linkBnt}>
@@ -100,12 +102,24 @@ const WelcomePage = () => {
             textColor={grey[900]}
             backgroundColor={grey[50]}
             onSearch={handleSearch}
-            maxWidth={'30%'}
+            maxWidth={'50%'}
             focusHoverColor={grey[300]}
             placeholderText={'Enter a course or major'}
             borderRadiusRatio={'43px'}
           />
         </div>
+      </Container>
+      <Container>
+        <img
+          src={poster}
+          alt={'loading...'}
+          style={{
+            height: '100%',
+            width: '100%',
+            paddingTop: '10%',
+            marginRight: '10%',
+          }}
+        />
       </Container>
     </div>
   );
