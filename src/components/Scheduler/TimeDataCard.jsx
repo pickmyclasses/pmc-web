@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import {
   Alert,
   Box,
@@ -12,13 +12,17 @@ import {
 import { Edit, Info } from '@material-ui/icons';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 
-export default function TimeDataCard({
-  data: { title, subtitle, description, coursePageURL, topBorderColor = 'gray' },
-  hasConflicts = false,
-  onLinkClick = () => {},
-}) {
-  return (
+const TimeDataCard = forwardRef(
+  (
+    {
+      data: { title, subtitle, description, coursePageURL, topBorderColor = 'gray' },
+      hasConflicts = false,
+      onLinkClick = () => {},
+    },
+    ref
+  ) => (
     <Card
+      ref={ref}
       sx={{
         position: 'relative',
         minWidth: '288px',
@@ -61,5 +65,7 @@ export default function TimeDataCard({
         </Tooltip>
       </CardActions>
     </Card>
-  );
-}
+  )
+);
+
+export default TimeDataCard;
