@@ -335,7 +335,6 @@ export default function Timeline({
             sx={{
               position: 'absolute',
               right: 'calc(100% + 8px)',
-              paddingBottom: '56px',
               top: getTopByTime(selectedEventData.earliestStart) * 100 + '%',
               zIndex: 9999,
             }}
