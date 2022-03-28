@@ -6,7 +6,6 @@ import ReviewRatings from '../components/ReviewInputDetails/ReviewRatings';
 import ReviewComments from '../components/ReviewInputDetails/ReviewComments';
 import { useMount } from '../utils';
 import { postReview, postTagsByCourseID } from '../../src/api/index';
-import swal from 'sweetalert';
 import ReviewAnonymous from '../components/ReviewInputDetails/ReviewAnonymous';
 import ReviewRecommend from '../components/ReviewInputDetails/ReviewRecommend';
 import ReviewRadioButtons from '../components/ReviewInputDetails/ReviewRadioButtons';
@@ -43,17 +42,19 @@ export default function ReviewPage() {
   const [activeStep, setActiveStep] = React.useState(0);
   const { enqueueSnackbar } = useSnackbar();
 
-  let variant = '';
   const handleNext = () => {
     if (activeStep === 1) {
       if (positiveTags.length === 0) {
-        variant = 'warning';
-        enqueueSnackbar('Please fill in the postive side of the course', { variant });
+        enqueueSnackbar(snackBarMessage.lackPos.message, {
+          variant: snackBarMessage.lackPos.variant,
+        });
+
         return;
       }
       if (negativeTags.length === 0) {
-        variant = 'warning';
-        enqueueSnackbar('Please fill in the negative side of the course', { variant });
+        enqueueSnackbar(snackBarMessage.lackPos.message, {
+          variant: snackBarMessage.lackNeg.variant,
+        });
         return;
       }
     }
@@ -66,9 +67,10 @@ export default function ReviewPage() {
         IsHomeworkHeavy === undefined ||
         HourSpent === undefined
       ) {
-        variant = 'warning';
+        enqueueSnackbar(snackBarMessage.lackAnswers.message, {
+          variant: snackBarMessage.lackAnswers.variant,
+        });
 
-        enqueueSnackbar('You have question(s）unanswered', { variant });
         return;
       }
     }
@@ -269,13 +271,21 @@ export default function ReviewPage() {
                   postTagsByCourseID(course.id, {
                     content: positiveTags[i].name.trim(),
                     type: 1,
-                  }).catch((error) => swal(error));
+                  }).catch((error) =>
+                    enqueueSnackbar(snackBarMessage.error.message + error, {
+                      variant: snackBarMessage.error.variant,
+                    })
+                  );
                 }
                 for (let i = 0; i < negativeTags.length; i++) {
                   postTagsByCourseID(course.id, {
                     content: negativeTags[i].name.trim(),
                     type: 0,
-                  }).catch((error) => swal(error));
+                  }).catch((error) =>
+                    enqueueSnackbar(snackBarMessage.error.message + error, {
+                      variant: snackBarMessage.error.variant,
+                    })
+                  );
                 }
                 postReview(course.id, {
                   rating: ratingValue,
@@ -293,9 +303,15 @@ export default function ReviewPage() {
                   isExamHeavy: IsExamHeavy,
                   isHomeworkHeavy: IsHomeworkHeavy,
                   extraCreditOffered: ExtraCreditOffered,
-                }).catch((error) => swal(error));
+                }).catch((error) =>
+                  enqueueSnackbar(snackBarMessage.error.message + error, {
+                    variant: snackBarMessage.error.variant,
+                  })
+                );
 
-                swal('Good job!', 'You submitted the review!', 'success');
+                enqueueSnackbar(snackBarMessage.reviewSuccess.message, {
+                  variant: snackBarMessage.reviewSuccess.variant,
+                });
               }}
             >
               Submit
@@ -306,4 +322,17 @@ export default function ReviewPage() {
     </Box>
   );
 }
-// TODO: when you send it to the backend, do trim() for the tags e.g: tags.map(x=>x.trim())
+const snackBarMessage = {
+  error: { message: 'Error : ', variant: 'error' },
+
+  lackPos: { message: 'Please fill in the postive side of the course ', variant: 'warning' },
+  lackNeg: { message: 'Please fill in the negative side of the course', variant: 'warning' },
+  lackAnswers: {
+    message: 'You have question(s）unanswered',
+    variant: 'warning',
+  },
+  reviewSuccess: {
+    message: 'Good job! You submitted the review!',
+    variant: 'success',
+  },
+};

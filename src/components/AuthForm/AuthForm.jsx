@@ -52,24 +52,25 @@ export default function AuthForm() {
 
         if (location?.state?.linkTo) {
           navigate(location.state.linkTo, { replace: true });
-          let variant = 'success';
-          enqueueSnackbar('Login successfully', { variant });
+          enqueueSnackbar(snackBarMessage['LoginSuccess'].message, {
+            variant: snackBarMessage['LoginSuccess'].variant,
+          });
         } else navigate('/', { replace: true });
       })
       .catch((err) => {
         setIsLoginLoading(false);
-        let variant = 'error';
         if (err.response) {
-          enqueueSnackbar('Wrong username or password', { variant });
+          enqueueSnackbar(snackBarMessage['wrongPassword'].message, {
+            variant: snackBarMessage['wrongPassword'].variant,
+          });
         } else if (err.request) {
-          enqueueSnackbar('Sorry, something went wrong on the server, try again later', {
-            variant,
+          enqueueSnackbar(snackBarMessage['serverError'].message, {
+            variant: snackBarMessage['serverError'].variant,
           });
         } else {
-          enqueueSnackbar(
-            'Sorry, something went wrong, please refresh the page and try again',
-            { variant }
-          );
+          enqueueSnackbar(snackBarMessage['serverError'].message, {
+            variant: snackBarMessage['serverError'].variant,
+          });
         }
       });
   };
@@ -154,4 +155,13 @@ export default function AuthForm() {
 
 const ErrorMessage = ({ message }) => {
   return <FormHelperText sx={{ color: 'red', fontSize: 17 }}>{message}</FormHelperText>;
+};
+
+const snackBarMessage = {
+  LoginSuccess: { message: 'Login successfully', variant: 'success' },
+  wrongPassword: { message: 'Wrong username or password', variant: 'error' },
+  serverError: {
+    message: 'Sorry, something went wrong, please refresh the page and try again',
+    variant: 'error',
+  },
 };

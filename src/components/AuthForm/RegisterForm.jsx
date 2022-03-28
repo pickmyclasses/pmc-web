@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,12 +12,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import swal from 'sweetalert';
 import { register } from '../../api';
 import { useLocation } from 'react-router-dom';
 import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
-import Slide from '@mui/material/Slide';
 import { useSnackbar } from 'notistack';
 
 const theme = createTheme();
@@ -42,33 +40,38 @@ export default function RegisterForm() {
       notifyMsg = 'Password Mismatch! Please make sure your password is correct.';
       variant = 'error';
       enqueueSnackbar(notifyMsg, { variant });
+
+      enqueueSnackbar(snackBarMessage[''].message, {
+        variant: snackBarMessage['serverError'].variant,
+      });
     } else if (!email || !password || !firstName || !lastName || !rePassword || !college) {
       notifyMsg = 'Info Not Complete. Please make sure you have filled out all the fields.';
       variant = 'error';
-      enqueueSnackbar(notifyMsg, { variant });
+      enqueueSnackbar(snackBarMessage.lackInfo.message, {
+        variant: snackBarMessage.lackInfo.variant,
+      });
     } else {
       register({ email, firstName, lastName, college, password, rePassword })
         .then(() => {
-          notifyMsg = 'Welcome To PMC!';
-          variant = 'success';
-          enqueueSnackbar(notifyMsg, { variant });
-          notifyMsg = 'Registration succeeded, please login!';
-          enqueueSnackbar(notifyMsg, { variant });
+          enqueueSnackbar(snackBarMessage.registerSuccess.message, {
+            variant: snackBarMessage.registerSuccess.variant,
+          });
+
           setTimeout(() => navigateIfAllowed('/auth', null, { state: location.state }), 1000);
         })
         .catch((err) => {
           if (err.response) {
-            notifyMsg = 'Oop... Something went wrong';
-            variant = 'error';
-            enqueueSnackbar(notifyMsg, { variant });
+            enqueueSnackbar(snackBarMessage.internalError.message + ' ' + err.response, {
+              variant: snackBarMessage.internalError.variant,
+            });
           } else if (err.request) {
-            notifyMsg = 'Oop... Something went wrong. Internal error, please try again later';
-            variant = 'error';
-            enqueueSnackbar(notifyMsg, { variant });
+            enqueueSnackbar(snackBarMessage.internalError.message + ' ' + err.request, {
+              variant: snackBarMessage.internalError.variant,
+            });
           } else {
-            notifyMsg = 'Oop... Something went wrong. Internal error, please try again later';
-            variant = 'error';
-            enqueueSnackbar(notifyMsg, { variant });
+            enqueueSnackbar(snackBarMessage.internalError.message, {
+              variant: snackBarMessage.internalError.variant,
+            });
           }
         });
     }
@@ -188,3 +191,18 @@ export default function RegisterForm() {
     </ThemeProvider>
   );
 }
+
+const snackBarMessage = {
+  lackInfo: {
+    message: 'Info Not Complete. Please make sure you have filled out all the fields',
+    variant: 'error',
+  },
+  registerSuccess: {
+    message: 'Welcome to PMC! Registration succeeded, please login!',
+    variant: 'success',
+  },
+  internalError: {
+    message: 'Oops ... Something went wrong. Please try again later',
+    variant: 'error',
+  },
+};
