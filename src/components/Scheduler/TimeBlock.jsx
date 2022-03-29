@@ -43,13 +43,14 @@ export default function TimeBlock({
     width: '100%',
     minWidth: 0,
     height: '100%',
-    boxShadow: 1,
+    boxShadow: (showDetails ? 2 : 1) * (darken ? 3 : 1),
     borderWidth: '2px !important',
-    borderRadius: '0px',
+    borderRadius: showDetails ? '4px' : '0px',
     wordSpacing: !showDetails && '100vw',
     alignItems: 'flex-start',
     overflow: 'hidden',
     '&, &:hover, &:focus': { ...palette },
+    '*': { textTransform: 'none', pointerEvents: 'none' },
   };
 
   const titleFontSize = getDynamicFontSize(showDetails ? 16 : 14);
@@ -58,24 +59,18 @@ export default function TimeBlock({
   return (
     <Button text={text} variant={variant} color='primary' sx={buttonStyles} {...props}>
       <Stack>
-        <FixedHeightTypography variant='subtitle2' sx={{ fontSize: titleFontSize }}>
+        <Typography variant='subtitle2' lineHeight={1.17} fontSize={titleFontSize}>
           {text}
-        </FixedHeightTypography>
+        </Typography>
         {showDetails && (
-          <FixedHeightTypography variant='body2' sx={{ fontSize: descriptionFontSize }}>
+          <Typography variant='body2' lineHeight={1.5} fontSize={descriptionFontSize}>
             {details}
-          </FixedHeightTypography>
+          </Typography>
         )}
       </Stack>
     </Button>
   );
 }
-
-const FixedHeightTypography = styled(Typography)({
-  pointerEvents: 'none',
-  textTransform: 'none',
-  lineHeight: 1.25,
-});
 
 /**
  * Returns the CSS style for font size that automatically scales with the screen size, with

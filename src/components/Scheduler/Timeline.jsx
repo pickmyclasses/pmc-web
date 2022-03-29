@@ -306,7 +306,7 @@ export default function Timeline({
         zIndex={1001}
         paddingTop='12px'
         marginTop='-12px'
-        marginBottom={showShadowUnderColumnTitles ? '-4px' : '4px'}
+        marginBottom={showShadowUnderColumnTitles ? '-8px' : '4px'}
         sx={{
           background: 'white',
           ...(showShadowUnderColumnTitles && {
@@ -337,21 +337,14 @@ export default function Timeline({
       >
         {renderGridLines()}
         {eventsShown.map((event, i) => renderEvent(i, event))}
-        <Box
-          ref={dataCardDefaultContainerRef}
-          sx={{
-            position: 'absolute',
-            right: 'calc(100% + 8px)',
-            top: selectedEventData && getTopByTime(selectedEventData.earliestStart) * 100 + '%',
-            zIndex: 9999,
-          }}
-        />
+        <Box ref={dataCardDefaultContainerRef} />
         {selectedEventData && (
           <Portal container={timeDataCardContainer || dataCardDefaultContainerRef?.current}>
-            <Stack
-              direction='row'
-              justifyContent={dataCardSide === 'right' && 'flex-end'}
-              padding={timeDataCardContainer && '32px 64px'}
+            <Box
+              position='absolute'
+              right='calc(100% + 8px)'
+              top={getTopByTime(selectedEventData.earliestStart) * 100 + '%'}
+              zIndex={9999}
             >
               <TimeDataCard
                 ref={dataCardRef}
@@ -359,7 +352,7 @@ export default function Timeline({
                 hasConflicts={selectedEventHasConflicts}
                 onLinkClick={() => setSelectedEventData(null)}
               />
-            </Stack>
+            </Box>
           </Portal>
         )}
       </Box>

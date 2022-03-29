@@ -43,28 +43,28 @@ export default function ProfilePage() {
   );
 
   return (
-    <Container maxWidth='xl' sx={{ paddingBottom: '32px', height: '100%' }}>
-      <Grid container spacing='32px' height='100%'>
-        {/* The left bar (that contains the avatar and tab list): */}
-        <LeftBarGridItem item xs='auto' height='100%' sx={{ boxShadow: 3 }}>
-          <Stack width='240px' spacing='24px' paddingRight='32px'>
-            <ProfileAvatarDisplay />
-            <Divider />
-          </Stack>
-          <Tabs orientation='vertical' variant='fullWidth' value={activeTabName}>
-            {Object.entries(tabs).map(([name, { title, icon }]) =>
-              renderTab(name, title, icon)
-            )}
-          </Tabs>
-        </LeftBarGridItem>
-        {/* The active tab's content: */}
-        <Grid item xs sx={{ marginLeft: '272px' }}>
-          <Scrollbars autoHide style={{ height: 'calc(100vh - 72px)' }}>
-            <Box padding='32px'>{createElement(tabs[activeTabName].content)}</Box>
-          </Scrollbars>
-        </Grid>
-      </Grid>
-    </Container>
+    <>
+      <LeftBar sx={{ boxShadow: 3 }}>
+        <Stack width='240px' spacing='24px' paddingRight='32px'>
+          <ProfileAvatarDisplay />
+          <Divider />
+        </Stack>
+        <Tabs orientation='vertical' variant='fullWidth' value={activeTabName}>
+          {Object.entries(tabs).map(([name, { title, icon }]) => renderTab(name, title, icon))}
+        </Tabs>
+      </LeftBar>
+      <Scrollbars autoHide>
+        <Container maxWidth='xl' sx={{ height: '100%' }}>
+          {/* The active tab's content: */}
+          <Container maxWidth='xl' sx={{ paddingBottom: '32px', height: '100%' }}>
+            <Box sx={{ marginLeft: '256px' }}>
+              <Box padding='32px'>{createElement(tabs[activeTabName].content)}</Box>
+            </Box>
+          </Container>
+          {/* The left bar (that contains the avatar and tab list): */}
+        </Container>
+      </Scrollbars>
+    </>
   );
 }
 
@@ -83,10 +83,14 @@ const tabs = {
 
 const leftBarLeftShadowWidth = 128;
 
-const LeftBarGridItem = styled(Grid)({
+const LeftBar = styled(Box)({
   backgroundColor: 'white',
   position: 'absolute',
-  marginTop: '32px',
+  left: 'max(50vw - 1536px / 2, 0px)',
+  marginLeft: '32px',
+  top: '72px',
+  height: 'calc(100% - 72px)',
+  paddingTop: '32px',
   zIndex: 9997,
   // The left shadow of the left bar is a gradient from white, and this is achieved with an
   // inner shadow on the :before element. (Credit: https://stackoverflow.com/a/17323375)
