@@ -53,8 +53,8 @@ const useStyle = makeStyles({
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 'auto',
-    marginLeft: '10em',
-    marginRight: '10em',
+    marginLeft: '9em',
+    marginRight: '9em',
   },
   link: {
     color: 'white',
