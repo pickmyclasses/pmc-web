@@ -128,9 +128,8 @@ const generateSessions = (classes, resolver) => {
         data: {
           eventID: classData.id,
           groupID: selectionID || course.id,
-          earliestStart: Math.min(
-            ...relatedClasses.map((classData) => parseTime(classData.startTime))
-          ),
+          firstColumn: Math.min(...relatedClasses.map((x) => parseDayList(x.offerDate)[0])) - 1,
+          earliestStart: Math.min(...relatedClasses.map((x) => parseTime(x.startTime))),
           title: courseCode,
           subtitle: course.title,
           description: <CourseScheduleSummary plainText classes={relatedClasses} />,

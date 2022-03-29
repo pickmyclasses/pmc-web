@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Box, Card, Divider, Stack, Typography } from '@mui/material';
 import { Computer } from '@mui/icons-material';
 import ShoppingCart from '../Scheduler/ShoppingCart';
@@ -11,13 +11,6 @@ import ContainerWithLoadingIndication from 'components/Page/ContainerWithLoading
 /** The schedule tab of the user profile page. */
 export default function ProfileSchedule() {
   const { classesInShoppingCart } = useContext(SchedulerContext);
-
-  const [shoppingCartTimeDataCardContainer, setShoppingCartTimeDataCardContainer] = useState();
-
-  const shoppingCartTimeDataCardContainerRef = useCallback(
-    (current) => setShoppingCartTimeDataCardContainer(current),
-    []
-  );
 
   return (
     <>
@@ -59,18 +52,12 @@ export default function ProfileSchedule() {
                 label='Live Courses & Recurrent Events'
                 variant='overline'
               />
-              <Stack direction='row' height='1728px'>
-                <Box
-                  ref={shoppingCartTimeDataCardContainerRef}
-                  marginTop='calc(1em - 4px)'
-                  position='relative'
-                />
+              <Box height='1728px'>
                 <ShoppingCart
                   classes={classesInShoppingCart}
                   timelineColumnTitles={timelineColumnTitles}
                   defaultRangeStart={7.5 * 3600}
                   defaultRangeEnd={22 * 3600}
-                  timeDataCardContainer={shoppingCartTimeDataCardContainer}
                   noSummary
                   showShadowUnderColumnTitles
                   showHalfHourMarks
@@ -79,7 +66,7 @@ export default function ProfileSchedule() {
                   showDetailsInTimeBlocks
                   showTimeDataCardInside
                 />
-              </Stack>
+              </Box>
             </Stack>
           </Card>
         </Stack>

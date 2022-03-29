@@ -26,6 +26,7 @@ const TimeDataCard = forwardRef(
       sx={{
         position: 'relative',
         minWidth: '288px',
+        maxWidth: '360px',
         padding: '12px 16px 16px',
         marginBottom: '8px',
         borderTop: '8px solid ' + topBorderColor,

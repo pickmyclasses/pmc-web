@@ -342,7 +342,7 @@ export default function Timeline({
           <Portal container={timeDataCardContainer || dataCardDefaultContainerRef?.current}>
             <Box
               position='absolute'
-              right='calc(100% + 8px)'
+              right={`calc(${100 - selectedEventData.firstColumn * columnWidth}% + 8px)`}
               top={getTopByTime(selectedEventData.earliestStart) * 100 + '%'}
               zIndex={9999}
             >
