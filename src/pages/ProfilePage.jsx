@@ -45,6 +45,7 @@ export default function ProfilePage() {
   return (
     <>
       <LeftBar sx={{ boxShadow: 3 }}>
+        {/* The left bar (that contains the avatar and tab list): */}
         <Stack width='240px' spacing='24px' paddingRight='32px'>
           <ProfileAvatarDisplay />
           <Divider />
@@ -54,14 +55,13 @@ export default function ProfilePage() {
         </Tabs>
       </LeftBar>
       <Scrollbars autoHide>
-        <Container maxWidth='xl' sx={{ height: '100%' }}>
-          {/* The active tab's content: */}
-          <Container maxWidth='xl' sx={{ paddingBottom: '32px', height: '100%' }}>
-            <Box sx={{ marginLeft: '256px' }}>
-              <Box padding='32px'>{createElement(tabs[activeTabName].content)}</Box>
+        {/* The active tab's content: */}
+        <Container maxWidth='xl' sx={{ paddingBottom: '32px', height: '100%' }}>
+          <Box sx={{ marginLeft: '276px' }}>
+            <Box paddingY='32px' paddingLeft='32px'>
+              {createElement(tabs[activeTabName].content)}
             </Box>
-          </Container>
-          {/* The left bar (that contains the avatar and tab list): */}
+          </Box>
         </Container>
       </Scrollbars>
     </>

@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "module": "System",
-    "baseUrl": "./src",
-    "paths": {
-      "*": ["./src/*"]
-    }
+    "target": "ES6",
+    "module": "commonjs",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "src"
   }
 }
