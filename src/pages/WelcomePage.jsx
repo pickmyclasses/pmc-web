@@ -1,44 +1,55 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import { grey } from '@mui/material/colors';
-import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/Search/SearchBar';
-import poster from '../assets/poster.gif';
+import Lottie from 'react-lottie-player';
+import poster from '../assets/poster.json';
+import graduation from '../assets/education-reward.json';
 
 const useStyle = makeStyles({
   main: {
     height: '100%',
-    backgroundColor: '#182b3a',
+    background: 'linear-gradient( #182b3a, #2e5f82);',
     fontFamily:
       '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji',
     display: 'flex',
   },
-  registerForm: {
+  mainForm: {
     width: '70%',
-    marginLeft: '17%',
-    marginTop: '8%',
+    marginTop: '6%',
+    paddingLeft: '6%',
   },
   headings: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: '2.6em',
   },
-  inlineText: {
-    color: '#8b959c',
-    paddingBottom: '2rem',
-    paddingTop: '1.5rem',
-    fontSize: '1.25rem',
-    fontWeight: '300',
-    width: '30%',
+  headingTwo: {
+    color: 'white',
+    marginLeft: '18%',
+    marginTop: '3%',
+    fontSize: '2em',
+    fontWeight: 'bold',
+  },
+  searchBarText: {
+    color: 'white',
+    paddingLeft: '26%',
+    paddingTop: '3%',
+    fontSize: '1.4em',
   },
   linkBnt: {
     backgroundColor: '#dd1843',
     border: '0',
     borderRadius: '5em',
-    lineHeight: '1',
+    lineHeight: '1.2',
+    paddingLeft: '18%',
+    paddingRight: '20%',
+    marginLeft: '15%',
+    marginTop: '5%',
   },
   link: {
     color: 'white',
@@ -49,16 +60,12 @@ const useStyle = makeStyles({
     textDecoration: 'none',
   },
   loginLink: {
-    fontSize: '1em',
+    fontSize: '1.2em',
     color: '#cccfcc',
     paddingLeft: '0.8rem',
     display: 'block',
     marginTop: '1em',
-  },
-  searchFormHeading: {
-    fontSize: '1.5em',
-    color: 'white',
-    marginTop: '7%',
+    marginLeft: '30%',
   },
   searchFormTopText: {
     marginTop: '2%',
@@ -66,7 +73,14 @@ const useStyle = makeStyles({
     color: '#8b959c',
   },
   searchBarContainer: {
-    marginTop: '3%',
+    marginTop: '2%',
+    paddingLeft: '15%',
+  },
+  registerText: {
+    marginTop: '9%',
+    marginLeft: '12%',
+    fontSize: '1.4em',
+    color: 'white',
   },
 });
 
@@ -74,15 +88,36 @@ const WelcomePage = () => {
   const navigate = useNavigate();
 
   const handleSearch = (searchText) => searchText.trim() && navigate(`/search/${searchText}`);
-
   const classes = useStyle();
+
   return (
     <div className={classes.main}>
-      <Container className={classes.registerForm}>
-        <div className={classes.headings}>
-          Data-driven course catalogs Easier searching <br />
-          Easier college
-          <div className={classes.inlineText}>Start picking your classes with PMC</div>
+      <Box className={classes.mainForm}>
+        <div className={classes.headings}>Data-driven course catalogs, Easier searching</div>
+        <div className={classes.headingTwo}>
+          Make your college life a journey!
+          <Lottie
+            loop
+            animationData={graduation}
+            play
+            style={{ width: '14%', paddingLeft: '22%' }}
+          />
+        </div>
+        <div className={classes.searchBarContainer}>
+          <SearchBar
+            textColor={grey[900]}
+            backgroundColor={grey[50]}
+            onSearch={handleSearch}
+            maxWidth={'70%'}
+            focusHoverColor={grey[300]}
+            placeholderText={''}
+            borderRadiusRatio={'43px'}
+            fontSize={'1.7em'}
+          />
+        </div>
+        <div className={classes.searchBarText}>Searching for your classes now!</div>
+        <div className={classes.registerText}>
+          Or, register for your customized scheduler and recommendations!
         </div>
         <Button variant='contained' disableElevation className={classes.linkBnt}>
           <Link to='/register' className={classes.link}>
@@ -92,35 +127,10 @@ const WelcomePage = () => {
         <Link to='/auth' className={classes.loginLink}>
           Already a user? log in now!
         </Link>
-        <div className={classes.searchFormHeading}>
-          Or, check out the stats and reviews <br />
-          of the courses you are looking for.
-        </div>
-
-        <div className={classes.searchBarContainer}>
-          <SearchBar
-            textColor={grey[900]}
-            backgroundColor={grey[50]}
-            onSearch={handleSearch}
-            maxWidth={'50%'}
-            focusHoverColor={grey[300]}
-            placeholderText={'Enter a course or major'}
-            borderRadiusRatio={'43px'}
-          />
-        </div>
-      </Container>
-      <Container>
-        <img
-          src={poster}
-          alt={'loading...'}
-          style={{
-            height: '100%',
-            width: '100%',
-            paddingTop: '10%',
-            marginRight: '10%',
-          }}
-        />
-      </Container>
+      </Box>
+      <Box sx={{ paddingRight: '4%' }}>
+        <Lottie loop animationData={poster} play style={{ width: '100%', height: '100%' }} />
+      </Box>
     </div>
   );
 };

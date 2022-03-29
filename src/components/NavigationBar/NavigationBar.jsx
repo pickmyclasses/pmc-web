@@ -49,6 +49,7 @@ export default function NavigationBar() {
                   focusHoverColor={alpha(theme.palette.common.black, 0.333)}
                   placeholderText={'Search for a course'}
                   borderRadiusRatio={'4px'}
+                  fontSize={'1.2em'}
                 />
               </Grid>
               <Grid item xs='auto'>
