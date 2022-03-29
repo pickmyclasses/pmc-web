@@ -59,7 +59,12 @@ export default function ProfileSchedule() {
                 label='Live Courses & Recurrent Events'
                 variant='overline'
               />
-              <Box height='1728px'>
+              <Stack direction='row' height='1728px'>
+                <Box
+                  ref={shoppingCartTimeDataCardContainerRef}
+                  marginTop='calc(1em - 4px)'
+                  position='relative'
+                />
                 <ShoppingCart
                   classes={classesInShoppingCart}
                   timelineColumnTitles={timelineColumnTitles}
@@ -74,17 +79,11 @@ export default function ProfileSchedule() {
                   showDetailsInTimeBlocks
                   showTimeDataCardInside
                 />
-              </Box>
+              </Stack>
             </Stack>
           </Card>
         </Stack>
       </ContainerWithLoadingIndication>
-      <Box
-        ref={shoppingCartTimeDataCardContainerRef}
-        position='sticky'
-        bottom={0}
-        zIndex={999}
-      />
     </>
   );
 }
