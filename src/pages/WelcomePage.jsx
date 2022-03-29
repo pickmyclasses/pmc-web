@@ -48,13 +48,12 @@ const useStyle = makeStyles({
     border: '0',
     borderRadius: '5em',
     lineHeight: '1.2',
-    marginTop: '5%',
+    marginTop: '2em',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: 'auto',
-    marginLeft: '10em',
-    marginRight: '10em',
+    paddinX: '2em',
+    margin: 'auto',
   },
   link: {
     color: 'white',
@@ -122,13 +121,13 @@ const WelcomePage = () => {
           <div className={classes.registerText}>
             Or, register for your customized scheduler and recommendations!
           </div>
-          <div className={classes.linkBnt}>
-            <Button>
+          <Box display='flex'>
+            <Button className={classes.linkBnt}>
               <Link to='/register' className={classes.link}>
                 register now!
               </Link>
             </Button>
-          </div>
+          </Box>
           <Link to='/auth' className={classes.loginLink}>
             Already a user? log in now!
           </Link>
