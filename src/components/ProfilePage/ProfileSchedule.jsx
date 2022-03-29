@@ -14,7 +14,7 @@ export default function ProfileSchedule() {
   /** The list of `{classData, course}` of online classes the user has. */
   const [asyncClasses, setAsyncClasses] = useState([]);
 
-  // Extract classes that are online from the user's schedule. A class in online (asynchronous)
+  // Extract classes that are online from the user's schedule. A class is online (asynchronous)
   // if it does not have an `offerDate` (weekdays where the class meets).
   useEffect(
     () => setAsyncClasses(classesInShoppingCart.filter((x) => !x.classData.offerDate)),
