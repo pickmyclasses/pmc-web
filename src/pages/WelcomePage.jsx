@@ -67,7 +67,6 @@ const useStyle = makeStyles({
   loginLink: {
     fontSize: '1.2em',
     color: '#cccfcc',
-    paddingLeft: '0.8rem',
     display: 'block',
     marginTop: '1em',
     textAlign: 'center',
