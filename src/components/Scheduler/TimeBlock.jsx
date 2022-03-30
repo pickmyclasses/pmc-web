@@ -52,7 +52,7 @@ export default function TimeBlock({
     textTransform: 'none',
     padding: '6px 0',
     '&, &:hover, &:focus': { ...palette },
-    '*': { pointerEvents: 'none', wordBreak: 'break-word' },
+    '*': { pointerEvents: 'none' },
   };
 
   const titleFontSize = getDynamicFontSize(showDetails ? 16 : 14);

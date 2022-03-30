@@ -10,12 +10,13 @@ import {
   Tooltip,
   Typography,
   colors,
+  Box,
 } from '@mui/material';
 import UnloadConfirmation from 'components/CoursePage/CourseRegistration/UnloadConfirmation';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { CirclePicker } from 'react-color';
-import { parseTime, secondsToTimeString, useDebounce, useMount } from 'utils';
+import { parseTime, pluralize, secondsToTimeString, useDebounce } from 'utils';
 
 export default function EditableTimeDataCardContent({
   data,
@@ -31,19 +32,32 @@ export default function EditableTimeDataCardContent({
 
   const [startInput, setStartInput] = useState(secondsToTimeString(start));
   const [endInput, setEndInput] = useState(secondsToTimeString(end));
+  const [parsedStartInput, setParsedStartInput] = useState(NaN);
+  const [parsedEndInput, setParsedEndInput] = useState(NaN);
   const [pendingChanges, setPendingChanges] = useState(data);
   const debouncedPendingChanges = useDebounce(pendingChanges, 250);
   const [isDirty, setIsDirty] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
+  const [isValid, setIsValid] = useState(false);
 
   useEffect(() => onEditingEventChange(pendingChanges), [debouncedPendingChanges]);
 
-  const handleDataValueChange = (key) => (value) => {
-    setPendingChanges(Object.assign({ ...data }, Object.fromEntries([[key, value]])));
+  useEffect(() => setParsedStartInput(parseTime(startInput)), [startInput]);
+  useEffect(() => setParsedEndInput(parseTime(endInput)), [endInput]);
+  useEffect(() => {
+    const isValid =
+      !isNaN(parsedStartInput) && !isNaN(parsedEndInput) && parsedStartInput < parsedEndInput;
+    setIsValid(isValid);
+    if (isValid) {
+      handleDataValueChange(['start', parsedStartInput], ['end', parsedEndInput]);
+      setTimeout(scrollCardIntoView, 750);
+    }
+  }, [parsedStartInput, parsedEndInput]);
+
+  const handleDataValueChange = (...args) => {
+    setPendingChanges(Object.assign({ ...data }, Object.fromEntries(args)));
     setIsDirty(true);
   };
-
-  const isValid = !isNaN(start) && !isNaN(end) && start < end;
 
   return (
     <>
@@ -59,7 +73,7 @@ export default function EditableTimeDataCardContent({
         <TextField
           placeholder='Title'
           value={pendingChanges.title}
-          onChange={(e) => handleDataValueChange('title')(e.target.value)}
+          onChange={(e) => handleDataValueChange(['title', e.target.value])}
           variant='standard'
           autoFocus
           fullWidth
@@ -69,9 +83,9 @@ export default function EditableTimeDataCardContent({
         <Stack direction='row' spacing='12px'>
           <Select
             value={pendingChanges.type}
-            onChange={(e) => handleDataValueChange('type')(e.target.value)}
+            onChange={(e) => handleDataValueChange(['type', e.target.value])}
             variant='standard'
-            sx={{ width: '9em' }}
+            sx={{ width: '9em', textAlign: 'center' }}
           >
             <MenuItem value='Event'>Event</MenuItem>
             <MenuItem value='Task'>Task</MenuItem>
@@ -81,13 +95,13 @@ export default function EditableTimeDataCardContent({
           <CirclePicker
             colors={colorOptions}
             color={pendingChanges.color}
-            onChange={(newColor) => handleDataValueChange('color')(newColor.hex)}
+            onChange={(newColor) => handleDataValueChange(['color', newColor.hex])}
           />
         </Stack>
         <TextField
           label='Description'
           value={pendingChanges.subtitle}
-          onChange={(e) => handleDataValueChange('subtitle')(e.target.value)}
+          onChange={(e) => handleDataValueChange(['subtitle', e.target.value])}
           variant='standard'
           fullWidth
           multiline
@@ -98,7 +112,7 @@ export default function EditableTimeDataCardContent({
         <ToggleButtonGroup
           value={pendingChanges.days}
           onChange={(_, newDays) =>
-            newDays.length > 0 && handleDataValueChange('days')(newDays)
+            newDays.length > 0 && handleDataValueChange(['days', newDays.sort()])
           }
           size='small'
           sx={{ width: '100%', '> *': { width: '20%' } }}
@@ -113,11 +127,7 @@ export default function EditableTimeDataCardContent({
           <TextField
             placeholder='Start'
             value={startInput}
-            onChange={(e) => {
-              setStartInput(e.target.value);
-              const parsed = parseTime(e.target.value);
-              if (!isNaN(parsed) && parsed < end) handleDataValueChange('start')(parsed);
-            }}
+            onChange={(e) => setStartInput(e.target.value)}
             variant='standard'
             sx={{ width: '4.5em' }}
             inputProps={{ style: { textAlign: 'center' } }}
@@ -126,18 +136,14 @@ export default function EditableTimeDataCardContent({
           <TextField
             placeholder='End'
             value={endInput}
-            onChange={(e) => {
-              setEndInput(e.target.value);
-              const parsed = parseTime(e.target.value);
-              if (!isNaN(parsed) && parsed > start) handleDataValueChange('end')(parsed);
-            }}
+            onChange={(e) => setEndInput(e.target.value)}
             variant='standard'
             sx={{ width: '4.5em' }}
             inputProps={{ style: { textAlign: 'center' } }}
           />
           {isValid && (
             <Typography variant='caption' color='text.secondary'>
-              ({Math.floor((end - start) / 3600)}h {Math.floor(((end - start) % 3600) / 60)}m)
+              ({formatDuration({ startTime: start, endTime: end })})
             </Typography>
           )}
         </Stack>
@@ -158,16 +164,18 @@ export default function EditableTimeDataCardContent({
           Delete
         </Button>
         <Stack direction='row' spacing='12px'>
-          <Tooltip title={hasConflicts && 'Conflicts detected'}>
-            <Button
-              variant='contained'
-              color={hasConflicts ? 'warning' : 'primary'}
-              disabled={!isValid}
-              size='small'
-              onClick={() => onEditingEventSave(() => onIsEditableChange(false))}
-            >
-              Save
-            </Button>
+          <Tooltip title={isValid && hasConflicts ? 'Save with conflicts' : ''}>
+            <Box component='span'>
+              <Button
+                variant='contained'
+                color={hasConflicts ? 'warning' : 'primary'}
+                disabled={!isValid}
+                size='small'
+                onClick={() => onEditingEventSave(() => onIsEditableChange(false))}
+              >
+                Save
+              </Button>
+            </Box>
           </Tooltip>
           <Button
             color='inherit'
@@ -185,11 +193,19 @@ export default function EditableTimeDataCardContent({
   );
 }
 
-const colorOptions = ['#e91e63', '#673ab7', '#3f51b5', '#009688'];
+const colorOptions = ['#2d4e86', '#662d86', '#86512d', '#2d8665'];
 
 const MotionCardActions = motion(CardActions);
 
 const cardActionsVariants = {
   initial: { backgroundColor: '#fff' },
   flashing: { backgroundColor: colors.red[500] },
+};
+
+const formatDuration = ({ startTime, endTime }) => {
+  const hours = Math.floor((endTime - startTime) / 3600);
+  const minutes = Math.floor(((endTime - startTime) % 3600) / 60);
+  if (hours > 0 && minutes > 0) return `${hours}h ${minutes}m`;
+  if (hours > 0) return pluralize(hours, 'hour');
+  return pluralize(minutes, 'minute');
 };

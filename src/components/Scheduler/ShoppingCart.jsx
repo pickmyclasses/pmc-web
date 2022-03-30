@@ -228,7 +228,7 @@ const generateSessions = (
           type: event.type,
           subtitle: event.description,
           color: 'gray',
-          editURL: !areCustomEventsEditable && '/profile/schedule',
+          editURL: !areCustomEventsEditable && '/profile/schedule?selected=' + event.id,
           isEditable: areCustomEventsEditable,
           days: event.days,
           start: event.startTime,
