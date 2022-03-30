@@ -2,10 +2,12 @@ import { People, Place } from '@mui/icons-material';
 import {
   Checkbox,
   Grid,
+  Link,
   ListItemButton,
   ListItemIcon,
   ListItemText,
   Stack,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { CenterAligningFlexBox } from 'components/CourseCardGrid/CourseCard/CourseCard';
@@ -24,7 +26,7 @@ export default function OfferingListingItem({
   onSelect,
   setMouseEnteredClasses,
 }) {
-  const { location, offerDate, startTime, seatAvailable } = classData;
+  const { location, locationMapURL, offerDate, startTime, seatAvailable } = classData;
 
   return (
     <ListItemButton
@@ -63,7 +65,23 @@ export default function OfferingListingItem({
                 <LabelWithIcon
                   color='action'
                   iconType={Place}
-                  label={location || 'Online'}
+                  label={
+                    locationMapURL ? (
+                      <Tooltip title='View location on map'>
+                        <Link
+                          href={locationMapURL}
+                          target='_blank'
+                          color='text.primary'
+                          underline='hover'
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {location}
+                        </Link>
+                      </Tooltip>
+                    ) : (
+                      location || 'Online'
+                    )
+                  }
                   size='small'
                   noWrap
                 />

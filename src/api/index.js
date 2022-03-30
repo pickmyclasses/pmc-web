@@ -15,6 +15,7 @@ export const fetchCourseByID = (courseID) =>
     axios.get(`/course/${courseID}`).then((data) => {
       const course = data.data.data;
       injectFakeImageURLToCourse(course);
+      injectLocationMapURLToClasses(course.classes);
       // Hide courses that don't have a start time (corrupted data from backend?)
       course.classes = course.classes.filter((x) => !x.offerDate || x.startTime);
       onFetched(course);
@@ -91,11 +92,32 @@ export const fetchClassesInShoppingCart = (userID) =>
     for (let { courseData } of data.data.data.scheduledClassList) {
       injectFakeImageURLToCourse(courseData);
     }
+    injectLocationMapURLToClasses(data.data.data.scheduledClassList.map((x) => x.classData));
     return data.data.data.scheduledClassList.map(({ classData, courseData: course }) => ({
       classData,
       course,
     }));
   });
+
+// TODO Q: Get rid of all this once the backend has the support for it.
+const injectLocationMapURLToClasses = (classes) => {
+  for (let classData of classes) {
+    const buildingNumber = getBuildingNumberByLocation(classData.location);
+    if (buildingNumber) {
+      classData.locationMapURL = 'https://map.utah.edu/?buildingnumber=' + buildingNumber;
+    }
+  }
+};
+
+const getBuildingNumberByLocation = (location) => {
+  // prettier-ignore
+  const ids = [[1,'PARK'],[2,'VOICE'],[3,'DGH'],[4,'KH'],[5,'CSC'],[6,'ST'],[7,'LS'],[8,'AEB'],[9,'JWB'],[10,'PHYS'],[11,'WBB'],[12,'FASB'],[13,'LCB'],[14,'JTB'],[17,'PAB'],[19,'INSCC'],[25,'BEH S'],[26,'SW'],[27,'S BEH'],[28,'MCD'],[29,'FLD H'],[30,'PLAZA'],[32,'STAD'],[35,'UMFA'],[36,'FMAB'],[37,'ARCH'],[38,'ART'],[39,'SCULPT'],[40,'SSB'],[41,'NWPG'],[43,'NS'],[44,'BLDG 44'],[45,'CTIHB'],[46,'LSND'],[48,'GC'],[49,'LNCO'],[51,'SILL'],[52,'ALUMNI'],[53,'UNION'],[56,'CME'],[57,'HEDCO'],[58,'MPL'],[59,'MSRL'],[60,'ESB'],[61,'MCE'],[62,'WEB'],[64,'MEB'],[66,'PMT'],[67,'U CAMPSTOR'],[69,'CPG'],[70,'LAW'],[71,'SAEC'],[72,'BLDG 72'],[73,'PTAB'],[74,'BU C'],[77,'CRCC'],[79,'SFEBB'],[80,'GARFF'],[82,'ASB'],[83,'JFB'],[84,'BIOL'],[85,'HEB'],[86,'M LIB'],[87,'TBBC'],[90,'JHC'],[91,'HPR E'],[92,'HPR N'],[93,'HPRNAT'],[94,'HPR W'],[95,'HPR SW'],[96,'HPR SE'],[97,'DGC'],[98,'KBAC'],[99,'HBF'],[108,'GLF SH'],[109,'DFSS'],[110,'GSESLC'],[112,'MHC'],[114,'KV'],[119,'BRIDGE'],[120,'SKI']];
+
+  return (
+    ids.find((x) => x[1] === location?.split(' ')[0])?.[0] ||
+    ids.find((x) => x[1] === location?.split(' ').slice(0, 2).join(' '))?.[0]
+  );
+};
 
 let fakeCustomEvents = [
   {
