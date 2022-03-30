@@ -114,7 +114,7 @@ export const fetchCustomEvents = () => new Promise((onFetched) => onFetched(fake
 
 export const removeCustomEventByID = (id) =>
   new Promise((onFetched) => {
-    fakeCustomEvents = fakeCustomEvents.filter((x) => +x.id !== id);
+    fakeCustomEvents = fakeCustomEvents.filter((x) => +x.id !== +id);
     onFetched();
   });
 

@@ -75,16 +75,18 @@ export default function ShoppingCart({
           columnTitles={timelineColumnTitles}
           onEditingEventChange={(event) => setEditingCustomEvent(event)}
           onEditingEventCancel={() => setEditingCustomEvent(null)}
-          onEditingEventDelete={(onComplete) =>
-            removeCustomEventByID(editingCustomEvent.eventID).then(() =>
-              refreshSchedulerData(onComplete)
-            )
-          }
-          onEditingEventSave={(onComplete) =>
-            postCustomEvent(sessionToCustomEvent(editingCustomEvent)).then(() =>
-              refreshSchedulerData(onComplete)
-            )
-          }
+          onEditingEventDelete={(onComplete) => {
+            removeCustomEventByID(editingCustomEvent.eventID).then(() => {
+              setEditingCustomEvent(null);
+              refreshSchedulerData(onComplete);
+            });
+          }}
+          onEditingEventSave={(onComplete) => {
+            postCustomEvent(sessionToCustomEvent(editingCustomEvent)).then(() => {
+              setEditingCustomEvent(null);
+              refreshSchedulerData(onComplete);
+            });
+          }}
           {...timeLineProps}
         />
       </Box>

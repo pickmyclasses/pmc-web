@@ -117,9 +117,11 @@ export default function Timeline({
     );
     setEventsWithConflicts(newEventsWithConflicts);
     setEventsShiftedRight(getShiftedRight(eventsShown));
-    setSelectedEventData(
-      eventsShown.find((x) => x.isActive && x.data.groupID === selectedEventGroupID)?.data
-    );
+    const selectedEventData =
+      selectedEventGroupID &&
+      eventsShown.find((x) => x.isActive && x.data.groupID === selectedEventGroupID)?.data;
+    setSelectedEventData(selectedEventData || null);
+    if (!selectedEventData) setSelectedEventGroupID(NaN);
     setSelectedEventHasConflicts(
       eventsShown.some(
         (x, i) => x.data.groupID === selectedEventGroupID && newEventsWithConflicts[i]
