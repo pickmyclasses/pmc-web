@@ -158,7 +158,7 @@ export default function EditableTimeDataCardContent({
           Delete
         </Button>
         <Stack direction='row' spacing='12px'>
-          <Tooltip title='Conflicts detected' hidden={!hasConflicts}>
+          <Tooltip title={hasConflicts && 'Conflicts detected'}>
             <Button
               variant='contained'
               color={hasConflicts ? 'warning' : 'primary'}
