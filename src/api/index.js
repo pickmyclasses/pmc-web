@@ -89,14 +89,11 @@ export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseI
  */
 export const fetchClassesInShoppingCart = (userID) =>
   axios.get(`schedule?userID=${userID}`).then((data) => {
-    for (let { courseData } of data.data.data.scheduledClassList) {
-      injectFakeImageURLToCourse(courseData);
+    for (let { course } of data.data.data.scheduledClassList) {
+      injectFakeImageURLToCourse(course);
     }
     injectLocationMapURLToClasses(data.data.data.scheduledClassList.map((x) => x.classData));
-    return data.data.data.scheduledClassList.map(({ classData, courseData: course }) => ({
-      classData,
-      course,
-    }));
+    return data.data.data.scheduledClassList;
   });
 
 // TODO Q: Get rid of all this once the backend has the support for it.
