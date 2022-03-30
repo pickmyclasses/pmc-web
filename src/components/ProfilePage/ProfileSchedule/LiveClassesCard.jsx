@@ -12,7 +12,7 @@ import React from 'react';
  * @param {Array<{classData, course}>} props.classesInShoppingCart The list of classes the user
  *     has in their shopping cart, along with their corresponding courses.
  */
-export default function LiveClassesCard({ classesInShoppingCart }) {
+export default function LiveClassesCard({ classesInShoppingCart, customEvents }) {
   return (
     // The following `overflow: unset` style enables the sticky feature of the column titles
     // above the timeline. (The style `position: sticky` does not allow any non-scrollable
@@ -28,6 +28,7 @@ export default function LiveClassesCard({ classesInShoppingCart }) {
         <Box height='1728px'>
           <ShoppingCart
             classes={classesInShoppingCart}
+            customEvents={customEvents}
             timelineColumnTitles={timelineColumnTitles}
             // Default time range: 7:30am - 10pm
             defaultRangeStart={7.5 * 3600}
@@ -39,6 +40,7 @@ export default function LiveClassesCard({ classesInShoppingCart }) {
             largerTimeOnMarks
             showDetailsInTimeBlocks
             showTimeDataCardInside
+            allowEditingCustomEvents
           />
         </Box>
       </Stack>

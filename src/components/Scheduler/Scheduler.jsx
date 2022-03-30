@@ -14,7 +14,7 @@ import { PreventableNavigationContext } from 'components/PreventableNavigation/C
  * @param {{classesToHighlight: ?Array<{classData, course}>}} props
  */
 export default function Scheduler({ classesToHighlight = null }) {
-  const { classesInShoppingCart, requirements } = useContext(SchedulerContext);
+  const { classesInShoppingCart, customEvents, requirements } = useContext(SchedulerContext);
   const { navigateIfAllowed } = useContext(PreventableNavigationContext);
 
   const [classes, setClasses] = useState([]);
@@ -31,7 +31,7 @@ export default function Scheduler({ classesToHighlight = null }) {
   const renderSchedulerContent = () => (
     <>
       <Box flex={1}>
-        <ShoppingCart classes={classes} />
+        <ShoppingCart classes={classes} customEvents={customEvents} />
       </Box>
       <Divider sx={{ margin: '12px 0' }} />
       <RequirementList requirements={requirements || []} />

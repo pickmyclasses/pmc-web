@@ -29,13 +29,8 @@ export default function UnloadConfirmation({
       window.onbeforeunload = oldBeforeUnloadHandler;
       allowNavigation(navigationPreventionKey);
     };
-  }, [
-    preventNavigation,
-    allowNavigation,
-    when,
-    navigationPreventionKey,
-    onNavigationPrevented,
-  ]);
+    // eslint-disable-next-line
+  }, [preventNavigation, allowNavigation, when, navigationPreventionKey]);
 
   return <></>;
 }

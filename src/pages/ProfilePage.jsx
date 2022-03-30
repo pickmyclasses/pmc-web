@@ -57,7 +57,7 @@ export default function ProfilePage() {
       <Scrollbars autoHide>
         {/* The active tab's content: */}
         <Container maxWidth='xl' sx={{ paddingBottom: '32px', height: '100%' }}>
-          <Box sx={{ marginLeft: '276px' }}>
+          <Box sx={{ marginLeft: '280px' }}>
             <Box paddingY='32px' paddingLeft='32px'>
               {createElement(tabs[activeTabName].content)}
             </Box>
@@ -91,7 +91,6 @@ const LeftBar = styled(Box)({
   top: '72px',
   height: 'calc(100% - 72px)',
   paddingTop: '32px',
-  zIndex: 9997,
   // The left shadow of the left bar is a gradient from white, and this is achieved with an
   // inner shadow on the :before element. (Credit: https://stackoverflow.com/a/17323375)
   '&:before': {
@@ -99,7 +98,6 @@ const LeftBar = styled(Box)({
     position: 'absolute',
     top: 0,
     height: '100%',
-    zIndex: 9998,
     width: leftBarLeftShadowWidth * 2 + 'px',
     boxShadow: `${
       -2 * leftBarLeftShadowWidth

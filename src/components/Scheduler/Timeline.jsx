@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Box, Divider, Grid, Portal, Stack, Typography, useTheme } from '@mui/material';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Box, Divider, Grid, Portal, Typography, useTheme } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useMount } from '../../utils';
 import TimeBlock from './TimeBlock';
 import TimeDataCard from './TimeDataCard';
+import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
 
 /** Represents the timeline view in the shopping cart. */
 export default function Timeline({
@@ -12,6 +12,10 @@ export default function Timeline({
   columnTitles = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
   events = [],
   onSelect = () => {},
+  onEditingEventChange = () => {},
+  onEditingEventSave = () => {},
+  onEditingEventCancel = () => {},
+  onEditingEventDelete = () => {},
   alwaysGrayUnHighlighted = false,
   onGroupIDsWithConflictsChange = () => {},
   showShadowUnderColumnTitles = false,
@@ -22,6 +26,7 @@ export default function Timeline({
   timeDataCardContainer = undefined,
 }) {
   const theme = useTheme();
+  const { isNavigationAllowed, navigateIfAllowed } = useContext(PreventableNavigationContext);
 
   const [rangeStart, setRangeStart] = useState(defaultRangeStart);
   const [rangeEnd, setRangeEnd] = useState(defaultRangeEnd);
@@ -30,9 +35,10 @@ export default function Timeline({
   const [eventsWithConflicts, setEventsWithConflicts] = useState([]);
   const [eventsShiftedRight, setEventsShiftedRight] = useState([]);
   const [mouseEnteredEventData, setMouseEnteredEventData] = useState(null);
+  const [selectedEventGroupID, setSelectedEventGroupID] = useState(NaN);
   const [selectedEventData, setSelectedEventData] = useState(null);
   const [selectedEventHasConflicts, setSelectedEventHasConflicts] = useState(false);
-  const [dataCardSide, setDataCardSide] = useState('left');
+  const [isDataCardEditable, setIsDataCardEditable] = useState(false);
 
   const containerRef = useRef();
   const dataCardDefaultContainerRef = useRef();
@@ -41,26 +47,31 @@ export default function Timeline({
   const columnWidth = 100 / columnTitles.length;
 
   // Deselect any highlighted event on click outside.
-  useMount(() => {
+  useEffect(() => {
     const handleDocumentMouseDown = (e) => {
       if (
+        !isDataCardEditable &&
         (!containerRef?.current?.contains(e.target) || e.target.tagName !== 'BUTTON') &&
         !dataCardRef?.current?.contains(e.target)
       ) {
-        setSelectedEventData(null);
+        setSelectedEventGroupID(NaN);
       }
     };
 
     document.addEventListener('mousedown', handleDocumentMouseDown);
     return () => document.removeEventListener('mousedown', handleDocumentMouseDown);
-  });
+  }, [isDataCardEditable]);
 
   // Auto zooms the timeline to fit all the events, with ranges rounded to the nearest hour that
   // to fits and having the same size as the default range.
   useEffect(() => {
-    let earliestStart = Math.min(...events.map((x) => x.start)) || defaultRangeStart;
+    let earliestStart =
+      Math.min(...events.filter((x) => !x.data.isEditable).map((x) => x.start)) ||
+      defaultRangeStart;
     earliestStart = Math.floor(earliestStart / 3600) * 3600;
-    let latestEnd = Math.max(...events.map((x) => x.end)) || defaultRangeEnd;
+    let latestEnd =
+      Math.max(...events.filter((x) => !x.data.isEditable).map((x) => x.end)) ||
+      defaultRangeEnd;
     latestEnd = Math.ceil(latestEnd / 3600) * 3600;
     const range = defaultRangeEnd - defaultRangeStart;
     const defaultStart = Math.max(latestEnd - range, defaultRangeStart);
@@ -100,26 +111,32 @@ export default function Timeline({
   // Compute which events should be slightly shifted right in the display. Some events are
   // shifted right to avoid covering other events and making other events unrecognizable.
   useEffect(() => {
-    const unHighlighted = eventsShown.filter((x) => !x.highlight);
-    let eventsWithConflicts = eventsShown.map((x) => hasConflictsWithSome(x, unHighlighted));
-    let eventsShiftedRight = eventsShown.map((x) => +hasConflictsWithSome(x, eventsShown));
-    for (let i = eventsShiftedRight.length - 2; i >= 0; i--) {
-      if (eventsShiftedRight[i] > 0) {
-        eventsShiftedRight[i] = (eventsShiftedRight[i + 1] + 1) % 2;
-      }
-    }
-    setEventsWithConflicts(eventsWithConflicts);
-    setEventsShiftedRight(eventsShiftedRight);
-  }, [eventsShown]);
+    const targetEvents = eventsShown.filter((x) => !x.ignoreConflicts);
+    const newEventsWithConflicts = eventsShown.map((x) =>
+      hasConflictsWithSome(x, targetEvents)
+    );
+    setEventsWithConflicts(newEventsWithConflicts);
+    setEventsShiftedRight(getShiftedRight(eventsShown));
+    const selectedEventData =
+      selectedEventGroupID &&
+      eventsShown.find((x) => x.isActive && x.data.groupID === selectedEventGroupID)?.data;
+    setSelectedEventData(selectedEventData || null);
+    if (!selectedEventData) setSelectedEventGroupID(NaN);
+    setSelectedEventHasConflicts(
+      eventsShown.some(
+        (x, i) => x.data.groupID === selectedEventGroupID && newEventsWithConflicts[i]
+      )
+    );
+  }, [eventsShown, selectedEventGroupID]);
 
   // Report which (non-outlined) events have conflicts.
   useEffect(() => {
     if (onGroupIDsWithConflictsChange) {
-      const nonOutlinedEvents = eventsShown.filter((x) => x.highlight !== 'outlined');
+      const targetEvents = eventsShown.filter((x) => !x.ignoreConflicts);
       const groupIDsWithConflicts = Array.from(
         new Set(
-          nonOutlinedEvents
-            .filter((x) => hasConflictsWithSome(x, nonOutlinedEvents))
+          targetEvents
+            .filter((x) => hasConflictsWithSome(x, targetEvents))
             .map((x) => x.data.groupID)
         )
       );
@@ -139,12 +156,14 @@ export default function Timeline({
 
   const getTopByTime = (time) => (time - rangeStart) / (rangeEnd - rangeStart);
 
-  const handleTimeBlockClick = ({ data, ...event }) => {
-    setSelectedEventHasConflicts(
-      eventsShown.some((x, i) => x.data.groupID === data.groupID && eventsWithConflicts[i])
-    );
-    setSelectedEventData(selectedEventData?.groupID !== data.groupID && data);
-    setDataCardSide(event.columnIndex < columnTitles.length / 2 ? 'right' : 'left');
+  const handleTimeBlockClick = (event) => {
+    if (isDataCardEditable && !isNavigationAllowed) {
+      // Don't deselect; show flash
+      return void navigateIfAllowed('#');
+    }
+
+    const { data } = event;
+    setSelectedEventGroupID(selectedEventGroupID !== data.groupID ? data.groupID : NaN);
   };
 
   const renderEvent = (i, event) => {
@@ -159,6 +178,7 @@ export default function Timeline({
       key,
       isActive,
       highlight,
+      variant,
       shouldDispatch,
       sx,
     } = event;
@@ -169,7 +189,7 @@ export default function Timeline({
     const bottom = getTopByTime(Math.min(end, rangeEnd));
     const hasConflicts = eventsWithConflicts[i];
     const isMouseEntered = mouseEnteredEventData?.groupID === data.groupID;
-    const isSelected = selectedEventData?.groupID === data.groupID;
+    const isSelected = selectedEventGroupID === data.groupID;
 
     return (
       <AnimatePresence
@@ -218,17 +238,18 @@ export default function Timeline({
                     : 'primary'
                   : alwaysGrayUnHighlighted ||
                     hasHighlights ||
-                    (selectedEventData && !isSelected)
+                    (selectedEventGroupID && !isSelected)
                   ? 'gray'
                   : color
               }
               darken={isMouseEntered || isSelected}
               variant={
-                highlight
+                variant ||
+                (highlight
                   ? typeof highlight === 'string'
                     ? highlight
                     : 'outlined'
-                  : 'contained'
+                  : 'contained')
               }
               showDetails={showDetailsInTimeBlocks}
               sx={sx}
@@ -239,7 +260,7 @@ export default function Timeline({
               onClick={() => {
                 if (shouldDispatch) {
                   onSelect?.(data.groupID);
-                  setSelectedEventData(null);
+                  setSelectedEventGroupID(NaN);
                 } else {
                   handleTimeBlockClick(event);
                 }
@@ -343,14 +364,20 @@ export default function Timeline({
             <Box
               position='absolute'
               right={`calc(${100 - selectedEventData.firstColumn * columnWidth}% + 8px)`}
-              top={getTopByTime(selectedEventData.earliestStart) * 100 + '%'}
-              zIndex={9999}
+              top={`max(${getTopByTime(selectedEventData.earliestStart) * 100}%, 0%)`}
+              zIndex={1000}
             >
               <TimeDataCard
                 ref={dataCardRef}
                 data={selectedEventData}
                 hasConflicts={selectedEventHasConflicts}
-                onLinkClick={() => setSelectedEventData(null)}
+                onLinkClick={() => setSelectedEventGroupID(NaN)}
+                isEditable={isDataCardEditable}
+                onIsEditableChange={setIsDataCardEditable}
+                onEditingEventChange={onEditingEventChange}
+                onEditingEventDelete={onEditingEventDelete}
+                onEditingEventSave={onEditingEventSave}
+                onEditingEventCancel={onEditingEventCancel}
               />
             </Box>
           </Portal>
@@ -387,4 +414,24 @@ export const hasConflictsWithSome = (x, events) => {
         y.start <= x.end
     )
   );
+};
+
+const getShiftedRight = (events, maxShifts = 2) => {
+  /** @type {[end: Number, shiftedRight: Number][]} */
+  let stack = [[Infinity, maxShifts - 1]];
+  let currColumn = -1;
+  let res = [];
+  for (let event of events) {
+    if (!event.isActive) {
+      res.push(0);
+      continue;
+    }
+    if (event.columnIndex !== currColumn) stack.splice(1);
+    currColumn = event.columnIndex;
+    while (stack[stack.length - 1][0] <= event.start) stack.pop();
+    const shiftedRight = (stack[stack.length - 1][1] + 1) % maxShifts;
+    res.push(shiftedRight);
+    stack.push([event.end, shiftedRight]);
+  }
+  return res;
 };

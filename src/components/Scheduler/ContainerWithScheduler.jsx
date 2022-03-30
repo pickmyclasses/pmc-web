@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { fetchClassesInShoppingCart, fetchRequirements } from '../../api';
+import { fetchClassesInShoppingCart, fetchCustomEvents, fetchRequirements } from '../../api';
 import { UserContext } from '../../App';
 
 /**
@@ -12,6 +12,7 @@ export default function ContainerWithScheduler({ children }) {
   const { user } = useContext(UserContext);
 
   const [classesInShoppingCart, setClassesInShoppingCart] = useState([]);
+  const [customEvents, setCustomEvents] = useState([]);
   const [requirements, setRequirements] = useState([]);
 
   const refreshSchedulerData = useCallback(
@@ -19,10 +20,12 @@ export default function ContainerWithScheduler({ children }) {
       if (user) {
         Promise.all([
           fetchClassesInShoppingCart(user.userID).then(setClassesInShoppingCart),
+          fetchCustomEvents().then(setCustomEvents),
           fetchRequirements().then(setRequirements),
         ]).then(() => onComplete?.());
       } else {
         setClassesInShoppingCart([]);
+        setCustomEvents([]);
         setRequirements([]);
         onComplete?.();
       }
@@ -34,7 +37,7 @@ export default function ContainerWithScheduler({ children }) {
 
   return (
     <SchedulerContext.Provider
-      value={{ classesInShoppingCart, requirements, refreshSchedulerData }}
+      value={{ classesInShoppingCart, customEvents, requirements, refreshSchedulerData }}
     >
       {children}
     </SchedulerContext.Provider>
@@ -45,6 +48,7 @@ export default function ContainerWithScheduler({ children }) {
  * @type {React.Context<{
  *   classesInShoppingCart: Array<{classData, course}>,
  *   requirements: Array<Object>,
+ *   customEvents: Array<Object>,
  *   refreshSchedulerData: function(function(): *): void,
  * }>}
  */

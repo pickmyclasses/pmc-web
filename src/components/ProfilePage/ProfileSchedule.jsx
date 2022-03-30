@@ -9,7 +9,7 @@ import ProfilePageTabHeadingCard from './ProfilePageTabHeadingCard';
 
 /** The schedule tab of the user profile page. */
 export default function ProfileSchedule() {
-  const { classesInShoppingCart } = useContext(SchedulerContext);
+  const { classesInShoppingCart, customEvents } = useContext(SchedulerContext);
 
   /** The list of `{classData, course}` of online classes the user has. */
   const [asyncClasses, setAsyncClasses] = useState([]);
@@ -30,7 +30,10 @@ export default function ProfileSchedule() {
           description='View and manage your courses and other weekly events'
         />
         <AsyncClassesCard classesAndCourses={asyncClasses} />
-        <LiveClassesCard classesInShoppingCart={classesInShoppingCart} />
+        <LiveClassesCard
+          classesInShoppingCart={classesInShoppingCart}
+          customEvents={customEvents}
+        />
       </Stack>
     </ContainerWithLoadingIndication>
   );

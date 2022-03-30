@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Stack, Typography, styled, useTheme } from '@mui/material';
+import { Button, Stack, Typography, useTheme } from '@mui/material';
 import Color from 'color';
 
 export default function TimeBlock({
@@ -26,8 +26,8 @@ export default function TimeBlock({
       : [mainColor.lighten(0.25).string(), mainColor.string()];
 
     const outlinedBackgroundColors = [
-      theme.palette.background.default,
-      theme.palette.grey[300],
+      mainColor.lightness(97.2).string(),
+      mainColor.lightness(93.8).string(),
     ];
 
     setPalette({
@@ -49,8 +49,10 @@ export default function TimeBlock({
     wordSpacing: !showDetails && '100vw',
     alignItems: 'flex-start',
     overflow: 'hidden',
+    textTransform: 'none',
+    padding: '6px 0',
     '&, &:hover, &:focus': { ...palette },
-    '*': { textTransform: 'none', pointerEvents: 'none' },
+    '*': { pointerEvents: 'none', wordBreak: 'break-word' },
   };
 
   const titleFontSize = getDynamicFontSize(showDetails ? 16 : 14);
