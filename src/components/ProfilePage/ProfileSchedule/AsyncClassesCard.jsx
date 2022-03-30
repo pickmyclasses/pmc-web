@@ -25,14 +25,7 @@ export default function AsyncClassesCard({ classesAndCourses }) {
         {classesAndCourses.length > 0 ? (
           // TODO Q: The following card grid is only a placeholder. Eventually we should list
           // the classes in a more easily-readable fashion.
-          <CourseCardGrid
-            numColumns={4}
-            courses={classesAndCourses.map((x) => ({
-              tags: [],
-              classes: [x.classData],
-              ...x.course,
-            }))}
-          />
+          <CourseCardGrid numColumns={4} courses={classesAndCourses.map((x) => x.course)} />
         ) : (
           <Typography>
             You don't have any asynchronous (e.g. online) courses in your schedule.
