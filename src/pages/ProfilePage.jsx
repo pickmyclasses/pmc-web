@@ -86,6 +86,7 @@ const leftBarLeftShadowWidth = 128;
 const LeftBar = styled(Box)({
   backgroundColor: 'white',
   position: 'absolute',
+  zIndex: 98,
   left: 'max(50vw - 1536px / 2, 0px)',
   marginLeft: '32px',
   top: '72px',
@@ -97,6 +98,7 @@ const LeftBar = styled(Box)({
     content: '" "',
     position: 'absolute',
     top: 0,
+    zIndex: 99,
     height: '100%',
     width: leftBarLeftShadowWidth * 2 + 'px',
     boxShadow: `${
