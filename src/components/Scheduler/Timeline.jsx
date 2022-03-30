@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import TimeBlock from './TimeBlock';
 import TimeDataCard from './TimeDataCard';
 import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
+import { useLocation } from 'react-router-dom';
 
 /** Represents the timeline view in the shopping cart. */
 export default function Timeline({
@@ -26,6 +27,7 @@ export default function Timeline({
   timeDataCardContainer = undefined,
 }) {
   const theme = useTheme();
+  const location = useLocation();
   const { isNavigationAllowed, navigateIfAllowed } = useContext(PreventableNavigationContext);
 
   const [rangeStart, setRangeStart] = useState(defaultRangeStart);
@@ -39,6 +41,7 @@ export default function Timeline({
   const [selectedEventData, setSelectedEventData] = useState(null);
   const [selectedEventHasConflicts, setSelectedEventHasConflicts] = useState(false);
   const [isDataCardEditable, setIsDataCardEditable] = useState(false);
+  const [hasSelectedDefaultEvent, setHasSelectedDefaultEvent] = useState(false);
 
   const containerRef = useRef();
   const dataCardDefaultContainerRef = useRef();
@@ -105,8 +108,9 @@ export default function Timeline({
       )
     );
     setHasHighlights(events.some((x) => x.highlight));
+
     // eslint-disable-next-line
-  }, [events]);
+  }, [events, hasSelectedDefaultEvent, location.search]);
 
   // Compute which events should be slightly shifted right in the display. Some events are
   // shifted right to avoid covering other events and making other events unrecognizable.
@@ -117,9 +121,22 @@ export default function Timeline({
     );
     setEventsWithConflicts(newEventsWithConflicts);
     setEventsShiftedRight(getShiftedRight(eventsShown));
+
+    // Find the data of the selected event. If this is the first render, select the default
+    // event according to the `selected` URL search parameter.
+    let targetGroupID = selectedEventGroupID;
+    if (eventsShown.length && !hasSelectedDefaultEvent) {
+      const params = Object.fromEntries(new URLSearchParams(location.search).entries());
+      targetGroupID = +params.selected;
+      if (!isNaN(targetGroupID)) {
+        setSelectedEventGroupID(targetGroupID);
+        setIsDataCardEditable(true);
+      }
+      setHasSelectedDefaultEvent(true);
+    }
     const selectedEventData =
-      selectedEventGroupID &&
-      eventsShown.find((x) => x.isActive && x.data.groupID === selectedEventGroupID)?.data;
+      targetGroupID &&
+      eventsShown.find((x) => x.isActive && x.data.groupID === targetGroupID)?.data;
     setSelectedEventData(selectedEventData || null);
     if (!selectedEventData) setSelectedEventGroupID(NaN);
     setSelectedEventHasConflicts(
@@ -156,13 +173,12 @@ export default function Timeline({
 
   const getTopByTime = (time) => (time - rangeStart) / (rangeEnd - rangeStart);
 
-  const handleTimeBlockClick = (event) => {
+  const handleTimeBlockClick = ({ data }) => {
     if (isDataCardEditable && !isNavigationAllowed) {
       // Don't deselect; show flash
       return void navigateIfAllowed('#');
     }
 
-    const { data } = event;
     setSelectedEventGroupID(selectedEventGroupID !== data.groupID ? data.groupID : NaN);
   };
 
@@ -366,6 +382,9 @@ export default function Timeline({
               right={`calc(${100 - selectedEventData.firstColumn * columnWidth}% + 8px)`}
               top={`max(${getTopByTime(selectedEventData.earliestStart) * 100}%, 0%)`}
               zIndex={1000}
+              sx={{
+                transition: isDataCardEditable && getTransitionForStyles(['right', 'top'], 0.5),
+              }}
             >
               <TimeDataCard
                 ref={dataCardRef}
