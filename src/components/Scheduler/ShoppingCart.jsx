@@ -4,7 +4,7 @@ import { formatCourseName, parseDayList, parseTime } from '../../utils';
 import Timeline from './Timeline';
 // import Color from 'color';
 import { pluralize } from '../../utils';
-import CourseScheduleSummary, { formatDayList, formatTimeRange } from './CourseScheduleSummary';
+import CourseScheduleSummary, { formatTimeRange } from './CourseScheduleSummary';
 import { getColorByCourse, postCustomEvent, removeCustomEventByID } from '../../api';
 import PreventableLink from '../PreventableNavigation/PreventableLink';
 import { SchedulerContext } from './ContainerWithScheduler';

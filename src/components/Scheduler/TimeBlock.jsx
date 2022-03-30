@@ -36,7 +36,7 @@ export default function TimeBlock({
       borderColor: shades[+darken],
       color: variant === 'outlined' ? shades[+darken] : '',
     });
-  }, [theme, variant, color, darken]);
+  }, [theme, variant, color, darken, showDetails]);
 
   const buttonStyles = {
     ...sx,
