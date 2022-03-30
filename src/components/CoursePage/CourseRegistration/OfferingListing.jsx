@@ -117,13 +117,9 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
       course,
       highlight: 'outlined',
       selectionID: x.id,
+      ignoreConflicts: !selectedClasses.find((y) => +y.id === +x.id),
     }));
-    setHighlightedClasses([
-      ...mouseEnteredClassesToHighlight,
-      ...selectedClassesToHighlight.filter(
-        (x) => !mouseEnteredClasses.find((y) => +y.id === +x.classData.id)
-      ),
-    ]);
+    setHighlightedClasses([...selectedClassesToHighlight, ...mouseEnteredClassesToHighlight]);
   }, [
     classGroups,
     classesOfCourseInShoppingCart.length,
@@ -264,7 +260,7 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
               variants={savePromptCardVariants}
               initial='initial'
               animate={isSavePromptFlashing ? 'flashing' : 'initial'}
-              transition={{ type: 'just', delay: isSavePromptFlashing ? 0 : 0.5 }}
+              transition={{ type: 'just', delay: isSavePromptFlashing ? 0 : 0.25 }}
               onAnimationComplete={() => setIsSavePromptFlashing(false)}
               sx={{ width: 'calc(min(960px, 62.5vw) - 46px)', boxShadow: 3 }}
             >

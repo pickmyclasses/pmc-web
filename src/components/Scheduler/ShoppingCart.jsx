@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Box, Link, Stack, Typography, useTheme } from '@mui/material';
 import { formatCourseName, parseDayList, parseTime } from '../../utils';
 import Timeline from './Timeline';
 // import Color from 'color';
 import { pluralize } from '../../utils';
-import CourseScheduleSummary, { formatTimeRange } from './CourseScheduleSummary';
-import { getColorByCourse } from '../../api';
+import CourseScheduleSummary, { formatDayList, formatTimeRange } from './CourseScheduleSummary';
+import { getColorByCourse, postCustomEvent, removeCustomEventByID } from '../../api';
 import PreventableLink from '../PreventableNavigation/PreventableLink';
+import { SchedulerContext } from './ContainerWithScheduler';
 
 /** The shopping cart resides in the top part of the scheduler. */
 export default function ShoppingCart({
   classes,
+  customEvents,
   noSummary = false,
   timelineColumnTitles = undefined,
+  allowEditingCustomEvents = false,
   ...timeLineProps
 }) {
   const theme = useTheme();
+  const { refreshSchedulerData } = useContext(SchedulerContext);
 
   const [sessionGenerationResolver, setSessionGenerationResolver] = useState({});
   const [sessions, setSessions] = useState([]);
@@ -24,6 +28,7 @@ export default function ShoppingCart({
   const [numCourses, setNumCourses] = useState(0);
   const [numOnlineCourses, setNumOnlineCourses] = useState(false);
   const [hasHighlights, setHasHighlights] = useState(false);
+  const [editingCustomEvent, setEditingCustomEvent] = useState(null);
 
   useEffect(() => {
     // Enumerate each class' meet times and turn them into individual sessions/events. First
@@ -32,7 +37,13 @@ export default function ShoppingCart({
     sessionGenerationResolver.onGenerated = null;
     let newResolver = { onGenerated: setSessions };
     setSessionGenerationResolver(newResolver);
-    generateSessions(classes, newResolver);
+    generateSessions(
+      classes,
+      customEvents,
+      allowEditingCustomEvents,
+      editingCustomEvent,
+      newResolver
+    );
 
     // Compute the content to display in the bottom summary text.
     setHasHighlights(classes.some((x) => x.highlight));
@@ -54,12 +65,28 @@ export default function ShoppingCart({
     setNumCourses(courses.length);
     setNumOnlineCourses(courses.filter((x) => x.isOnline).length);
     // eslint-disable-next-line
-  }, [classes]);
+  }, [classes, customEvents, editingCustomEvent]);
 
   return (
     <Box display='flex' flexDirection='column' position='relative' width='100%' height='100%'>
       <Box flex={1}>
-        <Timeline events={sessions} columnTitles={timelineColumnTitles} {...timeLineProps} />
+        <Timeline
+          events={sessions}
+          columnTitles={timelineColumnTitles}
+          onEditingEventChange={(event) => setEditingCustomEvent(event)}
+          onEditingEventCancel={() => setEditingCustomEvent(null)}
+          onEditingEventDelete={(onComplete) =>
+            removeCustomEventByID(editingCustomEvent.eventID).then(() =>
+              refreshSchedulerData(onComplete)
+            )
+          }
+          onEditingEventSave={(onComplete) =>
+            postCustomEvent(sessionToCustomEvent(editingCustomEvent)).then(() =>
+              refreshSchedulerData(onComplete)
+            )
+          }
+          {...timeLineProps}
+        />
       </Box>
       {!noSummary && (
         <Stack alignItems='center'>
@@ -94,8 +121,15 @@ export default function ShoppingCart({
 /**
  * Generates a list of sessions for each weekday from a list of classes and belonged courses.
  */
-const generateSessions = (classes, resolver) => {
+const generateSessions = (
+  classes,
+  customEvents,
+  areCustomEventsEditable,
+  editingCustomEvent,
+  resolver
+) => {
   let sessions = [];
+  // Generate sessions from classes.
   for (let { classData, course, highlight, selectionID } of classes) {
     for (let dayOffered of parseDayList(classData.offerDate)) {
       if (dayOffered === -1) continue; // online course
@@ -133,8 +167,10 @@ const generateSessions = (classes, resolver) => {
           title: courseCode,
           subtitle: course.title,
           description: <CourseScheduleSummary plainText classes={relatedClasses} />,
-          topBorderColor: 'gray',
-          coursePageURL: `/course/${course.id}`,
+          color: 'gray',
+          editURL: `/course/${course.id}/registration`,
+          infoURL: `/course/${course.id}`,
+          isEditable: false,
         },
       };
 
@@ -142,9 +178,66 @@ const generateSessions = (classes, resolver) => {
         new Promise((onAssignedColors) => {
           // ImageColors.getColors(course.ImageURL, { cache: true }).then((palette) => {
           const color = getColorByCourse(course);
-          sessionData.color = sessionData.data.topBorderColor = color;
+          sessionData.color = sessionData.data.color = color;
           onAssignedColors(sessionData);
           // })
+        })
+      );
+    }
+  }
+  // Generate sessions from custom events.
+  let events = customEvents;
+  if (editingCustomEvent) {
+    events = events
+      .filter((x) => +x.id !== +editingCustomEvent?.eventID)
+      .concat(sessionToCustomEvent(editingCustomEvent)); // Always show changes live
+  }
+  for (let event of events) {
+    for (let day of event.days) {
+      let sessionData = {
+        columnIndex: day - 1,
+        start: event.startTime,
+        end: event.endTime,
+        details: (
+          <>
+            {event.title && (
+              <>
+                {event.type}
+                <br />
+              </>
+            )}
+            {formatTimeRange(event)}
+          </>
+        ),
+        color: 'gray',
+        variant: 'outlined',
+        text: event.title || event.type,
+        // The following `data` object determines what to display in the timeline detail
+        // card (which shows up when clicking on a time block).
+        // TODO Q: Extract TimeDataCard so that it's handled by ShoppingCart. Let Timeline
+        // emit an onTimeBlockClick event instead of handling showing the detail card. Put
+        // all this complex data construction into the updated TimeDataCard.
+        data: {
+          eventID: event.id,
+          groupID: event.id,
+          firstColumn: Math.min(...event.days) - 1,
+          earliestStart: event.startTime,
+          title: event.title,
+          type: event.type,
+          subtitle: event.description,
+          color: 'gray',
+          editURL: !areCustomEventsEditable && '/profile/schedule',
+          isEditable: areCustomEventsEditable,
+          days: event.days,
+          start: event.startTime,
+          end: event.endTime,
+        },
+      };
+
+      sessions.push(
+        new Promise((onAssignedColors) => {
+          sessionData.color = sessionData.data.color = event.color;
+          onAssignedColors(sessionData);
         })
       );
     }
@@ -167,3 +260,14 @@ export const getInstructor = (classData) =>
   Object.values(classData).find(
     (value) => value && /^[A-Za-z\s]+,[A-Za-z,\s]+$/.test(String(value))
   );
+
+const sessionToCustomEvent = ({ eventID, title, type, subtitle, color, days, start, end }) => ({
+  id: eventID,
+  title,
+  type,
+  description: subtitle,
+  color,
+  days,
+  startTime: start,
+  endTime: end,
+});

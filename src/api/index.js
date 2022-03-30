@@ -78,8 +78,6 @@ const fakeFetchCoursesBySearch = (res) => {
   return Promise.all(resultCourseIDs.map((id) => fetchCourseByID(id)));
 };
 
-new Promise((onFetched) => onFetched());
-
 export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
 
 export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseID}/class`);
@@ -98,6 +96,30 @@ export const fetchClassesInShoppingCart = (userID) =>
       course,
     }));
   });
+
+let fakeCustomEvents = [
+  {
+    id: (1 << 24) + 0,
+    title: 'Manic Monday',
+    description: 'I just never feel like working on Mondays',
+    type: 'Event',
+    color: '#e91e63',
+    days: [1],
+    startTime: 9 * 3600,
+    endTime: 16.5 * 3600,
+  },
+];
+
+export const fetchCustomEvents = () => new Promise((onFetched) => onFetched(fakeCustomEvents));
+
+export const removeCustomEventByID = (id) =>
+  new Promise((onFetched) => {
+    fakeCustomEvents = fakeCustomEvents.filter((x) => +x.id !== id);
+    onFetched();
+  });
+
+export const postCustomEvent = (body) =>
+  removeCustomEventByID(body.id).then(() => fakeCustomEvents.push(body));
 
 export const fetchRequirements = () => fakeFetchRequirements();
 

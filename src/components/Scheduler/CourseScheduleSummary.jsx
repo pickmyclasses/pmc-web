@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { formatInstructorName, parseDayList } from '../../utils';
+import { formatInstructorName, parseDayList, secondsToTimeString } from '../../utils';
 import DaysIndicator from '../CourseCardGrid/CourseCard/DaysIndicator';
 import { getComponent, getInstructor } from './ShoppingCart';
 
@@ -30,10 +30,8 @@ export default function CourseScheduleSummary({ classes, plainText = false }) {
           {plainText ? (
             <Typography variant='subtitle2' noWrap>
               &nbsp;
-              {parseDayList(classData.offerDate)
-                .map((x) => dayNames[x])
-                .join(', ')}{' '}
-              @&nbsp;
+              {formatDayList(parseDayList(classData.offerDate))}
+              &nbsp;@&nbsp;
             </Typography>
           ) : (
             <DaysIndicator
@@ -52,10 +50,18 @@ export default function CourseScheduleSummary({ classes, plainText = false }) {
   );
 }
 
-const dayNames = 'Sun Mon Tue Wed Thu Fri Sat'.split(' ');
+const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+export const formatDayList = (days) => days.map((x) => dayNames[x]).join(', ');
 
 /** `09:40am–10:30am` becomes `9:40–10:30am`. */
 export const formatTimeRange = ({ startTime, endTime }) => {
+  if (!isNaN(startTime)) {
+    return formatTimeRange({
+      startTime: secondsToTimeString(startTime),
+      endTime: secondsToTimeString(endTime),
+    });
+  }
   if (startTime.slice(-2) === endTime.slice(-2)) startTime = startTime.slice(0, -2);
   return `${startTime.replace(/^0+/, '')}–${endTime.replace(/^0+/, '')}`;
 };

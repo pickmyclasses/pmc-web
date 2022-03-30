@@ -5,7 +5,7 @@ import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
 import ShoppingCart from '../../Scheduler/ShoppingCart';
 
 export default function SchedulePreview({ course, classesToHighlight, ...shoppingCartProps }) {
-  const { classesInShoppingCart } = useContext(SchedulerContext);
+  const { classesInShoppingCart, customEvents } = useContext(SchedulerContext);
 
   const [classes, setClasses] = useState([]);
 
@@ -29,6 +29,7 @@ export default function SchedulePreview({ course, classesToHighlight, ...shoppin
           <Box flex={1}>
             <ShoppingCart
               classes={classes}
+              customEvents={customEvents}
               noSummary
               alwaysGrayUnHighlighted
               {...shoppingCartProps}
