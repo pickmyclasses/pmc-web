@@ -41,6 +41,7 @@ export default function LiveClassesCard({ classesInShoppingCart, customEvents })
             showDetailsInTimeBlocks
             showTimeDataCardInside
             allowEditingCustomEvents
+            addEventOnClick
           />
         </Box>
       </Stack>

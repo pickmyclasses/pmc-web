@@ -11,12 +11,17 @@ import {
   Typography,
   colors,
   Box,
+  Dialog,
+  DialogTitle,
+  DialogActions,
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import UnloadConfirmation from 'components/CoursePage/CourseRegistration/UnloadConfirmation';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { CirclePicker } from 'react-color';
 import { parseTime, pluralize, secondsToTimeString, useDebounce } from 'utils';
+import { useSnackbar } from 'notistack';
 
 export default function EditableTimeDataCardContent({
   data,
@@ -28,7 +33,8 @@ export default function EditableTimeDataCardContent({
   onEditingEventSave = () => {},
   onEditingEventCancel = () => {},
 }) {
-  const { start, end } = data;
+  const { eventID, start, end } = data;
+  const { enqueueSnackbar } = useSnackbar();
 
   const [startInput, setStartInput] = useState(secondsToTimeString(start));
   const [endInput, setEndInput] = useState(secondsToTimeString(end));
@@ -36,11 +42,17 @@ export default function EditableTimeDataCardContent({
   const [parsedEndInput, setParsedEndInput] = useState(NaN);
   const [pendingChanges, setPendingChanges] = useState(data);
   const debouncedPendingChanges = useDebounce(pendingChanges, 250);
-  const [isDirty, setIsDirty] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
   const [isValid, setIsValid] = useState(false);
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
+  const [isDeletingLoading, setIsDeletingLoading] = useState(false);
+  const [isSavingLoading, setIsSavingLoading] = useState(false);
 
-  useEffect(() => onEditingEventChange(pendingChanges), [debouncedPendingChanges]);
+  useEffect(
+    () => onEditingEventChange(pendingChanges),
+    // eslint-disable-next-line
+    [debouncedPendingChanges]
+  );
 
   useEffect(() => setParsedStartInput(parseTime(startInput)), [startInput]);
   useEffect(() => setParsedEndInput(parseTime(endInput)), [endInput]);
@@ -52,17 +64,16 @@ export default function EditableTimeDataCardContent({
       handleDataValueChange(['start', parsedStartInput], ['end', parsedEndInput]);
       setTimeout(scrollCardIntoView, 750);
     }
+    // eslint-disable-next-line
   }, [parsedStartInput, parsedEndInput]);
 
-  const handleDataValueChange = (...args) => {
+  const handleDataValueChange = (...args) =>
     setPendingChanges(Object.assign({ ...data }, Object.fromEntries(args)));
-    setIsDirty(true);
-  };
 
   return (
     <>
       <UnloadConfirmation
-        when={isDirty}
+        when
         navigationPreventionKey='time-data-card-editing'
         onNavigationPrevented={() => {
           scrollCardIntoView();
@@ -82,8 +93,8 @@ export default function EditableTimeDataCardContent({
         />
         <Stack direction='row' spacing='12px'>
           <Select
-            value={pendingChanges.type}
-            onChange={(e) => handleDataValueChange(['type', e.target.value])}
+            value={pendingChanges.label}
+            onChange={(e) => handleDataValueChange(['label', e.target.value])}
             variant='standard'
             sx={{ width: '9em', textAlign: 'center' }}
           >
@@ -127,6 +138,7 @@ export default function EditableTimeDataCardContent({
           <TextField
             placeholder='Start'
             value={startInput}
+            error={!isValid}
             onChange={(e) => setStartInput(e.target.value)}
             variant='standard'
             sx={{ width: '4.5em' }}
@@ -136,6 +148,7 @@ export default function EditableTimeDataCardContent({
           <TextField
             placeholder='End'
             value={endInput}
+            error={!isValid}
             onChange={(e) => setEndInput(e.target.value)}
             variant='standard'
             sx={{ width: '4.5em' }}
@@ -143,7 +156,7 @@ export default function EditableTimeDataCardContent({
           />
           {isValid && (
             <Typography variant='caption' color='text.secondary'>
-              ({formatDuration({ startTime: start, endTime: end })})
+              ({formatDuration({ startTime: parsedStartInput, endTime: parsedEndInput })})
             </Typography>
           )}
         </Stack>
@@ -153,28 +166,40 @@ export default function EditableTimeDataCardContent({
         variants={cardActionsVariants}
         initial='initial'
         animate={isFlashing ? 'flashing' : 'initial'}
-        transition={{ type: 'just', delay: isFlashing ? 0 : 0.25 }}
+        transition={{ label: 'just', delay: isFlashing ? 0 : 0.25 }}
         onAnimationComplete={() => setIsFlashing(false)}
       >
         <Button
           color='error'
           size='small'
-          onClick={() => onEditingEventDelete(() => onIsEditableChange(false))}
+          onClick={() => setIsDeleteConfirmationOpen(true)}
+          sx={{ visibility: !(eventID >= 0) && 'hidden' }}
         >
           Delete
         </Button>
         <Stack direction='row' spacing='12px'>
           <Tooltip title={isValid && hasConflicts ? 'Save with conflicts' : ''}>
             <Box component='span'>
-              <Button
+              <LoadingButton
                 variant='contained'
                 color={hasConflicts ? 'warning' : 'primary'}
                 disabled={!isValid}
                 size='small'
-                onClick={() => onEditingEventSave(() => onIsEditableChange(false))}
+                loading={isSavingLoading}
+                onClick={() => {
+                  setIsSavingLoading(true);
+                  onEditingEventSave(
+                    /* onComplete= */ () => {
+                      onIsEditableChange(false);
+                      if (!(eventID >= 0)) {
+                        enqueueSnackbar('Added event');
+                      }
+                    }
+                  );
+                }}
               >
                 Save
-              </Button>
+              </LoadingButton>
             </Box>
           </Tooltip>
           <Button
@@ -189,6 +214,36 @@ export default function EditableTimeDataCardContent({
           </Button>
         </Stack>
       </MotionCardActions>
+      <Dialog
+        open={isDeleteConfirmationOpen}
+        onClose={() => setIsDeleteConfirmationOpen(false)}
+      >
+        <DialogTitle>
+          Delete {pendingChanges.label.toLowerCase()}
+          {pendingChanges.title ? ` "${pendingChanges.title}"` : ''}?
+        </DialogTitle>
+        <DialogActions sx={{ padding: '20px', '> *': { marginLeft: '12px !important' } }}>
+          <Button color='inherit' onClick={() => setIsDeleteConfirmationOpen(false)}>
+            Cancel
+          </Button>
+          <LoadingButton
+            variant='contained'
+            color='error'
+            loading={isDeletingLoading}
+            onClick={() => {
+              setIsDeletingLoading(true);
+              onEditingEventDelete(
+                /* onComplete= */ () => {
+                  onIsEditableChange(false);
+                  enqueueSnackbar('Deleted event');
+                }
+              );
+            }}
+          >
+            Delete
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

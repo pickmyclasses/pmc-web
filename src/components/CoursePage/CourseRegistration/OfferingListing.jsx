@@ -1,7 +1,7 @@
 import { ChevronRight } from '@mui/icons-material';
 import { Box, Button, Card, colors, Grid, List, Portal, Snackbar, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { addClassIDToShoppingCart, removeClassIDFromShoppingCart } from 'api';
+import { addClassIDToSchedule, removeClassIDFromSchedule } from 'api';
 import { UserContext } from 'App';
 import { SchedulerContext } from 'components/Scheduler/ContainerWithScheduler';
 import { getComponent, getInstructor } from 'components/Scheduler/ShoppingCart';
@@ -188,24 +188,10 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
     setIsSavingLoading(true);
 
     Promise.all(
-      classesOfCourseInShoppingCart.map((x) =>
-        removeClassIDFromShoppingCart({
-          userID: user.userID,
-          classID: +x.id,
-          semesterID: 1,
-        })
-      )
+      classesOfCourseInShoppingCart.map((x) => removeClassIDFromSchedule(user.userID, +x.id))
     )
       .then(() =>
-        Promise.all(
-          selectedClasses.map((x) =>
-            addClassIDToShoppingCart({
-              userID: user.userID,
-              classID: +x.id,
-              semesterID: 1,
-            })
-          )
-        )
+        Promise.all(selectedClasses.map((x) => addClassIDToSchedule(user.userID, +x.id)))
       )
       .then(() =>
         refreshSchedulerData(() => {

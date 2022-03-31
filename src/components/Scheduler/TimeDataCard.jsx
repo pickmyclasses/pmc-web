@@ -1,17 +1,5 @@
 import React, { forwardRef, useCallback, useEffect, useState } from 'react';
-import {
-  Alert,
-  Box,
-  Card,
-  CardActions,
-  Divider,
-  IconButton,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import { Edit, Info } from '@material-ui/icons';
-import PreventableLink from 'components/PreventableNavigation/PreventableLink';
-import { formatDayList, formatTimeRange } from './CourseScheduleSummary';
+import { Card } from '@mui/material';
 import StaticTimeDataCardContent from './TimeDataCard/StaticTimeDataCardContent';
 import EditableTimeDataCardContent from './TimeDataCard/EditableTimeDataCardContent';
 
@@ -25,7 +13,7 @@ const TimeDataCard = forwardRef(
 
     const scrollCardIntoView = useCallback(
       () => ref?.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }),
-      [ref?.current]
+      [ref]
     );
 
     useEffect(() => {
@@ -33,9 +21,9 @@ const TimeDataCard = forwardRef(
         scrollCardIntoView();
         setHasScrolledIntoView(true);
       }
-    }, [hasScrolledIntoView, ref?.current]);
+    }, [hasScrolledIntoView, ref, scrollCardIntoView]);
 
-    useEffect(() => scrollCardIntoView(), [groupID]);
+    useEffect(() => scrollCardIntoView(), [groupID, scrollCardIntoView]);
 
     return (
       <Card

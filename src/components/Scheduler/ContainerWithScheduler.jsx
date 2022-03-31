@@ -1,5 +1,9 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { fetchClassesInShoppingCart, fetchCustomEvents, fetchRequirements } from '../../api';
+import {
+  fetchScheduledClassesAndCustomEvents,
+  fetchCustomEvents,
+  fetchRequirements,
+} from '../../api';
 import { UserContext } from '../../App';
 
 /**
@@ -19,8 +23,12 @@ export default function ContainerWithScheduler({ children }) {
     (onComplete) => {
       if (user) {
         Promise.all([
-          fetchClassesInShoppingCart(user.userID).then(setClassesInShoppingCart),
-          fetchCustomEvents().then(setCustomEvents),
+          fetchScheduledClassesAndCustomEvents(user.userID).then(
+            ({ scheduledClasses, customEvents }) => {
+              setClassesInShoppingCart(scheduledClasses);
+              setCustomEvents(customEvents);
+            }
+          ),
           fetchRequirements().then(setRequirements),
         ]).then(() => onComplete?.());
       } else {

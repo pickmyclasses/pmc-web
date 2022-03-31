@@ -84,16 +84,20 @@ export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
 export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseID}/class`);
 
 /**
- * Fetches the list of `{classData, course}` a user has in their shopping cart but also injects
- * the fake image URL. Basically pretends `ImageURL` was an actual field of a course.
+ * Fetches ```
+ * {
+ *   scheduledClasses: Array<{classData, course}>,
+ *   customEvents: Array<CustomEvent>
+ * }
+ * ```.
  */
-export const fetchClassesInShoppingCart = (userID) =>
-  axios.get(`schedule?userID=${userID}`).then((data) => {
-    for (let { course } of data.data.data.scheduledClassList) {
+export const fetchScheduledClassesAndCustomEvents = (userID) =>
+  axios.get(`schedule?userID=${userID}`).then(({ data }) => {
+    for (let { course } of data.data.scheduledClasses) {
       injectFakeImageURLToCourse(course);
     }
-    injectLocationMapURLToClasses(data.data.data.scheduledClassList.map((x) => x.classData));
-    return data.data.data.scheduledClassList;
+    injectLocationMapURLToClasses(data.data.scheduledClasses.map((x) => x.classData));
+    return data.data;
   });
 
 // TODO Q: Get rid of all this once the backend has the support for it.
@@ -116,29 +120,15 @@ const getBuildingNumberByLocation = (location) => {
   );
 };
 
-let fakeCustomEvents = [
-  {
-    id: (1 << 24) + 0,
-    title: 'Manic Monday',
-    description: 'I just never feel like working on Mondays',
-    type: 'Event',
-    color: '#e91e63',
-    days: [1],
-    startTime: 9 * 3600,
-    endTime: 16.5 * 3600,
-  },
-];
-
-export const fetchCustomEvents = () => new Promise((onFetched) => onFetched(fakeCustomEvents));
-
-export const removeCustomEventByID = (id) =>
-  new Promise((onFetched) => {
-    fakeCustomEvents = fakeCustomEvents.filter((x) => +x.id !== +id);
-    onFetched();
+export const addOrUpdateCustomEvent = (userID, customEvent) =>
+  axios.post('/schedule?type=custom-event', {
+    isNew: !(+customEvent.id >= 0),
+    userID,
+    customEvent,
   });
 
-export const postCustomEvent = (body) =>
-  removeCustomEventByID(body.id).then(() => fakeCustomEvents.push(body));
+export const removeCustomEventByID = (eventID) =>
+  axios.put('/schedule?type=custom-event', { id: eventID });
 
 export const fetchRequirements = () => fakeFetchRequirements();
 
@@ -153,23 +143,11 @@ const fakeFetchRequirements = () =>
     ])
   );
 
-/**
- * @param {{
- *   userID: Number,
- *   classID: Number,
- *   semesterID: 1,
- * }} body
- */
-export const addClassIDToShoppingCart = (body) => axios.post('/schedule', body);
+export const addClassIDToSchedule = (userID, classID) =>
+  axios.post('/schedule?type=class', { userID, classID });
 
-/**
- * @param {{
- *   userID: Number,
- *   classID: Number,
- *   semesterID: 1,
- * }} body
- */
-export const removeClassIDFromShoppingCart = (body) => axios.put('/schedule', body);
+export const removeClassIDFromSchedule = (userID, classID) =>
+  axios.put('/schedule?type=class', { userID, classID });
 
 export const fetchReviewsByCourseID = (courseID) =>
   axios.get(`/course/${courseID}/review`).then((data) => data.data.data.reviews);
