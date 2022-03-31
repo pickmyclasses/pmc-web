@@ -21,6 +21,7 @@ import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { CirclePicker } from 'react-color';
 import { parseTime, pluralize, secondsToTimeString, useDebounce } from 'utils';
+import { useSnackbar } from 'notistack';
 
 export default function EditableTimeDataCardContent({
   data,
@@ -32,7 +33,8 @@ export default function EditableTimeDataCardContent({
   onEditingEventSave = () => {},
   onEditingEventCancel = () => {},
 }) {
-  const { start, end } = data;
+  const { eventID, start, end } = data;
+  const { enqueueSnackbar } = useSnackbar();
 
   const [startInput, setStartInput] = useState(secondsToTimeString(start));
   const [endInput, setEndInput] = useState(secondsToTimeString(end));
@@ -40,7 +42,6 @@ export default function EditableTimeDataCardContent({
   const [parsedEndInput, setParsedEndInput] = useState(NaN);
   const [pendingChanges, setPendingChanges] = useState(data);
   const debouncedPendingChanges = useDebounce(pendingChanges, 250);
-  const [isDirty, setIsDirty] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
@@ -66,15 +67,13 @@ export default function EditableTimeDataCardContent({
     // eslint-disable-next-line
   }, [parsedStartInput, parsedEndInput]);
 
-  const handleDataValueChange = (...args) => {
+  const handleDataValueChange = (...args) =>
     setPendingChanges(Object.assign({ ...data }, Object.fromEntries(args)));
-    setIsDirty(true);
-  };
 
   return (
     <>
       <UnloadConfirmation
-        when={isDirty}
+        when
         navigationPreventionKey='time-data-card-editing'
         onNavigationPrevented={() => {
           scrollCardIntoView();
@@ -94,8 +93,8 @@ export default function EditableTimeDataCardContent({
         />
         <Stack direction='row' spacing='12px'>
           <Select
-            value={pendingChanges.type}
-            onChange={(e) => handleDataValueChange(['type', e.target.value])}
+            value={pendingChanges.label}
+            onChange={(e) => handleDataValueChange(['label', e.target.value])}
             variant='standard'
             sx={{ width: '9em', textAlign: 'center' }}
           >
@@ -139,6 +138,7 @@ export default function EditableTimeDataCardContent({
           <TextField
             placeholder='Start'
             value={startInput}
+            error={!isValid}
             onChange={(e) => setStartInput(e.target.value)}
             variant='standard'
             sx={{ width: '4.5em' }}
@@ -148,6 +148,7 @@ export default function EditableTimeDataCardContent({
           <TextField
             placeholder='End'
             value={endInput}
+            error={!isValid}
             onChange={(e) => setEndInput(e.target.value)}
             variant='standard'
             sx={{ width: '4.5em' }}
@@ -155,7 +156,7 @@ export default function EditableTimeDataCardContent({
           />
           {isValid && (
             <Typography variant='caption' color='text.secondary'>
-              ({formatDuration({ startTime: start, endTime: end })})
+              ({formatDuration({ startTime: parsedStartInput, endTime: parsedEndInput })})
             </Typography>
           )}
         </Stack>
@@ -165,10 +166,15 @@ export default function EditableTimeDataCardContent({
         variants={cardActionsVariants}
         initial='initial'
         animate={isFlashing ? 'flashing' : 'initial'}
-        transition={{ type: 'just', delay: isFlashing ? 0 : 0.25 }}
+        transition={{ label: 'just', delay: isFlashing ? 0 : 0.25 }}
         onAnimationComplete={() => setIsFlashing(false)}
       >
-        <Button color='error' size='small' onClick={() => setIsDeleteConfirmationOpen(true)}>
+        <Button
+          color='error'
+          size='small'
+          onClick={() => setIsDeleteConfirmationOpen(true)}
+          sx={{ visibility: !(eventID >= 0) && 'hidden' }}
+        >
           Delete
         </Button>
         <Stack direction='row' spacing='12px'>
@@ -182,7 +188,14 @@ export default function EditableTimeDataCardContent({
                 loading={isSavingLoading}
                 onClick={() => {
                   setIsSavingLoading(true);
-                  onEditingEventSave(() => onIsEditableChange(false));
+                  onEditingEventSave(
+                    /* onComplete= */ () => {
+                      onIsEditableChange(false);
+                      if (!(eventID >= 0)) {
+                        enqueueSnackbar('Added event');
+                      }
+                    }
+                  );
                 }}
               >
                 Save
@@ -205,8 +218,11 @@ export default function EditableTimeDataCardContent({
         open={isDeleteConfirmationOpen}
         onClose={() => setIsDeleteConfirmationOpen(false)}
       >
-        <DialogTitle>Delete event {pendingChanges.title}?</DialogTitle>
-        <DialogActions sx={{ padding: '16px' }}>
+        <DialogTitle>
+          Delete {pendingChanges.label.toLowerCase()}
+          {pendingChanges.title ? ` "${pendingChanges.title}"` : ''}?
+        </DialogTitle>
+        <DialogActions sx={{ padding: '20px', '> *': { marginLeft: '12px !important' } }}>
           <Button color='inherit' onClick={() => setIsDeleteConfirmationOpen(false)}>
             Cancel
           </Button>
@@ -216,7 +232,12 @@ export default function EditableTimeDataCardContent({
             loading={isDeletingLoading}
             onClick={() => {
               setIsDeletingLoading(true);
-              onEditingEventDelete(() => onIsEditableChange(false));
+              onEditingEventDelete(
+                /* onComplete= */ () => {
+                  onIsEditableChange(false);
+                  enqueueSnackbar('Deleted event');
+                }
+              );
             }}
           >
             Delete

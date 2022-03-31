@@ -1,8 +1,19 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Box, Divider, Grid, Portal, Typography, useTheme } from '@mui/material';
+import {
+  Box,
+  Divider,
+  Grid,
+  MenuItem,
+  Popover,
+  Portal,
+  Typography,
+  useTheme,
+} from '@mui/material';
+import { AddCircle } from '@mui/icons-material';
 import { AnimatePresence, motion } from 'framer-motion';
 import TimeBlock from './TimeBlock';
 import TimeDataCard from './TimeDataCard';
+import LabelWithIcon from '../CoursePage/LabelWithIcon';
 import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
 import { useLocation } from 'react-router-dom';
 
@@ -25,6 +36,8 @@ export default function Timeline({
   largerTimeOnMarks = false,
   showDetailsInTimeBlocks = false,
   timeDataCardContainer = undefined,
+  addEventOnClick = false,
+  onAddEvent = () => {},
 }) {
   const theme = useTheme();
   const location = useLocation();
@@ -42,6 +55,7 @@ export default function Timeline({
   const [selectedEventHasConflicts, setSelectedEventHasConflicts] = useState(false);
   const [isDataCardEditable, setIsDataCardEditable] = useState(false);
   const [hasSelectedDefaultEvent, setHasSelectedDefaultEvent] = useState(false);
+  const [addEventConfirmationPosition, setAddEventConfirmationPosition] = useState(null);
 
   const containerRef = useRef();
   const dataCardDefaultContainerRef = useRef();
@@ -49,9 +63,9 @@ export default function Timeline({
 
   const columnWidth = 100 / columnTitles.length;
 
-  // Deselect any highlighted event on click outside.
   useEffect(() => {
     const handleDocumentMouseDown = (e) => {
+      // Deselect any highlighted event on click outside.
       if (
         !isDataCardEditable &&
         (!containerRef?.current?.contains(e.target) || e.target.tagName !== 'BUTTON') &&
@@ -59,11 +73,23 @@ export default function Timeline({
       ) {
         setSelectedEventGroupID(NaN);
       }
+
+      // Add an event when the user clicks on empty space inside the timeline.
+      if (
+        addEventOnClick &&
+        e.button === 0 &&
+        containerRef?.current?.contains(e.target) &&
+        e.target.tagName !== 'BUTTON' &&
+        !dataCardRef?.current?.contains(e.target) &&
+        !selectedEventGroupID
+      ) {
+        setAddEventConfirmationPosition({ top: e.clientY + 12, left: e.clientX });
+      }
     };
 
     document.addEventListener('mousedown', handleDocumentMouseDown);
     return () => document.removeEventListener('mousedown', handleDocumentMouseDown);
-  }, [isDataCardEditable]);
+  }, [isDataCardEditable, addEventOnClick, selectedEventGroupID]);
 
   // Auto zooms the timeline to fit all the events, with ranges rounded to the nearest hour that
   // to fits and having the same size as the default range.
@@ -134,11 +160,17 @@ export default function Timeline({
       }
       setHasSelectedDefaultEvent(true);
     }
-    const selectedEventData =
-      targetGroupID &&
-      eventsShown.find((x) => x.isActive && x.data.groupID === targetGroupID)?.data;
+    const selectedEventData = eventsShown.find(
+      (x) => x.isActive && [targetGroupID, -1].includes(x.data.groupID)
+    )?.data;
     setSelectedEventData(selectedEventData || null);
-    if (!selectedEventData) setSelectedEventGroupID(NaN);
+    if (!selectedEventData) {
+      setSelectedEventGroupID(NaN);
+      setIsDataCardEditable(false);
+    } else if (selectedEventData.groupID === -1) {
+      setSelectedEventGroupID(-1);
+      setIsDataCardEditable(true);
+    }
     setSelectedEventHasConflicts(
       eventsShown.some(
         (x, i) => x.data.groupID === selectedEventGroupID && newEventsWithConflicts[i]
@@ -175,8 +207,11 @@ export default function Timeline({
 
   const handleTimeBlockClick = ({ data }) => {
     if (isDataCardEditable && !isNavigationAllowed) {
-      // Don't deselect; show flash
-      return void navigateIfAllowed('#');
+      if (data.groupID !== selectedEventGroupID) {
+        // Don't deselect; show flash
+        navigateIfAllowed('#');
+      }
+      return;
     }
 
     setSelectedEventGroupID(selectedEventGroupID !== data.groupID ? data.groupID : NaN);
@@ -370,7 +405,12 @@ export default function Timeline({
       </Box>
       <Box
         ref={containerRef}
-        sx={{ width: '100%', height: 'calc(100% - 32px)', position: 'relative' }}
+        sx={{
+          width: '100%',
+          height: 'calc(100% - 32px)',
+          position: 'relative',
+          cursor: addEventOnClick && !selectedEventGroupID && 'copy',
+        }}
       >
         {renderGridLines()}
         {eventsShown.map((event, i) => renderEvent(i, event))}
@@ -402,6 +442,51 @@ export default function Timeline({
           </Portal>
         )}
       </Box>
+      <Popover
+        anchorReference='anchorPosition'
+        anchorPosition={addEventConfirmationPosition}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={!!addEventConfirmationPosition}
+        onClose={() => setAddEventConfirmationPosition(null)}
+      >
+        <MenuItem
+          onClick={() => {
+            const containerRect = containerRef.current.getBoundingClientRect();
+            const columnIndex = Math.min(
+              Math.floor(
+                ((addEventConfirmationPosition.left - containerRect.x) / containerRect.width) *
+                  columnTitles.length
+              ),
+              columnTitles.length - 1
+            );
+            const start =
+              Math.floor(
+                (((addEventConfirmationPosition.top - 12 - containerRect.y) /
+                  containerRect.height) *
+                  (rangeEnd - rangeStart) +
+                  rangeStart) /
+                  1800
+              ) * 1800;
+            onAddEvent({
+              eventID: -1,
+              groupID: -1,
+              firstColumn: columnIndex,
+              earliestStart: start,
+              title: '',
+              label: 'Event',
+              subtitle: '',
+              color: '#2d4e86',
+              isEditable: true,
+              days: [columnIndex + 1], // TODO Q: +1? who's controlling monday starting first
+              start,
+              end: start + 3600,
+            });
+            setAddEventConfirmationPosition(null);
+          }}
+        >
+          <LabelWithIcon iconType={AddCircle} color='action' label='Create custom event' />
+        </MenuItem>
+      </Popover>
     </Box>
   );
 }
@@ -429,8 +514,8 @@ export const hasConflictsWithSome = (x, events) => {
         y.isActive &&
         y !== x &&
         y.columnIndex === x.columnIndex &&
-        x.start <= y.end &&
-        y.start <= x.end
+        x.start < y.end &&
+        y.start < x.end
     )
   );
 };

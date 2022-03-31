@@ -12,7 +12,7 @@ export default function ProfileSchedule() {
   const { classesInShoppingCart, customEvents } = useContext(SchedulerContext);
 
   /** The list of `{classData, course}` of online classes the user has. */
-  const [asyncClasses, setAsyncClasses] = useState([]);
+  const [asyncClasses, setAsyncClasses] = useState(null);
 
   // Extract classes that are online from the user's schedule. A class is online (asynchronous)
   // if it does not have an `offerDate` (weekdays where the class meets).
@@ -22,7 +22,9 @@ export default function ProfileSchedule() {
   );
 
   return (
-    <ContainerWithLoadingIndication isLoading={!classesInShoppingCart}>
+    <ContainerWithLoadingIndication
+      isLoading={!classesInShoppingCart || !customEvents || !asyncClasses}
+    >
       <Stack spacing='32px'>
         <ProfilePageTabHeadingCard
           iconType={EventNote}

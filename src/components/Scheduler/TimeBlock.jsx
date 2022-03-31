@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Stack, Typography, useTheme } from '@mui/material';
 import Color from 'color';
+import { Resizable } from 'react-resizable';
 
 export default function TimeBlock({
   text,
@@ -11,6 +12,7 @@ export default function TimeBlock({
   details,
   data,
   sx = {},
+  isEditable = false,
   ...props
 }) {
   const theme = useTheme();
@@ -50,7 +52,7 @@ export default function TimeBlock({
     alignItems: 'flex-start',
     overflow: 'hidden',
     textTransform: 'none',
-    padding: '6px 0',
+    padding: '6px',
     '&, &:hover, &:focus': { ...palette },
     '*': { pointerEvents: 'none' },
   };
