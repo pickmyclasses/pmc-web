@@ -101,6 +101,7 @@ export default function EditableTimeDataCardContent({
             <MenuItem value='Event'>Event</MenuItem>
             <MenuItem value='Task'>Task</MenuItem>
             <MenuItem value='Meeting'>Meeting</MenuItem>
+            <MenuItem value='Work'>Work</MenuItem>
             <MenuItem value='Break'>Break</MenuItem>
           </Select>
           <CirclePicker
@@ -248,7 +249,7 @@ export default function EditableTimeDataCardContent({
   );
 }
 
-const colorOptions = ['#2d4e86', '#662d86', '#86512d', '#2d8665'];
+export const colorOptions = ['#437e94', '#8b4a94', '#947859', '#67943b'];
 
 const MotionCardActions = motion(CardActions);
 

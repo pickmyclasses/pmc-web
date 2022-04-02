@@ -19,7 +19,7 @@ export default function AsyncClassesCard({ classesAndCourses }) {
         <LabelWithIcon
           color='action'
           iconType={Computer}
-          label='Asynchronous Courses'
+          label='Online Courses'
           variant='overline'
         />
         {classesAndCourses.length > 0 ? (
@@ -27,9 +27,7 @@ export default function AsyncClassesCard({ classesAndCourses }) {
           // the classes in a more easily-readable fashion.
           <CourseCardGrid numColumns={4} courses={classesAndCourses.map((x) => x.course)} />
         ) : (
-          <Typography>
-            You don't have any asynchronous (e.g. online) courses in your schedule.
-          </Typography>
+          <Typography>You don't have any online courses in your schedule.</Typography>
         )}
       </Stack>
     </Card>

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Stack, Typography, useTheme } from '@mui/material';
 import Color from 'color';
-import { Resizable } from 'react-resizable';
 
 export default function TimeBlock({
   text,
+  shortText,
   variant = 'outlined',
   color = 'gray',
   darken = false,
@@ -64,7 +64,7 @@ export default function TimeBlock({
     <Button text={text} variant={variant} color='primary' sx={buttonStyles} {...props}>
       <Stack>
         <Typography variant='subtitle2' lineHeight={1.17} fontSize={titleFontSize}>
-          {text}
+          {showDetails ? text : shortText}
         </Typography>
         {showDetails && (
           <Typography variant='body2' lineHeight={1.5} fontSize={descriptionFontSize}>
@@ -81,4 +81,4 @@ export default function TimeBlock({
  * maximum value being `maxFontSize` pixels.
  */
 const getDynamicFontSize = (maxFontSize) =>
-  `min(${maxFontSize}px, ${maxFontSize} / 1280 * 100vw, ${maxFontSize} / 960 * 100vh)`;
+  `min(${maxFontSize}px, ${maxFontSize} / 1440 * 100vw, ${maxFontSize} / 1080 * 100vh)`;
