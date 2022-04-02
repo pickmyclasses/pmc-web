@@ -87,7 +87,6 @@ export default function ReviewPage() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
   useMount(() => fetchCourseByID(urlParams.id).then(setCourse));
   const tagsPosLabel = 'Positive Side';
   const tagsNegLabel = 'Negative Side';
@@ -233,14 +232,13 @@ export default function ReviewPage() {
                 setSemester(semester);
               }}
             />
-            {/* <ReviewDropdownSemester
-              options={semesters}
-              value={semester}
-              onChange={(semester) => {
-                setSemester(semester);
-                console.log(semester);
+            <ReviewDropdownProfessor
+              options={professors}
+              value={professor}
+              onChange={(professor) => {
+                setProfessor(professor);
               }}
-            /> */}
+            />
           </Stack>
         </Box>
       ),
@@ -314,7 +312,14 @@ export default function ReviewPage() {
                     })
                   );
                 }
+
                 postReview(course.id, {
+                  classSemester: {
+                    collegeName: semester.collegeName,
+                    year: semester.year,
+                    season: semester.season,
+                  },
+                  classProfessor: professor.professorName,
                   rating: ratingValue,
                   anonymous: anonymity,
                   recommended: recommendation,

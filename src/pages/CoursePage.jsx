@@ -58,11 +58,7 @@ export default function CoursePage() {
     fetchProfessorByCourseID(courseID).then(setProfessors);
     if (user) {
       //fetchSemestersByCourseID(user.collegeID).then((data) => setSemesters(data));
-<<<<<<< Updated upstream
-      fetchSemestersByCollegeID(user.collegeID).then((data) => setSemesters(data.data));
-=======
       fetchSemestersByCollegeID(user.collegeID).then((data) => setSemesters(data.data.data));
->>>>>>> Stashed changes
     }
     // Figure out the active tab from the URL.
     const tabParam = String(urlParams.tab).toLowerCase();

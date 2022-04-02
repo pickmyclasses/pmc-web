@@ -7,24 +7,22 @@ import Select from '@mui/material/Select';
 import { FilterContext } from '../CoursePage/CourseReviews';
 
 export default function ReviewDropdownProfessor({ options, value, onChange }) {
-  const { filterMethod, setFilterMethod } = useContext(FilterContext);
-
-  const handleChange = (e) => setFilterMethod(e.target.value);
-
   return (
     <Box width='192px'>
       <FormControl fullWidth>
-        <InputLabel>Sort reviews by</InputLabel>
-        <Select value={filterMethod} label='Sort reviews by' onChange={handleChange}>
-          {options.map((option, key) => {
-            <MenuItem value='most-recent'>Most Recent</MenuItem>;
-          })}
-          <MenuItem value='most-recent'>Most Recent</MenuItem>
-          {/* <MenuItem value='least-recent'>Least Recent</MenuItem>
-          <MenuItem value='most-helpful'>Most Helpful</MenuItem>
-          <MenuItem value='least-helpful'>Least Helpful</MenuItem> */}
-          <MenuItem value='highest-rated'>Highest Rated</MenuItem>
-          <MenuItem value='lowest-rated'>Lowest Rated</MenuItem>
+        <InputLabel>Professors</InputLabel>
+        <Select
+          value={value}
+          label='PrfessorsOptions'
+          onChange={(event) => {
+            onChange(event.target.value);
+          }}
+        >
+          {options.map((option, index) => (
+            <MenuItem key={index} value={option}>
+              {option.professorName}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </Box>

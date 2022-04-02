@@ -15,12 +15,12 @@ export default function ReviewDropdownSemester({ options, value, onChange }) {
           value={value}
           label='SemestersOptions'
           onChange={(event) => {
-            //onChange(event.target.value);
+            onChange(event.target.value);
           }}
         >
           {options.map(
             (option, index) => (
-              <MenuItem key={index} value={option.year + ' ' + option.season}>
+              <MenuItem key={index} value={option}>
                 {option.year + ' ' + option.season}
               </MenuItem>
             )
