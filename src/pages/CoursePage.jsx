@@ -1,14 +1,29 @@
-import React, { createContext, createElement, useCallback, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  createElement,
+  useCallback,
+  useEffect,
+  useState,
+  useContext,
+} from 'react';
 import { useParams } from 'react-router-dom';
 import { Forum, PieChart, ShoppingCart, Widgets } from '@mui/icons-material';
 import { Box, Container } from '@mui/material';
-import { fetchCourseByID, fetchReviewsByCourseID, fetchReviewTagsByCourseID } from '../api';
+import {
+  fetchCourseByID,
+  fetchReviewsByCourseID,
+  fetchReviewTagsByCourseID,
+  fetchProfessorByCourseID,
+  fetchSemestersByCollegeID,
+} from '../api';
 import CoursePageTop, { imageHeight } from '../components/CoursePage/CoursePageTop';
 import CourseOverview from '../components/CoursePage/CourseOverview';
 import CourseStats from '../components/CoursePage/CourseStats';
 import CourseReviews from '../components/CoursePage/CourseReviews';
 import CourseRegistration from '../components/CoursePage/CourseRegistration';
 import ContainerWithLoadingIndication from '../components/Page/ContainerWithLoadingIndication';
+import { UserContext } from '../App';
+
 import Scrollbars from 'react-custom-scrollbars-2';
 
 export default function CoursePage() {
@@ -18,11 +33,14 @@ export default function CoursePage() {
   const [course, setCourse] = useState(null);
   const [reviews, setReviews] = useState(null);
   const [reviewTags, setReviewTags] = useState(null);
+  const [professors, setProfessors] = useState(null);
+  const [semesters, setSemesters] = useState(null);
   // This avoids the useRef()'s not updating problem with useEffect().
   // See https://stackoverflow.com/a/67906087)
   // We can potentially include this pattern in the utils collection to reuse it.
   const [containerNode, setContainerNode] = useState(null);
   const containerRef = useCallback((node) => setContainerNode(node), []);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     const courseID = urlParams.id;
@@ -33,10 +51,17 @@ export default function CoursePage() {
       setReviews(null);
     }
 
-    // Fetch data for the course, classes offered, reviews tags.
+    // Fetch data for the course, classes offered, reviews tags, professors, semesters.
     fetchCourseByID(courseID).then(setCourse);
     fetchReviewsByCourseID(courseID).then(setReviews);
     fetchReviewTagsByCourseID(courseID).then(setReviewTags);
+    fetchProfessorByCourseID(courseID).then(setProfessors);
+    if (user) {
+      //fetchSemestersByCourseID(user.collegeID).then((data) => setSemesters(data));
+      fetchSemestersByCollegeID(user.collegeID).then((data) => setSemesters(data));
+      console.log(semesters);
+    }
+
     // Figure out the active tab from the URL.
     const tabParam = String(urlParams.tab).toLowerCase();
     setActiveTabName(tabs.hasOwnProperty(tabParam) ? tabParam : '');
@@ -53,7 +78,9 @@ export default function CoursePage() {
         <OnTopScrollBars>
           <CoursePageTop course={course} tabs={tabs} activeTabName={activeTabName} />
           <Container maxWidth='xl' sx={{ paddingTop: '32px' }}>
-            <CourseContext.Provider value={{ course, reviews, reviewTags }}>
+            <CourseContext.Provider
+              value={{ course, reviews, reviewTags, professors, semesters }}
+            >
               {createElement(tabs[activeTabName].content)}
             </CourseContext.Provider>
           </Container>

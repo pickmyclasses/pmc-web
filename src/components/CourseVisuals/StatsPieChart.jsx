@@ -41,13 +41,13 @@ let option = {
 };
 
 function onChartLegendselectchanged(param, echarts) {
-  console.log(param, echarts);
+  //console.log(param, echarts);
 }
 function onChartReady(echarts) {
-  console.log('echarts is ready', echarts);
+  //console.log('echarts is ready', echarts);
 }
 function onChartClick(param, echarts) {
-  console.log(param, echarts);
+  //console.log(param, echarts);
 }
 function generateStarValues(reviews, option) {
   option.title.subtext = 'Based on ' + reviews.length + ' reviews';
