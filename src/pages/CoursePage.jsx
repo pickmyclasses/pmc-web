@@ -65,8 +65,6 @@ export default function CoursePage() {
     setActiveTabName(tabs.hasOwnProperty(tabParam) ? tabParam : '');
   }, [urlParams, course?.id]);
 
-  console.log(semesters);
-
   useEffect(() => {
     // Go to top of page (right below the banner image) when URL changes.
     const pageContent = containerNode?.children[0].children[0];
