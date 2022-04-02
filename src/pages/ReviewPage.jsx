@@ -9,6 +9,10 @@ import { postReview, postTagsByCourseID } from '../../src/api/index';
 import ReviewAnonymous from '../components/ReviewInputDetails/ReviewAnonymous';
 import ReviewRecommend from '../components/ReviewInputDetails/ReviewRecommend';
 import ReviewRadioButtons from '../components/ReviewInputDetails/ReviewRadioButtons';
+import ReviewDropdownSemester from '../components/ReviewInputDetails/ReviewDropdownSemester';
+import ReviewDropdownProfessor from '../components/ReviewInputDetails/ReviewDropdownProfessor';
+import Stack from '@mui/material/Stack';
+
 import { useSnackbar } from 'notistack';
 import { UserContext } from '../App';
 
@@ -37,11 +41,14 @@ export default function ReviewPage() {
   const { reviewTags: tagSuggestion } = useContext(CourseContext);
   const [positiveTags, setPositiveTags] = useState([]);
   const [negativeTags, setNegativeTags] = useState([]);
+  const [professor, setProfessor] = useState();
+  const [semester, setSemester] = useState();
   const urlParams = useParams();
   const { user } = useContext(UserContext);
   const [activeStep, setActiveStep] = React.useState(0);
   const { enqueueSnackbar } = useSnackbar();
-
+  const { professors } = useContext(CourseContext);
+  const { semesters } = useContext(CourseContext);
   const handleNext = () => {
     if (activeStep === 1) {
       if (positiveTags.length === 0) {
@@ -208,14 +215,34 @@ export default function ReviewPage() {
       ),
     },
     {
-      label: 'Additional Comments on the course',
+      label: 'Additional Information on the course',
       description: (
-        <ReviewComments
-          value={commentValue}
-          onChange={(commentValue) => {
-            setCommentValue(commentValue);
-          }}
-        />
+        <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}>
+          <ReviewComments
+            value={commentValue}
+            onChange={(commentValue) => {
+              setCommentValue(commentValue);
+            }}
+          />
+          <Stack direction='row' spacing={1}>
+            {' '}
+            <ReviewDropdownSemester
+              options={semesters}
+              value={semester}
+              onChange={(semester) => {
+                setSemester(semester);
+              }}
+            />
+            {/* <ReviewDropdownSemester
+              options={semesters}
+              value={semester}
+              onChange={(semester) => {
+                setSemester(semester);
+                console.log(semester);
+              }}
+            /> */}
+          </Stack>
+        </Box>
       ),
     },
   ];
