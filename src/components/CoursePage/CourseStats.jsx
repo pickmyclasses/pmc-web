@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import ReviewPieChart from '../CourseVisuals/ReviewPieChart';
+import StatsPieChart from '../CourseVisuals/StatsPieChart';
 import { Grid, Box, Typography, Card } from '@mui/material';
 import { CourseContext } from '../../pages/CoursePage';
 import ReviewDotLineChart from '../CourseVisuals/ReviewDotLineChart';
@@ -14,40 +14,41 @@ function generateStarValues(reviews, data) {
 
 export default function CourseStats() {
   const { reviews } = useContext(CourseContext);
-  const [filterMethod, setFilterMethod] = useState('This week');
-  const [filteredReviews, setFilteredReviews] = useState(reviews);
+  // const { reviews } = useContext(CourseContext);
+  // const [filterMethod, setFilterMethod] = useState('This week');
+  // const [filteredReviews, setFilteredReviews] = useState(reviews);
 
-  const data = [
-    { name: 'Useless (1)', value: 0 },
-    { name: 'Poor (2)', value: 0 },
-    { name: 'Ok (3)', value: 0 },
-    { name: 'Good (4)', value: 0 },
-    { name: 'Excellent (5)', value: 0 },
-  ];
-  generateStarValues(filteredReviews, data);
-  useEffect(() => {
-    const predicateByFilterMethod = (filterMethod) => {
-      const days = daysByFilterMethod[filterMethod];
-      return (review) => {
-        const reviewDate = new Date(review.createdAt);
-        const currDate = new Date();
-        return currDate.getTime() - days * 86400000 < reviewDate.getTime();
-      };
-    };
+  // const data = [
+  //   { name: 'Useless (1)', value: 0 },
+  //   { name: 'Poor (2)', value: 0 },
+  //   { name: 'Ok (3)', value: 0 },
+  //   { name: 'Good (4)', value: 0 },
+  //   { name: 'Excellent (5)', value: 0 },
+  // ];
+  // generateStarValues(filteredReviews, data);
+  // useEffect(() => {
+  //   const predicateByFilterMethod = (filterMethod) => {
+  //     const days = daysByFilterMethod[filterMethod];
+  //     return (review) => {
+  //       const reviewDate = new Date(review.createdAt);
+  //       const currDate = new Date();
+  //       return currDate.getTime() - days * 86400000 < reviewDate.getTime();
+  //     };
+  //   };
 
-    const predicate = predicateByFilterMethod(filterMethod);
-    setFilteredReviews(
-      reviews
-        .concat()
-        .filter(predicate)
-        .sort((x, y) => new Date(x.createdAt).getTime() - new Date(y.createdAt).getTime())
-    );
-  }, [filterMethod, reviews]);
+  //   const predicate = predicateByFilterMethod(filterMethod);
+  //   setFilteredReviews(
+  //     reviews
+  //       .concat()
+  //       .filter(predicate)
+  //       .sort((x, y) => new Date(x.createdAt).getTime() - new Date(y.createdAt).getTime())
+  //   );
+  // }, [filterMethod, reviews]);
 
   return (
     <>
       <Box>
-        <Grid container spacing='32px' marginBottom='32px'>
+        {/* <Grid container spacing='32px' marginBottom='32px'>
           <Grid item xs={4}>
             <Card sx={{ width: '100%', height: '100%' }}>
               <Box
@@ -95,20 +96,22 @@ export default function CourseStats() {
               </Box>
             </Card>
           </Grid>
-        </Grid>
-        {/* <Grid container spacing='32px' marginBottom='32px'>
-          <Grid item xs={4}>
-            <Card sx={{ width: '100%', height: '300px' }}>
-              <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}> </Box>
+        </Grid> */}
+        <Grid container spacing='32px' marginBottom='32px'>
+          <Grid item xs={5}>
+            <Card sx={{ width: '100%', height: '500px' }}>
+              <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}>
+                <StatsPieChart reviews={reviews} />
+              </Box>
             </Card>
           </Grid>
 
-          <Grid item xs={8}>
+          <Grid item xs={7}>
             <Card sx={{ width: '100%', height: '300px' }}>
               <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}></Box>
             </Card>
           </Grid>
-        </Grid> */}
+        </Grid>
       </Box>
     </>
   );
