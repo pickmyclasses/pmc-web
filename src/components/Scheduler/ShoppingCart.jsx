@@ -4,10 +4,11 @@ import { formatCourseName, parseDayList, parseTime } from '../../utils';
 import Timeline from './Timeline';
 // import Color from 'color';
 import { pluralize } from '../../utils';
-import CourseScheduleSummary, { formatDayList, formatTimeRange } from './CourseScheduleSummary';
-import { getColorByCourse, postCustomEvent, removeCustomEventByID } from '../../api';
+import CourseScheduleSummary, { formatTimeRange } from './CourseScheduleSummary';
+import { getColorByCourse, addOrUpdateCustomEvent, removeCustomEventByID } from '../../api';
 import PreventableLink from '../PreventableNavigation/PreventableLink';
 import { SchedulerContext } from './ContainerWithScheduler';
+import { UserContext } from 'App';
 
 /** The shopping cart resides in the top part of the scheduler. */
 export default function ShoppingCart({
@@ -16,9 +17,11 @@ export default function ShoppingCart({
   noSummary = false,
   timelineColumnTitles = undefined,
   allowEditingCustomEvents = false,
+  addEventOnClick = false,
   ...timeLineProps
 }) {
   const theme = useTheme();
+  const { user } = useContext(UserContext);
   const { refreshSchedulerData } = useContext(SchedulerContext);
 
   const [sessionGenerationResolver, setSessionGenerationResolver] = useState({});
@@ -78,15 +81,24 @@ export default function ShoppingCart({
           onEditingEventDelete={(onComplete) => {
             removeCustomEventByID(editingCustomEvent.eventID).then(() => {
               setEditingCustomEvent(null);
-              refreshSchedulerData(onComplete);
+              refreshSchedulerData(() => {
+                onComplete();
+                setEditingCustomEvent(null);
+              });
             });
           }}
           onEditingEventSave={(onComplete) => {
-            postCustomEvent(sessionToCustomEvent(editingCustomEvent)).then(() => {
-              setEditingCustomEvent(null);
-              refreshSchedulerData(onComplete);
-            });
+            addOrUpdateCustomEvent(user.userID, sessionToCustomEvent(editingCustomEvent)).then(
+              () => {
+                refreshSchedulerData(() => {
+                  onComplete();
+                  setEditingCustomEvent(null);
+                });
+              }
+            );
           }}
+          addEventOnClick={!!user && addEventOnClick}
+          onAddEvent={(event) => setEditingCustomEvent(event)}
           {...timeLineProps}
         />
       </Box>
@@ -156,6 +168,7 @@ const generateSessions = (
         highlight,
         shouldDispatch: !!selectionID,
         text: courseCode,
+        shortText: courseCode,
         // The following `data` object determines what to display in the timeline detail
         // card (which shows up when clicking on a time block).
         // TODO Q: Extract TimeDataCard so that it's handled by ShoppingCart. Let Timeline
@@ -204,7 +217,7 @@ const generateSessions = (
           <>
             {event.title && (
               <>
-                {event.type}
+                {event.kind}
                 <br />
               </>
             )}
@@ -212,8 +225,8 @@ const generateSessions = (
           </>
         ),
         color: 'gray',
-        variant: 'outlined',
-        text: event.title || event.type,
+        text: event.title || event.kind,
+        shortText: event.kind,
         // The following `data` object determines what to display in the timeline detail
         // card (which shows up when clicking on a time block).
         // TODO Q: Extract TimeDataCard so that it's handled by ShoppingCart. Let Timeline
@@ -225,7 +238,7 @@ const generateSessions = (
           firstColumn: Math.min(...event.days) - 1,
           earliestStart: event.startTime,
           title: event.title,
-          type: event.type,
+          label: event.kind,
           subtitle: event.description,
           color: 'gray',
           editURL: !areCustomEventsEditable && '/profile/schedule?selected=' + event.id,
@@ -263,10 +276,19 @@ export const getInstructor = (classData) =>
     (value) => value && /^[A-Za-z\s]+,[A-Za-z,\s]+$/.test(String(value))
   );
 
-const sessionToCustomEvent = ({ eventID, title, type, subtitle, color, days, start, end }) => ({
+const sessionToCustomEvent = ({
+  eventID,
+  title,
+  label,
+  subtitle,
+  color,
+  days,
+  start,
+  end,
+}) => ({
   id: eventID,
   title,
-  type,
+  kind: label,
   description: subtitle,
   color,
   days,

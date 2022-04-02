@@ -1,5 +1,5 @@
 import { Dashboard, EventNote, PlaylistAdd, School } from '@mui/icons-material';
-import { Box, Container, Divider, Grid, Stack, styled, Tab, Tabs } from '@mui/material';
+import { Box, Container, Divider, Stack, styled, Tab, Tabs } from '@mui/material';
 import PreventableLink from '../components/PreventableNavigation/PreventableLink';
 import ProfileAvatarDisplay from '../components/ProfilePage/ProfileAvatarDisplay';
 import ProfileRoadmap from '../components/ProfilePage/ProfileRoadmap';

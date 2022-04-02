@@ -9,7 +9,7 @@ export default function StaticTimeDataCardContent({
   data: {
     title,
     subtitle,
-    type,
+    label,
     description,
     editURL = undefined,
     infoURL = undefined,
@@ -24,12 +24,12 @@ export default function StaticTimeDataCardContent({
 }) {
   return (
     <Box padding='12px 20px 16px'>
-      <Typography variant='h6' fontSize='1.125rem'>
+      <Typography variant='h6' fontSize='1.125rem' lineHeight={1.33} marginBottom='4px'>
         {title}
       </Typography>
-      {type && (
+      {label && (
         <Typography variant='body2' color='text.secondary' gutterBottom>
-          {type}
+          {label}
         </Typography>
       )}
       <Typography variant='body2'>{subtitle}</Typography>

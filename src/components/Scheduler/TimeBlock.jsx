@@ -4,6 +4,7 @@ import Color from 'color';
 
 export default function TimeBlock({
   text,
+  shortText,
   variant = 'outlined',
   color = 'gray',
   darken = false,
@@ -11,6 +12,7 @@ export default function TimeBlock({
   details,
   data,
   sx = {},
+  isEditable = false,
   ...props
 }) {
   const theme = useTheme();
@@ -36,7 +38,7 @@ export default function TimeBlock({
       borderColor: shades[+darken],
       color: variant === 'outlined' ? shades[+darken] : '',
     });
-  }, [theme, variant, color, darken]);
+  }, [theme, variant, color, darken, showDetails]);
 
   const buttonStyles = {
     ...sx,
@@ -50,7 +52,7 @@ export default function TimeBlock({
     alignItems: 'flex-start',
     overflow: 'hidden',
     textTransform: 'none',
-    padding: '6px 0',
+    padding: '6px',
     '&, &:hover, &:focus': { ...palette },
     '*': { pointerEvents: 'none' },
   };
@@ -62,7 +64,7 @@ export default function TimeBlock({
     <Button text={text} variant={variant} color='primary' sx={buttonStyles} {...props}>
       <Stack>
         <Typography variant='subtitle2' lineHeight={1.17} fontSize={titleFontSize}>
-          {text}
+          {showDetails ? text : shortText}
         </Typography>
         {showDetails && (
           <Typography variant='body2' lineHeight={1.5} fontSize={descriptionFontSize}>
@@ -79,4 +81,4 @@ export default function TimeBlock({
  * maximum value being `maxFontSize` pixels.
  */
 const getDynamicFontSize = (maxFontSize) =>
-  `min(${maxFontSize}px, ${maxFontSize} / 1280 * 100vw, ${maxFontSize} / 960 * 100vh)`;
+  `min(${maxFontSize}px, ${maxFontSize} / 1440 * 100vw, ${maxFontSize} / 1080 * 100vh)`;
