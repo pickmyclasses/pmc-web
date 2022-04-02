@@ -34,7 +34,7 @@ export default function CoursePage() {
   const [reviews, setReviews] = useState(null);
   const [reviewTags, setReviewTags] = useState(null);
   const [professors, setProfessors] = useState(null);
-  const [semesters, setSemesters] = useState(null);
+  const [semesters, setSemesters] = useState([]);
   // This avoids the useRef()'s not updating problem with useEffect().
   // See https://stackoverflow.com/a/67906087)
   // We can potentially include this pattern in the utils collection to reuse it.
@@ -58,14 +58,14 @@ export default function CoursePage() {
     fetchProfessorByCourseID(courseID).then(setProfessors);
     if (user) {
       //fetchSemestersByCourseID(user.collegeID).then((data) => setSemesters(data));
-      fetchSemestersByCollegeID(user.collegeID).then((data) => setSemesters(data));
-      console.log(semesters);
+      fetchSemestersByCollegeID(user.collegeID).then((data) => setSemesters(data.data));
     }
-
     // Figure out the active tab from the URL.
     const tabParam = String(urlParams.tab).toLowerCase();
     setActiveTabName(tabs.hasOwnProperty(tabParam) ? tabParam : '');
   }, [urlParams, course?.id]);
+
+  console.log(semesters);
 
   useEffect(() => {
     // Go to top of page (right below the banner image) when URL changes.

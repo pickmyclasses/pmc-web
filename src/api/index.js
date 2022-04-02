@@ -165,3 +165,5 @@ export const fetchProfessorByCourseID = (courseID, body) =>
 
 export const fetchSemestersByCollegeID = (collegeID, body) =>
   axios.get(`/college/${collegeID}/semester/list`).then((data) => data);
+
+export const fetchCollegeList = () => axios.get(`/college/list`).then((data) => data.data.data);
