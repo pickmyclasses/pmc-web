@@ -27,23 +27,29 @@ export default function CourseScheduleSummary({ classes, plainText = false }) {
           <Typography variant='body2' noWrap>
             {component}:
           </Typography>
-          {plainText ? (
-            <Typography variant='subtitle2' noWrap>
-              &nbsp;
-              {formatDayList(parseDayList(classData.offerDate))}
-              &nbsp;@&nbsp;
-            </Typography>
+          {classData.offerDate?.length === 0 ? (
+            <Typography variant='subtitle2'>&nbsp;meets online</Typography>
           ) : (
-            <DaysIndicator
-              days={parseDayList(classData.offerDate)}
-              width='88px'
-              height={1.25}
-              sx={{ marginLeft: '12px', marginRight: '-2px' }}
-            />
+            <>
+              {plainText ? (
+                <Typography variant='subtitle2' noWrap>
+                  &nbsp;
+                  {formatDayList(parseDayList(classData.offerDate))}
+                  &nbsp;@&nbsp;
+                </Typography>
+              ) : (
+                <DaysIndicator
+                  days={parseDayList(classData.offerDate)}
+                  width='88px'
+                  height={1.25}
+                  sx={{ marginLeft: '12px', marginRight: '-2px' }}
+                />
+              )}
+              <Typography variant='subtitle2' noWrap>
+                {formatTimeRange(classData)}
+              </Typography>
+            </>
           )}
-          <Typography variant='subtitle2' noWrap>
-            {formatTimeRange(classData)}
-          </Typography>
         </Stack>
       ))}
     </Stack>

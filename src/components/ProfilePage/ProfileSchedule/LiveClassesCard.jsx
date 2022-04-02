@@ -22,7 +22,7 @@ export default function LiveClassesCard({ classesInShoppingCart, customEvents })
         <LabelWithIcon
           iconType={EventNote}
           color='action'
-          label='Live Courses & Recurrent Events'
+          label='Weekly Schedule'
           variant='overline'
         />
         <Box height='1728px'>
