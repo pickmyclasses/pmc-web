@@ -7,6 +7,7 @@ import ProfileSchedule from '../components/ProfilePage/ProfileSchedule';
 import React, { createElement, useEffect, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { useParams } from 'react-router-dom';
+import ProfileHistory from 'components/ProfilePage/ProfileHistory';
 
 /**
  * Provides the basic layout and tab management for the user profile page (accessed via avatar
@@ -56,9 +57,9 @@ export default function ProfilePage() {
       </LeftBar>
       <Scrollbars autoHide>
         {/* The active tab's content: */}
-        <Container maxWidth='xl' sx={{ paddingBottom: '32px', height: '100%' }}>
-          <Box sx={{ marginLeft: '280px' }}>
-            <Box paddingY='32px' paddingLeft='32px'>
+        <Container maxWidth='xl' sx={{ height: 'calc(100% - 32px)' }}>
+          <Box marginLeft='280px' height='100%'>
+            <Box height='calc(100% - 32px)' marginTop='32px' paddingLeft='32px'>
               {createElement(tabs[activeTabName].content)}
             </Box>
           </Box>
@@ -76,7 +77,7 @@ const tabs = {
   '': { title: 'Dashboard', icon: Dashboard, content: ProfileRoadmap },
   'schedule': { title: 'Schedule', icon: EventNote, content: ProfileSchedule },
   'roadmap': { title: 'Roadmap', icon: School, content: ProfileRoadmap },
-  'history': { title: 'History', icon: History, content: ProfileRoadmap },
+  'history': { title: 'History', icon: History, content: ProfileHistory },
 };
 
 // The following provides shadow style settings for the left bar of the page.

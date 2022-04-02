@@ -25,7 +25,7 @@ export default function ProfileSchedule() {
     <ContainerWithLoadingIndication
       isLoading={!classesInShoppingCart || !customEvents || !asyncClasses}
     >
-      <Stack spacing='32px'>
+      <Stack spacing='32px' paddingBottom='32px'>
         <ProfilePageTabHeadingCard
           iconType={EventNote}
           title='Your Schedule'

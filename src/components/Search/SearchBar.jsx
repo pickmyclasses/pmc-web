@@ -13,12 +13,13 @@ export default function SearchBar({
   defaultSearchText,
   textColor,
   backgroundColor,
-  onSearch,
+  onSearch = () => {},
   maxWidth,
   focusHoverColor,
   placeholderText,
   borderRadiusRatio,
-  fontSize
+  fontSize,
+  searchIconColor,
 }) {
   const theme = useTheme();
 
@@ -72,7 +73,7 @@ export default function SearchBar({
             </>
           )}
           <IconButton
-            sx={{ color: colors.blue[300] }}
+            sx={{ color: searchIconColor || colors.blue[300] }}
             onClick={function () {
               onSearch(searchText);
             }}
