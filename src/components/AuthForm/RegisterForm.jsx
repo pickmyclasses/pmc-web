@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -9,6 +9,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Autocomplete from '@mui/material/Autocomplete';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { register } from '../../api';
 import { useLocation } from 'react-router-dom';
@@ -16,6 +17,8 @@ import { PreventableNavigationContext } from 'components/PreventableNavigation/C
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 import { useSnackbar } from 'notistack';
 import logo from '../../assets/icon.png';
+import { useMount } from 'utils';
+import { fetchCollegeList } from '../../api';
 
 const theme = createTheme();
 
@@ -23,6 +26,12 @@ export default function RegisterForm() {
   const { navigateIfAllowed } = useContext(PreventableNavigationContext);
   const location = useLocation();
   const { enqueueSnackbar } = useSnackbar();
+  const [collegeList, setCollegeList] = useState([]);
+  const [college, setCollege] = useState(null);
+
+  useMount(() => {
+    fetchCollegeList().then(setCollegeList);
+  });
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -31,10 +40,10 @@ export default function RegisterForm() {
     const password = data.get('password');
     const firstName = data.get('firstName');
     const lastName = data.get('lastName');
-    const college = data.get('college');
     const rePassword = data.get('rePassword');
     let notifyMsg = '';
     let variant = '';
+
     if (rePassword !== password) {
       notifyMsg = 'Password Mismatch! Please make sure your password is correct.';
       variant = 'error';
@@ -126,13 +135,13 @@ export default function RegisterForm() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name='college'
-                  label='College'
+                <Autocomplete
                   id='college'
-                  autoComplete='college'
+                  required
+                  onChange={(event, value) => setCollege(value.id)}
+                  options={collegeList}
+                  getOptionLabel={(option) => option.name}
+                  renderInput={(params) => <TextField {...params} label='College' />}
                 />
               </Grid>
               <Grid item xs={12}>
