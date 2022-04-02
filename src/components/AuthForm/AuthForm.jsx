@@ -44,6 +44,7 @@ export default function AuthForm() {
           token: data.data.token,
           role: data.data.role,
           userID: data.data.id,
+          collegeID: data.data.collegeID,
         };
         setUser(userInfo);
 
