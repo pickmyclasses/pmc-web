@@ -32,7 +32,7 @@ export default function ContainerWithStaticScheduler({ children }) {
           // TODO Q: Ideally we should show a message in the scheduler if not logged in, e.g.
           // "Log in to enable your personal shopping cart!"
           // ...instead of hiding the scheduler altogether.
-          xs={shouldShowStaticScheduler ? 3.25 : 0}
+          xs={shouldShowStaticScheduler ? 3.6 : 0}
           sx={{ padding: '24px', display: shouldShowStaticScheduler ? '' : 'none' }}
         >
           <Card sx={{ height: '100%', overflow: 'visible' }}>

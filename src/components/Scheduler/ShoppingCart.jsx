@@ -168,6 +168,7 @@ const generateSessions = (
         highlight,
         shouldDispatch: !!selectionID,
         text: courseCode,
+        shortText: courseCode,
         // The following `data` object determines what to display in the timeline detail
         // card (which shows up when clicking on a time block).
         // TODO Q: Extract TimeDataCard so that it's handled by ShoppingCart. Let Timeline
@@ -224,8 +225,8 @@ const generateSessions = (
           </>
         ),
         color: 'gray',
-        variant: 'outlined',
         text: event.title || event.kind,
+        shortText: event.kind,
         // The following `data` object determines what to display in the timeline detail
         // card (which shows up when clicking on a time block).
         // TODO Q: Extract TimeDataCard so that it's handled by ShoppingCart. Let Timeline

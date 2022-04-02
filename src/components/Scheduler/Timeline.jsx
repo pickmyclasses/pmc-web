@@ -15,7 +15,8 @@ import TimeBlock from './TimeBlock';
 import TimeDataCard from './TimeDataCard';
 import LabelWithIcon from '../CoursePage/LabelWithIcon';
 import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { colorOptions } from './TimeDataCard/EditableTimeDataCardContent';
 
 /** Represents the timeline view in the shopping cart. */
 export default function Timeline({
@@ -41,6 +42,7 @@ export default function Timeline({
 }) {
   const theme = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
   const { isNavigationAllowed, navigateIfAllowed } = useContext(PreventableNavigationContext);
 
   const [rangeStart, setRangeStart] = useState(defaultRangeStart);
@@ -136,7 +138,7 @@ export default function Timeline({
     setHasHighlights(events.some((x) => x.highlight));
 
     // eslint-disable-next-line
-  }, [events, hasSelectedDefaultEvent, location.search]);
+  }, [events, hasSelectedDefaultEvent]);
 
   // Compute which events should be slightly shifted right in the display. Some events are
   // shifted right to avoid covering other events and making other events unrecognizable.
@@ -159,6 +161,9 @@ export default function Timeline({
         setIsDataCardEditable(true);
       }
       setHasSelectedDefaultEvent(true);
+
+      // Clear the search parameter from the URL so the event won't stay editable on reload.
+      navigate('#', { replace: true, search: '' });
     }
     const selectedEventData = eventsShown.find(
       (x) => x.isActive && [targetGroupID, -1].includes(x.data.groupID)
@@ -221,6 +226,7 @@ export default function Timeline({
     const {
       columnIndex,
       text,
+      shortText,
       details,
       color,
       data,
@@ -282,6 +288,7 @@ export default function Timeline({
           >
             <TimeBlock
               text={text}
+              shortText={shortText}
               color={
                 highlight
                   ? hasConflicts
@@ -475,7 +482,7 @@ export default function Timeline({
               title: '',
               label: 'Event',
               subtitle: '',
-              color: '#2d4e86',
+              color: colorOptions[0],
               isEditable: true,
               days: [columnIndex + 1], // TODO Q: +1? who's controlling monday starting first
               start,
