@@ -14,13 +14,13 @@ export default function ProfileHistory() {
           title='Your History of Courses'
           description='Tell us what courses you have taken for more personalized content and recommendation'
         />
-        <Grid container flex={1} backgroundColor='pink'>
-          <Grid item xs={6} paddingRight='16px'>
+        <Grid container flex={1}>
+          <Grid item xs={6} paddingRight='24px'>
             <AddToHistorySearchList />
           </Grid>
           <Divider orientation='vertical' sx={{ marginRight: '-1px' }} />
-          <Grid item xs={6} paddingLeft='16px'>
-            right
+          <Grid item xs={6} paddingLeft='24px'>
+            blah blah blah
           </Grid>
         </Grid>
       </Stack>
