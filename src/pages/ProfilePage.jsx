@@ -1,4 +1,4 @@
-import { Dashboard, EventNote, PlaylistAdd, School } from '@mui/icons-material';
+import { Dashboard, EventNote, History, School } from '@mui/icons-material';
 import { Box, Container, Divider, Stack, styled, Tab, Tabs } from '@mui/material';
 import PreventableLink from '../components/PreventableNavigation/PreventableLink';
 import ProfileAvatarDisplay from '../components/ProfilePage/ProfileAvatarDisplay';
@@ -76,7 +76,7 @@ const tabs = {
   '': { title: 'Dashboard', icon: Dashboard, content: ProfileRoadmap },
   'schedule': { title: 'Schedule', icon: EventNote, content: ProfileSchedule },
   'roadmap': { title: 'Roadmap', icon: School, content: ProfileRoadmap },
-  'history': { title: 'History', icon: PlaylistAdd, content: ProfileRoadmap },
+  'history': { title: 'History', icon: History, content: ProfileRoadmap },
 };
 
 // The following provides shadow style settings for the left bar of the page.
