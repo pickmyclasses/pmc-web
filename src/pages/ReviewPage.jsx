@@ -41,7 +41,7 @@ export default function ReviewPage() {
   const { reviewTags: tagSuggestion } = useContext(CourseContext);
   const [positiveTags, setPositiveTags] = useState([]);
   const [negativeTags, setNegativeTags] = useState([]);
-  const [professor, setProfessor] = useState();
+  const [professor, setProfessor] = useState('');
   const [semester, setSemester] = useState();
   const urlParams = useParams();
   const { user } = useContext(UserContext);
@@ -312,6 +312,10 @@ export default function ReviewPage() {
                     })
                   );
                 }
+                // console.log(professor.professorName);
+                // console.log(semester.collegeName);
+                // console.log(semester.year);
+                // console.log(semester.season);
 
                 postReview(course.id, {
                   classSemester: {
