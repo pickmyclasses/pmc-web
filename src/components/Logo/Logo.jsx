@@ -17,8 +17,8 @@ export default function Logo() {
       color={theme.palette.primary.contrastText}
       sx={{ textDecoration: 'none' }}
     >
-      <img src={logo} alt={logo} style={{ height: '35px', marginRight: '10px' }} />
-      <img src={heading} alt={'PickMyClasses'} style={{ height: '30px' }} />
+      <img src={logo} alt={logo} style={{ height: '32px', marginRight: '16px' }} />
+      <img src={heading} alt={'PickMyClasses'} style={{ height: '22px' }} />
     </Stack>
   );
 }
