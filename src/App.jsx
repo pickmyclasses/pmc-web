@@ -12,11 +12,8 @@ import RegisterForm from './components/AuthForm/RegisterForm';
 import FeedbackEditor from './pages/FeedbackEditorPage';
 import ContainerWithNavigationBar from './components/NavigationBar/ContainerWithNavigationBar';
 import ContainerWithPreventableNavigation from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
-<<<<<<< HEAD
 import FileUpload from './pages/Admin/FileUpload';
-=======
 import ProfilePage from 'pages/ProfilePage';
->>>>>>> 30f873b5e6d5503d17e3c083002915f33a93afc2
 
 export default function App() {
   const [user, setUser] = useState();
