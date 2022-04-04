@@ -12,6 +12,7 @@ import RegisterForm from './components/AuthForm/RegisterForm';
 import FeedbackEditor from './pages/FeedbackEditorPage';
 import ContainerWithNavigationBar from './components/NavigationBar/ContainerWithNavigationBar';
 import ContainerWithPreventableNavigation from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
+import FileUpload from './pages/Admin/FileUpload';
 import ProfilePage from 'pages/ProfilePage';
 
 export default function App() {
@@ -39,6 +40,7 @@ export default function App() {
               <Route exact path='/course/:id/edit-feedback' element={<FeedbackEditor />} />
               <Route exact path='/admin' element={<AdminPage />} />
               <Route exact path='/admin-update' element={<UpdateData />} />
+              <Route exact path='/file-upload' element={<FileUpload />} />
             </Routes>
           </ContainerWithNavigationBar>
         </ContainerWithPreventableNavigation>
