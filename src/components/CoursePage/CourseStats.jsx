@@ -1,19 +1,45 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import StatsPieChart from '../CourseVisuals/StatsPieChart';
-import { Grid, Box, Typography, Card } from '@mui/material';
+import StatsStackedBar from '../CourseVisuals/StatsStackedBar';
+import { Grid, Box, Typography, Card, Stack } from '@mui/material';
 import { CourseContext } from '../../pages/CoursePage';
 import ReviewDotLineChart from '../CourseVisuals/ReviewDotLineChart';
 import ReviewDotLineFilter from '../CourseVisuals/ReviewDotLineFilter';
 import TagList from '../CourseCardGrid/CourseCard/TagList';
-
-function generateStarValues(reviews, data) {
-  for (let i = 0; i < reviews.length; i++) {
-    data[reviews[i].rating - 1].value += 1;
-  }
-}
+import { motion } from 'framer-motion';
 
 export default function CourseStats() {
-  const { reviews } = useContext(CourseContext);
+  const { course, reviews } = useContext(CourseContext);
+  const coursePageURL = '/course/' + course.id;
+
+  const renderProfessorSummery = () => (
+    <MotionCard
+      initial='initial'
+      whileHover='mouseEntered'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      sx={{ width: '100%', height: '100%', cursor: 'pointer', '&:hover': { boxShadow: 6 } }}
+    >
+      <Stack padding='24px' spacing='12px' height='calc(100% )'>
+        <Stack spacing='12px' flex={1}></Stack>
+      </Stack>
+    </MotionCard>
+  );
+
+  const renderRatingSummery = () => (
+    <MotionCard
+      initial='initial'
+      whileHover='mouseEntered'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      sx={{ width: '100%', height: '100%', cursor: 'pointer', '&:hover': { boxShadow: 6 } }}
+    >
+      <Stack padding='24px' spacing='12px' height='calc(100% - 48px)'>
+        <Stack spacing='12px' flex={1}>
+          <StatsStackedBar reviews={reviews} />
+        </Stack>
+      </Stack>
+    </MotionCard>
+  );
+
   // const { reviews } = useContext(CourseContext);
   // const [filterMethod, setFilterMethod] = useState('This week');
   // const [filteredReviews, setFilteredReviews] = useState(reviews);
@@ -47,72 +73,17 @@ export default function CourseStats() {
 
   return (
     <>
-      <Box>
-        {/* <Grid container spacing='32px' marginBottom='32px'>
-          <Grid item xs={4}>
-            <Card sx={{ width: '100%', height: '100%' }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  padding: '12px 24px',
-                  '> *': { marginY: '12px !important' },
-                }}
-              >
-                <Typography variant='subtitle2'>Ratings Distribution</Typography>
-                <ReviewPieChart reviews={filteredReviews} />
-                <FilterContext.Provider
-                  value={{
-                    filterMethods: Object.keys(daysByFilterMethod),
-                    filterMethod,
-                    setFilterMethod,
-                  }}
-                >
-                  <ReviewDotLineFilter />
-                </FilterContext.Provider>
-              </Box>
-            </Card>
-          </Grid>
-          <Grid item xs={8}>
-            <Card sx={{ width: '100%', height: '100%' }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  padding: '12px 24px',
-                  '> *': { marginY: '12px !important' },
-                }}
-              >
-                <Typography variant='subtitle2'>Ratings Over Time</Typography>
-                <ReviewDotLineChart reviews={filteredReviews} />
-
-                <TagList
-                  tags={data.map((item) => item.name + ' : ' + item.value)}
-                  variant='outlined'
-                  color='success'
-                />
-              </Box>
-            </Card>
-          </Grid>
-        </Grid> */}
-        <Grid container spacing='32px' marginBottom='32px'>
-          <Grid item xs={5}>
-            <Card sx={{ width: '100%', height: '500px' }}>
-              <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}>
-                <StatsPieChart reviews={reviews} />
-              </Box>
-            </Card>
-          </Grid>
-
-          <Grid item xs={7}>
-            <Card sx={{ width: '100%', height: '300px' }}>
-              <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}></Box>
-            </Card>
-          </Grid>
+      <Grid container spacing='32px' marginBottom='16px'>
+        <Grid item xs={6}>
+          {renderRatingSummery()}
         </Grid>
-      </Box>
+        <Grid item xs={3}>
+          {renderProfessorSummery()}
+        </Grid>
+        <Grid item xs={3}>
+          {renderProfessorSummery()}
+        </Grid>
+      </Grid>
     </>
   );
 }
@@ -132,3 +103,5 @@ const daysByFilterMethod = {
   'This month': 30,
   'This year': 365,
 };
+
+const MotionCard = motion(Card);
