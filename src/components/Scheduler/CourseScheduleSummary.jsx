@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { formatInstructorName, parseDayList } from '../../utils';
+import { formatInstructorName, parseDayList, secondsToTimeString } from '../../utils';
 import DaysIndicator from '../CourseCardGrid/CourseCard/DaysIndicator';
 import { getComponent, getInstructor } from './ShoppingCart';
 
@@ -27,35 +27,47 @@ export default function CourseScheduleSummary({ classes, plainText = false }) {
           <Typography variant='body2' noWrap>
             {component}:
           </Typography>
-          {plainText ? (
-            <Typography variant='subtitle2' noWrap>
-              &nbsp;
-              {parseDayList(classData.offerDate)
-                .map((x) => dayNames[x])
-                .join(', ')}{' '}
-              @&nbsp;
-            </Typography>
+          {classData.offerDate?.length === 0 ? (
+            <Typography variant='subtitle2'>&nbsp;meets online</Typography>
           ) : (
-            <DaysIndicator
-              days={parseDayList(classData.offerDate)}
-              width='88px'
-              height={1.25}
-              sx={{ marginLeft: '12px', marginRight: '-2px' }}
-            />
+            <>
+              {plainText ? (
+                <Typography variant='subtitle2' noWrap>
+                  &nbsp;
+                  {formatDayList(parseDayList(classData.offerDate))}
+                  &nbsp;@&nbsp;
+                </Typography>
+              ) : (
+                <DaysIndicator
+                  days={parseDayList(classData.offerDate)}
+                  width='88px'
+                  height={1.25}
+                  sx={{ marginLeft: '12px', marginRight: '-2px' }}
+                />
+              )}
+              <Typography variant='subtitle2' noWrap>
+                {formatTimeRange(classData)}
+              </Typography>
+            </>
           )}
-          <Typography variant='subtitle2' noWrap>
-            {formatTimeRange(classData)}
-          </Typography>
         </Stack>
       ))}
     </Stack>
   );
 }
 
-const dayNames = 'Sun Mon Tue Wed Thu Fri Sat'.split(' ');
+const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+export const formatDayList = (days) => days.map((x) => dayNames[x]).join(', ');
 
 /** `09:40am–10:30am` becomes `9:40–10:30am`. */
 export const formatTimeRange = ({ startTime, endTime }) => {
+  if (!isNaN(startTime)) {
+    return formatTimeRange({
+      startTime: secondsToTimeString(startTime),
+      endTime: secondsToTimeString(endTime),
+    });
+  }
   if (startTime.slice(-2) === endTime.slice(-2)) startTime = startTime.slice(0, -2);
   return `${startTime.replace(/^0+/, '')}–${endTime.replace(/^0+/, '')}`;
 };

@@ -18,6 +18,7 @@ export default function SearchBar({
   focusHoverColor,
   placeholderText,
   borderRadiusRatio,
+  fontSize
 }) {
   const theme = useTheme();
 
@@ -37,6 +38,7 @@ export default function SearchBar({
         maxWidth: maxWidth,
         borderRadius: borderRadiusRatio,
         color: textColor,
+        fontSize: fontSize,
         backgroundColor: backgroundColor,
         '&:hover, &.Mui-focused': { backgroundColor: focusHoverColor },
         '::before, ::after': { display: 'none' },

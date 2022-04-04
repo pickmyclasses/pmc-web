@@ -9,6 +9,7 @@ export default function LabelWithIcon({
   height = '1.5em',
   size = 'medium',
   noWrap = false,
+  variant = undefined,
 }) {
   const theme = useTheme();
 
@@ -20,7 +21,7 @@ export default function LabelWithIcon({
         sx: { marginRight: size === 'small' ? '4px' : '8px' },
       })}
       <Typography
-        variant={`body${size === 'small' ? 2 : 1}`}
+        variant={variant || `body${size === 'small' ? 2 : 1}`}
         color={theme.palette[color]?.dark}
         noWrap={noWrap}
       >

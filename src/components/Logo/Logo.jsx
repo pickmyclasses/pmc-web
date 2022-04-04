@@ -1,7 +1,8 @@
 import React from 'react';
-import { Stack, Typography, useTheme } from '@mui/material';
-import { School } from '@material-ui/icons';
+import { Stack, useTheme } from '@mui/material';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
+import heading from '../../assets/pmc.png';
+import logo from '../../assets/icon.png';
 
 /** A clickable website logo that links to home page. */
 export default function Logo() {
@@ -16,10 +17,8 @@ export default function Logo() {
       color={theme.palette.primary.contrastText}
       sx={{ textDecoration: 'none' }}
     >
-      <School style={{ marginRight: '12px' }} />
-      <Typography variant='h6' fontWeight='500'>
-        PickMyClasses
-      </Typography>
+      <img src={logo} alt={logo} style={{ height: '32px', marginRight: '16px' }} />
+      <img src={heading} alt={'PickMyClasses'} style={{ height: '22px' }} />
     </Stack>
   );
 }

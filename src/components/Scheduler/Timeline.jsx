@@ -1,9 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import {
+  Box,
+  Divider,
+  Grid,
+  MenuItem,
+  Popover,
+  Portal,
+  Typography,
+  useTheme,
+} from '@mui/material';
+import { AddCircle } from '@mui/icons-material';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useMount } from '../../utils';
 import TimeBlock from './TimeBlock';
 import TimeDataCard from './TimeDataCard';
+import LabelWithIcon from '../CoursePage/LabelWithIcon';
+import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { colorOptions } from './TimeDataCard/EditableTimeDataCardContent';
 
 /** Represents the timeline view in the shopping cart. */
 export default function Timeline({
@@ -12,9 +25,25 @@ export default function Timeline({
   columnTitles = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
   events = [],
   onSelect = () => {},
+  onEditingEventChange = () => {},
+  onEditingEventSave = () => {},
+  onEditingEventCancel = () => {},
+  onEditingEventDelete = () => {},
   alwaysGrayUnHighlighted = false,
+  onGroupIDsWithConflictsChange = () => {},
+  showShadowUnderColumnTitles = false,
+  showHalfHourMarks = false,
+  expandAllTimeOnMarks = false,
+  largerTimeOnMarks = false,
+  showDetailsInTimeBlocks = false,
+  timeDataCardContainer = undefined,
+  addEventOnClick = false,
+  onAddEvent = () => {},
 }) {
   const theme = useTheme();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { isNavigationAllowed, navigateIfAllowed } = useContext(PreventableNavigationContext);
 
   const [rangeStart, setRangeStart] = useState(defaultRangeStart);
   const [rangeEnd, setRangeEnd] = useState(defaultRangeEnd);
@@ -23,35 +52,57 @@ export default function Timeline({
   const [eventsWithConflicts, setEventsWithConflicts] = useState([]);
   const [eventsShiftedRight, setEventsShiftedRight] = useState([]);
   const [mouseEnteredEventData, setMouseEnteredEventData] = useState(null);
+  const [selectedEventGroupID, setSelectedEventGroupID] = useState(NaN);
   const [selectedEventData, setSelectedEventData] = useState(null);
-  const [doesSelectedEventHaveConflicts, setDoesSelectedEventHaveConflicts] = useState(false);
+  const [selectedEventHasConflicts, setSelectedEventHasConflicts] = useState(false);
+  const [isDataCardEditable, setIsDataCardEditable] = useState(false);
+  const [hasSelectedDefaultEvent, setHasSelectedDefaultEvent] = useState(false);
+  const [addEventConfirmationPosition, setAddEventConfirmationPosition] = useState(null);
 
   const containerRef = useRef();
+  const dataCardDefaultContainerRef = useRef();
   const dataCardRef = useRef();
 
   const columnWidth = 100 / columnTitles.length;
 
-  // Deselect any highlighted event on click outside.
-  useMount(() => {
+  useEffect(() => {
     const handleDocumentMouseDown = (e) => {
+      // Deselect any highlighted event on click outside.
       if (
+        !isDataCardEditable &&
         (!containerRef?.current?.contains(e.target) || e.target.tagName !== 'BUTTON') &&
         !dataCardRef?.current?.contains(e.target)
       ) {
-        setSelectedEventData(null);
+        setSelectedEventGroupID(NaN);
+      }
+
+      // Add an event when the user clicks on empty space inside the timeline.
+      if (
+        addEventOnClick &&
+        e.button === 0 &&
+        containerRef?.current?.contains(e.target) &&
+        e.target.tagName !== 'BUTTON' &&
+        !dataCardRef?.current?.contains(e.target) &&
+        !selectedEventGroupID
+      ) {
+        setAddEventConfirmationPosition({ top: e.clientY + 12, left: e.clientX });
       }
     };
 
     document.addEventListener('mousedown', handleDocumentMouseDown);
     return () => document.removeEventListener('mousedown', handleDocumentMouseDown);
-  });
+  }, [isDataCardEditable, addEventOnClick, selectedEventGroupID]);
 
   // Auto zooms the timeline to fit all the events, with ranges rounded to the nearest hour that
   // to fits and having the same size as the default range.
   useEffect(() => {
-    let earliestStart = Math.min(...events.map((x) => x.start)) || defaultRangeStart;
+    let earliestStart =
+      Math.min(...events.filter((x) => !x.data.isEditable).map((x) => x.start)) ||
+      defaultRangeStart;
     earliestStart = Math.floor(earliestStart / 3600) * 3600;
-    let latestEnd = Math.max(...events.map((x) => x.end)) || defaultRangeEnd;
+    let latestEnd =
+      Math.max(...events.filter((x) => !x.data.isEditable).map((x) => x.end)) ||
+      defaultRangeEnd;
     latestEnd = Math.ceil(latestEnd / 3600) * 3600;
     const range = defaultRangeEnd - defaultRangeStart;
     const defaultStart = Math.max(latestEnd - range, defaultRangeStart);
@@ -85,23 +136,67 @@ export default function Timeline({
       )
     );
     setHasHighlights(events.some((x) => x.highlight));
+
     // eslint-disable-next-line
-  }, [events]);
+  }, [events, hasSelectedDefaultEvent]);
 
   // Compute which events should be slightly shifted right in the display. Some events are
   // shifted right to avoid covering other events and making other events unrecognizable.
   useEffect(() => {
-    const unHighlighted = eventsShown.filter((x) => !x.highlight);
-    let eventsWithConflicts = eventsShown.map((x) => hasConflictsWithSome(x, unHighlighted));
-    let eventsShiftedRight = eventsShown.map((x) => +hasConflictsWithSome(x, eventsShown));
-    for (let i = eventsShiftedRight.length - 2; i >= 0; i--) {
-      if (eventsShiftedRight[i] > 0) {
-        eventsShiftedRight[i] = (eventsShiftedRight[i + 1] + 1) % 2;
+    const targetEvents = eventsShown.filter((x) => !x.ignoreConflicts);
+    const newEventsWithConflicts = eventsShown.map((x) =>
+      hasConflictsWithSome(x, targetEvents)
+    );
+    setEventsWithConflicts(newEventsWithConflicts);
+    setEventsShiftedRight(getShiftedRight(eventsShown));
+
+    // Find the data of the selected event. If this is the first render, select the default
+    // event according to the `selected` URL search parameter.
+    let targetGroupID = selectedEventGroupID;
+    if (eventsShown.length && !hasSelectedDefaultEvent) {
+      const params = Object.fromEntries(new URLSearchParams(location.search).entries());
+      targetGroupID = +params.selected;
+      if (!isNaN(targetGroupID)) {
+        setSelectedEventGroupID(targetGroupID);
+        setIsDataCardEditable(true);
       }
+      setHasSelectedDefaultEvent(true);
+
+      // Clear the search parameter from the URL so the event won't stay editable on reload.
+      navigate('#', { replace: true, search: '' });
     }
-    setEventsWithConflicts(eventsWithConflicts);
-    setEventsShiftedRight(eventsShiftedRight);
-  }, [eventsShown]);
+    const selectedEventData = eventsShown.find(
+      (x) => x.isActive && [targetGroupID, -1].includes(x.data.groupID)
+    )?.data;
+    setSelectedEventData(selectedEventData || null);
+    if (!selectedEventData) {
+      setSelectedEventGroupID(NaN);
+      setIsDataCardEditable(false);
+    } else if (selectedEventData.groupID === -1) {
+      setSelectedEventGroupID(-1);
+      setIsDataCardEditable(true);
+    }
+    setSelectedEventHasConflicts(
+      eventsShown.some(
+        (x, i) => x.data.groupID === selectedEventGroupID && newEventsWithConflicts[i]
+      )
+    );
+  }, [eventsShown, selectedEventGroupID, hasSelectedDefaultEvent, location.search]);
+
+  // Report which (non-outlined) events have conflicts.
+  useEffect(() => {
+    if (onGroupIDsWithConflictsChange) {
+      const targetEvents = eventsShown.filter((x) => !x.ignoreConflicts);
+      const groupIDsWithConflicts = Array.from(
+        new Set(
+          targetEvents
+            .filter((x) => hasConflictsWithSome(x, targetEvents))
+            .map((x) => x.data.groupID)
+        )
+      );
+      onGroupIDsWithConflictsChange(groupIDsWithConflicts);
+    }
+  }, [eventsShown, onGroupIDsWithConflictsChange]);
 
   // Logic for rendering elements in the timeline.
 
@@ -115,17 +210,24 @@ export default function Timeline({
 
   const getTopByTime = (time) => (time - rangeStart) / (rangeEnd - rangeStart);
 
-  const handleTimeBlockClick = (data) => {
-    setDoesSelectedEventHaveConflicts(
-      eventsShown.some((x, i) => x.data.groupID === data.groupID && eventsWithConflicts[i])
-    );
-    setSelectedEventData(selectedEventData?.groupID !== data.groupID && data);
+  const handleTimeBlockClick = ({ data }) => {
+    if (isDataCardEditable && !isNavigationAllowed) {
+      if (data.groupID !== selectedEventGroupID) {
+        // Don't deselect; show flash
+        navigateIfAllowed('#');
+      }
+      return;
+    }
+
+    setSelectedEventGroupID(selectedEventGroupID !== data.groupID ? data.groupID : NaN);
   };
 
   const renderEvent = (i, event) => {
     const {
       columnIndex,
       text,
+      shortText,
+      details,
       color,
       data,
       start,
@@ -133,6 +235,7 @@ export default function Timeline({
       key,
       isActive,
       highlight,
+      variant,
       shouldDispatch,
       sx,
     } = event;
@@ -143,7 +246,7 @@ export default function Timeline({
     const bottom = getTopByTime(Math.min(end, rangeEnd));
     const hasConflicts = eventsWithConflicts[i];
     const isMouseEntered = mouseEnteredEventData?.groupID === data.groupID;
-    const isSelected = selectedEventData?.groupID === data.groupID;
+    const isSelected = selectedEventGroupID === data.groupID;
 
     return (
       <AnimatePresence
@@ -185,35 +288,39 @@ export default function Timeline({
           >
             <TimeBlock
               text={text}
+              shortText={shortText}
               color={
                 highlight
                   ? hasConflicts
-                    ? 'error'
+                    ? 'warning'
                     : 'primary'
                   : alwaysGrayUnHighlighted ||
                     hasHighlights ||
-                    (selectedEventData && !isSelected)
+                    (selectedEventGroupID && !isSelected)
                   ? 'gray'
                   : color
               }
               darken={isMouseEntered || isSelected}
               variant={
-                highlight
+                variant ||
+                (highlight
                   ? typeof highlight === 'string'
                     ? highlight
                     : 'outlined'
-                  : 'contained'
+                  : 'contained')
               }
+              showDetails={showDetailsInTimeBlocks}
               sx={sx}
+              details={details}
               data={data}
               onMouseEnter={() => setMouseEnteredEventData(data)}
               onMouseLeave={() => setMouseEnteredEventData(null)}
               onClick={() => {
                 if (shouldDispatch) {
                   onSelect?.(data.groupID);
-                  setSelectedEventData(null);
+                  setSelectedEventGroupID(NaN);
                 } else {
-                  handleTimeBlockClick(data);
+                  handleTimeBlockClick(event);
                 }
               }}
             />
@@ -225,7 +332,7 @@ export default function Timeline({
 
   const renderGridLines = () => {
     const gridLines = [];
-    for (let time = 0, i = 0; time <= 86400; time += 3600) {
+    for (let time = 0, i = 0; time <= 86400; time += showHalfHourMarks ? 1800 : 3600) {
       const y = (time - rangeStart) / (rangeEnd - rangeStart);
       const isInRange = time >= rangeStart && time <= rangeEnd;
       gridLines.push(
@@ -242,14 +349,24 @@ export default function Timeline({
                 transform: 'translateY(-50%)',
                 top: y * 100 + '%',
                 width: 'calc(100% + 20px)',
+                filter: time % 3600 && 'opacity(0.667)',
                 '::before': { width: '100%' },
-                '> span': { fontSize: '10px', opacity: 0.75, padding: '0 4px 0 2px' },
+                '> span': {
+                  fontSize: largerTimeOnMarks ? '14px' : '10px',
+                  opacity: 0.75,
+                  padding: '0 4px 0 2px',
+                },
                 '::after': { display: 'none' },
                 transition: getTransitionForStyles(['top'], 0.375),
               }}
             >
-              {(time / 3600) % 12 || 12}
-              {(time % 43200 === 0 || i === 0) && (time % 86400 < 43200 ? 'am' : 'pm')}
+              {time % 3600 === 0 && (
+                <>
+                  {(time / 3600) % 12 || 12}
+                  {(expandAllTimeOnMarks || time % 43200 === 0 || i === 0) &&
+                    (time % 86400 < 43200 ? 'am' : 'pm')}
+                </>
+              )}
             </MotionDivider>
           )}
         </AnimatePresence>
@@ -261,33 +378,122 @@ export default function Timeline({
 
   return (
     <Box width='calc(100% - 16px)' height='100%'>
-      <Grid container sx={{ width: '100%', flex: 1, marginBottom: '4px' }}>
-        {columnTitles.map((title, i) => renderColumnTitle(i, title))}
-      </Grid>
+      <Box
+        width='calc(100% + 16px)'
+        position='sticky'
+        top='-1px'
+        zIndex={1001}
+        paddingTop='12px'
+        marginTop='-12px'
+        marginBottom={showShadowUnderColumnTitles ? '-8px' : '4px'}
+        sx={{
+          background: 'white',
+          ...(showShadowUnderColumnTitles && {
+            '&:after': {
+              content: '" "',
+              position: 'absolute',
+              width: '100%',
+              height: '3px',
+              boxShadow: '0 3px 3px -3px inset',
+            },
+          }),
+        }}
+      >
+        <Grid
+          container
+          sx={{
+            width: 'calc(100% - 16px)',
+            flex: 1,
+            paddingBottom: showShadowUnderColumnTitles ? '4px' : '',
+          }}
+        >
+          {columnTitles.map((title, i) => renderColumnTitle(i, title))}
+        </Grid>
+      </Box>
       <Box
         ref={containerRef}
-        sx={{ width: '100%', height: 'calc(100% - 32px)', position: 'relative' }}
+        sx={{
+          width: '100%',
+          height: 'calc(100% - 32px)',
+          position: 'relative',
+          cursor: addEventOnClick && !selectedEventGroupID && 'copy',
+        }}
       >
         {renderGridLines()}
         {eventsShown.map((event, i) => renderEvent(i, event))}
+        <Box ref={dataCardDefaultContainerRef} />
         {selectedEventData && (
-          <Box
-            ref={dataCardRef}
-            sx={{
-              position: 'absolute',
-              right: 'calc(100% + 8px)',
-              top: getTopByTime(selectedEventData.earliestStart) * 100 + '%',
-              zIndex: 9999,
-            }}
-          >
-            <TimeDataCard
-              data={selectedEventData}
-              hasConflicts={doesSelectedEventHaveConflicts}
-              onLinkClick={() => setSelectedEventData(null)}
-            />
-          </Box>
+          <Portal container={timeDataCardContainer || dataCardDefaultContainerRef?.current}>
+            <Box
+              position='absolute'
+              right={`calc(${100 - selectedEventData.firstColumn * columnWidth}% + 8px)`}
+              top={`max(${getTopByTime(selectedEventData.earliestStart) * 100}%, 0%)`}
+              zIndex={1000}
+              sx={{
+                transition: isDataCardEditable && getTransitionForStyles(['right', 'top'], 0.5),
+              }}
+            >
+              <TimeDataCard
+                ref={dataCardRef}
+                data={selectedEventData}
+                hasConflicts={selectedEventHasConflicts}
+                onLinkClick={() => setSelectedEventGroupID(NaN)}
+                isEditable={isDataCardEditable}
+                onIsEditableChange={setIsDataCardEditable}
+                onEditingEventChange={onEditingEventChange}
+                onEditingEventDelete={onEditingEventDelete}
+                onEditingEventSave={onEditingEventSave}
+                onEditingEventCancel={onEditingEventCancel}
+              />
+            </Box>
+          </Portal>
         )}
       </Box>
+      <Popover
+        anchorReference='anchorPosition'
+        anchorPosition={addEventConfirmationPosition}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={!!addEventConfirmationPosition}
+        onClose={() => setAddEventConfirmationPosition(null)}
+      >
+        <MenuItem
+          onClick={() => {
+            const containerRect = containerRef.current.getBoundingClientRect();
+            const columnIndex = Math.min(
+              Math.floor(
+                ((addEventConfirmationPosition.left - containerRect.x) / containerRect.width) *
+                  columnTitles.length
+              ),
+              columnTitles.length - 1
+            );
+            const start =
+              Math.floor(
+                (((addEventConfirmationPosition.top - 12 - containerRect.y) /
+                  containerRect.height) *
+                  (rangeEnd - rangeStart) +
+                  rangeStart) /
+                  1800
+              ) * 1800;
+            onAddEvent({
+              eventID: -1,
+              groupID: -1,
+              firstColumn: columnIndex,
+              earliestStart: start,
+              title: '',
+              label: 'Event',
+              subtitle: '',
+              color: colorOptions[0],
+              isEditable: true,
+              days: [columnIndex + 1], // TODO Q: +1? who's controlling monday starting first
+              start,
+              end: start + 3600,
+            });
+            setAddEventConfirmationPosition(null);
+          }}
+        >
+          <LabelWithIcon iconType={AddCircle} color='action' label='Create custom event' />
+        </MenuItem>
+      </Popover>
     </Box>
   );
 }
@@ -315,8 +521,28 @@ export const hasConflictsWithSome = (x, events) => {
         y.isActive &&
         y !== x &&
         y.columnIndex === x.columnIndex &&
-        x.start <= y.end &&
-        y.start <= x.end
+        x.start < y.end &&
+        y.start < x.end
     )
   );
+};
+
+const getShiftedRight = (events, maxShifts = 2) => {
+  /** @type {[end: Number, shiftedRight: Number][]} */
+  let stack = [[Infinity, maxShifts - 1]];
+  let currColumn = -1;
+  let res = [];
+  for (let event of events) {
+    if (!event.isActive) {
+      res.push(0);
+      continue;
+    }
+    if (event.columnIndex !== currColumn) stack.splice(1);
+    currColumn = event.columnIndex;
+    while (stack[stack.length - 1][0] <= event.start) stack.pop();
+    const shiftedRight = (stack[stack.length - 1][1] + 1) % maxShifts;
+    res.push(shiftedRight);
+    stack.push([event.end, shiftedRight]);
+  }
+  return res;
 };

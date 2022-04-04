@@ -112,7 +112,7 @@ export default function CourseCard({ course }) {
       sx={{
         boxShadow: 3,
         width: '100%',
-        height: '216px',
+        height: '208px',
         display: 'flex',
         flexFlow: 'column',
         cursor: 'pointer',

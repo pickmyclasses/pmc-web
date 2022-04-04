@@ -4,8 +4,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
 import ShoppingCart from '../../Scheduler/ShoppingCart';
 
-export default function SchedulePreview({ course, classesToHighlight, onSelect }) {
-  const { classesInShoppingCart } = useContext(SchedulerContext);
+export default function SchedulePreview({ course, classesToHighlight, ...shoppingCartProps }) {
+  const { classesInShoppingCart, customEvents } = useContext(SchedulerContext);
 
   const [classes, setClasses] = useState([]);
 
@@ -13,7 +13,7 @@ export default function SchedulePreview({ course, classesToHighlight, onSelect }
     () =>
       setClasses(
         mergeShoppingCartClasses(
-          classesInShoppingCart.filter((x) => +x.course.id !== +course.id),
+          classesInShoppingCart.filter((x) => +x.course.id !== +course?.id),
           classesToHighlight,
           true
         )
@@ -29,9 +29,10 @@ export default function SchedulePreview({ course, classesToHighlight, onSelect }
           <Box flex={1}>
             <ShoppingCart
               classes={classes}
+              customEvents={customEvents}
               noSummary
-              onSelect={onSelect}
               alwaysGrayUnHighlighted
+              {...shoppingCartProps}
             />
           </Box>
         </Stack>

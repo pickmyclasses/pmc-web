@@ -13,17 +13,17 @@ export const register = (body) =>
 export const fetchCourseByID = (courseID) =>
   new Promise((onFetched) =>
     axios.get(`/course/${courseID}`).then((data) => {
-      // Inject classesOffered. TODO Q: Remove this after Jay finished object combination for
-      // fetch course query response.
       const course = data.data.data;
       injectFakeImageURLToCourse(course);
+      injectLocationMapURLToClasses(course.classes);
+      // Hide courses that don't have a start time (corrupted data from backend?)
+      course.classes = course.classes.filter((x) => !x.offerDate || x.startTime);
       onFetched(course);
     })
   );
 
 const getFakeCourseImageURL = (course) =>
-  'https://d2z1w4aiblvrwu.cloudfront.net/ad/ZRoa/default-large.jpg';
-// `https://singlecolorimage.com/get/${getColorByCourse(course).substring(1)}/512x216`;
+  `https://singlecolorimage.com/get/${getColorByCourse(course).substring(1)}/512x216`;
 
 export const getColorByCourse = (course) =>
   '#' +
@@ -79,26 +79,56 @@ const fakeFetchCoursesBySearch = (res) => {
   return Promise.all(resultCourseIDs.map((id) => fetchCourseByID(id)));
 };
 
-new Promise((onFetched) => onFetched());
-
 export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
 
 export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseID}/class`);
 
 /**
- * Fetches the list of `{classData, course}` a user has in their shopping cart but also injects
- * the fake image URL. Basically pretends `ImageURL` was an actual field of a course.
+ * Fetches ```
+ * {
+ *   scheduledClasses: Array<{classData, course}>,
+ *   customEvents: Array<CustomEvent>
+ * }
+ * ```.
  */
-export const fetchClassesInShoppingCart = (userID) =>
-  axios.get(`schedule?userID=${userID}`).then((data) => {
-    for (let { courseData } of data.data.data.scheduledClassList) {
-      injectFakeImageURLToCourse(courseData);
+export const fetchScheduledClassesAndCustomEvents = (userID) =>
+  axios.get(`schedule?userID=${userID}`).then(({ data }) => {
+    for (let { course } of data.data.scheduledClasses) {
+      injectFakeImageURLToCourse(course);
     }
-    return data.data.data.scheduledClassList.map(({ classData, courseData: course }) => ({
-      classData,
-      course,
-    }));
+    injectLocationMapURLToClasses(data.data.scheduledClasses.map((x) => x.classData));
+    return data.data;
   });
+
+// TODO Q: Get rid of all this once the backend has the support for it.
+const injectLocationMapURLToClasses = (classes) => {
+  for (let classData of classes) {
+    const buildingNumber = getBuildingNumberByLocation(classData.location);
+    if (buildingNumber) {
+      classData.locationMapURL = 'https://map.utah.edu/?buildingnumber=' + buildingNumber;
+    }
+  }
+};
+
+const getBuildingNumberByLocation = (location) => {
+  // prettier-ignore
+  const ids = [[1,'PARK'],[2,'VOICE'],[3,'DGH'],[4,'KH'],[5,'CSC'],[6,'ST'],[7,'LS'],[8,'AEB'],[9,'JWB'],[10,'PHYS'],[11,'WBB'],[12,'FASB'],[13,'LCB'],[14,'JTB'],[17,'PAB'],[19,'INSCC'],[25,'BEH S'],[26,'SW'],[27,'S BEH'],[28,'MCD'],[29,'FLD H'],[30,'PLAZA'],[32,'STAD'],[35,'UMFA'],[36,'FMAB'],[37,'ARCH'],[38,'ART'],[39,'SCULPT'],[40,'SSB'],[41,'NWPG'],[43,'NS'],[44,'BLDG 44'],[45,'CTIHB'],[46,'LSND'],[48,'GC'],[49,'LNCO'],[51,'SILL'],[52,'ALUMNI'],[53,'UNION'],[56,'CME'],[57,'HEDCO'],[58,'MPL'],[59,'MSRL'],[60,'ESB'],[61,'MCE'],[62,'WEB'],[64,'MEB'],[66,'PMT'],[67,'U CAMPSTOR'],[69,'CPG'],[70,'LAW'],[71,'SAEC'],[72,'BLDG 72'],[73,'PTAB'],[74,'BU C'],[77,'CRCC'],[79,'SFEBB'],[80,'GARFF'],[82,'ASB'],[83,'JFB'],[84,'BIOL'],[85,'HEB'],[86,'M LIB'],[87,'TBBC'],[90,'JHC'],[91,'HPR E'],[92,'HPR N'],[93,'HPRNAT'],[94,'HPR W'],[95,'HPR SW'],[96,'HPR SE'],[97,'DGC'],[98,'KBAC'],[99,'HBF'],[108,'GLF SH'],[109,'DFSS'],[110,'GSESLC'],[112,'MHC'],[114,'KV'],[119,'BRIDGE'],[120,'SKI']];
+
+  return (
+    ids.find((x) => x[1] === location?.split(' ')[0])?.[0] ||
+    ids.find((x) => x[1] === location?.split(' ').slice(0, 2).join(' '))?.[0]
+  );
+};
+
+export const addOrUpdateCustomEvent = (userID, customEvent) =>
+  axios.post('/schedule?type=custom-event', {
+    isNew: !(+customEvent.id >= 0),
+    userID,
+    customEvent,
+  });
+
+export const removeCustomEventByID = (eventID) =>
+  axios.put('/schedule?type=custom-event', { id: eventID });
 
 export const fetchRequirements = () => fakeFetchRequirements();
 
@@ -113,23 +143,11 @@ const fakeFetchRequirements = () =>
     ])
   );
 
-/**
- * @param {{
- *   userID: Number,
- *   classID: Number,
- *   semesterID: 1,
- * }} body
- */
-export const addClassIDToShoppingCart = (body) => axios.post('/schedule', body);
+export const addClassIDToSchedule = (userID, classID) =>
+  axios.post('/schedule?type=class', { userID, classID });
 
-/**
- * @param {{
- *   userID: Number,
- *   classID: Number,
- *   semesterID: 1,
- * }} body
- */
-export const removeClassIDFromShoppingCart = (body) => axios.put('/schedule', body);
+export const removeClassIDFromSchedule = (userID, classID) =>
+  axios.put('/schedule?type=class', { userID, classID });
 
 export const fetchReviewsByCourseID = (courseID) =>
   axios.get(`/course/${courseID}/review`).then((data) => data.data.data.reviews);
@@ -141,3 +159,11 @@ export const putTagsByCourseID = (courseID, body) => axios.put(`/course/${course
 
 export const fetchReviewTagsByCourseID = (courseID, body) =>
   axios.get(`/course/${courseID}/tag`).then((data) => data.data.data);
+
+export const fetchProfessorByCourseID = (courseID, body) =>
+  axios.get(`/course/${courseID}/professor/list`).then((data) => data.data.data);
+
+export const fetchSemestersByCollegeID = (collegeID, body) =>
+  axios.get(`/college/${collegeID}/semester/list`).then((data) => data);
+
+export const fetchCollegeList = () => axios.get(`/college/list`).then((data) => data.data.data);

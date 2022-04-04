@@ -54,6 +54,15 @@ export const useDebounce = (value, delay) => {
 };
 
 /**
+ * Returns the time of day in `h:mmt` from number of seconds since midnight.
+ * @example secondsToTimeString(43260) // '12:01pm'
+ */
+export const secondsToTimeString = (seconds) =>
+  `${Math.floor(seconds / 3600) % 12 || 12}:${Math.floor((seconds % 3600) / 60)
+    .toString()
+    .padStart(2, '0')}${seconds < 43200 ? 'am' : 'pm'}`;
+
+/**
  * Returns the number of seconds past midnight a string of time represents.
  * @example parseTime('12:01 AM') // 60
  */
@@ -64,7 +73,7 @@ export const parseTime = (s) => {
     if (s.includes('p')) offset = 43200;
     s = s.replace(/^12/, '0').replace(/[^\d.:]+/g, '');
   }
-  return Date.parse(`1970-1-1 ${s}Z`) / 1000 + offset;
+  return Date.parse(`1970-1-1 ${s}:00Z`) / 1000 + offset;
 };
 
 /**
@@ -152,15 +161,20 @@ export const formatPrerequisites = (s) => {
     .replace(/co-?requisites:[\s^\s]*/gi, '')
     .replace(/pre-?requisites:/gi, '')
     .replace(/[\r\n]+/g, '');
-  // eslint-disable-next-line
-  const rawList = eval(
-    `['${rawString}']`
-      .replace(/\(/g, "',['")
-      .replace(/\)/g, "'],'")
-      .replace(/OR/g, "','OR','")
-      .replace(/AND/g, "','AND','")
-  );
-  return prunePrerequisiteList(rawList);
+
+  try {
+    // eslint-disable-next-line
+    const rawList = eval(
+      `['${rawString}']`
+        .replace(/\(/g, "',['")
+        .replace(/\)/g, "'],'")
+        .replace(/OR/g, "','OR','")
+        .replace(/AND/g, "','AND','")
+    );
+    return prunePrerequisiteList(rawList);
+  } catch (error) {
+    return prunePrerequisiteList([]);
+  }
 };
 
 const prunePrerequisiteList = (p) => {

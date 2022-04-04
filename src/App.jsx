@@ -12,7 +12,11 @@ import RegisterForm from './components/AuthForm/RegisterForm';
 import FeedbackEditor from './pages/FeedbackEditorPage';
 import ContainerWithNavigationBar from './components/NavigationBar/ContainerWithNavigationBar';
 import ContainerWithPreventableNavigation from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
+<<<<<<< HEAD
 import FileUpload from './pages/Admin/FileUpload';
+=======
+import ProfilePage from 'pages/ProfilePage';
+>>>>>>> 30f873b5e6d5503d17e3c083002915f33a93afc2
 
 export default function App() {
   const [user, setUser] = useState();
@@ -30,6 +34,8 @@ export default function App() {
               />
               <Route exact path='/auth' element={<AuthForm />} />
               <Route exact path='/register' element={<RegisterForm />} />
+              <Route exact path='/profile' element={<ProfilePage />} />
+              <Route exact path='/profile/:tab' element={<ProfilePage />} />
               <Route exact path='/search/:query' element={<SearchPage />} />
               <Route exact path='/course/:id' element={<CoursePage />} />
               <Route exact path='/course/:id/:tab' element={<CoursePage />} />

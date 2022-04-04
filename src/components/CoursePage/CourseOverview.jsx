@@ -20,6 +20,7 @@ import CourseScheduleSummary from '../Scheduler/CourseScheduleSummary';
 import { fetchCoursesBySearch } from 'api';
 import { SectionOverline } from 'pages/HomePage';
 import { PreventableNavigationContext } from '../PreventableNavigation/ContainerWithPreventableNavigation';
+import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 
 export default function CourseOverview() {
   const { navigateIfAllowed } = useContext(PreventableNavigationContext);
@@ -61,20 +62,31 @@ export default function CourseOverview() {
   const coursePageURL = '/course/' + course.id;
   const renderInfoSummary = () => (
     <Card sx={{ width: '100%', height: '100%' }}>
-      <Stack padding='24px' spacing='12px'>
-        {course.tags.length > 0 && (
-          <>
-            <Typography variant='subtitle2'>Top Tags</Typography>
-            <TagList tags={course.tags.map((x) => x.name + ' | ' + x.voteCount)} />
-          </>
-        )}
-        <Typography variant='subtitle2'>Full Description</Typography>
-        <Typography variant='body1'>{course.description}</Typography>
-        <Typography variant='subtitle2'>Reward</Typography>
-        <Stack direction='row' spacing='24px'>
-          <LabelWithIcon color='primary' iconType={School} label='CS major requirement' />
-          <LabelWithIcon color='info' iconType={WatchLater} label={formatCreditRange(course)} />
+      <Stack padding='24px' spacing='12px' height='calc(100% - 48px)'>
+        <Stack spacing='12px' flex={1}>
+          {course.tags.length > 0 && (
+            <>
+              <Typography variant='subtitle2'>Top Tags</Typography>
+              <TagList tags={course.tags.map((x) => x.name)} />
+            </>
+          )}
+          <Typography variant='subtitle2'>Full Description</Typography>
+          <Typography variant='body1'>{course.description}</Typography>
+          <Typography variant='subtitle2'>Reward</Typography>
+          <Stack direction='row' spacing='24px'>
+            <LabelWithIcon color='primary' iconType={School} label='CS major requirement' />
+            <LabelWithIcon
+              color='info'
+              iconType={WatchLater}
+              label={formatCreditRange(course)}
+            />
+          </Stack>
         </Stack>
+        <Link component={PreventableLink} to={coursePageURL + '/stats'}>
+          <ClickableIndicator>
+            <Typography variant='subtitle2'>See detailed statistics</Typography>
+          </ClickableIndicator>
+        </Link>
       </Stack>
     </Card>
   );
@@ -83,7 +95,7 @@ export default function CourseOverview() {
     <MotionCard
       initial='initial'
       whileHover='mouseEntered'
-      onClick={() => navigateIfAllowed(`${coursePageURL}/reviews`)}
+      onClick={() => navigateIfAllowed(coursePageURL + '/reviews')}
       sx={{ width: '100%', height: '100%', cursor: 'pointer', '&:hover': { boxShadow: 6 } }}
     >
       <Stack padding='24px' spacing='12px' height='calc(100% - 48px)'>
@@ -131,7 +143,7 @@ export default function CourseOverview() {
     <MotionCard
       initial='initial'
       whileHover='mouseEntered'
-      onClick={() => navigateIfAllowed(`${coursePageURL}/registration`)}
+      onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
       sx={{ width: '100%', height: '100%', cursor: 'pointer', '&:hover': { boxShadow: 6 } }}
     >
       <Stack height='100%'>

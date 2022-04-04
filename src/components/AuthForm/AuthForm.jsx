@@ -1,6 +1,4 @@
 import React, { useContext, useState } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -9,22 +7,30 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import FormHelperText from '@mui/material/FormHelperText';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { login } from '../../api';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../App';
+import { LoadingButton } from '@mui/lab';
+import PreventableLink from 'components/PreventableNavigation/PreventableLink';
+import { useSnackbar } from 'notistack';
+import logo from '../../assets/icon.png';
 
 export default function AuthForm() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { setUser } = useContext(UserContext);
 
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setIsLoginLoading(true);
+
     const data = new FormData(event.currentTarget);
 
     const email = data.get('email');
@@ -38,19 +44,33 @@ export default function AuthForm() {
           token: data.data.token,
           role: data.data.role,
           userID: data.data.id,
+          collegeID: data.data.collegeID,
         };
         setUser(userInfo);
 
         localStorage.setItem('user', JSON.stringify(userInfo));
-        navigate('/');
+
+        if (location?.state?.linkTo) {
+          navigate(location.state.linkTo, { replace: true });
+          enqueueSnackbar(snackBarMessage['LoginSuccess'].message, {
+            variant: snackBarMessage['LoginSuccess'].variant,
+          });
+        } else navigate('/', { replace: true });
       })
       .catch((err) => {
+        setIsLoginLoading(false);
         if (err.response) {
-          setErrorMessage('Wrong username or password');
+          enqueueSnackbar(snackBarMessage['wrongPassword'].message, {
+            variant: snackBarMessage['wrongPassword'].variant,
+          });
         } else if (err.request) {
-          setErrorMessage('Sorry, something went wrong on the server, try again later');
+          enqueueSnackbar(snackBarMessage['serverError'].message, {
+            variant: snackBarMessage['serverError'].variant,
+          });
         } else {
-          setErrorMessage('Sorry, something went wrong, please refresh the page and try again');
+          enqueueSnackbar(snackBarMessage['serverError'].message, {
+            variant: snackBarMessage['serverError'].variant,
+          });
         }
       });
   };
@@ -68,9 +88,7 @@ export default function AuthForm() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <img src={logo} alt={'logo'} style={{ height: '5em' }} />
           <Typography component='h1' variant='h5'>
             Login
           </Typography>
@@ -100,9 +118,15 @@ export default function AuthForm() {
               control={<Checkbox value='remember' color='primary' />}
               label='Remember me'
             />
-            <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+            <LoadingButton
+              loading={isLoginLoading}
+              type='submit'
+              fullWidth
+              variant='contained'
+              sx={{ mt: 3, mb: 2 }}
+            >
               Sign In
-            </Button>
+            </LoadingButton>
             <Grid container>
               <Grid item xs>
                 <Link href='#' variant='body2'>
@@ -110,8 +134,13 @@ export default function AuthForm() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href='/register' variant='body2'>
-                  {"Don't have an account? Sign Up"}
+                <Link
+                  variant='body2'
+                  component={PreventableLink}
+                  to='/register'
+                  state={location.state}
+                >
+                  Don't have an account? Sign Up
                 </Link>
               </Grid>
             </Grid>
@@ -124,4 +153,13 @@ export default function AuthForm() {
 
 const ErrorMessage = ({ message }) => {
   return <FormHelperText sx={{ color: 'red', fontSize: 17 }}>{message}</FormHelperText>;
+};
+
+const snackBarMessage = {
+  LoginSuccess: { message: 'Login successfully', variant: 'success' },
+  wrongPassword: { message: 'Wrong username or password', variant: 'error' },
+  serverError: {
+    message: 'Sorry, something went wrong, please refresh the page and try again',
+    variant: 'error',
+  },
 };
