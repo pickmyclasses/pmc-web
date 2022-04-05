@@ -5,6 +5,10 @@ import StatsStackedBar from '../CourseVisuals/StatsStackedBar';
 import StatsProfessorSum from '../CourseVisuals/StatsProfessorSum';
 import StatsInfoDump from '../CourseVisuals/StatsInfoDump';
 import StatsLoading from 'components/CourseVisuals/StatsLoading';
+import StatsTags from 'components/CourseVisuals/StatsTags';
+import StatsClassSize from 'components/CourseVisuals/StatsClassSize';
+import StatsPopularity from 'components/CourseVisuals/StatsPopularity';
+
 import { Grid, Typography, Card, Stack, Link, Box } from '@mui/material';
 import { CourseContext } from '../../pages/CoursePage';
 import TagList from '../CourseCardGrid/CourseCard/TagList';
@@ -42,6 +46,57 @@ export default function CourseStats() {
       </Stack>
     </MotionCard>
   );
+  const renderTagsSummary = () => (
+    <MotionCard
+      initial='initial'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
+    >
+      <Stack height='200px' padding='24px'>
+        <Box flex={1}>
+          <Typography variant='subtitle2'>Course Top Tags</Typography>
+          <StatsTags reviews={reviews} />
+        </Box>
+        <Link>
+          <ClickableIndicator propagate>
+            <Typography variant='subtitle2'>See Details</Typography>
+          </ClickableIndicator>
+        </Link>
+      </Stack>
+    </MotionCard>
+  );
+
+  const renderClassSizeSummary = () => (
+    <MotionCard
+      initial='initial'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
+    >
+      <Stack height='200px' padding='24px'>
+        <Box flex={1}>
+          <Typography variant='subtitle2'>Class Size</Typography>
+          <StatsClassSize reviews={reviews} />
+        </Box>
+        <Link>
+          <ClickableIndicator propagate>
+            <Typography variant='subtitle2'>See Details</Typography>
+          </ClickableIndicator>
+        </Link>
+      </Stack>
+    </MotionCard>
+  );
 
   const renderInfoSummery = () => (
     <MotionCard
@@ -68,6 +123,33 @@ export default function CourseStats() {
       </Stack>
     </MotionCard>
   );
+
+  const renderPopularitySummary = () => (
+    <MotionCard
+      initial='initial'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
+    >
+      <Stack height='200px' padding='24px'>
+        <Box flex={1}>
+          <Typography variant='subtitle2'>Course Popularity </Typography>
+          <StatsPopularity reviews={reviews} />
+        </Box>
+        <Link>
+          <ClickableIndicator propagate>
+            <Typography variant='subtitle2'>See Details</Typography>
+          </ClickableIndicator>
+        </Link>
+      </Stack>
+    </MotionCard>
+  );
+
   const renderPlaceHolder = () => (
     <MotionCard
       initial='initial'
@@ -86,7 +168,9 @@ export default function CourseStats() {
         </Box>
         <Link>
           <ClickableIndicator propagate>
-            <Typography variant='subtitle2'>See Details</Typography>
+            <Typography style={{ color: '#a3a3a3' }} variant='subtitle2'>
+              Unavailable
+            </Typography>
           </ClickableIndicator>
         </Link>
       </Stack>
@@ -163,13 +247,13 @@ export default function CourseStats() {
       </Grid>
       <Grid container spacing='32px' marginBottom='16px'>
         <Grid item xs={6}>
-          {renderPlaceHolder()}
+          {renderTagsSummary()}
         </Grid>
         <Grid item xs={3}>
-          {renderPlaceHolder()}
+          {renderClassSizeSummary()}
         </Grid>
         <Grid item xs={3}>
-          {renderPlaceHolder()}
+          {renderPopularitySummary()}
         </Grid>
       </Grid>
     </>
