@@ -1,12 +1,16 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, Avatar } from 'react';
+
 import StatsPieChart from '../CourseVisuals/StatsPieChart';
 import StatsStackedBar from '../CourseVisuals/StatsStackedBar';
-import { Grid, Box, Typography, Card, Stack } from '@mui/material';
+import StatsProfessorSum from '../CourseVisuals/StatsProfessorSum';
+import StatsInfoDump from '../CourseVisuals/StatsInfoDump';
+import StatsLoading from 'components/CourseVisuals/StatsLoading';
+import { Grid, Typography, Card, Stack, Link, Box } from '@mui/material';
 import { CourseContext } from '../../pages/CoursePage';
-import ReviewDotLineChart from '../CourseVisuals/ReviewDotLineChart';
-import ReviewDotLineFilter from '../CourseVisuals/ReviewDotLineFilter';
 import TagList from '../CourseCardGrid/CourseCard/TagList';
 import { motion } from 'framer-motion';
+import ClickableIndicator from '../CourseCardGrid/CourseCard/ClickableIndicator';
+import statsInfoDump from '../CourseVisuals/StatsInfoDump';
 
 export default function CourseStats() {
   const { course, reviews } = useContext(CourseContext);
@@ -15,27 +19,100 @@ export default function CourseStats() {
   const renderProfessorSummery = () => (
     <MotionCard
       initial='initial'
-      whileHover='mouseEntered'
       //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
-      sx={{ width: '100%', height: '100%', cursor: 'pointer', '&:hover': { boxShadow: 6 } }}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
     >
-      <Stack padding='24px' spacing='12px' height='calc(100% )'>
-        <Stack spacing='12px' flex={1}></Stack>
+      <Stack height='200px' padding='24px'>
+        <Box flex={1}>
+          <Typography variant='subtitle2'>Top Professors </Typography>
+
+          <StatsProfessorSum reviews={reviews} />
+        </Box>
+        <Link>
+          <ClickableIndicator propagate>
+            <Typography variant='subtitle2'>See Details</Typography>
+          </ClickableIndicator>
+        </Link>
       </Stack>
     </MotionCard>
   );
 
+  const renderInfoSummery = () => (
+    <MotionCard
+      initial='initial'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
+    >
+      <Stack height='200px' padding='24px'>
+        <Box flex={1}>
+          <Typography variant='subtitle2'>Course Load </Typography>
+          <StatsInfoDump reviews={reviews} />
+        </Box>
+        <Link>
+          <ClickableIndicator propagate>
+            <Typography variant='subtitle2'>See Details</Typography>
+          </ClickableIndicator>
+        </Link>
+      </Stack>
+    </MotionCard>
+  );
+  const renderPlaceHolder = () => (
+    <MotionCard
+      initial='initial'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
+    >
+      <Stack height='200px' padding='24px'>
+        <Box flex={1}>
+          <StatsLoading />
+        </Box>
+        <Link>
+          <ClickableIndicator propagate>
+            <Typography variant='subtitle2'>See Details</Typography>
+          </ClickableIndicator>
+        </Link>
+      </Stack>
+    </MotionCard>
+  );
   const renderRatingSummery = () => (
     <MotionCard
       initial='initial'
-      whileHover='mouseEntered'
       //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
-      sx={{ width: '100%', height: '100%', cursor: 'pointer', '&:hover': { boxShadow: 6 } }}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
     >
-      <Stack padding='24px' spacing='12px' height='calc(100% - 48px)'>
-        <Stack spacing='12px' flex={1}>
+      <Stack height='200px' padding='24px'>
+        <Box flex={1}>
           <StatsStackedBar reviews={reviews} />
-        </Stack>
+        </Box>
+        <Link>
+          <ClickableIndicator propagate>
+            <Typography variant='subtitle2'>See Details</Typography>
+          </ClickableIndicator>
+        </Link>
       </Stack>
     </MotionCard>
   );
@@ -81,7 +158,18 @@ export default function CourseStats() {
           {renderProfessorSummery()}
         </Grid>
         <Grid item xs={3}>
-          {renderProfessorSummery()}
+          {renderInfoSummery()}
+        </Grid>
+      </Grid>
+      <Grid container spacing='32px' marginBottom='16px'>
+        <Grid item xs={6}>
+          {renderPlaceHolder()}
+        </Grid>
+        <Grid item xs={3}>
+          {renderPlaceHolder()}
+        </Grid>
+        <Grid item xs={3}>
+          {renderPlaceHolder()}
         </Grid>
       </Grid>
     </>
