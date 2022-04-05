@@ -1,19 +1,206 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import StatsPieChart from '../CourseVisuals/StatsPieChart';
-import { Grid, Box, Typography, Card } from '@mui/material';
-import { CourseContext } from '../../pages/CoursePage';
-import ReviewDotLineChart from '../CourseVisuals/ReviewDotLineChart';
-import ReviewDotLineFilter from '../CourseVisuals/ReviewDotLineFilter';
-import TagList from '../CourseCardGrid/CourseCard/TagList';
+import React, { createContext, useContext, useState, useEffect, Avatar } from 'react';
 
-function generateStarValues(reviews, data) {
-  for (let i = 0; i < reviews.length; i++) {
-    data[reviews[i].rating - 1].value += 1;
-  }
-}
+import StatsPieChart from '../CourseVisuals/StatsPieChart';
+import StatsStackedBar from '../CourseVisuals/StatsStackedBar';
+import StatsProfessorSum from '../CourseVisuals/StatsProfessorSum';
+import StatsInfoDump from '../CourseVisuals/StatsInfoDump';
+import StatsLoading from 'components/CourseVisuals/StatsLoading';
+import StatsTags from 'components/CourseVisuals/StatsTags';
+import StatsClassSize from 'components/CourseVisuals/StatsClassSize';
+import StatsPopularity from 'components/CourseVisuals/StatsPopularity';
+
+import { Grid, Typography, Card, Stack, Link, Box } from '@mui/material';
+import { CourseContext } from '../../pages/CoursePage';
+import TagList from '../CourseCardGrid/CourseCard/TagList';
+import { motion } from 'framer-motion';
+import ClickableIndicator from '../CourseCardGrid/CourseCard/ClickableIndicator';
+import statsInfoDump from '../CourseVisuals/StatsInfoDump';
 
 export default function CourseStats() {
-  const { reviews } = useContext(CourseContext);
+  const { course, reviews } = useContext(CourseContext);
+  const coursePageURL = '/course/' + course.id;
+
+  const renderProfessorSummery = () => (
+    <MotionCard
+      initial='initial'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
+    >
+      <Stack height='200px' padding='24px'>
+        <Box flex={1}>
+          <Typography variant='subtitle2'>Top Professors </Typography>
+
+          <StatsProfessorSum reviews={reviews} />
+        </Box>
+        <Link>
+          <ClickableIndicator propagate>
+            <Typography variant='subtitle2'>See Details</Typography>
+          </ClickableIndicator>
+        </Link>
+      </Stack>
+    </MotionCard>
+  );
+  const renderTagsSummary = () => (
+    <MotionCard
+      initial='initial'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
+    >
+      <Stack height='200px' padding='24px'>
+        <Box flex={1}>
+          <Typography variant='subtitle2'>Course Top Tags</Typography>
+          <StatsTags reviews={reviews} />
+        </Box>
+        <Link>
+          <ClickableIndicator propagate>
+            <Typography variant='subtitle2'>See Details</Typography>
+          </ClickableIndicator>
+        </Link>
+      </Stack>
+    </MotionCard>
+  );
+
+  const renderClassSizeSummary = () => (
+    <MotionCard
+      initial='initial'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
+    >
+      <Stack height='200px' padding='24px'>
+        <Box flex={1}>
+          <Typography variant='subtitle2'>Class Size</Typography>
+          <StatsClassSize reviews={reviews} />
+        </Box>
+        <Link>
+          <ClickableIndicator propagate>
+            <Typography variant='subtitle2'>See Details</Typography>
+          </ClickableIndicator>
+        </Link>
+      </Stack>
+    </MotionCard>
+  );
+
+  const renderInfoSummery = () => (
+    <MotionCard
+      initial='initial'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
+    >
+      <Stack height='200px' padding='24px'>
+        <Box flex={1}>
+          <Typography variant='subtitle2'>Course Load </Typography>
+          <StatsInfoDump reviews={reviews} />
+        </Box>
+        <Link>
+          <ClickableIndicator propagate>
+            <Typography variant='subtitle2'>See Details</Typography>
+          </ClickableIndicator>
+        </Link>
+      </Stack>
+    </MotionCard>
+  );
+
+  const renderPopularitySummary = () => (
+    <MotionCard
+      initial='initial'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
+    >
+      <Stack height='200px' padding='24px'>
+        <Box flex={1}>
+          <Typography variant='subtitle2'>Course Popularity </Typography>
+          <StatsPopularity reviews={reviews} />
+        </Box>
+        <Link>
+          <ClickableIndicator propagate>
+            <Typography variant='subtitle2'>See Details</Typography>
+          </ClickableIndicator>
+        </Link>
+      </Stack>
+    </MotionCard>
+  );
+
+  const renderPlaceHolder = () => (
+    <MotionCard
+      initial='initial'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
+    >
+      <Stack height='200px' padding='24px'>
+        <Box flex={1}>
+          <StatsLoading />
+        </Box>
+        <Link>
+          <ClickableIndicator propagate>
+            <Typography style={{ color: '#a3a3a3' }} variant='subtitle2'>
+              Unavailable
+            </Typography>
+          </ClickableIndicator>
+        </Link>
+      </Stack>
+    </MotionCard>
+  );
+  const renderRatingSummery = () => (
+    <MotionCard
+      initial='initial'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
+    >
+      <Stack height='200px' padding='24px'>
+        <Box flex={1}>
+          <StatsStackedBar reviews={reviews} />
+        </Box>
+        <Link>
+          <ClickableIndicator propagate>
+            <Typography variant='subtitle2'>See Details</Typography>
+          </ClickableIndicator>
+        </Link>
+      </Stack>
+    </MotionCard>
+  );
+
   // const { reviews } = useContext(CourseContext);
   // const [filterMethod, setFilterMethod] = useState('This week');
   // const [filteredReviews, setFilteredReviews] = useState(reviews);
@@ -47,72 +234,28 @@ export default function CourseStats() {
 
   return (
     <>
-      <Box>
-        {/* <Grid container spacing='32px' marginBottom='32px'>
-          <Grid item xs={4}>
-            <Card sx={{ width: '100%', height: '100%' }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  padding: '12px 24px',
-                  '> *': { marginY: '12px !important' },
-                }}
-              >
-                <Typography variant='subtitle2'>Ratings Distribution</Typography>
-                <ReviewPieChart reviews={filteredReviews} />
-                <FilterContext.Provider
-                  value={{
-                    filterMethods: Object.keys(daysByFilterMethod),
-                    filterMethod,
-                    setFilterMethod,
-                  }}
-                >
-                  <ReviewDotLineFilter />
-                </FilterContext.Provider>
-              </Box>
-            </Card>
-          </Grid>
-          <Grid item xs={8}>
-            <Card sx={{ width: '100%', height: '100%' }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  padding: '12px 24px',
-                  '> *': { marginY: '12px !important' },
-                }}
-              >
-                <Typography variant='subtitle2'>Ratings Over Time</Typography>
-                <ReviewDotLineChart reviews={filteredReviews} />
-
-                <TagList
-                  tags={data.map((item) => item.name + ' : ' + item.value)}
-                  variant='outlined'
-                  color='success'
-                />
-              </Box>
-            </Card>
-          </Grid>
-        </Grid> */}
-        <Grid container spacing='32px' marginBottom='32px'>
-          <Grid item xs={5}>
-            <Card sx={{ width: '100%', height: '500px' }}>
-              <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}>
-                <StatsPieChart reviews={reviews} />
-              </Box>
-            </Card>
-          </Grid>
-
-          <Grid item xs={7}>
-            <Card sx={{ width: '100%', height: '300px' }}>
-              <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}></Box>
-            </Card>
-          </Grid>
+      <Grid container spacing='32px' marginBottom='16px'>
+        <Grid item xs={6}>
+          {renderRatingSummery()}
         </Grid>
-      </Box>
+        <Grid item xs={3}>
+          {renderProfessorSummery()}
+        </Grid>
+        <Grid item xs={3}>
+          {renderInfoSummery()}
+        </Grid>
+      </Grid>
+      <Grid container spacing='32px' marginBottom='16px'>
+        <Grid item xs={6}>
+          {renderTagsSummary()}
+        </Grid>
+        <Grid item xs={3}>
+          {renderClassSizeSummary()}
+        </Grid>
+        <Grid item xs={3}>
+          {renderPopularitySummary()}
+        </Grid>
+      </Grid>
     </>
   );
 }
@@ -132,3 +275,5 @@ const daysByFilterMethod = {
   'This month': 30,
   'This year': 365,
 };
+
+const MotionCard = motion(Card);
