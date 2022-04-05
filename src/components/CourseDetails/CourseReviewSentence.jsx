@@ -1,5 +1,9 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+
+const lowerCaseAllWordsExceptFirstLetters = (string) =>
+  string.replaceAll(/\S*/g, (word) => `${word.slice(0, 1)}${word.slice(1).toLowerCase()}`);
+
 export default function CourseReviewSentence({ review }) {
   let hourSpent;
   if (review.hourSpent === 0) {
@@ -24,6 +28,18 @@ export default function CourseReviewSentence({ review }) {
       </Typography>
       <Typography variant='body2'>
         Any extra credited - {review.extraCreditOffered ? 'Yes' : 'No'}
+      </Typography>
+      <Typography variant='body2'>
+        Professor -{' '}
+        {review.classProfessor
+          ? lowerCaseAllWordsExceptFirstLetters(review.classProfessor)
+          : 'No information available'}
+      </Typography>
+      <Typography variant='body2'>
+        Semester -{' '}
+        {review.classSemester
+          ? review.classSemester.year + ' - ' + review.classSemester.season
+          : 'No information available'}
       </Typography>
     </Box>
   );

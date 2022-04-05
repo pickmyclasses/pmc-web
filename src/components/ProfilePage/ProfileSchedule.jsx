@@ -31,7 +31,7 @@ export default function ProfileSchedule() {
           title='Your Schedule'
           description='View and manage your courses and other weekly events'
         />
-        <AsyncClassesCard classesAndCourses={asyncClasses} />
+        {asyncClasses.length > 0 && <AsyncClassesCard classesAndCourses={asyncClasses} />}
         <LiveClassesCard
           classesInShoppingCart={classesInShoppingCart}
           customEvents={customEvents}
