@@ -181,7 +181,7 @@ export default function Timeline({
         (x, i) => x.data.groupID === selectedEventGroupID && newEventsWithConflicts[i]
       )
     );
-  }, [eventsShown, selectedEventGroupID, hasSelectedDefaultEvent, location.search]);
+  }, [eventsShown, selectedEventGroupID, hasSelectedDefaultEvent, location.search, navigate]);
 
   // Report which (non-outlined) events have conflicts.
   useEffect(() => {

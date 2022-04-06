@@ -13,12 +13,10 @@ import React, { createElement } from 'react';
 export default function ProfilePageTabHeadingCard({ iconType, title, description }) {
   return (
     <Card>
-      <Stack padding='24px' spacing='24px' direction='row' alignItems='center'>
+      <Stack padding='16px 20px' spacing='16px' direction='row' alignItems='center'>
         {createElement(iconType, { fontSize: 'large', color: 'action' })}
-        <Stack>
-          <Typography variant='h6' gutterBottom>
-            {title}
-          </Typography>
+        <Stack spacing='4px'>
+          <Typography variant='h6'>{title}</Typography>
           <Typography fontStyle='italic'>{description}</Typography>
         </Stack>
       </Stack>
