@@ -59,7 +59,7 @@ export default function ReviewPage() {
         return;
       }
       if (negativeTags.length === 0) {
-        enqueueSnackbar(snackBarMessage.lackPos.message, {
+        enqueueSnackbar(snackBarMessage.lackNeg.message, {
           variant: snackBarMessage.lackNeg.variant,
         });
         return;
@@ -312,10 +312,6 @@ export default function ReviewPage() {
                     })
                   );
                 }
-                // console.log(professor.professorName);
-                // console.log(semester.collegeName);
-                // console.log(semester.year);
-                // console.log(semester.season);
 
                 postReview(course.id, {
                   classSemester: {
