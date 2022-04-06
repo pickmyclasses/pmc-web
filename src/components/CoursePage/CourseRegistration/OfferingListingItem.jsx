@@ -41,7 +41,12 @@ export default function OfferingListingItem({
         {children}
         <Stack direction='row'>
           <ListItemIcon sx={{ minWidth: 0, marginRight: '-8px' }}>
-            <Checkbox checked={selected} />
+            <Tooltip
+              disableInteractive
+              title={`Click to ${selected ? 'withdraw' : 'register'}`}
+            >
+              <Checkbox checked={selected} />
+            </Tooltip>
           </ListItemIcon>
           <ListItemText>
             <Grid

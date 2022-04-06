@@ -15,7 +15,7 @@ export default function SearchPage({ shouldShowScheduler }) {
 
   // TODO: fix this hard coded number
   useEffect(() => {
-    fetchCoursesBySearch({ keyword: urlParams['query'], pageSize: 12 }).then(setCourses);
+    fetchCoursesBySearch({ keyword: urlParams.query, pageSize: 12 }).then(setCourses);
     setCourses(null);
   }, [urlParams]);
 

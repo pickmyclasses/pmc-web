@@ -4,19 +4,31 @@ import PreventableLink from '../components/PreventableNavigation/PreventableLink
 import ProfileAvatarDisplay from '../components/ProfilePage/ProfileAvatarDisplay';
 import ProfileRoadmap from '../components/ProfilePage/ProfileRoadmap';
 import ProfileSchedule from '../components/ProfilePage/ProfileSchedule';
-import React, { createElement, useEffect, useState } from 'react';
+import React, { createElement, useContext, useEffect, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { useParams } from 'react-router-dom';
+import ProfileHistory from 'components/ProfilePage/ProfileHistory';
+import { UserContext } from 'App';
+import ContainerWithLoadingIndication from 'components/Page/ContainerWithLoadingIndication';
+import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
 
 /**
  * Provides the basic layout and tab management for the user profile page (accessed via avatar
  * in nav-bar -> profile).
  */
 export default function ProfilePage() {
+  const { user } = useContext(UserContext);
+  const { navigateIfAllowed } = useContext(PreventableNavigationContext);
   const urlParams = useParams();
 
   /** The name of the active tab as given in the URL's `:tab` parameter. */
   const [activeTabName, setActiveTabName] = useState('');
+
+  // Redirect to auth page if not logged in.
+  useEffect(() => {
+    if (user === null)
+      navigateIfAllowed('/auth', null, { replace: true, state: { linkTo: '/profile' } });
+  }, [user]);
 
   // Figure out the active tab from the URL.
   useEffect(() => {
@@ -43,7 +55,7 @@ export default function ProfilePage() {
   );
 
   return (
-    <>
+    <ContainerWithLoadingIndication isLoading={!user}>
       <LeftBar sx={{ boxShadow: 3 }}>
         {/* The left bar (that contains the avatar and tab list): */}
         <Stack width='240px' spacing='24px' paddingRight='32px'>
@@ -56,15 +68,15 @@ export default function ProfilePage() {
       </LeftBar>
       <Scrollbars autoHide>
         {/* The active tab's content: */}
-        <Container maxWidth='xl' sx={{ paddingBottom: '32px', height: '100%' }}>
-          <Box sx={{ marginLeft: '280px' }}>
-            <Box paddingY='32px' paddingLeft='32px'>
+        <Container maxWidth='xl'>
+          <Box marginLeft='280px'>
+            <Box height='calc(100vh - 72px - 33px)' marginTop='32px' paddingLeft='32px'>
               {createElement(tabs[activeTabName].content)}
             </Box>
           </Box>
         </Container>
       </Scrollbars>
-    </>
+    </ContainerWithLoadingIndication>
   );
 }
 
@@ -76,7 +88,7 @@ const tabs = {
   '': { title: 'Dashboard', icon: Dashboard, content: ProfileRoadmap },
   'schedule': { title: 'Schedule', icon: EventNote, content: ProfileSchedule },
   'roadmap': { title: 'Roadmap', icon: School, content: ProfileRoadmap },
-  'history': { title: 'History', icon: History, content: ProfileRoadmap },
+  'history': { title: 'History', icon: History, content: ProfileHistory },
 };
 
 // The following provides shadow style settings for the left bar of the page.

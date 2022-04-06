@@ -143,10 +143,7 @@ export default function Timeline({
   // Compute which events should be slightly shifted right in the display. Some events are
   // shifted right to avoid covering other events and making other events unrecognizable.
   useEffect(() => {
-    const targetEvents = eventsShown.filter((x) => !x.ignoreConflicts);
-    const newEventsWithConflicts = eventsShown.map((x) =>
-      hasConflictsWithSome(x, targetEvents)
-    );
+    const newEventsWithConflicts = eventsShown.map((x) => hasConflictsWithSome(x, eventsShown));
     setEventsWithConflicts(newEventsWithConflicts);
     setEventsShiftedRight(getShiftedRight(eventsShown));
 
@@ -181,7 +178,7 @@ export default function Timeline({
         (x, i) => x.data.groupID === selectedEventGroupID && newEventsWithConflicts[i]
       )
     );
-  }, [eventsShown, selectedEventGroupID, hasSelectedDefaultEvent, location.search]);
+  }, [eventsShown, selectedEventGroupID, hasSelectedDefaultEvent, location.search, navigate]);
 
   // Report which (non-outlined) events have conflicts.
   useEffect(() => {
@@ -516,9 +513,11 @@ export const getTransitionForStyles = (styles, duration = 0.25) =>
 export const hasConflictsWithSome = (x, events) => {
   return (
     x.isActive &&
+    !x.ignoreConflicts &&
     !!events.find(
       (y) =>
         y.isActive &&
+        !y.ignoreConflicts &&
         y !== x &&
         y.columnIndex === x.columnIndex &&
         x.start < y.end &&

@@ -16,6 +16,16 @@ import { formatCourseName, formatCreditRange } from '../../utils';
 import { CenterAligningFlexBox } from '../CourseCardGrid/CourseCard/CourseCard';
 import CourseEligibilityIndicator from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
 
+/**
+ * The top portion of the course page that displays an image banner (like the channel art from
+ * YouTube) and the basic info of a course.
+ *
+ * @param {Object} props
+ * @param {Object} props.course The course whose info will be displayed.
+ * @param {Array<[name: String, {title: String, icon}]>} props.tabs The tabs to show in the tab
+ *     list.
+ * @param {String} props.activeTabName The `name` of the tab to highlight as selected.
+ */
 export default function CoursePageTop({ course, tabs, activeTabName }) {
   const theme = useTheme();
 
@@ -24,7 +34,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
   const renderCourseInfo = () => (
     <Box>
       <CenterAligningFlexBox>
-        <CourseEligibilityIndicator course={course} size='medium' placement='bottom'>
+        <CourseEligibilityIndicator course={course} size='medium' tooltipPlacement='bottom'>
           <Typography variant='h5' fontWeight='normal' lineHeight={2} noWrap>
             <b>{formatCourseName(course.catalogCourseName)}</b> — {course.title}
           </Typography>

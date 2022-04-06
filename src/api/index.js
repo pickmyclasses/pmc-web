@@ -10,7 +10,7 @@ export const register = (body) =>
  * Fetches the course but also injects the fake image URL. Basically pretends `ImageURL` was an
  * actual field of the course.
  */
-export const fetchCourseByID = (courseID) =>
+export const fetchCourseByID = (courseID, userID = undefined) =>
   new Promise((onFetched) =>
     axios.get(`/course/${courseID}`).then((data) => {
       const course = data.data.data;
@@ -72,8 +72,8 @@ export const fetchCoursesBySearch = (body) =>
 const fakeFetchCoursesBySearch = (res) => {
   const resultCourseIDs = res || [
     22966, 23000, 22968, 23068, 23063, 23041, 23001, 22986, 22998, 22964, 22941, 22942, 22961,
-    22971, 22951, 22970, 22998, 31826, 28270, 24777, 27266, 27334, 21978, 28354, 30056, 25305,
-    22958, 22938, 27252,
+    22971, 22951, 22970, 31826, 28270, 24777, 27266, 27334, 21978, 28354, 30056, 25305, 22958,
+    22938, 27252,
   ];
 
   return Promise.all(resultCourseIDs.map((id) => fetchCourseByID(id)));
@@ -148,6 +148,46 @@ export const addClassIDToSchedule = (userID, classID) =>
 
 export const removeClassIDFromSchedule = (userID, classID) =>
   axios.put('/schedule?type=class', { userID, classID });
+
+// TODO Q: Remove the following once backend has its support.
+let fakeHistoryCourses = [22935, 27252, 22939, 27254, 22948, 22954];
+
+/**
+ * Fetches the courses a user has taken in the past.
+ *
+ * @param {Number} userID
+ * @return {Promise<Array<Object>>}
+ */
+export const fetchHistoryCourses = (userID) =>
+  Promise.all(
+    fakeHistoryCourses
+      .concat()
+      .reverse()
+      .map((x) => fetchCourseByID(x))
+  );
+
+/**
+ * Ensures that a user's history contains a particular course.
+ *
+ * Note: this function is called "add or update" to reserve the option of letting users edit the
+ * semester and instructor for a history course.
+ *
+ * @param {Number} userID
+ * @param {Number} courseID The ID of the course to add or update.
+ */
+export const addOrUpdateHistoryCourse = (userID, courseID) =>
+  removeHistoryCourse(userID, courseID).then(() => fakeHistoryCourses.push(courseID));
+
+/**
+ * Ensures that a user's history does not contain a particular course.
+ *
+ * @param {Number} userID
+ * @param {Number} courseID The ID of the course to remove.
+ */
+export const removeHistoryCourse = (userID, courseID) =>
+  new Promise((onComplete) =>
+    onComplete((fakeHistoryCourses = fakeHistoryCourses.filter((x) => +x !== +courseID)))
+  );
 
 export const fetchReviewsByCourseID = (courseID) =>
   axios.get(`/course/${courseID}/review`).then((data) => data.data.data.reviews);

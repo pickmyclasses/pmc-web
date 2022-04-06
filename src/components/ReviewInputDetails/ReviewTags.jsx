@@ -48,7 +48,6 @@ export default function ReviewTags({ tags, tagsLabel, tagSuggestion, onChange })
             sx={{ width: '700px' }}
             filterOptions={(options, params) => {
               const filtered = filter(options, params);
-              console.log(params);
               const { inputValue } = params;
               // Suggest the creation of a new value
               const isExisting = options.some((option) => inputValue === option.name);

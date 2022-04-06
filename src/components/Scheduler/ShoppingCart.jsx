@@ -144,7 +144,7 @@ const generateSessions = (
 ) => {
   let sessions = [];
   // Generate sessions from classes.
-  for (let { classData, course, highlight, selectionID } of classes) {
+  for (let { classData, course, highlight, ignoreConflicts, selectionID } of classes) {
     for (let dayOffered of parseDayList(classData.offerDate)) {
       if (dayOffered === -1) continue; // online course
 
@@ -166,6 +166,7 @@ const generateSessions = (
         ),
         color: 'gray',
         highlight,
+        ignoreConflicts,
         shouldDispatch: !!selectionID,
         text: courseCode,
         shortText: courseCode,
