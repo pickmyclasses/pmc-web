@@ -6,7 +6,7 @@ import ProfileRoadmap from '../components/ProfilePage/ProfileRoadmap';
 import ProfileSchedule from '../components/ProfilePage/ProfileSchedule';
 import React, { createElement, useContext, useEffect, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import ProfileHistory from 'components/ProfilePage/ProfileHistory';
 import { UserContext } from 'App';
 import ContainerWithLoadingIndication from 'components/Page/ContainerWithLoadingIndication';
@@ -19,6 +19,7 @@ import { PreventableNavigationContext } from 'components/PreventableNavigation/C
 export default function ProfilePage() {
   const { user } = useContext(UserContext);
   const { navigateIfAllowed } = useContext(PreventableNavigationContext);
+  const location = useLocation();
   const urlParams = useParams();
 
   /** The name of the active tab as given in the URL's `:tab` parameter. */
@@ -27,7 +28,7 @@ export default function ProfilePage() {
   // Redirect to auth page if not logged in.
   useEffect(() => {
     if (user === null)
-      navigateIfAllowed('/auth', null, { replace: true, state: { linkTo: '/profile' } });
+      navigateIfAllowed('/auth', null, { replace: true, state: { linkTo: location.pathname } });
   }, [user, navigateIfAllowed]);
 
   // Figure out the active tab from the URL.
