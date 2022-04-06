@@ -29,16 +29,19 @@ export default function ProfileHistory() {
   // The history data is only fetched once when this tab is rendered. This component then
   // assumes the history is always up-to-date and shows any changes the user makes in real-time
   // without refetching any data from the backend.
-  useMount(() => fetchHistoryCourses(user.userID).then(setHistoryCourses));
+  //
+  // The fetched data is reversed by default to show the most recent addition first and old
+  // courses last.
+  useMount(() =>
+    fetchHistoryCourses(user.userID).then((courses) => setHistoryCourses(courses.reverse()))
+  );
 
   const handleSearch = (query) => {
     fetchCoursesBySearch({ keyword: query, pageSize: 6 }).then(setSearchResultCourses);
   };
 
   const handleAddHistoryCourse = (course, shouldUpdateViewOnly = false) => {
-    if (!historyCourses.find((x) => x.id === course.id)) {
-      setHistoryCourses([course, ...historyCourses]);
-    }
+    setHistoryCourses([course, ...historyCourses.filter((x) => x.id !== course.id)]);
     if (!shouldUpdateViewOnly) {
       addOrUpdateHistoryCourse(user.userID, course.id).catch(() => {
         enqueueSnackbar(

@@ -51,24 +51,24 @@ export default function CoursePage() {
       setReviews(null);
     }
 
-    // Fetch data for the course, classes offered, reviews tags, professors, semesters.
+    // Fetch related data.
     fetchCourseByID(courseID).then(setCourse);
     fetchReviewsByCourseID(courseID).then(setReviews);
     fetchReviewTagsByCourseID(courseID).then(setReviewTags);
     fetchProfessorByCourseID(courseID).then(setProfessors);
-    if (user) {
-      //fetchSemestersByCourseID(user.collegeID).then((data) => setSemesters(data));
-      fetchSemestersByCollegeID(user.collegeID).then((data) => setSemesters(data.data.data));
-    }
+    if (user) fetchSemestersByCollegeID(user.collegeID).then(setSemesters);
+
     // Figure out the active tab from the URL.
     const tabParam = String(urlParams.tab).toLowerCase();
     setActiveTabName(tabs.hasOwnProperty(tabParam) ? tabParam : '');
   }, [urlParams, course?.id]);
+
   useEffect(() => {
     // Go to top of page (right below the banner image) when URL changes.
     const pageContent = containerNode?.children[0].children[0];
     if (pageContent) pageContent.scrollTo(0, Math.min(pageContent.scrollTop, imageHeight));
   }, [urlParams, containerNode]);
+
   return (
     <ContainerWithLoadingIndication isLoading={!course || !reviews}>
       <Box ref={containerRef} width='100%' height='100%' minHeight={0}>

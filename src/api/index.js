@@ -149,9 +149,6 @@ export const addClassIDToSchedule = (userID, classID) =>
 export const removeClassIDFromSchedule = (userID, classID) =>
   axios.put('/schedule?type=class', { userID, classID });
 
-// TODO Q: Remove the following once backend has its support.
-let fakeHistoryCourses = [22935, 27252, 22939, 27254, 22948, 22954];
-
 /**
  * Fetches the courses a user has taken in the past.
  *
@@ -159,12 +156,9 @@ let fakeHistoryCourses = [22935, 27252, 22939, 27254, 22948, 22954];
  * @return {Promise<Array<Object>>}
  */
 export const fetchHistoryCourses = (userID) =>
-  Promise.all(
-    fakeHistoryCourses
-      .concat()
-      .reverse()
-      .map((x) => fetchCourseByID(x))
-  );
+  axios
+    .get(`/user/${userID}/history`)
+    .then(({ data }) => Promise.all(data.data.map((x) => fetchCourseByID(x))));
 
 /**
  * Ensures that a user's history contains a particular course.
@@ -176,7 +170,7 @@ export const fetchHistoryCourses = (userID) =>
  * @param {Number} courseID The ID of the course to add or update.
  */
 export const addOrUpdateHistoryCourse = (userID, courseID) =>
-  removeHistoryCourse(userID, courseID).then(() => fakeHistoryCourses.push(courseID));
+  axios.post('/user/history', { userID, courseID });
 
 /**
  * Ensures that a user's history does not contain a particular course.
@@ -185,9 +179,7 @@ export const addOrUpdateHistoryCourse = (userID, courseID) =>
  * @param {Number} courseID The ID of the course to remove.
  */
 export const removeHistoryCourse = (userID, courseID) =>
-  new Promise((onComplete) =>
-    onComplete((fakeHistoryCourses = fakeHistoryCourses.filter((x) => +x !== +courseID)))
-  );
+  axios.put('/user/history', { userID, courseID });
 
 export const fetchReviewsByCourseID = (courseID) =>
   axios.get(`/course/${courseID}/review`).then((data) => data.data.data.reviews);
@@ -204,6 +196,6 @@ export const fetchProfessorByCourseID = (courseID, body) =>
   axios.get(`/course/${courseID}/professor/list`).then((data) => data.data.data);
 
 export const fetchSemestersByCollegeID = (collegeID, body) =>
-  axios.get(`/college/${collegeID}/semester/list`).then((data) => data);
+  axios.get(`/college/${collegeID}/semester/list`).then((data) => data.data.data);
 
 export const fetchCollegeList = () => axios.get(`/college/list`).then((data) => data.data.data);
