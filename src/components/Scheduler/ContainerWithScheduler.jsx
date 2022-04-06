@@ -1,9 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import {
-  fetchScheduledClassesAndCustomEvents,
-  fetchCustomEvents,
-  fetchRequirements,
-} from '../../api';
+import { fetchScheduledClassesAndCustomEvents, fetchRequirements } from '../../api';
 import { UserContext } from '../../App';
 
 /**

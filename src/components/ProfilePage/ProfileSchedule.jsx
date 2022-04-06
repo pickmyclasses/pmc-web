@@ -25,13 +25,13 @@ export default function ProfileSchedule() {
     <ContainerWithLoadingIndication
       isLoading={!classesInShoppingCart || !customEvents || !asyncClasses}
     >
-      <Stack spacing='32px' paddingBottom='32px'>
+      <Stack spacing='24px' paddingBottom='32px'>
         <ProfilePageTabHeadingCard
           iconType={EventNote}
           title='Your Schedule'
           description='View and manage your courses and other weekly events'
         />
-        {asyncClasses.length > 0 && <AsyncClassesCard classesAndCourses={asyncClasses} />}
+        {asyncClasses?.length > 0 && <AsyncClassesCard classesAndCourses={asyncClasses} />}
         <LiveClassesCard
           classesInShoppingCart={classesInShoppingCart}
           customEvents={customEvents}

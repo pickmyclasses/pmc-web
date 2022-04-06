@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Divider, FilledInput, IconButton, colors, useTheme } from '@mui/material';
-import { alpha } from '@mui/material/styles';
+import { Divider, FilledInput, IconButton, colors } from '@mui/material';
 import { Clear, Search } from '@material-ui/icons';
+import { useDebounce } from 'utils';
 
 /**
  * The search-bar that sits in the middle of the navigation bar. Fires events when the user
@@ -13,19 +13,25 @@ export default function SearchBar({
   defaultSearchText,
   textColor,
   backgroundColor,
+  autoSearchOnChange = false,
+  autoSearchDelay = 500,
   onSearch = () => {},
   maxWidth,
   focusHoverColor,
   placeholderText,
   borderRadiusRatio,
   fontSize,
+  clearIconColor,
   searchIconColor,
 }) {
-  const theme = useTheme();
-
   const [searchText, setSearchText] = useState('');
+  const debouncedSearchText = useDebounce(searchText, autoSearchDelay);
 
   useEffect(() => defaultSearchText && setSearchText(defaultSearchText), [defaultSearchText]);
+
+  useEffect(() => {
+    if (autoSearchOnChange && debouncedSearchText.trim()) onSearch?.(debouncedSearchText, true);
+  }, [debouncedSearchText]);
 
   return (
     <FilledInput
@@ -33,7 +39,7 @@ export default function SearchBar({
       placeholder={placeholderText}
       value={searchText}
       onChange={(e) => setSearchText(e.target.value)}
-      onKeyDown={(e) => e.key === 'Enter' && onSearch(searchText)}
+      onKeyDown={(e) => e.key === 'Enter' && onSearch?.(searchText, false)}
       inputProps={{ style: { padding: '10px 20px' } }}
       sx={{
         maxWidth: maxWidth,
@@ -49,12 +55,7 @@ export default function SearchBar({
           {!!searchText && (
             <>
               <IconButton
-                sx={{
-                  color: alpha(
-                    theme.palette.primary.contrastText,
-                    theme.palette.action.disabledOpacity
-                  ),
-                }}
+                sx={{ color: clearIconColor || 'text.disabled' }}
                 onClick={() => setSearchText('')}
               >
                 <Clear />
@@ -62,9 +63,9 @@ export default function SearchBar({
               <Divider
                 orientation='vertical'
                 variant='middle'
-                color={theme.palette.primary.contrastText}
                 sx={{
-                  opacity: 0.25,
+                  borderColor: clearIconColor || 'text.disabled',
+                  opacity: 0.5,
                   marginLeft: '4px',
                   marginRight: '8px',
                 }}
@@ -73,10 +74,8 @@ export default function SearchBar({
             </>
           )}
           <IconButton
-            sx={{ color: searchIconColor || colors.blue[300] }}
-            onClick={function () {
-              onSearch(searchText);
-            }}
+            sx={{ color: searchIconColor || 'text.disabled' }}
+            onClick={() => onSearch?.(searchText, false)}
           >
             <Search />
           </IconButton>

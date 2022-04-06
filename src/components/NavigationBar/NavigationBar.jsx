@@ -15,6 +15,7 @@ import SearchBar from '../Search/SearchBar';
 import NavigationBarButtonGroup from './NavigationBarButtonGroup';
 import { PreventableNavigationContext } from '../PreventableNavigation/ContainerWithPreventableNavigation';
 
+/** The navigation bar that shows up on top of every page. */
 export default function NavigationBar() {
   const { navigateIfAllowed } = useContext(PreventableNavigationContext);
 
@@ -47,9 +48,11 @@ export default function NavigationBar() {
                   onSearch={handleSearchClick}
                   maxWidth={'576px'}
                   focusHoverColor={alpha(theme.palette.common.black, 0.333)}
-                  placeholderText={'Search for a course'}
+                  placeholderText={'Search catalog'}
                   borderRadiusRatio={'4px'}
                   fontSize='18px'
+                  clearIconColor={theme.palette.grey[700]}
+                  searchIconColor='info.light'
                 />
               </Grid>
               <Grid item xs='auto'>
