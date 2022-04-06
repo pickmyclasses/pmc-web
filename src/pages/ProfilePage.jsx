@@ -24,6 +24,7 @@ export default function ProfilePage() {
   /** The name of the active tab as given in the URL's `:tab` parameter. */
   const [activeTabName, setActiveTabName] = useState('');
 
+  // Redirect to auth page if not logged in.
   useEffect(() => {
     if (user === null)
       navigateIfAllowed('/auth', null, { replace: true, state: { linkTo: '/profile' } });
