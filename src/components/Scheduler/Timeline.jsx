@@ -511,10 +511,6 @@ export const getTransitionForStyles = (styles, duration = 0.25) =>
   styles.map((x) => `${x} ${duration}s cubic-bezier(0.4, 0, 0.2, 1)`).join(', ');
 
 export const hasConflictsWithSome = (x, events) => {
-  console.log(
-    '*= got',
-    events.map((x) => x.ignoreConflicts)
-  );
   return (
     x.isActive &&
     !x.ignoreConflicts &&
