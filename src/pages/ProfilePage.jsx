@@ -24,10 +24,10 @@ export default function ProfilePage() {
   /** The name of the active tab as given in the URL's `:tab` parameter. */
   const [activeTabName, setActiveTabName] = useState('');
 
-  useEffect(
-    () => user === null && navigateIfAllowed('/auth', null, { state: { linkTo: '/profile' } }),
-    [user]
-  );
+  useEffect(() => {
+    if (user === null)
+      navigateIfAllowed('/auth', null, { replace: true, state: { linkTo: '/profile' } });
+  }, [user]);
 
   // Figure out the active tab from the URL.
   useEffect(() => {
