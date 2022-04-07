@@ -25,7 +25,7 @@ export default function ContainerWithScheduler({ children }) {
               setCustomEvents(customEvents);
             }
           ),
-          fetchRequirements().then(setRequirements),
+          fetchRequirements(user.userID).then(setRequirements),
         ]).then(() => onComplete?.());
       } else {
         setClassesInShoppingCart([]);
@@ -56,4 +56,4 @@ export default function ContainerWithScheduler({ children }) {
  *   refreshSchedulerData: function(function(): *): void,
  * }>}
  */
-export const SchedulerContext = createContext(null);
+export const SchedulerContext = createContext();

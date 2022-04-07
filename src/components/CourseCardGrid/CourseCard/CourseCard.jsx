@@ -135,7 +135,7 @@ const MotionTypography = motion(Typography);
 
 const courseTitleAnimationVariants = {
   initial: { height: '1.5em' },
-  mouseEntered: { height: '4.75em' },
+  mouseEntered: { height: '84px' },
 };
 
 const extraInfoAnimationVariants = {
