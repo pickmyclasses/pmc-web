@@ -4,9 +4,10 @@ import { UserContext } from '../../App';
 import { navigationBarTheme } from './NavigationBar';
 import SchedulerDropDown from './NavigationBarButtonGroup/SchedulerDropDown';
 import UserDropDown from './NavigationBarButtonGroup/UserDropDown';
-import { NotificationAdd } from '@mui/icons-material';
+import { School } from '@mui/icons-material';
 import { useMount } from '../../utils';
 import LinkToAuthForm from 'components/AuthForm/LinkToAuthForm';
+import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 
 /**
  * The group of buttons like notification and user profile that sits on the right side of the
@@ -23,7 +24,13 @@ export default function NavigationBarButtonGroup() {
 
   const renderTabsForLoggedIn = () => [
     <SchedulerDropDown key='scheduler' />,
-    <ButtonGroupTab key='notification' label='Notification' icon={<NotificationAdd />} />,
+    <ButtonGroupTab
+      key='roadmap'
+      label='Roadmap'
+      icon={<School />}
+      component={PreventableLink}
+      to='/profile/roadmap'
+    />,
     <UserDropDown key='user' />,
   ];
 

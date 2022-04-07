@@ -3,7 +3,12 @@ import EChartsReact from 'echarts-for-react';
 import React, { useEffect, useState } from 'react';
 import { pluralize } from 'utils';
 
-export default function HistoryBreakdownChart({ historyBreakdown }) {
+export default function HistoryBreakdownChart({
+  historyBreakdown,
+  style,
+  stacked = false,
+  hideTransitions = false,
+}) {
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [chartData, setChartData] = useState([]);
 
@@ -37,18 +42,24 @@ export default function HistoryBreakdownChart({ historyBreakdown }) {
 
   return (
     <EChartsReact
-      option={getChartOptions(chartData)}
-      style={{ height: '72px', marginTop: '-8px' }}
+      option={getChartOptions(chartData, { stacked, hideTransitions })}
+      style={style}
+      opts={{ renderer: 'svg' }}
     />
   );
 }
 
-const getChartOptions = (data) => ({
-  series: data.map(getSeriesItem),
+const getChartOptions = (data, style) => ({
+  series: data.map((x, i) => getSeriesItem(i, x, style)),
   xAxis: { max: 'dataMax', axisLine: { show: false }, splitLine: { show: false } },
-  yAxis: { type: 'category', axisLine: { show: false }, axisTick: { show: false } },
+  yAxis: {
+    type: 'category',
+    axisLabel: { show: false },
+    axisLine: { show: false },
+    axisTick: { show: false },
+  },
   textStyle: { fontFamily: 'Roboto' },
-  grid: { top: 8, right: 0, bottom: 0, left: 0 },
+  grid: { top: 8, right: 0, bottom: 0, left: style.stacked ? 0 : 144 },
   color: chartBarColors,
   tooltip: {
     borderColor: 'white',
@@ -58,10 +69,14 @@ const getChartOptions = (data) => ({
   },
 });
 
-const getSeriesItem = ({ title, completed, inProgress, toGo, value }, i) => ({
+const getSeriesItem = (
+  i,
+  { title, completed, inProgress, toGo, value },
+  { stacked, hideTransitions }
+) => ({
   data: [value],
   type: 'bar',
-  stack: 'progress',
+  stack: stacked ? 'all' : title,
   tooltip: {
     show: i % 4 !== 3,
     formatter: formatTooltipText(title, completed, inProgress, toGo, i % 4 === 0),
@@ -69,21 +84,22 @@ const getSeriesItem = ({ title, completed, inProgress, toGo, value }, i) => ({
   },
   label: {
     show: i % 4 === 0,
-    formatter: `${getShortenedCategoryName(title)} ${completed + inProgress}/${
-      completed + inProgress + toGo
-    }`,
-    position: 'insideBottomLeft',
-    offset: [-4, 24],
+    formatter: formatLabel(title, completed, inProgress, toGo, stacked),
+    position: stacked ? 'insideBottomLeft' : 'left',
+    offset: stacked ? [-4, 24] : [-4, 0],
     textBorderColor: 'white',
     textBorderWidth: 1.5,
   },
   emphasis: { disabled: i % 4 > 1 },
-  barMaxWidth: '24px',
+  barMaxWidth: stacked ? '24px' : undefined,
+  barGap: '0%',
+  barCategoryGap: '0%',
   itemStyle: {
     opacity: (3 - (i % 4)) / 3,
     borderRadius: getBorderRadius(completed, inProgress, toGo, i),
   },
   animationDuration: 0,
+  animationDurationUpdate: hideTransitions ? 0 : undefined,
 });
 
 const chartBarColors = [
@@ -101,20 +117,29 @@ const getBorderRadius = (completed, inProgress, toGo, i) => {
   return [leftRadius, rightRadius, rightRadius, leftRadius];
 };
 
+const formatLabel = (title, completed, inProgress, toGo, stacked) =>
+  stacked
+    ? `${getShortenedCategoryTitle(title)} ${completed + inProgress}/${
+        completed + inProgress + toGo
+      }`
+    : title;
+
 const formatTooltipText = (title, completed, inProgress, toGo) =>
   [
     '<div style="text-align: center">',
     `  <b>${title}</b>`,
     '  <br />',
     `  ${pluralize(completed, 'course')} taken`,
-    '  <br />',
-    `  ${pluralize(inProgress, 'course')} scheduled`,
+    inProgress > 0 && '  <br />',
+    inProgress > 0 && `  ${pluralize(inProgress, 'course')} scheduled`,
     '  <br />',
     `  ${pluralize(toGo, 'course')} to go`,
     '</div>',
-  ].join('');
+  ]
+    .filter(Boolean)
+    .join('');
 
-const getShortenedCategoryName = (fullName) => {
+const getShortenedCategoryTitle = (fullName) => {
   if (!fullName?.trim()) return '';
   if (fullName.toLowerCase().includes('math')) return 'Math';
   if (fullName.toLowerCase().includes('elective')) return 'Electives';
