@@ -246,3 +246,18 @@ export const fetchSemestersByCollegeID = (collegeID, body) =>
   axios.get(`/college/${collegeID}/semester/list`).then((data) => data.data.data);
 
 export const fetchCollegeList = () => axios.get(`/college/list`).then((data) => data.data.data);
+
+// export const fetchProfessorRanking = (courseID, body) =>
+//   axios.get(`/stats/course/${courseID}/professor/rank`).then((data) => data);
+// export const fetchCourseLoad = (courseID, body) =>
+//   axios.get(`/stats/course/${courseID}/load`).then((data) => data);
+
+export const fetchCourseLoad = async (courseID, body) => {
+  const res = await axios.get(`/stats/course/${courseID}/load`);
+  return await res.data.data;
+};
+
+export const fetchProfessorRanking = async (courseID, body) => {
+  const res = await axios.get(`/stats/course/${courseID}/professor/rank`);
+  return await res.data.data;
+};
