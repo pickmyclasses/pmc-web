@@ -1,8 +1,11 @@
 import {
   AccountBalance,
-  AdminPanelSettings,
+  AccountCircle,
+  EventNote,
   ExitToApp,
-  ManageAccounts,
+  Groups,
+  History,
+  Person,
   School,
 } from '@mui/icons-material';
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
@@ -25,16 +28,27 @@ export default function UserDropDown() {
 
   const menuItems = [
     {
-      icon: AdminPanelSettings,
+      icon: Person,
       text: 'Profile',
       props: { component: PreventableLink, to: '/profile' },
+    },
+    {
+      icon: EventNote,
+      text: 'Schedule',
+      props: { component: PreventableLink, to: '/profile/schedule' },
     },
     {
       icon: School,
       text: 'Roadmap',
       props: { component: PreventableLink, to: '/profile/roadmap' },
     },
-    { icon: AccountBalance, text: 'My university', props: { divider: true } },
+    {
+      icon: History,
+      text: 'History',
+      props: { component: PreventableLink, to: '/profile/history', divider: true },
+    },
+    { icon: Groups, text: 'Discussion Board' },
+    { icon: AccountBalance, text: 'My University', props: { divider: true } },
     { icon: ExitToApp, text: 'Log out', handleClick: handleLogOutMenuItemClick },
   ];
 
@@ -44,13 +58,13 @@ export default function UserDropDown() {
         <>
           <ButtonGroupTab
             label={user.name}
-            icon={<ManageAccounts />}
+            icon={<AccountCircle />}
             {...bindTrigger(popupState)}
           />
           <Menu
             {...bindMenu(popupState)}
             disableScrollLock
-            PaperProps={{ sx: { width: '240px' } }}
+            PaperProps={{ sx: { width: '288px' } }}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
           >
@@ -58,11 +72,11 @@ export default function UserDropDown() {
               <MenuItem
                 key={i}
                 onClick={handleClick || popupState.close}
-                sx={{ height: '48px' }}
+                sx={{ height: '56px' }}
                 {...props}
               >
-                <ListItemIcon>{createElement(icon)}</ListItemIcon>
-                <ListItemText sx={{ marginLeft: '8px' }}>{text}</ListItemText>
+                <ListItemIcon sx={{ marginLeft: '8px' }}>{createElement(icon)}</ListItemIcon>
+                <ListItemText sx={{ marginLeft: '16px' }}>{text}</ListItemText>
               </MenuItem>
             ))}
           </Menu>

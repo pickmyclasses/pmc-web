@@ -66,7 +66,11 @@ export default function HistoryDisplay({ historyCourses, onRemoveHistoryCourse =
             variant='overline'
             size='small'
           />
-          <HistoryBreakdownChart historyBreakdown={historyBreakdown} />
+          <HistoryBreakdownChart
+            historyBreakdown={historyBreakdown}
+            style={{ height: '72px', marginTop: '-4px' }}
+            stacked
+          />
         </Stack>
       </Card>
       {/* The 16px of extra width is for showing the scrollbar to the right of list (rather
