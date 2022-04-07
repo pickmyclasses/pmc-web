@@ -64,7 +64,7 @@ export default function UserDropDown() {
           <Menu
             {...bindMenu(popupState)}
             disableScrollLock
-            PaperProps={{ sx: { width: '288px' } }}
+            PaperProps={{ sx: { width: '256px' } }}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
           >
@@ -72,7 +72,7 @@ export default function UserDropDown() {
               <MenuItem
                 key={i}
                 onClick={handleClick || popupState.close}
-                sx={{ height: '56px' }}
+                sx={{ height: '48px' }}
                 {...props}
               >
                 <ListItemIcon sx={{ marginLeft: '8px' }}>{createElement(icon)}</ListItemIcon>

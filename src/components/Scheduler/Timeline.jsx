@@ -266,7 +266,7 @@ export default function Timeline({
             sx={{
               position: 'absolute',
               top: top * 100 + '%',
-              left: (columnIndex + 0.0833) * columnWidth + '%',
+              left: (columnIndex + 0.0625) * columnWidth + '%',
               zIndex: isMouseEntered
                 ? 999
                 : isSelected
@@ -276,10 +276,10 @@ export default function Timeline({
                 : highlight
                 ? 996
                 : '',
-              width: 0.667 * columnWidth + '%',
+              width: 0.75 * columnWidth + '%',
               height: (bottom - top) * 100 + '%',
               // Adapt the same transition style from MUI to the shifting movement.
-              transform: eventsShiftedRight[i] ? 'translateX(25%)' : '',
+              transform: eventsShiftedRight[i] ? 'translateX(18.75%)' : '',
               transition: getTransitionForStyles(['top', 'height', 'transform'], 0.375),
             }}
           >

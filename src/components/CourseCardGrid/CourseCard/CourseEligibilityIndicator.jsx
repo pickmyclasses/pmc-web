@@ -80,7 +80,7 @@ const getDisplayContent = (eligibility, theme) =>
       ShoppingCart,
       'action',
       theme.palette.text.primary,
-      'In shopping cart',
+      'In your schedule',
     ],
     'taken': [DoDisturb, 'disabled', theme.palette.grey[600], 'Taken in the past'],
     'taken-check': [Check, 'disabled', theme.palette.grey[500], 'In your history'],
