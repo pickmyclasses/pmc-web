@@ -25,11 +25,19 @@ export default function RequirementList({ requirements = [] }) {
       <ClickableIndicator onClick={() => navigateIfAllowed('/profile/roadmap')}>
         <Typography variant='subtitle2'>Requirements</Typography>
       </ClickableIndicator>
-      {requirements.map(({ title, progress, total }) => (
-        <Typography variant='body2' key={title} style={{ color: theme.palette.text.secondary }}>
-          {title}: {progress}/{total}
-        </Typography>
-      ))}
+      {requirements.map(
+        ({ title, completedCourses, inProgressCourses, numRequiredCourses }) => (
+          <Typography
+            variant='body2'
+            key={title}
+            style={{ color: theme.palette.text.secondary }}
+          >
+            {title}: {Math.min(completedCourses.length, numRequiredCourses)}/
+            {numRequiredCourses}{' '}
+            {inProgressCourses.length > 0 ? `(+${inProgressCourses.length} scheduled)` : ''}
+          </Typography>
+        )
+      )}
     </Stack>
   );
 }

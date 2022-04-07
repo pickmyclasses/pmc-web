@@ -76,7 +76,7 @@ export default function ProfileHistory() {
           title='Your History of Courses'
           description='Tell us what courses you have taken for more personalized content and recommendation'
         />
-        <Grid container flex={1} minHeight={0}>
+        <Grid container flex={1} minHeight={0} flexWrap='nowrap'>
           <Grid item xs={5} paddingRight='24px' height='100%'>
             <AddToHistorySearchList
               searchResultCourses={searchResultCourses}
@@ -86,7 +86,7 @@ export default function ProfileHistory() {
               onRemoveHistoryCourse={handleRemoveHistoryCourse}
             />
           </Grid>
-          <Divider orientation='vertical' sx={{ marginRight: '-1px' }} />
+          <Divider orientation='vertical' />
           <Grid item xs={7} paddingLeft='24px' height='100%'>
             <HistoryDisplay
               historyCourses={historyCourses}
