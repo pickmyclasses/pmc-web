@@ -15,6 +15,8 @@ import {
   fetchReviewTagsByCourseID,
   fetchProfessorByCourseID,
   fetchSemestersByCollegeID,
+  fetchProfessorRanking,
+  fetchCourseLoad,
 } from '../api';
 import CoursePageTop, { imageHeight } from '../components/CoursePage/CoursePageTop';
 import CourseOverview from '../components/CoursePage/CourseOverview';
@@ -35,6 +37,9 @@ export default function CoursePage() {
   const [reviewTags, setReviewTags] = useState(null);
   const [professors, setProfessors] = useState(null);
   const [semesters, setSemesters] = useState([]);
+  const [professorRanking, setProfessorRanking] = useState();
+  const [courseLoad, setCourseLoad] = useState();
+
   // This avoids the useRef()'s not updating problem with useEffect().
   // See https://stackoverflow.com/a/67906087)
   // We can potentially include this pattern in the utils collection to reuse it.
@@ -56,6 +61,9 @@ export default function CoursePage() {
     fetchReviewsByCourseID(courseID).then(setReviews);
     fetchReviewTagsByCourseID(courseID).then(setReviewTags);
     fetchProfessorByCourseID(courseID).then(setProfessors);
+    fetchProfessorRanking(courseID).then(setProfessorRanking);
+    fetchCourseLoad(courseID).then(setCourseLoad);
+
     if (user) fetchSemestersByCollegeID(user.collegeID).then(setSemesters);
 
     // Figure out the active tab from the URL.
@@ -76,7 +84,15 @@ export default function CoursePage() {
           <CoursePageTop course={course} tabs={tabs} activeTabName={activeTabName} />
           <Container maxWidth='xl' sx={{ paddingTop: '32px' }}>
             <CourseContext.Provider
-              value={{ course, reviews, reviewTags, professors, semesters }}
+              value={{
+                course,
+                reviews,
+                reviewTags,
+                professors,
+                semesters,
+                professorRanking,
+                courseLoad,
+              }}
             >
               {createElement(tabs[activeTabName].content)}
             </CourseContext.Provider>
