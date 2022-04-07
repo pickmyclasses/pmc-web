@@ -13,18 +13,13 @@ import Button from '@mui/material/Button';
 
 import { Grid, Typography, Card, Stack, Link, Box, breadcrumbsClasses } from '@mui/material';
 import { CourseContext } from '../../pages/CoursePage';
-import TagList from '../CourseCardGrid/CourseCard/TagList';
 import { motion } from 'framer-motion';
 import ClickableIndicator from '../CourseCardGrid/CourseCard/ClickableIndicator';
-import statsInfoDump from '../CourseVisuals/StatsInfoDump';
-import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 
 export default function CourseStats() {
   const { ratingDistribution, setRatingDistribution } = useState(true);
   const { course, reviews, professorRanking, courseLoad } = useContext(CourseContext);
   const [condition, setCondition] = useState('default');
-  console.log(professorRanking);
-  console.log(courseLoad);
 
   const coursePageURL = '/course/' + course.id;
   const renderProfessorSummery = () => (
