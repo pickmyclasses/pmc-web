@@ -20,7 +20,6 @@ export default function CourseStats() {
   const { ratingDistribution, setRatingDistribution } = useState(true);
   const { course, reviews, professorRanking, courseLoad } = useContext(CourseContext);
   const [condition, setCondition] = useState('default');
-
   const coursePageURL = '/course/' + course.id;
   const renderProfessorSummery = () => (
     <MotionCard
@@ -38,7 +37,7 @@ export default function CourseStats() {
         <Box flex={1}>
           <Typography variant='subtitle2'>Top Professors </Typography>
 
-          <StatsProfessorSum reviews={reviews} />
+          <StatsProfessorSum professorRanking={professorRanking} />
         </Box>
         <Link>
           <ClickableIndicator propagate>
@@ -114,8 +113,8 @@ export default function CourseStats() {
     >
       <Stack height='200px' padding='24px'>
         <Box flex={1}>
-          <Typography variant='subtitle2'>Course Load </Typography>
-          <StatsInfoDump reviews={reviews} />
+          <Typography variant='subtitle2'>Average Grades </Typography>
+          <StatsInfoDump courseLoad={courseLoad} />
         </Box>
         <Link>
           <ClickableIndicator propagate>
@@ -189,6 +188,7 @@ export default function CourseStats() {
         height: '100%',
         cursor: 'pointer',
         '&:hover': { boxShadow: 6 },
+        overflow: 'visible',
       }}
     >
       <Stack height='200px' padding='24px'>
@@ -243,7 +243,7 @@ export default function CourseStats() {
                 {reviews.length === 0 ? renderPlaceHolder() : renderProfessorSummery()}
               </Grid>
               <Grid item xs={3}>
-                {renderInfoSummery()}
+                {reviews.length === 0 ? renderPlaceHolder() : renderInfoSummery()}
               </Grid>
             </Grid>
             <Grid container spacing='32px' marginBottom='16px'>

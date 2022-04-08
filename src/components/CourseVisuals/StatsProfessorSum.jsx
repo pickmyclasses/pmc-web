@@ -3,31 +3,24 @@ import { formatInstructorName } from 'utils';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 
-function sortBy(field) {
-  return function (a, b) {
-    return (a[field] < b[field]) - (a[field] > b[field]);
-  };
-}
-
-function getTopRatedInstructors(reviews, num) {
+function getTopRatedInstructors(professorRanking, num) {
   let instructors = [];
   let instructorRatings = [];
   let instructorInfo = [];
-  reviews.sort(sortBy('rating'));
-  for (let i = 0; i < reviews.length; i++) {
-    instructors.push(reviews[i].classProfessor);
-    instructorRatings.push(reviews[i].rating);
+  for (let i = 0; i < professorRanking.length; i++) {
+    instructors.push(professorRanking[i].name);
+    instructorRatings.push(professorRanking[i].rating);
   }
   instructorInfo.push(instructors.slice(0, num));
   instructorInfo.push(instructorRatings.slice(0, num));
   return instructorInfo;
 }
 
-export default function StatsProfessorSum({ reviews }) {
-  let instructorInfo = getTopRatedInstructors(reviews, 3);
+export default function StatsProfessorSum({ professorRanking }) {
+  let instructorInfo = getTopRatedInstructors(professorRanking, 3);
   let topInstructors = instructorInfo[0];
   let topInstructorRatings = instructorInfo[1];
-  console.log(instructorInfo);
+  console.log(professorRanking);
   return (
     <Box padding='8px 8px 4px'>
       {topInstructors.map((instructor, i) => (
