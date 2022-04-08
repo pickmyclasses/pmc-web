@@ -47,6 +47,20 @@ export default function CoursePage() {
   const containerRef = useCallback((node) => setContainerNode(node), []);
   const { user } = useContext(UserContext);
 
+  const refreshCourseData = useCallback(
+    (courseID) => {
+      fetchCourseByID(courseID).then(setCourse);
+      fetchReviewsByCourseID(courseID).then(setReviews);
+      fetchReviewTagsByCourseID(courseID).then(setReviewTags);
+      fetchProfessorByCourseID(courseID).then(setProfessors);
+      fetchProfessorRanking(courseID).then(setProfessorRanking);
+      fetchCourseLoad(courseID).then(setCourseLoad);
+
+      if (user) fetchSemestersByCollegeID(user.collegeID).then(setSemesters);
+    },
+    [user]
+  );
+
   useEffect(() => {
     const courseID = urlParams.id;
 
@@ -57,19 +71,12 @@ export default function CoursePage() {
     }
 
     // Fetch related data.
-    fetchCourseByID(courseID).then(setCourse);
-    fetchReviewsByCourseID(courseID).then(setReviews);
-    fetchReviewTagsByCourseID(courseID).then(setReviewTags);
-    fetchProfessorByCourseID(courseID).then(setProfessors);
-    fetchProfessorRanking(courseID).then(setProfessorRanking);
-    fetchCourseLoad(courseID).then(setCourseLoad);
-
-    if (user) fetchSemestersByCollegeID(user.collegeID).then(setSemesters);
+    refreshCourseData(courseID);
 
     // Figure out the active tab from the URL.
     const tabParam = String(urlParams.tab).toLowerCase();
     setActiveTabName(tabs.hasOwnProperty(tabParam) ? tabParam : '');
-  }, [urlParams, course?.id]);
+  }, [urlParams, course?.id, refreshCourseData]);
 
   useEffect(() => {
     // Go to top of page (right below the banner image) when URL changes.
@@ -78,13 +85,16 @@ export default function CoursePage() {
   }, [urlParams, containerNode]);
 
   return (
-    <ContainerWithLoadingIndication isLoading={!course || !reviews}>
+    <ContainerWithLoadingIndication
+      isLoading={!course || !reviews || !professorRanking || !courseLoad}
+    >
       <Box ref={containerRef} width='100%' height='100%' minHeight={0}>
         <OnTopScrollBars>
           <CoursePageTop course={course} tabs={tabs} activeTabName={activeTabName} />
           <Container maxWidth='xl' sx={{ paddingTop: '32px' }}>
             <CourseContext.Provider
               value={{
+                refreshCourseData,
                 course,
                 reviews,
                 reviewTags,
@@ -108,6 +118,7 @@ export default function CoursePage() {
  *   course: Object,
  *   reviews: Array<Object>,
  *   reviewTags: Array<Object>,
+ *   refreshCourseData: (courseID: Number) => void,
  * }>}
  */
 export const CourseContext = createContext(null);
