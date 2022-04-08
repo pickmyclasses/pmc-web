@@ -171,7 +171,7 @@ export default function ReviewPieChart({ reviews }) {
   return (
     <ReactECharts
       option={option}
-      style={{ height: 150 }}
+      style={{ height: 200 }}
       onChartReady={onChartReady}
       onEvents={{
         'click': onChartClick,

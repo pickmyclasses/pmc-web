@@ -33,7 +33,7 @@ export default function CourseStats() {
         '&:hover': { boxShadow: 6 },
       }}
     >
-      <Stack height='200px' padding='24px'>
+      <Stack padding='24px' height='calc(100% - 48px)'>
         <Box flex={1}>
           <Typography variant='subtitle2'>Top Professors </Typography>
 
@@ -59,7 +59,7 @@ export default function CourseStats() {
         '&:hover': { boxShadow: 6 },
       }}
     >
-      <Stack height='200px' padding='24px'>
+      <Stack padding='24px' height='calc(100% - 48px)'>
         <Box flex={1}>
           <Typography variant='subtitle2'>Course Top Tags</Typography>
           <StatsTags reviews={reviews} />
@@ -85,7 +85,7 @@ export default function CourseStats() {
         '&:hover': { boxShadow: 6 },
       }}
     >
-      <Stack height='200px' padding='24px'>
+      <Stack padding='24px' height='calc(100% - 48px)'>
         <Box flex={1}>
           <Typography variant='subtitle2'>Class Size</Typography>
           <StatsClassSize reviews={reviews} />
@@ -111,7 +111,7 @@ export default function CourseStats() {
         '&:hover': { boxShadow: 6 },
       }}
     >
-      <Stack height='200px' padding='24px'>
+      <Stack padding='24px' height='calc(100% - 48px)'>
         <Box flex={1}>
           <Typography variant='subtitle2'>Average Grades </Typography>
           <StatsInfoDump courseLoad={courseLoad} />
@@ -137,7 +137,7 @@ export default function CourseStats() {
         '&:hover': { boxShadow: 6 },
       }}
     >
-      <Stack height='200px' padding='24px'>
+      <Stack padding='24px' height='calc(100% - 48px)'>
         <Box flex={1}>
           <Typography variant='subtitle2'>Course Popularity </Typography>
           <StatsPopularity reviews={reviews} />
@@ -163,7 +163,7 @@ export default function CourseStats() {
         '&:hover': { boxShadow: 6 },
       }}
     >
-      <Stack height='200px' padding='24px'>
+      <Stack padding='24px' height='calc(100% - 48px)'>
         <Box flex={1}>
           <StatsLoading />
         </Box>
@@ -191,7 +191,7 @@ export default function CourseStats() {
         overflow: 'visible',
       }}
     >
-      <Stack height='200px' padding='24px'>
+      <Stack padding='24px' height='calc(100% - 48px)'>
         <Box flex={1}>
           <StatsStackedBar reviews={reviews} />
         </Box>

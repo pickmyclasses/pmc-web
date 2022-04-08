@@ -7,20 +7,20 @@ const gaugeData = [
     value: 20,
     name: 'Course Average',
     title: {
-      offsetCenter: ['-100%', '85%'],
+      offsetCenter: ['-100%', '84%'],
     },
     detail: {
-      offsetCenter: ['-80%', '120%'],
+      offsetCenter: ['-80%', '115%'],
     },
   },
   {
     value: 60,
     name: 'Major Average',
     title: {
-      offsetCenter: ['100%', '85%'],
+      offsetCenter: ['100%', '84%'],
     },
     detail: {
-      offsetCenter: ['80%', '120%'],
+      offsetCenter: ['80%', '115%'],
     },
   },
 ];
@@ -77,6 +77,7 @@ let option = {
   ],
 };
 function generateLetterGrade(value) {
+  value /= 25;
   if (value >= (3.7 + 4) / 2) return 'A';
   if (value >= (3.3 + 3.7) / 2) return 'A-';
   if (value >= (3 + 3.3) / 2) return 'B+';
@@ -93,7 +94,6 @@ function generateLetterGrade(value) {
 export default function statsInfoDump({ courseLoad }) {
   gaugeData[0].value = courseLoad.courseAverageGrade * 25;
   gaugeData[1].value = courseLoad.majorAverageGrade * 25;
-  console.log(option.series.title);
   //generateLetterGrade(courseLoad.courseAverageGrade)
   return (
     // <Stack padding='10px 10px ' spacing='12px'>
@@ -109,7 +109,7 @@ export default function statsInfoDump({ courseLoad }) {
     <ReactECharts
       option={option}
       opts={{ renderer: 'svg' }}
-      style={{ height: 150 }}
+      style={{ height: 200, marginTop: '-22px' }}
       onEvents={{}}
     />
   );
