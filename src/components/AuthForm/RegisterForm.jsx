@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -11,14 +12,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Autocomplete from '@mui/material/Autocomplete';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { register } from '../../api';
-import { useLocation } from 'react-router-dom';
+import { register, login, fetchCollegeList } from '../../api';
 import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 import { useSnackbar } from 'notistack';
 import logo from '../../assets/icon.png';
 import { useMount } from 'utils';
-import { fetchCollegeList } from '../../api';
+import { UserContext } from '../../App';
 
 const theme = createTheme();
 
@@ -28,8 +28,13 @@ export default function RegisterForm() {
   const { enqueueSnackbar } = useSnackbar();
   const [collegeList, setCollegeList] = useState([]);
   const [college, setCollege] = useState(null);
+  const { user, setUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
   useMount(() => {
+    if (user) {
+      navigate('/', { replace: true });
+    }
     fetchCollegeList().then(setCollegeList);
   });
 
@@ -61,11 +66,28 @@ export default function RegisterForm() {
     } else {
       register({ email, firstName, lastName, college, password, rePassword })
         .then(() => {
-          enqueueSnackbar(snackBarMessage.registerSuccess.message, {
-            variant: snackBarMessage.registerSuccess.variant,
-          });
+          login({ email, password })
+            .then((data) => {
+              setTimeout(() => navigateIfAllowed('/', null, { state: location.state }), 1000);
+              enqueueSnackbar(snackBarMessage.registerSuccess.message, {
+                variant: snackBarMessage.registerSuccess.variant,
+              });
 
-          setTimeout(() => navigateIfAllowed('/auth', null, { state: location.state }), 1000);
+              const userInfo = {
+                name: `${data.data.firstName} ${data.data.lastName}`,
+                token: data.data.token,
+                role: data.data.role,
+                userID: data.data.id,
+                collegeID: data.data.collegeID,
+              };
+              setUser(userInfo);
+              localStorage.setItem('user', JSON.stringify(userInfo));
+            })
+            .catch((err) => {
+              enqueueSnackbar(snackBarMessage.internalError.message + ' ' + err.response, {
+                variant: snackBarMessage.internalError.variant,
+              });
+            });
         })
         .catch((err) => {
           if (err.response) {
@@ -204,7 +226,7 @@ const snackBarMessage = {
     variant: 'error',
   },
   registerSuccess: {
-    message: 'Welcome to PMC! Registration succeeded, please login!',
+    message: 'Welcome to PMC! Registration succeeded!',
     variant: 'success',
   },
   internalError: {
