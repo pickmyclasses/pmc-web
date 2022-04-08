@@ -24,7 +24,7 @@ export default function ProfessorButton() {
           focusHoverColor={grey[300]}
           placeholderText={'Search for a professor'}
           borderRadius={'4px'}
-          fontSize={'1.3em'}
+          fontSize={'10px'}
         />
       </MenuItem>
       <MenuItem>
