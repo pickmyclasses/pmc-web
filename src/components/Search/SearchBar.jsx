@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Divider, FilledInput, IconButton, colors } from '@mui/material';
+import { Divider, FilledInput, IconButton } from '@mui/material';
 import { Clear, Search } from '@material-ui/icons';
 import { useDebounce } from 'utils';
 
@@ -30,6 +30,7 @@ export default function SearchBar({
 
   useEffect(() => {
     if (autoSearchOnChange && debouncedSearchText.trim()) onSearch?.(debouncedSearchText, true);
+    // eslint-disable-next-line
   }, [debouncedSearchText]);
 
   return (

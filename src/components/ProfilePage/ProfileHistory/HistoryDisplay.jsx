@@ -1,5 +1,5 @@
 import { Class } from '@mui/icons-material';
-import { Box, Collapse, List, Stack, Card, Skeleton } from '@mui/material';
+import { Box, Collapse, List, Stack, Card } from '@mui/material';
 import { getRequirementsFromScheduleAndHistory } from 'api';
 import LabelWithIcon from 'components/CoursePage/LabelWithIcon';
 import { SchedulerContext } from 'components/Scheduler/ContainerWithScheduler';
@@ -53,6 +53,9 @@ export default function HistoryDisplay({ historyCourses, onRemoveHistoryCourse =
       case 'info':
         window.open('/course/' + course.id, '_blank');
         break;
+      case 'review':
+        window.open(`/course/${course.id}/reviews`, '_blank');
+        break;
       case 'remove':
         onRemoveHistoryCourse?.(course);
         break;
@@ -95,7 +98,7 @@ export default function HistoryDisplay({ historyCourses, onRemoveHistoryCourse =
                   <SmallCourseListItem
                     course={course}
                     autoHideActionItems
-                    actionItems={['info', 'remove']}
+                    actionItems={['info', 'review', 'remove']}
                     onActionItemClick={handleCourseActionItemClick}
                   />
                 </Collapse>

@@ -30,7 +30,7 @@ export default function ProfilePage() {
   useEffect(() => {
     if (user === null)
       navigateIfAllowed('/auth', null, { replace: true, state: { linkTo: location.pathname } });
-  }, [user, navigateIfAllowed]);
+  }, [user, navigateIfAllowed, location.pathname]);
 
   // Figure out the active tab from the URL.
   useEffect(() => {

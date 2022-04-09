@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Box, CircularProgress, Divider, Stack, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { EventNote } from '@mui/icons-material';
 import ShoppingCart from './ShoppingCart';
 import RequirementList from './RequirementList';
