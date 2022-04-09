@@ -166,7 +166,6 @@ export default function Timeline({
       (x) => x.isActive && x.data.groupID === targetGroupID
     )?.data;
     setSelectedEventData(selectedEventData || null);
-    console.log('*= i', selectedEventGroupID, selectedEventData);
     if (!(isDataCardEditable && selectedEventGroupID === -1) && !selectedEventData) {
       setSelectedEventGroupID(NaN);
       setIsDataCardEditable(false);
