@@ -268,7 +268,7 @@ const generateSessions = (
 // helpers and access `classData[...]` directly.
 export const getComponent = (classData) =>
   Object.values(classData).find((value) =>
-    ['Lecture', 'Laboratory', 'Discussion', 'Seminar'].includes(value)
+    ['Lecture', 'Laboratory', 'Discussion', 'Seminar', 'Studio'].includes(value)
   );
 
 // TODO Q: This is assuming a class only has one instructor, which may be false.
