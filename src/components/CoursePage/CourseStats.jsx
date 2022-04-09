@@ -15,12 +15,17 @@ import { Grid, Typography, Card, Stack, Link, Box, breadcrumbsClasses } from '@m
 import { CourseContext } from '../../pages/CoursePage';
 import { motion } from 'framer-motion';
 import ClickableIndicator from '../CourseCardGrid/CourseCard/ClickableIndicator';
+import { PreventableNavigationContext } from '../PreventableNavigation/ContainerWithPreventableNavigation';
 
 export default function CourseStats() {
   const { ratingDistribution, setRatingDistribution } = useState(true);
   const { course, reviews, professorRanking, courseLoad } = useContext(CourseContext);
   const [condition, setCondition] = useState('default');
   const coursePageURL = '/course/' + course.id;
+  let hasChangedCourse = true;
+  useEffect(() => {
+    hasChangedCourse = true;
+  }, [course]);
   const renderProfessorSummery = () => (
     <MotionCard
       initial='initial'
@@ -62,7 +67,7 @@ export default function CourseStats() {
       <Stack padding='24px' height='calc(100% - 48px)'>
         <Box flex={1}>
           <Typography variant='subtitle2'>Course Top Tags</Typography>
-          <StatsTags reviews={reviews} />
+          <StatsTags hasChangedCourse={hasChangedCourse} tags={course.tags} />
         </Box>
         <Link>
           <ClickableIndicator propagate>
@@ -216,7 +221,7 @@ export default function CourseStats() {
         '&:hover': { boxShadow: 6 },
       }}
     >
-      <Stack height='200px' padding='24px'>
+      <Stack height='calc(100% - 48px)' padding='24px'>
         <Box flex={1}>
           {/* <Link to={coursePageURL + '/stats'}></Link> */}
           <Button variant='text' onClick={() => setCondition('default')}>
@@ -271,38 +276,6 @@ export default function CourseStats() {
         break;
     }
   }
-
-  // const { reviews } = useContext(CourseContext);
-  // const [filterMethod, setFilterMethod] = useState('This week');
-  // const [filteredReviews, setFilteredReviews] = useState(reviews);
-
-  // const data = [
-  //   { name: 'Useless (1)', value: 0 },
-  //   { name: 'Poor (2)', value: 0 },
-  //   { name: 'Ok (3)', value: 0 },
-  //   { name: 'Good (4)', value: 0 },
-  //   { name: 'Excellent (5)', value: 0 },
-  // ];
-  // generateStarValues(filteredReviews, data);
-  // useEffect(() => {
-  //   const predicateByFilterMethod = (filterMethod) => {
-  //     const days = daysByFilterMethod[filterMethod];
-  //     return (review) => {
-  //       const reviewDate = new Date(review.createdAt);
-  //       const currDate = new Date();
-  //       return currDate.getTime() - days * 86400000 < reviewDate.getTime();
-  //     };
-  //   };
-
-  //   const predicate = predicateByFilterMethod(filterMethod);
-  //   setFilteredReviews(
-  //     reviews
-  //       .concat()
-  //       .filter(predicate)
-  //       .sort((x, y) => new Date(x.createdAt).getTime() - new Date(y.createdAt).getTime())
-  //   );
-  // }, [filterMethod, reviews]);
-
   return <>{conditionalRendering(condition)}</>;
 }
 

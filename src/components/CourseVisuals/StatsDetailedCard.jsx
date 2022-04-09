@@ -3,105 +3,87 @@ import ReactECharts from 'echarts-for-react';
 import Box from '@mui/material/Box';
 
 let option = {
-  color: ['#b85042', '#cfb845', '#e1dd72', '#a8c66c', '#1b6535'],
-  title: {
-    text: 'Rating Detailed Distribution',
-    subtext: '',
-  },
   tooltip: {
     trigger: 'axis',
     axisPointer: {
+      // Use axis to trigger tooltip
       type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
     },
   },
-  legend: { bottom: 1 },
+  legend: {},
   grid: {
-    left: '4%',
-    bottom: '15%',
-  },
-  xAxis: {
-    type: 'value',
-    showGrid: false,
-    splitLine: {
-      show: false,
-    },
-    axisLabel: {
-      show: false,
-    },
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true,
   },
   yAxis: {
+    type: 'value',
+  },
+  xAxis: {
     type: 'category',
-    data: [''],
-    showGrid: false,
-    splitLine: {
-      show: false,
-    },
+    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
   },
   series: [
     {
-      name: 'One Stars',
+      name: 'Direct',
       type: 'bar',
       stack: 'total',
-      color: '#b85042',
       label: {
         show: true,
       },
       emphasis: {
         focus: 'series',
       },
-      data: [],
+      data: [320, 302, 301, 334, 390, 330, 320],
     },
     {
-      name: 'Two Star',
+      name: 'Mail Ad',
       type: 'bar',
       stack: 'total',
-      color: '#cfb845',
       label: {
         show: true,
       },
       emphasis: {
         focus: 'series',
       },
-      data: [],
+      data: [120, 132, 101, 134, 90, 230, 210],
     },
     {
-      name: 'Three Star',
+      name: 'Affiliate Ad',
       type: 'bar',
       stack: 'total',
-      color: '#e1dd72',
       label: {
         show: true,
       },
       emphasis: {
         focus: 'series',
       },
-      data: [],
+      data: [220, 182, 191, 234, 290, 330, 310],
     },
     {
-      name: 'Four Star',
+      name: 'Video Ad',
       type: 'bar',
       stack: 'total',
-      color: '#a8c66c',
       label: {
         show: true,
       },
       emphasis: {
         focus: 'series',
       },
-      data: [],
+      data: [150, 212, 201, 154, 190, 330, 410],
     },
     {
-      name: 'Five Star',
+      name: 'Search Engine',
       type: 'bar',
       stack: 'total',
-      color: '#1b6535',
       label: {
         show: true,
       },
       emphasis: {
         focus: 'series',
       },
-      data: [],
+      data: [820, 832, 901, 934, 1290, 1330, 1320],
     },
   ],
 };
@@ -114,25 +96,28 @@ function onChartReady(echarts) {
 function onChartClick(param, echarts) {
   //console.log(param, echarts);
 }
-function generateStarValues(reviews) {
-  option.title.subtext = 'Based on ' + reviews.length + ' reviews';
-  let distribution = [0, 0, 0, 0, 0];
-  for (let i = 0; i < reviews.length; i++) {
-    distribution[reviews[i].rating - 1] += 1;
-  }
 
-  for (let i = 0; i < option.series.length; i++) {
-    if (distribution[i] !== 0) {
-      option.series[i].data[0] = distribution[i];
-    }
-  }
+function generateStackBars(reviews) {
+  // name: 'Direct',
+  // type: 'bar',
+  // stack: 'total',
+  // label: {
+  //   show: true,
+  // },
+  // emphasis: {
+  //   focus: 'series',
+  // },
+  // data: [320, 302, 301, 334, 390, 330, 320],
+  console.log(option.series[0]);
 }
+function generateStarValues(reviews) {}
 export default function StatsDetailedCard({ reviews }) {
-  generateStarValues(reviews, option);
+  generateStackBars(reviews);
+  console.log(reviews);
   return (
     <ReactECharts
       option={option}
-      style={{ height: 150 }}
+      style={{ height: 500 }}
       onChartReady={onChartReady}
       onEvents={{
         'click': onChartClick,
