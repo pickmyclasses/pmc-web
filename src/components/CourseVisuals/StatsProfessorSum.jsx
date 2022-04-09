@@ -2,7 +2,6 @@ import { Stack, Typography, Box, Avatar, Grid } from '@mui/material';
 import { formatInstructorName } from 'utils';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
-import { CenterAligningFlexBox } from 'components/CourseCardGrid/CourseCard/CourseCard';
 function stringToColor(string) {
   let hash = 0;
   let i;
@@ -25,6 +24,8 @@ function stringAvatar(name) {
   return {
     sx: {
       bgcolor: stringToColor(name),
+      width: 28,
+      height: 28,
     },
     children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
   };
@@ -68,36 +69,6 @@ export default function StatsProfessorSum({ professorRanking }) {
             emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize='inherit' />}
           />
         </Stack>
-
-        // <>
-        //   <Stack>
-        //     <CenterAligningFlexBox>
-        //       <Avatar src='https://my.eng.utah.edu/~pajensen/Images/Peter.jpg' />
-        //       <Typography variant='subtitle1'>
-        //         {formatInstructorName(instructor)}
-        //       </Typography>{' '}
-        //     </CenterAligningFlexBox>
-
-        //     <Stack direction='row' justifyContent='space-between' width='100%'>
-        //       <CenterAligningFlexBox>
-        //         <Typography variant='caption' sx={{ opacity: 0.75 }}>
-        //           Associate Professor
-        //         </Typography>
-        //       </CenterAligningFlexBox>
-
-        //       <CenterAligningFlexBox>
-        //         <Rating
-        //           name='text-feedback'
-        //           value={topInstructorRatings[i]}
-        //           readOnly
-        //           size='small'
-        //           precision={0.1}
-        //           emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize='inherit' />}
-        //         />
-        //       </CenterAligningFlexBox>
-        //     </Stack>
-        //   </Stack>
-        // </>
       ))}
     </Stack>
   );
