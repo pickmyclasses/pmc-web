@@ -108,7 +108,7 @@ export default function MajorDeclarationPage() {
         <Typography variant='h5'>What is your major?</Typography>
         {currStep > 0 && (
           <Stack direction='row' spacing='12px' alignItems='center' color='success.dark'>
-            <Check fontSize='large' />
+            <Check />
             <Typography variant='h6' marginLeft='24px'>
               {selectedMajor?.name || 'N/A'}
             </Typography>
@@ -169,7 +169,7 @@ export default function MajorDeclarationPage() {
         <Typography variant='h5'>What emphasis?</Typography>
         {currStep > 1 && (
           <Stack direction='row' spacing='12px' alignItems='center' color='success.dark'>
-            <Check fontSize='large' />
+            <Check />
             <Typography variant='h6' marginLeft='24px'>
               {selectedEmphasis || 'No Emphasis'}
             </Typography>
@@ -216,7 +216,7 @@ export default function MajorDeclarationPage() {
         <Typography variant='h5'>What year are you?</Typography>
         {currStep > 2 && (
           <Stack direction='row' spacing='12px' alignItems='center' color='success.dark'>
-            <Check fontSize='large' />
+            <Check />
             <Typography variant='h6' marginLeft='24px'>
               {yearLabels[selectedYear]}
             </Typography>
