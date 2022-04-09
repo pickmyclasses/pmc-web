@@ -50,7 +50,7 @@ export default function AuthForm() {
         setUser(userInfo);
         localStorage.setItem('user', JSON.stringify(userInfo));
 
-        navigate(location?.state?.linkTo || '', { replace: true });
+        navigate(location?.state?.linkTo || '/', { replace: true });
         enqueueSnackbar(`Welcome back, ${data.data.firstName}!`);
       })
       .catch((err) => {

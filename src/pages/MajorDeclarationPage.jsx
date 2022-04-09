@@ -1,10 +1,9 @@
-import { Check, CheckCircle, Edit } from '@mui/icons-material';
+import { Check, Edit } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
   Autocomplete,
   Box,
   Button,
-  Collapse,
   Container,
   FormControlLabel,
   Grow,
@@ -18,33 +17,43 @@ import {
   Typography,
   Zoom,
 } from '@mui/material';
-import { declareMajor, fetchCollegeMajors } from 'api';
+import { declareMajor, fetchCollegeMajorList, fetchMajorEmphasisList } from 'api';
 import { UserContext } from 'App';
 import ContainerWithLoadingIndication from 'components/Page/ContainerWithLoadingIndication';
 import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
-import SearchBar from 'components/Search/SearchBar';
-import React, { createElement, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
+import { useLocation } from 'react-router-dom';
 import { TransitionGroup } from 'react-transition-group';
 import { capitalizeFirst } from 'utils';
 
 export default function MajorDeclarationPage() {
+  const location = useLocation();
+
   const { user } = useContext(UserContext);
   const { navigateIfAllowed } = useContext(PreventableNavigationContext);
 
   const [currStep, setCurrStep] = useState(-1);
   const [majorOptions, setMajorOptions] = useState([]);
   const [selectedMajor, setSelectedMajor] = useState(null);
+  const [areEmphasisOptionsLoading, setAreEmphasisOptionsLoading] = useState(false);
+  const [emphasisOptions, setEmphasisOptions] = useState(null);
   const [selectedEmphasis, setSelectedEmphasis] = useState(null);
   const [selectedYear, setSelectedYear] = useState(null);
   const [isSavingLoading, setIsSavingLoading] = useState(false);
+
+  const collegeID = 2;
 
   useEffect(() => {
     if (user === null)
       requestAnimationFrame(() => navigateIfAllowed('/', null, { replace: true }));
 
-    fetchCollegeMajors(2).then(setMajorOptions);
-    setTimeout(() => setCurrStep(0), 2000);
+    fetchCollegeMajorList(collegeID).then((majors) =>
+      setMajorOptions(majors.sort((x, y) => x.name.localeCompare(y.name)))
+    );
+    // Give the new user some time to read the welcome message on the top before showing the
+    // major prompt.
+    setTimeout(() => setCurrStep(0), location.state?.isNewUser ? 2000 : 0);
   }, [user]);
 
   const renderTop = () => (
@@ -82,18 +91,34 @@ export default function MajorDeclarationPage() {
     </Box>
   );
 
+  const handleMajorSelectionContinue = () => {
+    if (!selectedMajor) return void setCurrStep(2);
+
+    setAreEmphasisOptionsLoading(true);
+    fetchMajorEmphasisList(collegeID, selectedMajor.name).then((emphases) => {
+      setAreEmphasisOptionsLoading(false);
+      setEmphasisOptions(emphases.sort((x, y) => x.name.localeCompare(y.name)));
+      setCurrStep(emphases.length ? 1 : 2);
+    });
+  };
+
   const renderMajorSelection = () => (
     <Stack spacing='24px' paddingY='24px'>
-      <Stack direction='row' spacing='24px' alignItems='center'>
+      <Stack direction='row' height='40px' spacing='24px' alignItems='center'>
         <Typography variant='h5'>What is your major?</Typography>
         {currStep > 0 && (
           <Stack direction='row' spacing='12px' alignItems='center' color='success.dark'>
-            <Check fontSize='large' />
+            <Check />
             <Typography variant='h6' marginLeft='24px'>
               {selectedMajor?.name || 'N/A'}
             </Typography>
-            <IconButton onClick={() => setCurrStep(0)}>
-              <Edit />
+            <IconButton
+              onClick={() => {
+                setCurrStep(0);
+                setEmphasisOptions(null);
+              }}
+            >
+              <Edit fontSize='small' />
             </IconButton>
           </Stack>
         )}
@@ -104,7 +129,7 @@ export default function MajorDeclarationPage() {
             noOptionsText={
               majorOptions.length ? 'Sorry, your major is not on our list' : 'Loading majors...'
             }
-            options={majorOptions.sort((x, y) => x.name.localeCompare(y.name))}
+            options={majorOptions}
             groupBy={(option) => option.name.charAt(0).toUpperCase()}
             getOptionLabel={(option) => option.name}
             isOptionEqualToValue={(option, value) => option.name === value.name}
@@ -121,18 +146,16 @@ export default function MajorDeclarationPage() {
               setSelectedEmphasis(null);
             }}
           />
-          <Button
+          <LoadingButton
             variant='contained'
             sx={{ height: 'fit-content' }}
             disabled={!selectedMajor}
-            onClick={() => setCurrStep(selectedMajor?.emphasisList?.length ? 1 : 2)}
+            loading={areEmphasisOptionsLoading}
+            onClick={handleMajorSelectionContinue}
           >
             Continue
-          </Button>
-          <Button
-            color='inherit'
-            onClick={() => setCurrStep(selectedMajor?.emphasisList?.length ? 1 : 2)}
-          >
+          </LoadingButton>
+          <Button color='inherit' onClick={handleMajorSelectionContinue}>
             Skip
           </Button>
         </Stack>
@@ -142,16 +165,16 @@ export default function MajorDeclarationPage() {
 
   const renderEmphasisSelection = () => (
     <Stack spacing='24px' paddingY='24px'>
-      <Stack direction='row' spacing='24px' alignItems='center'>
+      <Stack direction='row' height='40px' spacing='24px' alignItems='center'>
         <Typography variant='h5'>What emphasis?</Typography>
         {currStep > 1 && (
           <Stack direction='row' spacing='12px' alignItems='center' color='success.dark'>
-            <Check fontSize='large' />
+            <Check />
             <Typography variant='h6' marginLeft='24px'>
               {selectedEmphasis || 'No Emphasis'}
             </Typography>
             <IconButton onClick={() => setCurrStep(1)}>
-              <Edit />
+              <Edit fontSize='small' />
             </IconButton>
           </Stack>
         )}
@@ -159,7 +182,7 @@ export default function MajorDeclarationPage() {
       {currStep === 1 && (
         <Stack alignSelf='center' direction='row' spacing='24px' alignItems='center'>
           <Select
-            value={selectedEmphasis || (!selectedMajor.emphasisRequired && 'No Emphasis')}
+            value={selectedEmphasis || (selectedMajor.emphasisRequired ? '' : 'No Emphasis')}
             onChange={(e) => setSelectedEmphasis(e.target.value)}
             sx={{ width: '432px' }}
           >
@@ -168,13 +191,11 @@ export default function MajorDeclarationPage() {
                 No Emphasis
               </MenuItem>
             )}
-            {selectedMajor.emphasisList
-              .sort((x, y) => x.localeCompare(y))
-              .map((x) => (
-                <MenuItem key={x} value={x}>
-                  {x}
-                </MenuItem>
-              ))}
+            {emphasisOptions.map(({ name }) => (
+              <MenuItem key={name} value={name}>
+                {name}
+              </MenuItem>
+            ))}
           </Select>
           <Button
             variant='contained'
@@ -191,16 +212,16 @@ export default function MajorDeclarationPage() {
 
   const renderYearSelection = () => (
     <Stack spacing='24px' paddingY='24px'>
-      <Stack direction='row' spacing='24px' alignItems='center'>
+      <Stack direction='row' height='40px' spacing='24px' alignItems='center'>
         <Typography variant='h5'>What year are you?</Typography>
         {currStep > 2 && (
           <Stack direction='row' spacing='12px' alignItems='center' color='success.dark'>
-            <Check fontSize='large' />
+            <Check />
             <Typography variant='h6' marginLeft='24px'>
               {yearLabels[selectedYear]}
             </Typography>
             <IconButton onClick={() => setCurrStep(2)}>
-              <Edit />
+              <Edit fontSize='small' />
             </IconButton>
           </Stack>
         )}
@@ -251,7 +272,7 @@ export default function MajorDeclarationPage() {
             selectedMajor?.name,
             selectedEmphasis === 'No Emphasis' ? undefined : selectedEmphasis,
             (+selectedYear + 1).toString()
-          ).then(() => navigateIfAllowed('/'));
+          ).then(() => navigateIfAllowed(location.state?.linkTo || '/'));
         }}
       >
         Start Now!
@@ -261,7 +282,7 @@ export default function MajorDeclarationPage() {
 
   const steps = [
     renderMajorSelection,
-    selectedMajor?.emphasisList?.length > 0 && renderEmphasisSelection,
+    emphasisOptions?.length > 0 && renderEmphasisSelection,
     renderYearSelection,
     renderCompleteIndication,
   ];
