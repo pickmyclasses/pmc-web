@@ -7,8 +7,11 @@ export const login = (body) => axios.post('/login', body).then((response) => res
 export const register = (body) =>
   axios.post('/register', body).then((response) => response.data);
 
-export const fetchCollegeMajors = (collegeID) =>
+export const fetchCollegeMajorList = (collegeID) =>
   axios.get(`/college/${collegeID}/major/list`).then(({ data }) => data.data);
+
+export const fetchMajorEmphasisList = (collegeID, majorName) =>
+  axios.get(`/college/${collegeID}/emphasis?major=${majorName}`).then(({ data }) => data.data);
 
 export const declareMajor = (userID, majorName, emphasisName, schoolYear) =>
   axios.post('/user/major', { userID, majorName, emphasisName, schoolYear });
