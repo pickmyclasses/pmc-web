@@ -6,8 +6,6 @@ import { useDebounce } from 'utils';
 /**
  * The search-bar that sits in the middle of the navigation bar. Fires events when the user
  * searches via calling `onSearch`.
- *
- * @param {{onSearch: (searchText: string) => void}} props
  */
 export default function SearchBar({
   defaultSearchText,
@@ -19,10 +17,11 @@ export default function SearchBar({
   maxWidth,
   focusHoverColor,
   placeholderText,
-  borderRadiusRatio,
+  borderRadiusRatio = '4px',
   fontSize,
   clearIconColor,
   searchIconColor,
+  hideSearchIcon = false,
 }) {
   const [searchText, setSearchText] = useState('');
   const debouncedSearchText = useDebounce(searchText, autoSearchDelay);
@@ -68,13 +67,17 @@ export default function SearchBar({
                   opacity: 0.5,
                   marginLeft: '4px',
                   marginRight: '8px',
+                  display: hideSearchIcon && 'none',
                 }}
                 flexItem
               />
             </>
           )}
           <IconButton
-            sx={{ color: searchIconColor || 'text.disabled' }}
+            sx={{
+              color: searchIconColor || 'text.disabled',
+              display: hideSearchIcon && 'none',
+            }}
             onClick={() => onSearch?.(searchText, false)}
           >
             <Search />

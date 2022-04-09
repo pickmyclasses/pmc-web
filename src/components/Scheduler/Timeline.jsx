@@ -198,7 +198,7 @@ export default function Timeline({
   // Logic for rendering elements in the timeline.
 
   const renderColumnTitle = (key, title) => (
-    <Grid key={'cl' + key} item xs sx={{ textAlign: 'center', marginLeft: '-4.17%' }}>
+    <Grid key={'cl' + key} item xs sx={{ textAlign: 'center', marginLeft: '-2.78%' }}>
       <Typography variant='subtitle2' color={theme.palette.text.secondary}>
         {title}
       </Typography>

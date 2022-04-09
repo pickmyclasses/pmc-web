@@ -9,11 +9,11 @@ import AdminPage from './pages/Admin/AdminPage';
 import UpdateData from './pages/Admin/UpdateData';
 import AuthForm from './components/AuthForm/AuthForm';
 import RegisterForm from './components/AuthForm/RegisterForm';
-import FeedbackEditor from './pages/FeedbackEditorPage';
 import ContainerWithNavigationBar from './components/NavigationBar/ContainerWithNavigationBar';
 import ContainerWithPreventableNavigation from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
 import FileUpload from './pages/Admin/FileUpload';
 import ProfilePage from 'pages/ProfilePage';
+import MajorDeclarationPage from 'pages/MajorDeclarationPage';
 
 export default function App() {
   const [user, setUser] = useState();
@@ -33,11 +33,11 @@ export default function App() {
               <Route exact path='/register' element={<RegisterForm />} />
               <Route exact path='/profile' element={<ProfilePage />} />
               <Route exact path='/profile/:tab' element={<ProfilePage />} />
+              <Route exact path='/profile/roadmap/declare' element={<MajorDeclarationPage />} />
               <Route exact path='/search/:query' element={<SearchPage />} />
               <Route exact path='/course/:id' element={<CoursePage />} />
               <Route exact path='/course/:id/:tab' element={<CoursePage />} />
               <Route exact path='/course/:id/reviews/compose' element={<ReviewPage />} />
-              <Route exact path='/course/:id/edit-feedback' element={<FeedbackEditor />} />
               <Route exact path='/admin' element={<AdminPage />} />
               <Route exact path='/admin-update' element={<UpdateData />} />
               <Route exact path='/file-upload' element={<FileUpload />} />

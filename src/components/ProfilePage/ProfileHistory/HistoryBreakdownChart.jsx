@@ -62,10 +62,12 @@ const getChartOptions = (data, style) => ({
   grid: { top: 8, right: 0, bottom: 0, left: style.stacked ? 0 : 144 },
   color: chartBarColors,
   tooltip: {
-    borderColor: 'white',
+    borderColor: '#ccc',
     transitionDuration: 0.25,
     hideDelay: 0,
-    axisPointer: { trigger: 'axis' },
+    position: 'top',
+    padding: [4, 16, 8, 16],
+    textStyle: { fontSize: 16, lineHeight: 24, color: 'black' },
   },
 });
 
@@ -80,7 +82,6 @@ const getSeriesItem = (
   tooltip: {
     show: i % 4 !== 3,
     formatter: formatTooltipText(title, completed, inProgress, toGo, i % 4 === 0),
-    textStyle: { fontSize: 16, lineHeight: 24 },
   },
   label: {
     show: i % 4 === 0,
@@ -126,8 +127,8 @@ const formatLabel = (title, completed, inProgress, toGo, stacked) =>
 
 const formatTooltipText = (title, completed, inProgress, toGo) =>
   [
-    '<div style="text-align: center">',
-    `  <b>${title}</b>`,
+    '<div style="text-align: center;">',
+    `  <b style="font-weight: 500; line-height: 2em;">${title}</b>`,
     '  <br />',
     `  ${pluralize(completed, 'course')} taken`,
     inProgress > 0 && '  <br />',

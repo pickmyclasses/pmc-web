@@ -7,6 +7,12 @@ export const login = (body) => axios.post('/login', body).then((response) => res
 export const register = (body) =>
   axios.post('/register', body).then((response) => response.data);
 
+export const fetchCollegeMajors = (collegeID) =>
+  axios.get(`/college/${collegeID}/major/list`).then(({ data }) => data.data);
+
+export const declareMajor = (userID, majorName, emphasisName, schoolYear) =>
+  axios.post('/user/major', { userID, majorName, emphasisName, schoolYear });
+
 /**
  * Fetches the course but also injects the fake image URL. Basically pretends `ImageURL` was an
  * actual field of the course.
