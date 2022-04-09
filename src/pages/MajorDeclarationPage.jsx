@@ -54,7 +54,7 @@ export default function MajorDeclarationPage() {
     // Give the new user some time to read the welcome message on the top before showing the
     // major prompt.
     setTimeout(() => setCurrStep(0), location.state?.isNewUser ? 2000 : 0);
-  }, [user]);
+  }, [user, location.state?.isNewUser, navigateIfAllowed]);
 
   const renderTop = () => (
     <Box backgroundColor='#eee' paddingY='72px'>

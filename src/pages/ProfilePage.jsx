@@ -11,6 +11,7 @@ import ProfileHistory from 'components/ProfilePage/ProfileHistory';
 import { UserContext } from 'App';
 import ContainerWithLoadingIndication from 'components/Page/ContainerWithLoadingIndication';
 import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
+import ProfileDashboard from 'components/ProfilePage/ProfileDashboard';
 
 /**
  * Provides the basic layout and tab management for the user profile page (accessed via avatar
@@ -29,7 +30,7 @@ export default function ProfilePage() {
   useEffect(() => {
     if (user === null)
       navigateIfAllowed('/auth', null, { replace: true, state: { linkTo: location.pathname } });
-  }, [user, navigateIfAllowed]);
+  }, [user, navigateIfAllowed, location.pathname]);
 
   // Figure out the active tab from the URL.
   useEffect(() => {
@@ -86,7 +87,7 @@ export default function ProfilePage() {
  * `name` also determines the `:tab` parameter in the URL.
  */
 const tabs = {
-  '': { title: 'Dashboard', icon: Dashboard, content: ProfileRoadmap },
+  '': { title: 'Dashboard', icon: Dashboard, content: ProfileDashboard },
   'schedule': { title: 'Schedule', icon: EventNote, content: ProfileSchedule },
   'roadmap': { title: 'Roadmap', icon: School, content: ProfileRoadmap },
   'history': { title: 'History', icon: History, content: ProfileHistory },
