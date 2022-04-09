@@ -72,7 +72,10 @@ export default function RegisterForm() {
           localStorage.setItem('user', JSON.stringify(userInfo));
 
           requestAnimationFrame(() =>
-            navigateIfAllowed('/profile/roadmap/declare', null, { replace: true })
+            navigateIfAllowed('/profile/roadmap/declare', null, {
+              replace: true,
+              state: { linkTo: '/', isNewUser: true },
+            })
           );
         })
         .catch((err) => {
