@@ -1,10 +1,9 @@
-import { Check, CheckCircle, Edit } from '@mui/icons-material';
+import { Check, Edit } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
   Autocomplete,
   Box,
   Button,
-  Collapse,
   Container,
   FormControlLabel,
   Grow,
@@ -22,13 +21,15 @@ import { declareMajor, fetchCollegeMajors } from 'api';
 import { UserContext } from 'App';
 import ContainerWithLoadingIndication from 'components/Page/ContainerWithLoadingIndication';
 import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
-import SearchBar from 'components/Search/SearchBar';
-import React, { createElement, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
+import { useLocation } from 'react-router-dom';
 import { TransitionGroup } from 'react-transition-group';
 import { capitalizeFirst } from 'utils';
 
 export default function MajorDeclarationPage() {
+  const location = useLocation();
+
   const { user } = useContext(UserContext);
   const { navigateIfAllowed } = useContext(PreventableNavigationContext);
 
@@ -44,8 +45,10 @@ export default function MajorDeclarationPage() {
       requestAnimationFrame(() => navigateIfAllowed('/', null, { replace: true }));
 
     fetchCollegeMajors(2).then(setMajorOptions);
-    setTimeout(() => setCurrStep(0), 2000);
-  }, [user]);
+    // Give the new user some time to read the welcome message on the top before showing the
+    // major prompt.
+    setTimeout(() => setCurrStep(0), location.state?.isNewUser ? 2000 : 0);
+  }, [user, location]);
 
   const renderTop = () => (
     <Box backgroundColor='#eee' paddingY='72px'>
@@ -251,7 +254,7 @@ export default function MajorDeclarationPage() {
             selectedMajor?.name,
             selectedEmphasis === 'No Emphasis' ? undefined : selectedEmphasis,
             (+selectedYear + 1).toString()
-          ).then(() => navigateIfAllowed('/'));
+          ).then(() => navigateIfAllowed(location.state?.linkTo || '/'));
         }}
       >
         Start Now!
