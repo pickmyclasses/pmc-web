@@ -104,7 +104,7 @@ export default function MajorDeclarationPage() {
 
   const renderMajorSelection = () => (
     <Stack spacing='24px' paddingY='24px'>
-      <Stack direction='row' spacing='24px' alignItems='center'>
+      <Stack direction='row' height='40px' spacing='24px' alignItems='center'>
         <Typography variant='h5'>What is your major?</Typography>
         {currStep > 0 && (
           <Stack direction='row' spacing='12px' alignItems='center' color='success.dark'>
@@ -118,7 +118,7 @@ export default function MajorDeclarationPage() {
                 setEmphasisOptions(null);
               }}
             >
-              <Edit />
+              <Edit fontSize='small' />
             </IconButton>
           </Stack>
         )}
@@ -165,7 +165,7 @@ export default function MajorDeclarationPage() {
 
   const renderEmphasisSelection = () => (
     <Stack spacing='24px' paddingY='24px'>
-      <Stack direction='row' spacing='24px' alignItems='center'>
+      <Stack direction='row' height='40px' spacing='24px' alignItems='center'>
         <Typography variant='h5'>What emphasis?</Typography>
         {currStep > 1 && (
           <Stack direction='row' spacing='12px' alignItems='center' color='success.dark'>
@@ -174,7 +174,7 @@ export default function MajorDeclarationPage() {
               {selectedEmphasis || 'No Emphasis'}
             </Typography>
             <IconButton onClick={() => setCurrStep(1)}>
-              <Edit />
+              <Edit fontSize='small' />
             </IconButton>
           </Stack>
         )}
@@ -212,7 +212,7 @@ export default function MajorDeclarationPage() {
 
   const renderYearSelection = () => (
     <Stack spacing='24px' paddingY='24px'>
-      <Stack direction='row' spacing='24px' alignItems='center'>
+      <Stack direction='row' height='40px' spacing='24px' alignItems='center'>
         <Typography variant='h5'>What year are you?</Typography>
         {currStep > 2 && (
           <Stack direction='row' spacing='12px' alignItems='center' color='success.dark'>
@@ -221,7 +221,7 @@ export default function MajorDeclarationPage() {
               {yearLabels[selectedYear]}
             </Typography>
             <IconButton onClick={() => setCurrStep(2)}>
-              <Edit />
+              <Edit fontSize='small' />
             </IconButton>
           </Stack>
         )}
