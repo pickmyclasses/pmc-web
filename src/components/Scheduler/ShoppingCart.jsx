@@ -121,7 +121,7 @@ export default function ShoppingCart({
             component={PreventableLink}
             to='/profile/schedule'
             variant='caption'
-            color='gray'
+            color='text.secondary'
             underline='hover'
           >
             View schedule details

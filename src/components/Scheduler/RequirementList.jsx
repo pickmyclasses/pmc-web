@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
-import { Divider, Stack, Typography } from '@mui/material';
+import { Divider, Link, Stack, Typography } from '@mui/material';
 import ClickableIndicator from 'components/CourseCardGrid/CourseCard/ClickableIndicator';
 import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
 import HistoryBreakdownChart from 'components/ProfilePage/ProfileHistory/HistoryBreakdownChart';
+import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 
 /** The requirement list resides in the bottom part of the scheduler. */
 export default function RequirementList({ requirements = [] }) {
@@ -21,6 +22,16 @@ export default function RequirementList({ requirements = [] }) {
         style={{ height: 28 * requirements.length + 'px', marginTop: 0 }}
         hideTransitions
       />
+      <Link
+        component={PreventableLink}
+        to='/profile/roadmap'
+        variant='caption'
+        color='text.secondary'
+        underline='hover'
+        textAlign='center'
+      >
+        View graduation roadmap
+      </Link>
     </Stack>
   );
 }

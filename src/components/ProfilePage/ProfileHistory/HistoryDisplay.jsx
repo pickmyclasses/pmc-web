@@ -6,6 +6,7 @@ import { SchedulerContext } from 'components/Scheduler/ContainerWithScheduler';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { TransitionGroup } from 'react-transition-group';
+import { useMount } from 'utils';
 import SmallCourseListItem from '../SmallCourseListItem';
 import HistoryBreakdownChart from './HistoryBreakdownChart';
 
@@ -14,11 +15,15 @@ import HistoryBreakdownChart from './HistoryBreakdownChart';
  * history.
  */
 export default function HistoryDisplay({ historyCourses, onRemoveHistoryCourse = null }) {
-  const { classesInShoppingCart, requirements } = useContext(SchedulerContext);
+  const { classesInShoppingCart, requirements, refreshSchedulerData } =
+    useContext(SchedulerContext);
   const listContainerRef = useRef();
 
   const [shouldListShowTransition, setShouldListShowTransition] = useState(false);
   const [historyBreakdown, setHistoryBreakdown] = useState(requirements);
+
+  // On unmount, refresh scheduler to update progress of requirements.
+  useMount(() => refreshSchedulerData);
 
   // Scroll to the top of list every time its content changes.
   useEffect(() => {

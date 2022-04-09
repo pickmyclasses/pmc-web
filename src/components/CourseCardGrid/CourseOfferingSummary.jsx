@@ -30,6 +30,7 @@ export default function CourseOfferingSummary({
 
   const [onlineOffering, setOnlineOffering] = useState(null);
   const [numHiddenOfferings, setNumHiddenOfferings] = useState(0);
+  const [defaultCombo, setDefaultCombo] = useState(); // to show when there is only one row
   const [comboInShoppingCart, setComboInShoppingCart] = useState(null);
   const [representativeOfferings, setRepresentativeOfferings] = useState([]);
   const [isMouseEntered, setIsMouseEntered] = useState(false);
@@ -46,6 +47,9 @@ export default function CourseOfferingSummary({
       classesInShoppingCart
     );
     setComboInShoppingCart(comboInShoppingCart);
+    setDefaultCombo(
+      offerings[offerings.length > 1 && offerings[0].days[0] === -1 ? 1 : 0]?.combo
+    );
 
     const numHiddenOfferings = offerings.length <= maxRows ? 0 : offerings.length - maxRows + 1;
     let representativeOfferings = offerings.slice(0, offerings.length - numHiddenOfferings);
@@ -61,7 +65,10 @@ export default function CourseOfferingSummary({
   // Handle highlight and un-highlight logics.
   useEffect(() => {
     if (
-      (representativeOfferings.length || onlineOffering || comboInShoppingCart) &&
+      (representativeOfferings.length ||
+        onlineOffering ||
+        comboInShoppingCart ||
+        (maxRows === 1 && defaultCombo)) &&
       hasStaticScheduler &&
       shouldShowStaticScheduler &&
       enableHighlight &&
@@ -71,7 +78,7 @@ export default function CourseOfferingSummary({
       const indexToHighlight = Math.max(mouseEnteredIndex, 0);
       const comboToHighlight =
         indexToHighlight === representativeOfferings.length
-          ? onlineOffering?.combo || comboInShoppingCart
+          ? onlineOffering?.combo || comboInShoppingCart || defaultCombo
           : representativeOfferings[indexToHighlight].combo;
       setHighlightedIndex(indexToHighlight);
       setClassesToHighlight(
