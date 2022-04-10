@@ -17,6 +17,7 @@ import { LoadingButton } from '@mui/lab';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 import { useSnackbar } from 'notistack';
 import logo from '../../assets/icon.png';
+import Scrollbars from 'react-custom-scrollbars-2';
 
 export default function AuthForm() {
   const navigate = useNavigate();
@@ -47,15 +48,10 @@ export default function AuthForm() {
           collegeID: data.data.collegeID,
         };
         setUser(userInfo);
-
         localStorage.setItem('user', JSON.stringify(userInfo));
 
-        if (location?.state?.linkTo) {
-          navigate(location.state.linkTo, { replace: true });
-          enqueueSnackbar(snackBarMessage['LoginSuccess'].message, {
-            variant: snackBarMessage['LoginSuccess'].variant,
-          });
-        } else navigate('/', { replace: true });
+        navigate(location?.state?.linkTo || '/', { replace: true });
+        enqueueSnackbar(`Welcome back, ${data.data.firstName}!`);
       })
       .catch((err) => {
         setIsLoginLoading(false);
@@ -78,75 +74,77 @@ export default function AuthForm() {
   const theme = createTheme();
   return (
     <ThemeProvider theme={theme}>
-      <Container component='main' maxWidth='xs'>
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <img src={logo} alt={'logo'} style={{ height: '5em' }} />
-          <Typography component='h1' variant='h5'>
-            Login
-          </Typography>
-          <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin='normal'
-              required
-              fullWidth
-              id='email'
-              label='Email Address'
-              name='email'
-              autoComplete='email'
-              autoFocus
-            />
-            <TextField
-              margin='normal'
-              required
-              fullWidth
-              name='password'
-              label='Password'
-              type='password'
-              id='password'
-              autoComplete='current-password'
-            />
-            {errorMessage !== '' && <ErrorMessage message={errorMessage} />}
-            <FormControlLabel
-              control={<Checkbox value='remember' color='primary' />}
-              label='Remember me'
-            />
-            <LoadingButton
-              loading={isLoginLoading}
-              type='submit'
-              fullWidth
-              variant='contained'
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </LoadingButton>
-            <Grid container>
-              <Grid item xs>
-                <Link href='#' variant='body2'>
-                  Forgot password?
-                </Link>
+      <Scrollbars autoHide>
+        <Container component='main' maxWidth='xs' sx={{ paddingBottom: '32px' }}>
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <img src={logo} alt={'logo'} style={{ height: '5em' }} />
+            <Typography component='h1' variant='h5'>
+              Login
+            </Typography>
+            <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+              <TextField
+                margin='normal'
+                required
+                fullWidth
+                id='email'
+                label='Email Address'
+                name='email'
+                autoComplete='email'
+                autoFocus
+              />
+              <TextField
+                margin='normal'
+                required
+                fullWidth
+                name='password'
+                label='Password'
+                type='password'
+                id='password'
+                autoComplete='current-password'
+              />
+              {errorMessage !== '' && <ErrorMessage message={errorMessage} />}
+              <FormControlLabel
+                control={<Checkbox value='remember' color='primary' />}
+                label='Remember me'
+              />
+              <LoadingButton
+                loading={isLoginLoading}
+                type='submit'
+                fullWidth
+                variant='contained'
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Sign In
+              </LoadingButton>
+              <Grid container>
+                <Grid item xs>
+                  <Link href='#' variant='body2'>
+                    Forgot password?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link
+                    variant='body2'
+                    component={PreventableLink}
+                    to='/register'
+                    state={location.state}
+                  >
+                    Don't have an account? Sign Up
+                  </Link>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Link
-                  variant='body2'
-                  component={PreventableLink}
-                  to='/register'
-                  state={location.state}
-                >
-                  Don't have an account? Sign Up
-                </Link>
-              </Grid>
-            </Grid>
+            </Box>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      </Scrollbars>
     </ThemeProvider>
   );
 }
@@ -156,7 +154,7 @@ const ErrorMessage = ({ message }) => {
 };
 
 const snackBarMessage = {
-  LoginSuccess: { message: 'Login successfully', variant: 'success' },
+  LoginSuccess: { message: 'Welcome back' },
   wrongPassword: { message: 'Wrong username or password', variant: 'error' },
   serverError: {
     message: 'Sorry, something went wrong, please refresh the page and try again',

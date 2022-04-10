@@ -13,6 +13,7 @@ import OfferingListingGroup from './OfferingListingGroup';
 import SchedulePreview from './SchedulePreview';
 import UnloadConfirmation from './UnloadConfirmation';
 import LinkToAuthForm from 'components/AuthForm/LinkToAuthForm';
+import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 
 export default function OfferingListing({ course, schedulePreviewContainer }) {
   const { user } = useContext(UserContext);
@@ -294,6 +295,16 @@ export default function OfferingListing({ course, schedulePreviewContainer }) {
         autoHideDuration={4000}
         onClose={() => setIsSnackbarOpen(false)}
         message={snackbarMessage}
+        action={
+          <Button
+            size='small'
+            component={PreventableLink}
+            to='/profile/schedule'
+            sx={{ marginLeft: '16px', color: 'grey.500' }}
+          >
+            View schedule
+          </Button>
+        }
       />
     </>
   );

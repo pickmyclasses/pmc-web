@@ -15,6 +15,9 @@ import {
   fetchReviewTagsByCourseID,
   fetchProfessorByCourseID,
   fetchSemestersByCollegeID,
+  fetchProfessorRanking,
+  fetchCourseLoad,
+  fetchRatingTrend,
 } from '../api';
 import CoursePageTop, { imageHeight } from '../components/CoursePage/CoursePageTop';
 import CourseOverview from '../components/CoursePage/CourseOverview';
@@ -28,19 +31,35 @@ import Scrollbars from 'react-custom-scrollbars-2';
 
 export default function CoursePage() {
   const urlParams = useParams();
-
   const [activeTabName, setActiveTabName] = useState('');
   const [course, setCourse] = useState(null);
   const [reviews, setReviews] = useState(null);
   const [reviewTags, setReviewTags] = useState(null);
   const [professors, setProfessors] = useState(null);
   const [semesters, setSemesters] = useState([]);
+  const [professorRanking, setProfessorRanking] = useState();
+  const [courseLoad, setCourseLoad] = useState();
+  const [courseTrend, setCourseTrend] = useState();
   // This avoids the useRef()'s not updating problem with useEffect().
   // See https://stackoverflow.com/a/67906087)
   // We can potentially include this pattern in the utils collection to reuse it.
   const [containerNode, setContainerNode] = useState(null);
   const containerRef = useCallback((node) => setContainerNode(node), []);
   const { user } = useContext(UserContext);
+  const refreshCourseData = useCallback(
+    (courseID) => {
+      fetchCourseByID(courseID).then(setCourse);
+      fetchReviewsByCourseID(courseID).then(setReviews);
+      fetchReviewTagsByCourseID(courseID).then(setReviewTags);
+      fetchProfessorByCourseID(courseID).then(setProfessors);
+      fetchProfessorRanking(courseID).then(setProfessorRanking);
+      fetchCourseLoad(courseID).then(setCourseLoad);
+      fetchRatingTrend(courseID).then(setCourseTrend);
+
+      if (user) fetchSemestersByCollegeID(user.collegeID).then(setSemesters);
+    },
+    [user]
+  );
 
   useEffect(() => {
     const courseID = urlParams.id;
@@ -51,32 +70,40 @@ export default function CoursePage() {
       setReviews(null);
     }
 
-    // Fetch data for the course, classes offered, reviews tags, professors, semesters.
-    fetchCourseByID(courseID).then(setCourse);
-    fetchReviewsByCourseID(courseID).then(setReviews);
-    fetchReviewTagsByCourseID(courseID).then(setReviewTags);
-    fetchProfessorByCourseID(courseID).then(setProfessors);
-    if (user) {
-      //fetchSemestersByCourseID(user.collegeID).then((data) => setSemesters(data));
-      fetchSemestersByCollegeID(user.collegeID).then((data) => setSemesters(data.data.data));
-    }
+    // Fetch related data.
+    refreshCourseData(courseID);
+
     // Figure out the active tab from the URL.
     const tabParam = String(urlParams.tab).toLowerCase();
     setActiveTabName(tabs.hasOwnProperty(tabParam) ? tabParam : '');
-  }, [urlParams, course?.id]);
+  }, [urlParams, course?.id, refreshCourseData]);
+
   useEffect(() => {
     // Go to top of page (right below the banner image) when URL changes.
     const pageContent = containerNode?.children[0].children[0];
     if (pageContent) pageContent.scrollTo(0, Math.min(pageContent.scrollTop, imageHeight));
   }, [urlParams, containerNode]);
+
   return (
-    <ContainerWithLoadingIndication isLoading={!course || !reviews}>
+    <ContainerWithLoadingIndication
+      isLoading={!course || !reviews || !professorRanking || !courseLoad || !courseTrend}
+    >
       <Box ref={containerRef} width='100%' height='100%' minHeight={0}>
         <OnTopScrollBars>
           <CoursePageTop course={course} tabs={tabs} activeTabName={activeTabName} />
           <Container maxWidth='xl' sx={{ paddingTop: '32px' }}>
             <CourseContext.Provider
-              value={{ course, reviews, reviewTags, professors, semesters }}
+              value={{
+                refreshCourseData,
+                course,
+                reviews,
+                reviewTags,
+                professors,
+                semesters,
+                professorRanking,
+                courseLoad,
+                courseTrend,
+              }}
             >
               {createElement(tabs[activeTabName].content)}
             </CourseContext.Provider>
@@ -92,6 +119,7 @@ export default function CoursePage() {
  *   course: Object,
  *   reviews: Array<Object>,
  *   reviewTags: Array<Object>,
+ *   refreshCourseData: (courseID: Number) => void,
  * }>}
  */
 export const CourseContext = createContext(null);

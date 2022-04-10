@@ -163,22 +163,26 @@ export default function Timeline({
       navigate('#', { replace: true, search: '' });
     }
     const selectedEventData = eventsShown.find(
-      (x) => x.isActive && [targetGroupID, -1].includes(x.data.groupID)
+      (x) => x.isActive && x.data.groupID === targetGroupID
     )?.data;
     setSelectedEventData(selectedEventData || null);
-    if (!selectedEventData) {
+    if (!(isDataCardEditable && selectedEventGroupID === -1) && !selectedEventData) {
       setSelectedEventGroupID(NaN);
       setIsDataCardEditable(false);
-    } else if (selectedEventData.groupID === -1) {
-      setSelectedEventGroupID(-1);
-      setIsDataCardEditable(true);
     }
     setSelectedEventHasConflicts(
       eventsShown.some(
         (x, i) => x.data.groupID === selectedEventGroupID && newEventsWithConflicts[i]
       )
     );
-  }, [eventsShown, selectedEventGroupID, hasSelectedDefaultEvent, location.search, navigate]);
+  }, [
+    eventsShown,
+    selectedEventGroupID,
+    isDataCardEditable,
+    hasSelectedDefaultEvent,
+    location.search,
+    navigate,
+  ]);
 
   // Report which (non-outlined) events have conflicts.
   useEffect(() => {
@@ -198,7 +202,7 @@ export default function Timeline({
   // Logic for rendering elements in the timeline.
 
   const renderColumnTitle = (key, title) => (
-    <Grid key={'cl' + key} item xs sx={{ textAlign: 'center', marginLeft: '-4.17%' }}>
+    <Grid key={'cl' + key} item xs sx={{ textAlign: 'center', marginLeft: '-2.78%' }}>
       <Typography variant='subtitle2' color={theme.palette.text.secondary}>
         {title}
       </Typography>
@@ -266,7 +270,7 @@ export default function Timeline({
             sx={{
               position: 'absolute',
               top: top * 100 + '%',
-              left: (columnIndex + 0.0833) * columnWidth + '%',
+              left: (columnIndex + 0.0625) * columnWidth + '%',
               zIndex: isMouseEntered
                 ? 999
                 : isSelected
@@ -276,10 +280,10 @@ export default function Timeline({
                 : highlight
                 ? 996
                 : '',
-              width: 0.667 * columnWidth + '%',
+              width: 0.75 * columnWidth + '%',
               height: (bottom - top) * 100 + '%',
               // Adapt the same transition style from MUI to the shifting movement.
-              transform: eventsShiftedRight[i] ? 'translateX(25%)' : '',
+              transform: eventsShiftedRight[i] ? 'translateX(18.75%)' : '',
               transition: getTransitionForStyles(['top', 'height', 'transform'], 0.375),
             }}
           >
@@ -486,6 +490,8 @@ export default function Timeline({
               end: start + 3600,
             });
             setAddEventConfirmationPosition(null);
+            setSelectedEventGroupID(-1);
+            setIsDataCardEditable(true);
           }}
         >
           <LabelWithIcon iconType={AddCircle} color='action' label='Create custom event' />

@@ -19,14 +19,14 @@ export default function ContainerWithScheduler({ children }) {
     (onComplete) => {
       if (user) {
         Promise.all([
-          fetchScheduledClassesAndCustomEvents(user.userID).then(
-            ({ scheduledClasses, customEvents }) => {
-              setClassesInShoppingCart(scheduledClasses);
-              setCustomEvents(customEvents);
-            }
-          ),
-          fetchRequirements().then(setRequirements),
-        ]).then(() => onComplete?.());
+          fetchScheduledClassesAndCustomEvents(user.userID),
+          fetchRequirements(user.userID),
+        ]).then(([{ scheduledClasses, customEvents }, requirements]) => {
+          setClassesInShoppingCart(scheduledClasses);
+          setCustomEvents(customEvents);
+          setRequirements(requirements);
+          onComplete?.();
+        });
       } else {
         setClassesInShoppingCart([]);
         setCustomEvents([]);
@@ -56,4 +56,4 @@ export default function ContainerWithScheduler({ children }) {
  *   refreshSchedulerData: function(function(): *): void,
  * }>}
  */
-export const SchedulerContext = createContext(null);
+export const SchedulerContext = createContext();

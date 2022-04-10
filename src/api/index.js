@@ -1,10 +1,20 @@
 import axios from 'axios';
 import Color from 'color';
+import { formatCourseName } from 'utils';
 
 export const login = (body) => axios.post('/login', body).then((response) => response.data);
 
 export const register = (body) =>
   axios.post('/register', body).then((response) => response.data);
+
+export const fetchCollegeMajorList = (collegeID) =>
+  axios.get(`/college/${collegeID}/major/list`).then(({ data }) => data.data);
+
+export const fetchMajorEmphasisList = (collegeID, majorName) =>
+  axios.get(`/college/${collegeID}/emphasis?major=${majorName}`).then(({ data }) => data.data);
+
+export const declareMajor = (userID, majorName, emphasisName, schoolYear) =>
+  axios.post('/user/major', { userID, majorName, emphasisName, schoolYear });
 
 /**
  * Fetches the course but also injects the fake image URL. Basically pretends `ImageURL` was an
@@ -14,10 +24,7 @@ export const fetchCourseByID = (courseID, userID = undefined) =>
   new Promise((onFetched) =>
     axios.get(`/course/${courseID}`).then((data) => {
       const course = data.data.data;
-      injectFakeImageURLToCourse(course);
-      injectLocationMapURLToClasses(course.classes);
-      // Hide courses that don't have a start time (corrupted data from backend?)
-      course.classes = course.classes.filter((x) => !x.offerDate || x.startTime);
+      injectFakePropertiesToCourse(course);
       onFetched(course);
     })
   );
@@ -33,8 +40,14 @@ export const getColorByCourse = (course) =>
     .rgbNumber()
     .toString(16);
 
-const injectFakeImageURLToCourse = (course) =>
-  (course.ImageURL = getFakeCourseImageURL(course));
+const injectFakePropertiesToCourse = (course) => {
+  course.ImageURL = getFakeCourseImageURL(course);
+  // prettier-ignore
+  course.requirementID = (2<<24)+(['CS1030','MATH1210','CS1410','MATH1220','CS2420','CS2100','CS3500','CS3505','CS3810','CS4150','CS4400'].includes(course.catalogCourseName)? 0:formatCourseName(course.catalogCourseName).split(' ')[0]==='CS'?1:course.catalogCourseName.includes('MATH')?2:3);
+  // Hide courses that don't have a start time (corrupted data from backend?)
+  course.classes = course.classes.filter((x) => !x.offerDate || x.startTime);
+  injectLocationMapURLToClasses(course.classes);
+};
 
 export const fetchAllCourses = () => axios.get('/course/list');
 
@@ -63,21 +76,10 @@ const fakeFetchHomePageCourses = () => {
 };
 
 export const fetchCoursesBySearch = (body) =>
-  axios.post('/course/search', body).then((response) => {
-    // return response.data.data.data;
-    return fakeFetchCoursesBySearch(response.data.data);
+  axios.post('/course/search', body).then(({ data }) => {
+    for (let course of data.data) injectFakePropertiesToCourse(course);
+    return data.data;
   });
-
-// TODO (QC): Get rid of this also.
-const fakeFetchCoursesBySearch = (res) => {
-  const resultCourseIDs = res || [
-    22966, 23000, 22968, 23068, 23063, 23041, 23001, 22986, 22998, 22964, 22941, 22942, 22961,
-    22971, 22951, 22970, 31826, 28270, 24777, 27266, 27334, 21978, 28354, 30056, 25305, 22958,
-    22938, 27252,
-  ];
-
-  return Promise.all(resultCourseIDs.map((id) => fetchCourseByID(id)));
-};
 
 export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
 
@@ -93,10 +95,7 @@ export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseI
  */
 export const fetchScheduledClassesAndCustomEvents = (userID) =>
   axios.get(`schedule?userID=${userID}`).then(({ data }) => {
-    for (let { course } of data.data.scheduledClasses) {
-      injectFakeImageURLToCourse(course);
-    }
-    injectLocationMapURLToClasses(data.data.scheduledClasses.map((x) => x.classData));
+    for (let { course } of data.data.scheduledClasses) injectFakePropertiesToCourse(course);
     return data.data;
   });
 
@@ -130,27 +129,80 @@ export const addOrUpdateCustomEvent = (userID, customEvent) =>
 export const removeCustomEventByID = (eventID) =>
   axios.put('/schedule?type=custom-event', { id: eventID });
 
-export const fetchRequirements = () => fakeFetchRequirements();
+const generateFakeRequirements = () => [
+  {
+    id: (2 << 24) + 0,
+    title: 'Major Requirements',
+    completedCourses: [],
+    inProgressCourses: [],
+    numRequiredCourses: 11,
+  },
+  {
+    id: (2 << 24) + 1,
+    title: 'Major Electives',
+    completedCourses: [],
+    inProgressCourses: [],
+    numRequiredCourses: 7,
+  },
+  {
+    id: (2 << 24) + 2,
+    title: 'Math/Science Electives',
+    completedCourses: [],
+    inProgressCourses: [],
+    numRequiredCourses: 5,
+  },
+  {
+    id: (2 << 24) + 3,
+    title: 'General Education',
+    completedCourses: [],
+    inProgressCourses: [],
+    numRequiredCourses: 13,
+  },
+];
 
 // TODO Q: Search the word "fake" in source code and get rid of all of them.
-const fakeFetchRequirements = () =>
-  new Promise((onFetched) =>
-    onFetched([
-      { title: 'Major Requirements', progress: 0, total: 6 },
-      { title: 'Major Electives', progress: 0, total: 7 },
-      { title: 'Math/Science Electives', progress: 0, total: 5 },
-      { title: 'General Education', progress: 0, total: 13 },
-    ])
+export const fetchRequirements = async (userID) => {
+  let requirements = generateFakeRequirements();
+  const [{ scheduledClasses }, historyCourses] = await Promise.all([
+    fetchScheduledClassesAndCustomEvents(userID),
+    fetchHistoryCourses(userID),
+  ]);
+  return getRequirementsFromScheduleAndHistory(
+    requirements,
+    scheduledClasses.map((x) => x.course),
+    historyCourses
   );
+};
+
+/** Argument `requirements` is modified in-place. */
+export const getRequirementsFromScheduleAndHistory = (
+  requirements,
+  scheduledCourses,
+  historyCourses
+) => {
+  for (let course of scheduledCourses) {
+    const target = requirements.find((x) => x.id === course.requirementID);
+    if (target && !target.inProgressCourses.find((x) => x.id === course.id))
+      target.inProgressCourses.push(course);
+  }
+  for (let course of historyCourses) {
+    const target = requirements.find((x) => x.id === course.requirementID);
+    if (
+      target &&
+      !target.completedCourses.find((x) => x.id === course.id) &&
+      !target.inProgressCourses.find((x) => x.id === course.id)
+    )
+      target.completedCourses.push(course);
+  }
+
+  return requirements;
+};
 
 export const addClassIDToSchedule = (userID, classID) =>
   axios.post('/schedule?type=class', { userID, classID });
 
 export const removeClassIDFromSchedule = (userID, classID) =>
   axios.put('/schedule?type=class', { userID, classID });
-
-// TODO Q: Remove the following once backend has its support.
-let fakeHistoryCourses = [22935, 27252, 22939, 27254, 22948, 22954];
 
 /**
  * Fetches the courses a user has taken in the past.
@@ -159,12 +211,10 @@ let fakeHistoryCourses = [22935, 27252, 22939, 27254, 22948, 22954];
  * @return {Promise<Array<Object>>}
  */
 export const fetchHistoryCourses = (userID) =>
-  Promise.all(
-    fakeHistoryCourses
-      .concat()
-      .reverse()
-      .map((x) => fetchCourseByID(x))
-  );
+  axios.get(`/user/${userID}/history`).then(({ data }) => {
+    for (let course of data.data) injectFakePropertiesToCourse(course);
+    return data.data;
+  });
 
 /**
  * Ensures that a user's history contains a particular course.
@@ -176,7 +226,7 @@ export const fetchHistoryCourses = (userID) =>
  * @param {Number} courseID The ID of the course to add or update.
  */
 export const addOrUpdateHistoryCourse = (userID, courseID) =>
-  removeHistoryCourse(userID, courseID).then(() => fakeHistoryCourses.push(courseID));
+  axios.post('/user/history', { userID, courseID });
 
 /**
  * Ensures that a user's history does not contain a particular course.
@@ -185,9 +235,7 @@ export const addOrUpdateHistoryCourse = (userID, courseID) =>
  * @param {Number} courseID The ID of the course to remove.
  */
 export const removeHistoryCourse = (userID, courseID) =>
-  new Promise((onComplete) =>
-    onComplete((fakeHistoryCourses = fakeHistoryCourses.filter((x) => +x !== +courseID)))
-  );
+  axios.put('/user/history', { userID, courseID });
 
 export const fetchReviewsByCourseID = (courseID) =>
   axios.get(`/course/${courseID}/review`).then((data) => data.data.data.reviews);
@@ -204,6 +252,26 @@ export const fetchProfessorByCourseID = (courseID, body) =>
   axios.get(`/course/${courseID}/professor/list`).then((data) => data.data.data);
 
 export const fetchSemestersByCollegeID = (collegeID, body) =>
-  axios.get(`/college/${collegeID}/semester/list`).then((data) => data);
+  axios.get(`/college/${collegeID}/semester/list`).then((data) => data.data.data);
 
 export const fetchCollegeList = () => axios.get(`/college/list`).then((data) => data.data.data);
+
+// export const fetchProfessorRanking = (courseID, body) =>
+//   axios.get(`/stats/course/${courseID}/professor/rank`).then((data) => data);
+// export const fetchCourseLoad = (courseID, body) =>
+//   axios.get(`/stats/course/${courseID}/load`).then((data) => data);
+
+export const fetchCourseLoad = async (courseID, body) => {
+  const res = await axios.get(`/stats/course/${courseID}/load`);
+  return await res.data.data;
+};
+
+export const fetchProfessorRanking = async (courseID, body) => {
+  const res = await axios.get(`/stats/course/${courseID}/professor/rank`);
+  return await res.data.data;
+};
+
+export const fetchRatingTrend = async (courseID, body) => {
+  const res = await axios.get(`/stats/course/${courseID}/rating/trend`);
+  return await res.data.data;
+};

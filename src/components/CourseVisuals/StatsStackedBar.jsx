@@ -166,12 +166,12 @@ function generateStarValues(reviews) {
     }
   }
 }
-export default function ReviewPieChart({ reviews }) {
+export default function StatsStackedBar({ reviews }) {
   generateStarValues(reviews, option);
   return (
     <ReactECharts
       option={option}
-      style={{ height: 150 }}
+      style={{ height: 200 }}
       onChartReady={onChartReady}
       onEvents={{
         'click': onChartClick,

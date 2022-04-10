@@ -28,7 +28,6 @@ import { CourseContext } from './CoursePage';
 import ReviewTags from 'components/ReviewInputDetails/ReviewTags';
 
 export default function ReviewPage() {
-  const [course, setCourse] = useState(null);
   const [ratingValue, setRatingValue] = useState(3);
   const [commentValue, setCommentValue] = useState('');
   const [anonymity, setAnonymity] = useState(false);
@@ -38,7 +37,8 @@ export default function ReviewPage() {
   const [IsExamHeavy, setExamHeavy] = useState();
   const [IsHomeworkHeavy, setHomeworkHeavy] = useState();
   const [ExtraCreditOffered, setExtraCreditOffered] = useState();
-  const { reviewTags: tagSuggestion } = useContext(CourseContext);
+  const { reviewTags: tagSuggestion, refreshCourseData, course } = useContext(CourseContext);
+
   const [positiveTags, setPositiveTags] = useState([]);
   const [negativeTags, setNegativeTags] = useState([]);
   const [professor, setProfessor] = useState('');
@@ -87,18 +87,9 @@ export default function ReviewPage() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-  useMount(() => fetchCourseByID(urlParams.id).then(setCourse));
   const tagsPosLabel = 'Positive Side';
   const tagsNegLabel = 'Negative Side';
   //getTagsByCourseID(course.ID).then(setTags);
-
-  if (!course) {
-    return (
-      <Box sx={{ width: '100%', height: '100%', display: 'flex' }}>
-        <CircularProgress sx={{ margin: 'auto' }} />
-      </Box>
-    );
-  }
 
   const steps = [
     {
@@ -335,12 +326,13 @@ export default function ReviewPage() {
                   isExamHeavy: IsExamHeavy,
                   isHomeworkHeavy: IsHomeworkHeavy,
                   extraCreditOffered: ExtraCreditOffered,
-                }).catch((error) =>
-                  enqueueSnackbar(snackBarMessage.error.message + error, {
-                    variant: snackBarMessage.error.variant,
-                  })
-                );
-
+                })
+                  .catch((error) =>
+                    enqueueSnackbar(snackBarMessage.error.message + error, {
+                      variant: snackBarMessage.error.variant,
+                    })
+                  )
+                  .then(() => refreshCourseData(course.id));
                 enqueueSnackbar(snackBarMessage.reviewSuccess.message, {
                   variant: snackBarMessage.reviewSuccess.variant,
                 });

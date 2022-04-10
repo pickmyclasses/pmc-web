@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Box, CircularProgress, Divider, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { EventNote } from '@mui/icons-material';
 import ShoppingCart from './ShoppingCart';
 import RequirementList from './RequirementList';
 import { SchedulerContext } from './ContainerWithScheduler';
 import ClickableIndicator from 'components/CourseCardGrid/CourseCard/ClickableIndicator';
 import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
+import { AnimateSharedLayout, motion } from 'framer-motion';
 
 /**
  * A component that displays the current user's schedule on the top and progress toward
@@ -29,13 +30,14 @@ export default function Scheduler({ classesToHighlight = null }) {
   const renderLoadingIndication = () => <CircularProgress sx={{ margin: 'auto' }} />;
 
   const renderSchedulerContent = () => (
-    <>
-      <Box flex={1}>
+    <AnimateSharedLayout>
+      <motion.div layout style={{ flex: 1 }} transition={layoutTransition}>
         <ShoppingCart classes={classes} customEvents={customEvents} />
-      </Box>
-      <Divider sx={{ margin: '12px 0' }} />
-      <RequirementList requirements={requirements || []} />
-    </>
+      </motion.div>
+      <motion.div layout style={{ marginTop: '12px' }} transition={layoutTransition}>
+        <RequirementList requirements={requirements || []} />
+      </motion.div>
+    </AnimateSharedLayout>
   );
 
   return (
@@ -52,6 +54,8 @@ export default function Scheduler({ classesToHighlight = null }) {
     </Box>
   );
 }
+
+const layoutTransition = { type: 'tween', ease: 'circOut', duration: 0.375 };
 
 export const mergeShoppingCartClasses = (
   classesInShoppingCart,
