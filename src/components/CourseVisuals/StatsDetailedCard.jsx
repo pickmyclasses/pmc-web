@@ -19,9 +19,6 @@ let option = {
   },
   toolbox: {
     feature: {
-      dataZoom: {
-        yAxisIndex: 'none',
-      },
       restore: {},
       saveAsImage: {},
     },
