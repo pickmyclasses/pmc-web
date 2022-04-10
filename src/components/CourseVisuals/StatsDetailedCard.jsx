@@ -1,92 +1,98 @@
 import React, { useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import Box from '@mui/material/Box';
+import { faProjectDiagram } from '@fortawesome/free-solid-svg-icons';
+import * as echarts from 'echarts';
 
+let ratings = [];
+let semesters = [];
 let option = {
   tooltip: {
     trigger: 'axis',
-    axisPointer: {
-      // Use axis to trigger tooltip
-      type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
+    position: function (pt) {
+      return [pt[0], '10%'];
     },
   },
-  legend: {},
-  grid: {
-    left: '3%',
-    right: '4%',
-    bottom: '3%',
-    containLabel: true,
+  title: {
+    left: 'center',
+    text: 'Overall Rating By Semesters',
   },
-  yAxis: {
-    type: 'value',
+  toolbox: {
+    feature: {
+      dataZoom: {
+        yAxisIndex: 'none',
+      },
+      restore: {},
+      saveAsImage: {},
+    },
   },
   xAxis: {
     type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    boundaryGap: false,
+    data: semesters,
   },
+  yAxis: {
+    type: 'value',
+    boundaryGap: [0, '100%'],
+    max: 5,
+  },
+  dataZoom: [
+    {
+      type: 'inside',
+      start: 0,
+      end: 10,
+    },
+    {
+      start: 0,
+      end: 10,
+    },
+  ],
   series: [
     {
-      name: 'Direct',
-      type: 'bar',
-      stack: 'total',
-      label: {
-        show: true,
+      name: 'Average Ratings',
+      type: 'line',
+      symbol: 'none',
+      sampling: 'lttb',
+      itemStyle: {
+        color: 'rgb(255, 70, 131)',
       },
-      emphasis: {
-        focus: 'series',
+      areaStyle: {
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          {
+            offset: 1,
+            color: 'rgb(237, 41, 56)',
+          },
+          {
+            offset: 0.75,
+            color: 'rgb(178, 95, 74)',
+          },
+          {
+            offset: 0.5,
+            color: 'rgb(119, 148, 92)',
+          },
+          {
+            offset: 0.25,
+            color: 'rgb(59, 202, 109)',
+          },
+          {
+            offset: 0,
+            color: 'rgb(0, 255, 127)',
+          },
+        ]),
       },
-      data: [320, 302, 301, 334, 390, 330, 320],
-    },
-    {
-      name: 'Mail Ad',
-      type: 'bar',
-      stack: 'total',
-      label: {
-        show: true,
-      },
-      emphasis: {
-        focus: 'series',
-      },
-      data: [120, 132, 101, 134, 90, 230, 210],
-    },
-    {
-      name: 'Affiliate Ad',
-      type: 'bar',
-      stack: 'total',
-      label: {
-        show: true,
-      },
-      emphasis: {
-        focus: 'series',
-      },
-      data: [220, 182, 191, 234, 290, 330, 310],
-    },
-    {
-      name: 'Video Ad',
-      type: 'bar',
-      stack: 'total',
-      label: {
-        show: true,
-      },
-      emphasis: {
-        focus: 'series',
-      },
-      data: [150, 212, 201, 154, 190, 330, 410],
-    },
-    {
-      name: 'Search Engine',
-      type: 'bar',
-      stack: 'total',
-      label: {
-        show: true,
-      },
-      emphasis: {
-        focus: 'series',
-      },
-      data: [820, 832, 901, 934, 1290, 1330, 1320],
+      data: ratings,
+      smooth: true,
     },
   ],
 };
+
+function populateDataset(courseTrend) {
+  for (let i = 0; i < courseTrend.length; i++) {
+    semesters.push(courseTrend[i].semesterName);
+    ratings.push(courseTrend[i].rating);
+  }
+}
+
 function onChartLegendselectchanged(param, echarts) {
   //console.log(param, echarts);
 }
@@ -111,13 +117,19 @@ function generateStackBars(reviews) {
   console.log(option.series[0]);
 }
 function generateStarValues(reviews) {}
-export default function StatsDetailedCard({ reviews }) {
-  generateStackBars(reviews);
-  console.log(reviews);
+export default function StatsDetailedCard({
+  ratingCondition,
+  setRatingCondition,
+  courseTrend,
+}) {
+  if (ratingCondition) {
+    populateDataset(courseTrend);
+    setRatingCondition(!ratingCondition);
+  }
   return (
     <ReactECharts
       option={option}
-      style={{ height: 500 }}
+      style={{ height: 380 }}
       onChartReady={onChartReady}
       onEvents={{
         'click': onChartClick,

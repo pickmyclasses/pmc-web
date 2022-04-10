@@ -90,17 +90,5 @@ function populateCourseTags(hasChangedCourse, tags) {
 
 export default function StatsTags({ hasChangedCourse, tags }) {
   populateCourseTags(hasChangedCourse, tags);
-  return (
-    // <Stack padding='10px 10px ' spacing='12px'>
-    //   <Box padding='8px 8px 4px'>
-    //     <Stack>
-    //       <Typography variant='subtitle1'>Average Grade A-</Typography>
-    //       <Typography variant='subtitle1'>Extra Credit offered</Typography>
-    //       <Typography variant='subtitle1'>Exam Heavy</Typography>
-    //       <Typography variant='subtitle1'>Homework Heavy</Typography>
-    //     </Stack>
-    //   </Box>
-    // </Stack>
-    <ReactECharts option={option} style={{ height: 150 }} onEvents={{}} />
-  );
+  return <ReactECharts option={option} style={{ height: 150 }} onEvents={{}} />;
 }
