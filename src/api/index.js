@@ -270,3 +270,8 @@ export const fetchProfessorRanking = async (courseID, body) => {
   const res = await axios.get(`/stats/course/${courseID}/professor/rank`);
   return await res.data.data;
 };
+
+export const fetchRatingTrend = async (courseID, body) => {
+  const res = await axios.get(`/stats/course/${courseID}/rating/trend`);
+  return await res.data.data;
+};

@@ -17,6 +17,7 @@ import {
   fetchSemestersByCollegeID,
   fetchProfessorRanking,
   fetchCourseLoad,
+  fetchRatingTrend,
 } from '../api';
 import CoursePageTop, { imageHeight } from '../components/CoursePage/CoursePageTop';
 import CourseOverview from '../components/CoursePage/CourseOverview';
@@ -30,7 +31,6 @@ import Scrollbars from 'react-custom-scrollbars-2';
 
 export default function CoursePage() {
   const urlParams = useParams();
-
   const [activeTabName, setActiveTabName] = useState('');
   const [course, setCourse] = useState(null);
   const [reviews, setReviews] = useState(null);
@@ -39,14 +39,13 @@ export default function CoursePage() {
   const [semesters, setSemesters] = useState([]);
   const [professorRanking, setProfessorRanking] = useState();
   const [courseLoad, setCourseLoad] = useState();
-
+  const [courseTrend, setCourseTrend] = useState();
   // This avoids the useRef()'s not updating problem with useEffect().
   // See https://stackoverflow.com/a/67906087)
   // We can potentially include this pattern in the utils collection to reuse it.
   const [containerNode, setContainerNode] = useState(null);
   const containerRef = useCallback((node) => setContainerNode(node), []);
   const { user } = useContext(UserContext);
-
   const refreshCourseData = useCallback(
     (courseID) => {
       fetchCourseByID(courseID).then(setCourse);
@@ -55,6 +54,7 @@ export default function CoursePage() {
       fetchProfessorByCourseID(courseID).then(setProfessors);
       fetchProfessorRanking(courseID).then(setProfessorRanking);
       fetchCourseLoad(courseID).then(setCourseLoad);
+      fetchRatingTrend(courseID).then(setCourseTrend);
 
       if (user) fetchSemestersByCollegeID(user.collegeID).then(setSemesters);
     },
@@ -86,7 +86,7 @@ export default function CoursePage() {
 
   return (
     <ContainerWithLoadingIndication
-      isLoading={!course || !reviews || !professorRanking || !courseLoad}
+      isLoading={!course || !reviews || !professorRanking || !courseLoad || !courseTrend}
     >
       <Box ref={containerRef} width='100%' height='100%' minHeight={0}>
         <OnTopScrollBars>
@@ -102,6 +102,7 @@ export default function CoursePage() {
                 semesters,
                 professorRanking,
                 courseLoad,
+                courseTrend,
               }}
             >
               {createElement(tabs[activeTabName].content)}

@@ -333,7 +333,6 @@ export default function ReviewPage() {
                     })
                   )
                   .then(() => refreshCourseData(course.id));
-
                 enqueueSnackbar(snackBarMessage.reviewSuccess.message, {
                   variant: snackBarMessage.reviewSuccess.variant,
                 });

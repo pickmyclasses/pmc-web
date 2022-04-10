@@ -19,13 +19,12 @@ import { PreventableNavigationContext } from '../PreventableNavigation/Container
 
 export default function CourseStats() {
   const { ratingDistribution, setRatingDistribution } = useState(true);
-  const { course, reviews, professorRanking, courseLoad } = useContext(CourseContext);
+  const { course, reviews, professorRanking, courseLoad, courseTrend } =
+    useContext(CourseContext);
   const [condition, setCondition] = useState('default');
+  const [ratingCondition, setRatingCondition] = useState(true);
   const coursePageURL = '/course/' + course.id;
-  let hasChangedCourse = true;
-  useEffect(() => {
-    hasChangedCourse = true;
-  }, [course]);
+
   const renderProfessorSummery = () => (
     <MotionCard
       initial='initial'
@@ -67,7 +66,7 @@ export default function CourseStats() {
       <Stack padding='24px' height='calc(100% - 48px)'>
         <Box flex={1}>
           <Typography variant='subtitle2'>Course Top Tags</Typography>
-          <StatsTags hasChangedCourse={hasChangedCourse} tags={course.tags} />
+          <StatsTags tags={course.tags} />
         </Box>
         <Link>
           <ClickableIndicator propagate>
@@ -228,7 +227,11 @@ export default function CourseStats() {
             Return
           </Button>
 
-          <StatsDetailedCard reviews={reviews} />
+          <StatsDetailedCard
+            ratingCondition={ratingCondition}
+            setRatingCondition={setRatingCondition}
+            courseTrend={courseTrend}
+          />
         </Box>
       </Stack>
     </MotionCard>

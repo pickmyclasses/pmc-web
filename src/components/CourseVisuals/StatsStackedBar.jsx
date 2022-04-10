@@ -166,7 +166,7 @@ function generateStarValues(reviews) {
     }
   }
 }
-export default function ReviewPieChart({ reviews }) {
+export default function StatsStackedBar({ reviews }) {
   generateStarValues(reviews, option);
   return (
     <ReactECharts
