@@ -64,31 +64,29 @@ let option = {
     },
   ],
 };
-function populateCourseTags(hasChangedCourse, tags) {
-  if (hasChangedCourse) {
-    option.series[0].data[0].children = [];
-    option.series[0].data[1].children = [];
-    for (let i = 0; i < (tags.length > 5 ? 5 : tags.length); i++) {
-      // Negative
-      if (tags[i].type === 0) {
-        option.series[0].data[1].children.push({
-          name: tags[i].name,
-          value: tags[i].voteCount,
-          isPos: 0,
-        });
-        // Positive
-      } else {
-        option.series[0].data[0].children.push({
-          name: tags[i].name,
-          value: tags[i].voteCount,
-          isPos: 1,
-        });
-      }
+function populateCourseTags(tags) {
+  option.series[0].data[0].children = [];
+  option.series[0].data[1].children = [];
+  for (let i = 0; i < (tags.length > 5 ? 5 : tags.length); i++) {
+    // Negative
+    if (tags[i].type === 0) {
+      option.series[0].data[1].children.push({
+        name: tags[i].name,
+        value: tags[i].voteCount,
+        isPos: 0,
+      });
+      // Positive
+    } else {
+      option.series[0].data[0].children.push({
+        name: tags[i].name,
+        value: tags[i].voteCount,
+        isPos: 1,
+      });
     }
   }
 }
 
-export default function StatsTags({ hasChangedCourse, tags }) {
-  populateCourseTags(hasChangedCourse, tags);
+export default function StatsTags({ tags }) {
+  populateCourseTags(tags);
   return <ReactECharts option={option} style={{ height: 150 }} onEvents={{}} />;
 }

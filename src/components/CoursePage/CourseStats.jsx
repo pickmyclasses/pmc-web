@@ -24,10 +24,6 @@ export default function CourseStats() {
   const [condition, setCondition] = useState('default');
   const [ratingCondition, setRatingCondition] = useState(true);
   const coursePageURL = '/course/' + course.id;
-  let hasChangedCourse = true;
-  useEffect(() => {
-    hasChangedCourse = true;
-  }, [course]);
 
   const renderProfessorSummery = () => (
     <MotionCard
@@ -70,7 +66,7 @@ export default function CourseStats() {
       <Stack padding='24px' height='calc(100% - 48px)'>
         <Box flex={1}>
           <Typography variant='subtitle2'>Course Top Tags</Typography>
-          <StatsTags hasChangedCourse={hasChangedCourse} tags={course.tags} />
+          <StatsTags tags={course.tags} />
         </Box>
         <Link>
           <ClickableIndicator propagate>

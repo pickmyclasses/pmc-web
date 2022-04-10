@@ -40,11 +40,11 @@ let option = {
     {
       type: 'inside',
       start: 0,
-      end: 10,
+      end: 100,
     },
     {
       start: 0,
-      end: 10,
+      end: 100,
     },
   ],
   series: [
@@ -87,10 +87,17 @@ let option = {
 };
 
 function populateDataset(courseTrend) {
+  // Clear out the data from both the variables and also the option so that its not pushing duplicate data
+  option.xAxis.data = [];
+  option.series[0].data = [];
+  semesters = [];
+  ratings = [];
   for (let i = 0; i < courseTrend.length; i++) {
     semesters.push(courseTrend[i].semesterName);
     ratings.push(courseTrend[i].rating);
   }
+  option.xAxis.data = semesters;
+  option.series[0].data = ratings;
 }
 
 function onChartLegendselectchanged(param, echarts) {
@@ -116,16 +123,8 @@ function generateStackBars(reviews) {
   // data: [320, 302, 301, 334, 390, 330, 320],
   console.log(option.series[0]);
 }
-function generateStarValues(reviews) {}
-export default function StatsDetailedCard({
-  ratingCondition,
-  setRatingCondition,
-  courseTrend,
-}) {
-  if (ratingCondition) {
-    populateDataset(courseTrend);
-    setRatingCondition(!ratingCondition);
-  }
+export default function StatsDetailedCard({ courseTrend }) {
+  populateDataset(courseTrend);
   return (
     <ReactECharts
       option={option}
