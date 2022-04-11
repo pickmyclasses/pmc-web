@@ -3,7 +3,7 @@ import Table from './Table';
 
 export default function AdminPage(props)
 {
-    const [tableName, setTableName] = useState("college");
+    const [tableName, setTableName] = useState("building");
 
     let handleChange = (e) => 
     {
