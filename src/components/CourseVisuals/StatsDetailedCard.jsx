@@ -97,40 +97,33 @@ function populateDataset(courseTrend) {
   option.series[0].data = ratings;
 }
 
-function onChartLegendselectchanged(param, echarts) {
-  //console.log(param, echarts);
-}
-function onChartReady(echarts) {
-  //console.log('echarts is ready', echarts);
-}
-function onChartClick(param, echarts) {
-  //console.log(param, echarts);
+function getSeasonVal(season) {
+  switch (season) {
+    case 'Spring':
+      return 0;
+    case 'Summer':
+      return 1;
+    case 'Fall':
+      return 2;
+    default:
+      return 0;
+  }
 }
 
-function generateStackBars(reviews) {
-  // name: 'Direct',
-  // type: 'bar',
-  // stack: 'total',
-  // label: {
-  //   show: true,
-  // },
-  // emphasis: {
-  //   focus: 'series',
-  // },
-  // data: [320, 302, 301, 334, 390, 330, 320],
-  console.log(option.series[0]);
+// Sort by the year and then the semester
+// aStr[0] and bStr[0] are the year
+function sortDataset(courseTrend) {
+  courseTrend.sort((a, b) => {
+    let aStr = a.semesterName.split(' ');
+    let bStr = b.semesterName.split(' ');
+    let aSeason = getSeasonVal(aStr[0]);
+    let bSeason = getSeasonVal(bStr[0]);
+    return parseInt(aStr[1] - bStr[1]) * 100000 + (aSeason - bSeason);
+  });
 }
+
 export default function StatsDetailedCard({ courseTrend }) {
+  sortDataset(courseTrend);
   populateDataset(courseTrend);
-  return (
-    <ReactECharts
-      option={option}
-      style={{ height: 380 }}
-      onChartReady={onChartReady}
-      onEvents={{
-        'click': onChartClick,
-        'legendselectchanged': onChartLegendselectchanged,
-      }}
-    />
-  );
+  return <ReactECharts option={option} style={{ height: 380 }} onEvents={{}} />;
 }
