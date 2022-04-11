@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactECharts from 'echarts-for-react';
-import Box from '@mui/material/Box';
-import { faProjectDiagram } from '@fortawesome/free-solid-svg-icons';
 import * as echarts from 'echarts';
 
 let ratings = [];
