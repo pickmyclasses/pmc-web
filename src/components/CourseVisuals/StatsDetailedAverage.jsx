@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
+import * as echarts from 'echarts';
 
 let professors = [];
 let option = {
@@ -7,6 +8,7 @@ let option = {
     left: 'center',
     text: 'Average Student Grade by Professors',
   },
+
   tooltip: {
     trigger: 'axis',
     axisPointer: {
@@ -59,3 +61,12 @@ export default function StatsDetailedAverage({ reviews, professorRanking, course
   console.log(courseLoad);
   return <ReactECharts option={option} style={{ height: 380 }} onEvents={{}} />;
 }
+
+const dataset = [
+  ['CS 1410', 3.5],
+  ['CS 2420', 3.7],
+  ['CS 3810', 3.5],
+  ['CS 4400', 3.7],
+  ['CS 4500', 3.7],
+  ['CS 2100', 3.0],
+];
