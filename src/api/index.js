@@ -78,7 +78,7 @@ const fakeFetchHomePageCourses = () => {
 export const fetchCoursesBySearch = (body) =>
   axios.post('/course/search', body).then(({ data }) => {
     for (let course of data.data) injectFakePropertiesToCourse(course);
-    return data.data;
+    return data;
   });
 
 export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);

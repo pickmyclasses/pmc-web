@@ -10,12 +10,16 @@ import ContainerWithLoadingIndication from '../components/Page/ContainerWithLoad
 
 export default function SearchPage({ shouldShowScheduler }) {
   const [courses, setCourses] = useState(null);
+  const [numResults, setNumResults] = useState(NaN);
 
   const urlParams = useParams();
 
   // TODO: fix this hard coded number
   useEffect(() => {
-    fetchCoursesBySearch({ keyword: urlParams.query, pageSize: 12 }).then(setCourses);
+    fetchCoursesBySearch({ keyword: urlParams.query, pageSize: 12 }).then(({ data, total }) => {
+      setCourses(data);
+      setNumResults(total);
+    });
     setCourses(null);
   }, [urlParams?.query]);
 
@@ -27,7 +31,7 @@ export default function SearchPage({ shouldShowScheduler }) {
           <Scrollbars autoHide>
             <Stack padding='24px' spacing='16px'>
               <Typography variant='body2' gutterBottom>
-                Found {courses?.length} results for <b>"{urlParams.query}"</b>
+                Found {numResults} results for <b>"{urlParams.query}"</b>
               </Typography>
               <CourseResultList courses={courses} />
             </Stack>

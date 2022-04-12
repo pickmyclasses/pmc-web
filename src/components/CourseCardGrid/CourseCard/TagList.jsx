@@ -8,6 +8,7 @@ export default function TagList({
   gutterLeft = false,
   variant = 'contained',
   color = 'default',
+  disableInteractive = false,
 }) {
   const maxHeight = { small: '24px', medium: '32px', large: '40px' }[size];
   const fontSize = { small: '12px', medium: '', large: '16px' }[size];
@@ -22,6 +23,7 @@ export default function TagList({
         overflow: 'hidden',
         marginLeft: gutterLeft ? '8px' : '',
         '> *': { marginRight: '8px', marginBottom: noWrap ? '' : '8px' },
+        pointerEvents: disableInteractive && 'none',
       }}
     >
       {tags.map((label) => (
