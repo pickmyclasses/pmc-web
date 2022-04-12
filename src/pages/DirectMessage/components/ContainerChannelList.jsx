@@ -2,7 +2,7 @@ import React from 'react';
 import { ChannelList, useChatContext } from 'stream-chat-react';
 import Cookies from 'universal-cookie';
 
-import { SearchChannel, ChannelTeamList, TeamChannelPreview } from './';
+import { SearchChannel, ChannelTeamList, ChannelTeamPreview } from './';
 import HospitalIcon from '../assets/hospital.png';
 import LogoutIcon from '../assets/logout.png';
 
@@ -40,6 +40,7 @@ const ContainerChannelList = () => {
                     List={(listProps) => (
                         <ChannelTeamList
                             {...listProps}
+                            type="team"
                         />
                     )}
                 />
