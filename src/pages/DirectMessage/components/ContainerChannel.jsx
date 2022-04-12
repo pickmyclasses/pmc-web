@@ -1,7 +1,7 @@
 import React from 'react';
-import { Channel, useChatContext } from 'stream-chat-react';
+import { Channel, useChatContext, MessageTeam } from 'stream-chat-react';
 
-import { InnerChannel, ChannelCreate, ChannelEdit, MessageTeam } from './'
+import { InnerChannel, ChannelCreate, ChannelEdit } from './'
 
 
 const ContainerChannel = ({
