@@ -19,13 +19,22 @@ const SideBar = () => (
             </div>
         </div>
     </div>
+);
+
+const CompanyHeader = () => (
+    <div className='channel-list__header'>
+        <p className='channel-list__header__text'>PickMyClasses</p>
+    </div>
 )
 
 const ContainerChannelList = () => {
     return(
-        <div>
-            ContainerChannelList
-        </div>
+        <>
+            <SideBar/>
+            <div className='channel-list__list__wrapper'>
+                <CompanyHeader/>
+            </div>
+        </>
     )
 }
 
