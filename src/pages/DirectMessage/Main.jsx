@@ -1,10 +1,19 @@
 import React from 'react';
 import { StreamChat } from 'stream-chat';
+import { Chat } from 'stream-chat-react';
+import Cookies from 'universal-cookie';
+
+const API_KEY = '9z6vzf5r88js';
+
+const client = StreamChat.getInstance(API_KEY);
 
 const Main = () => {
     return (
-        <div>
-            <h1>Direct Message Admin</h1>
+        <div className='app_wrapper'>
+            <Chat client={client} theme="team light">
+                <ContainerChannelList/>
+                <ContainerChannel/>
+            </Chat>
         </div>
     )
 }
