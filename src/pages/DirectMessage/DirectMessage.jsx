@@ -5,11 +5,13 @@ import Cookies from 'universal-cookie';
 
 import { ContainerChannel, ContainerChannelList } from './components';
 
+import './DirectMessage.css';
+
 const API_KEY = '9z6vzf5r88js';
 
 const client = StreamChat.getInstance(API_KEY);
 
-const Main = () => {
+const DirectMessage = () => {
     return (
         <div className='app_wrapper'>
             <Chat client={client} theme="team light">
@@ -20,4 +22,4 @@ const Main = () => {
     )
 }
 
-export default Main;
+export default DirectMessage;
