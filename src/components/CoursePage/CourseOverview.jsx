@@ -54,7 +54,7 @@ export default function CourseOverview() {
     }).then((data) => {
       // The current course itself might show up in the search results. Remove it.
       setRecommendedCourses(
-        data.data.filter((x) => +x.id !== +course.id).slice(0, numRecommendedCourses)
+        data.filter((x) => +x.id !== +course.id).slice(0, numRecommendedCourses)
       );
     });
   }, [course]);
