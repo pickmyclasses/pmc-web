@@ -35,7 +35,7 @@ export default function FilterGroup() {
 
   const buttonGroup = [
     { name: 'type', component: <TypeButton /> },
-    { name: 'special courses', component: <SpecialCoursesButton /> },
+    { name: 'course level', component: <SpecialCoursesButton /> },
     { name: 'rating', component: <RatingButton /> },
     { name: 'credit hour', component: <CreditButton /> },
     { name: 'date', component: <DateButton /> },
@@ -62,6 +62,13 @@ export default function FilterGroup() {
             </DropdownButton>
           );
         })}
+
+        <Button variant='text' sx={{ mt: '0.4%' }}>
+          S<div style={{ textTransform: 'lowercase' }}>ave</div>
+        </Button>
+        <Button variant='text' sx={{ mt: '0.4%' }}>
+          R<div style={{ textTransform: 'lowercase' }}>eset</div>
+        </Button>
       </Box>
     </>
   );

@@ -1,44 +1,46 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-export default function SpecialCoursesButton() {
-  const [honorClicked, setHonorClicked] = useState(true);
-  const [specialClicked, setSpecialClicked] = useState(true);
-  const [independentClicked, setIndependentClicked] = useState(true);
-  const [thesisClicked, setThesisClicked] = useState(true);
+export default function SpecialCoursesButton({ optionSelected, setOptionSelected }) {
+  const [checked, setChecked] = useState([]);
+
+  const checkOptions = [
+    { id: 1, name: 'graduate level courses' },
+    { id: 2, name: 'undergraduate level courses' },
+  ];
+
+  useEffect(() => {
+    setChecked(optionSelected);
+  }, [optionSelected]);
+
+  const handleToggle = (id) => {
+    const curIdx = checked.indexOf(id);
+    const newChecked = [...checked];
+    curIdx === -1 ? newChecked.push(id) : newChecked.splice(curIdx, 1);
+    setChecked(newChecked);
+    setOptionSelected(newChecked);
+  };
 
   return (
     <>
-      <MenuItem>
-        <FormControlLabel
-          control={<Checkbox size='small' checked={honorClicked} />}
-          label={'Honor Courses'}
-          onChange={() => setHonorClicked(!honorClicked)}
-        />
-      </MenuItem>
-      <MenuItem>
-        <FormControlLabel
-          control={<Checkbox size='small' checked={specialClicked} />}
-          label={'Special Topics'}
-          onChange={() => setSpecialClicked(!specialClicked)}
-        />
-      </MenuItem>
-      <MenuItem>
-        <FormControlLabel
-          control={<Checkbox size='small' checked={independentClicked} />}
-          label={'Independent Study'}
-          onChange={() => setIndependentClicked(!independentClicked)}
-        />
-      </MenuItem>
-      <MenuItem>
-        <FormControlLabel
-          control={<Checkbox size='small' checked={thesisClicked} />}
-          label={'Thesis'}
-          onChange={() => setThesisClicked(!thesisClicked)}
-        />
-      </MenuItem>
+      {checkOptions.map((check) => {
+        return (
+          <MenuItem key={check.id}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  size='small'
+                  checked={checked.indexOf(check.id) === -1 ? false : true}
+                />
+              }
+              label={check.name}
+              onChange={() => handleToggle(check.id)}
+            />
+          </MenuItem>
+        );
+      })}
     </>
   );
 }

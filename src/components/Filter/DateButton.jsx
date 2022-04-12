@@ -1,77 +1,49 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-export default function DateButton() {
-  const [monSelected, setMonSelected] = useState(true);
-  const [tueSelected, setTueSelected] = useState(true);
-  const [wedSelected, setWedSelected] = useState(true);
-  const [thurSelected, setThurSelected] = useState(true);
-  const [friSelected, setFriSelected] = useState(true);
+export default function DateButton({ optionSelected, setOptionSelected }) {
+  const [check, setCheck] = useState([]);
+
+  useEffect(() => {
+    setCheck(optionSelected);
+  }, [optionSelected]);
+
+  const dateOptions = [
+    { id: 1, name: 'Mon' },
+    { id: 2, name: 'Tue' },
+    { id: 3, name: 'Wed' },
+    { id: 4, name: 'Thu' },
+    { id: 5, name: 'Fri' },
+  ];
+
+  const handleToggle = (id) => {
+    const curIdx = check.indexOf(id);
+    const newChecked = [...check];
+    curIdx === -1 ? newChecked.push(id) : newChecked.splice(curIdx, 1);
+    setCheck(newChecked);
+    setOptionSelected(newChecked);
+  };
 
   return (
     <>
-      <MenuItem>
-        <FormControlLabel
-          control={
-            <Checkbox
-              size='small'
-              checked={monSelected}
-              onChange={(event) => setMonSelected(event.target.checked)}
+      {dateOptions.map((date) => {
+        return (
+          <MenuItem key={date.id}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  size='small'
+                  checked={check.indexOf(date.id) === -1 ? false : true}
+                  onChange={() => handleToggle(date.id)}
+                />
+              }
+              label={date.name}
             />
-          }
-          label={'Mon'}
-        />
-      </MenuItem>
-      <MenuItem>
-        <FormControlLabel
-          control={
-            <Checkbox
-              size='small'
-              checked={tueSelected}
-              onChange={(event) => setTueSelected(event.target.checked)}
-            />
-          }
-          label={'Tue'}
-        />
-      </MenuItem>
-      <MenuItem>
-        <FormControlLabel
-          control={
-            <Checkbox
-              size='small'
-              checked={wedSelected}
-              onChange={(event) => setWedSelected(event.target.checked)}
-            />
-          }
-          label={'Wed'}
-        />
-      </MenuItem>
-      <MenuItem>
-        <FormControlLabel
-          control={
-            <Checkbox
-              size='small'
-              checked={thurSelected}
-              onChange={(event) => setThurSelected(event.target.checked)}
-            />
-          }
-          label={'Thur'}
-        />
-      </MenuItem>
-      <MenuItem>
-        <FormControlLabel
-          control={
-            <Checkbox
-              size='small'
-              checked={friSelected}
-              onChange={(event) => setFriSelected(event.target.checked)}
-            />
-          }
-          label={'Fri'}
-        />
-      </MenuItem>
+          </MenuItem>
+        );
+      })}
     </>
   );
 }

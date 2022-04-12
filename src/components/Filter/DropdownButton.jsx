@@ -6,7 +6,7 @@ import { grey, cyan } from '@mui/material/colors';
 export default function DropdownButton({ name, children }) {
   const [clicked, setClicked] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [optionSelected, setOptionSelected] = useState(false);
+  const [optionSelected, setOptionSelected] = useState([]);
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -38,7 +38,7 @@ export default function DropdownButton({ name, children }) {
 
   const childrenWithProps = React.Children.map(children, (child) => {
     if (React.isValidElement(child)) {
-      return React.cloneElement(child, { setOptionSelected });
+      return React.cloneElement(child, { optionSelected, setOptionSelected });
     }
     return child;
   });
@@ -47,12 +47,11 @@ export default function DropdownButton({ name, children }) {
     <>
       <Button
         variant='contained'
-        sx={optionSelected ? buttonStyleAfterClick : buttonStyleBeforeClick}
+        sx={optionSelected.length === 0 ? buttonStyleBeforeClick : buttonStyleAfterClick}
         style={{ marginRight: '1%' }}
         onClick={handleClick}
       >
         <div style={{ textTransform: 'lowercase' }}> {name}</div>
-        &nbsp;{clicked ? '▾' : '▸'}
       </Button>
       <Menu
         anchorEl={anchorEl}
