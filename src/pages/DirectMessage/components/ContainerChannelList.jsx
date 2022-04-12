@@ -5,8 +5,11 @@ import Cookies from 'universal-cookie';
 import { SearchChannel, ChannelTeamList, ChannelTeamPreview } from './';
 import HospitalIcon from '../assets/hospital.png';
 import LogoutIcon from '../assets/logout.png';
+import { Cookie } from '@mui/icons-material';
 
-const SideBar = () => (
+const cookies = new Cookies();
+
+const SideBar = ({logout}) => (
     <div className='channel-list__sidebar'>
         <div className='channel-list__sidebar__icon1'>
             <div className='icon1__inner'>
@@ -14,7 +17,7 @@ const SideBar = () => (
             </div>
         </div>
         <div className='channel-list__sidebar__icon2'>
-            <div className='icon2__inner'>
+            <div className='icon2__inner' onClick={logout}>
                 <img src={LogoutIcon} alt="Logout" width="30"/>
             </div>
         </div>
@@ -28,9 +31,22 @@ const CompanyHeader = () => (
 )
 
 const ContainerChannelList = () => {
+    // log out simply by clearing the cookie
+    const logout = () => {
+        cookies.remove("token");
+        cookies.remove("userId");
+        cookies.remove("username");
+        cookies.remove("fullName");
+        cookies.remove("avatarURL");
+        cookies.remove("hashedPassword");
+        cookies.remove("phoneNumber");
+        
+        window.location.href = "/";
+    }
+
     return(
         <>
-            <SideBar/>
+            <SideBar logout={logout}/>
             <div className='channel-list__list__wrapper'>
                 <CompanyHeader/>
                 <SearchChannel/>
