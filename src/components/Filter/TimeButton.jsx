@@ -1,15 +1,35 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-export default function TimeButton() {
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+export default function TimeButton({ optionSelected, setOptionSelected }) {
+  const [value, setValue] = useState(['', '']);
+
+  useEffect(() => {
+    if (optionSelected.length) setValue(optionSelected);
+  }, [optionSelected]);
 
   const handleClear = () => {
-    setStartTime('');
-    setEndTime('');
+    const newVal = ['', ''];
+    setValue(newVal);
+    setOptionSelected(newVal);
+  };
+
+  const setStartTime = (event) => {
+    let newVal = [];
+    newVal[0] = event.target.value;
+    newVal[1] = value[1];
+    setValue(newVal);
+    setOptionSelected(newVal);
+  };
+
+  const setEndTime = (event) => {
+    let newVal = [];
+    newVal[0] = value[0];
+    newVal[1] = event.target.value;
+    setValue(newVal);
+    setOptionSelected(newVal);
   };
 
   return (
@@ -18,8 +38,8 @@ export default function TimeButton() {
         <TextField
           label='start time'
           type='time'
-          value={startTime}
-          onChange={(event) => setStartTime(event.target.value)}
+          value={value[0]}
+          onChange={(event) => setStartTime(event)}
           InputLabelProps={{
             shrink: true,
           }}
@@ -33,8 +53,8 @@ export default function TimeButton() {
         <TextField
           label='end time'
           type='time'
-          value={endTime}
-          onChange={(event) => setEndTime(event.target.value)}
+          value={value[1]}
+          onChange={(event) => setEndTime(event)}
           InputLabelProps={{
             shrink: true,
           }}

@@ -47,7 +47,11 @@ export default function DropdownButton({ name, children }) {
     <>
       <Button
         variant='contained'
-        sx={optionSelected.length === 0 ? buttonStyleBeforeClick : buttonStyleAfterClick}
+        sx={
+          optionSelected.length === 0 || (optionSelected[0] === '' && optionSelected[1] === '')
+            ? buttonStyleBeforeClick
+            : buttonStyleAfterClick
+        }
         style={{ marginRight: '1%' }}
         onClick={handleClick}
       >
