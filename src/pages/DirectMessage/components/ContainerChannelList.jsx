@@ -50,6 +50,22 @@ const ContainerChannelList = () => {
                         />
                     )}
                 />
+                <ChannelList 
+                    filters={{}}
+                    channelRenderFilterFn={() => {}}
+                    List={(listProps) => (
+                        <ChannelTeamList
+                            {...listProps}
+                            type="messaging"
+                        />
+                    )}
+                    Preview = {(previewProps) => (
+                        <ChannelTeamPreview
+                            {...previewProps}
+                            type="messaging"
+                        />
+                    )}
+                />
             </div>
         </>
     )
