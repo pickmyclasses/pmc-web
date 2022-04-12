@@ -61,20 +61,12 @@ let option = {
   xAxis: {
     type: 'value',
     showGrid: false,
-    splitLine: {
-      show: false,
-    },
-    axisLabel: {
-      show: false,
-    },
+    show: false,
   },
   yAxis: {
+    show: false,
     type: 'category',
     data: [''],
-    showGrid: false,
-    splitLine: {
-      show: false,
-    },
   },
   series: [
     {

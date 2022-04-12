@@ -9,26 +9,26 @@ import StatsTags from 'components/CourseVisuals/StatsTags';
 import StatsClassSize from 'components/CourseVisuals/StatsClassSize';
 import StatsPopularity from 'components/CourseVisuals/StatsPopularity';
 import StatsDetailedCard from '../CourseVisuals/StatsDetailedCard';
+import StatsDetailedProfessor from 'components/CourseVisuals/StatsDetailedProfessor';
+import StatsDetailedAverage from 'components/CourseVisuals/StatsDetailedAverage';
+
 import Button from '@mui/material/Button';
 
-import { Grid, Typography, Card, Stack, Link, Box, breadcrumbsClasses } from '@mui/material';
+import { Grid, Typography, Card, Stack, Link, Box } from '@mui/material';
 import { CourseContext } from '../../pages/CoursePage';
 import { motion } from 'framer-motion';
 import ClickableIndicator from '../CourseCardGrid/CourseCard/ClickableIndicator';
 import { PreventableNavigationContext } from '../PreventableNavigation/ContainerWithPreventableNavigation';
 
 export default function CourseStats() {
-  const { ratingDistribution, setRatingDistribution } = useState(true);
   const { course, reviews, professorRanking, courseLoad, courseTrend } =
     useContext(CourseContext);
   const [condition, setCondition] = useState('default');
-  const [ratingCondition, setRatingCondition] = useState(true);
-  const coursePageURL = '/course/' + course.id;
 
   const renderProfessorSummery = () => (
     <MotionCard
       initial='initial'
-      onClick={() => setRatingDistribution(!ratingDistribution)}
+      onClick={() => setCondition('detailedProfessor')}
       whileHover='mouseEntered'
       sx={{
         width: '100%',
@@ -54,7 +54,6 @@ export default function CourseStats() {
   const renderTagsSummary = () => (
     <MotionCard
       initial='initial'
-      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
       whileHover='mouseEntered'
       sx={{
         width: '100%',
@@ -106,7 +105,7 @@ export default function CourseStats() {
   const renderInfoSummery = () => (
     <MotionCard
       initial='initial'
-      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      onClick={() => setCondition('detailedAverage')}
       whileHover='mouseEntered'
       sx={{
         width: '100%',
@@ -222,15 +221,62 @@ export default function CourseStats() {
     >
       <Stack height='calc(100% - 48px)' padding='24px'>
         <Box flex={1}>
-          {/* <Link to={coursePageURL + '/stats'}></Link> */}
           <Button variant='text' onClick={() => setCondition('default')}>
             Return
           </Button>
 
-          <StatsDetailedCard
-            ratingCondition={ratingCondition}
-            setRatingCondition={setRatingCondition}
-            courseTrend={courseTrend}
+          <StatsDetailedCard courseTrend={courseTrend} />
+        </Box>
+      </Stack>
+    </MotionCard>
+  );
+
+  const renderDetailedProfessor = () => (
+    <MotionCard
+      initial='initial'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
+    >
+      <Stack height='calc(100% - 48px)' padding='24px'>
+        <Box flex={1}>
+          <Button variant='text' onClick={() => setCondition('default')}>
+            Return
+          </Button>
+
+          <StatsDetailedProfessor reviews={reviews} professorRanking={professorRanking} />
+        </Box>
+      </Stack>
+    </MotionCard>
+  );
+
+  const renderDetailedAverage = () => (
+    <MotionCard
+      initial='initial'
+      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
+    >
+      <Stack height='calc(100% - 48px)' padding='24px'>
+        <Box flex={1}>
+          <Button variant='text' onClick={() => setCondition('default')}>
+            Return
+          </Button>
+
+          <StatsDetailedAverage
+            reviews={reviews}
+            professorRanking={professorRanking}
+            courseLoad={courseLoad}
           />
         </Box>
       </Stack>
@@ -274,6 +320,18 @@ export default function CourseStats() {
               {renderDetailedCard()}
             </Grid>
           </div>
+        );
+      case 'detailedProfessor':
+        return (
+          <Grid item xs={12}>
+            {renderDetailedProfessor()}
+          </Grid>
+        );
+      case 'detailedAverage':
+        return (
+          <Grid item xs={12}>
+            {renderDetailedAverage()}
+          </Grid>
         );
       default:
         break;
