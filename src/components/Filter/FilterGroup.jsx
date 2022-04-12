@@ -11,10 +11,6 @@ import RatingButton from './RatingButton';
 import TypeButton from './TypeButton';
 import DropdownButton from './DropdownButton';
 import SpecialCoursesButton from './SpecialCoursesButton';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-
-library.add(fas);
 
 export default function FilterGroup() {
   const [hideClicked, setHideClicked] = useState(false);
@@ -37,6 +33,16 @@ export default function FilterGroup() {
     },
   };
 
+  const buttonGroup = [
+    { name: 'type', component: <TypeButton /> },
+    { name: 'course level', component: <SpecialCoursesButton /> },
+    { name: 'rating', component: <RatingButton /> },
+    { name: 'credit hour', component: <CreditButton /> },
+    { name: 'date', component: <DateButton /> },
+    { name: 'time', component: <TimeButton /> },
+    { name: 'include tag', component: <TagButton /> },
+    { name: 'professor', component: <ProfessorButton /> },
+  ];
   return (
     <>
       <Box sx={{ p: 2, border: '1px solid grey', backgroundColor: 'white' }}>
@@ -49,37 +55,13 @@ export default function FilterGroup() {
           <div style={{ textTransform: 'lowercase' }}>hide no offerings</div>
         </Button>
 
-        <DropdownButton name={'type'}>
-          <TypeButton />
-        </DropdownButton>
-
-        <DropdownButton name={'special courses'}>
-          <SpecialCoursesButton />
-        </DropdownButton>
-
-        <DropdownButton name={'rating'}>
-          <RatingButton />
-        </DropdownButton>
-
-        <DropdownButton name={'credit hour'}>
-          <CreditButton />
-        </DropdownButton>
-
-        <DropdownButton name={'date'}>
-          <DateButton />
-        </DropdownButton>
-
-        <DropdownButton name={'time'}>
-          <TimeButton />
-        </DropdownButton>
-
-        <DropdownButton name={'include tag'}>
-          <TagButton />
-        </DropdownButton>
-
-        <DropdownButton name={'professor'}>
-          <ProfessorButton />
-        </DropdownButton>
+        {buttonGroup.map((button, i) => {
+          return (
+            <DropdownButton key={i} name={button.name}>
+              {button.component}
+            </DropdownButton>
+          );
+        })}
 
         <Button variant='text' sx={{ mt: '0.4%' }}>
           S<div style={{ textTransform: 'lowercase' }}>ave</div>

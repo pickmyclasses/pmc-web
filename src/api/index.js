@@ -245,6 +245,11 @@ export const postTagsByCourseID = (courseID, body) =>
   axios.post(`/course/${courseID}/tag`, body);
 export const putTagsByCourseID = (courseID, body) => axios.put(`/course/${courseID}/tag`, body);
 
+export const fetchTagList = () => axios.get('/course/tag').then((data) => data.data.data);
+
+export const fetchProfessorList = () =>
+  axios.get('/professor/list').then((data) => data.data.data);
+
 export const fetchReviewTagsByCourseID = (courseID, body) =>
   axios.get(`/course/${courseID}/tag`).then((data) => data.data.data);
 
@@ -254,7 +259,7 @@ export const fetchProfessorByCourseID = (courseID, body) =>
 export const fetchSemestersByCollegeID = (collegeID, body) =>
   axios.get(`/college/${collegeID}/semester/list`).then((data) => data.data.data);
 
-export const fetchCollegeList = () => axios.get(`/college/list`).then((data) => data.data.data);
+export const fetchCollegeList = () => axios.get(`/college/list`).then((data) => data.data);
 
 // export const fetchProfessorRanking = (courseID, body) =>
 //   axios.get(`/stats/course/${courseID}/professor/rank`).then((data) => data);

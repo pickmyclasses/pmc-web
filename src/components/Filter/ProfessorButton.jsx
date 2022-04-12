@@ -1,40 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
-import { grey } from '@mui/material/colors';
 import Button from '@mui/material/Button';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import SearchBar from '../Search/SearchBar';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import { useMount } from '../../utils';
+import { fetchProfessorList } from 'api';
 
-library.add(fas);
+export default function ProfessorButton({ optionSelected, setOptionSelected }) {
+  const [professors, setProfessors] = useState([]);
 
-export default function ProfessorButton() {
-  const handleSearch = () => {
-    alert('** button with search drop down');
-  };
+  useMount(() => {
+    fetchProfessorList().then(setProfessors);
+  });
 
   return (
     <>
       <MenuItem>
-        <SearchBar
-          textColor={grey[900]}
-          backgroundColor={grey[200]}
-          onSearchClick={handleSearch}
-          maxWidth={'100%'}
-          focusHoverColor={grey[300]}
-          placeholderText={'Search for a professor'}
-          borderRadius={'4px'}
-          fontSize={'10px'}
-        />
+        <Stack spacing={3} sx={{ width: 300 }}>
+          <Autocomplete
+            multiple
+            options={professors}
+            getOptionLabel={(option) => {
+              return option?.professorName;
+            }}
+            value={optionSelected}
+            onChange={(event, value) => setOptionSelected(value)}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            filterSelectedOptions
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </Stack>
       </MenuItem>
       <MenuItem>
         <Button variant='contained' sx={{ width: '100%' }}>
           Include
-        </Button>
-      </MenuItem>
-      <MenuItem>
-        <Button variant='contained' sx={{ width: '100%' }}>
-          Exclude
         </Button>
       </MenuItem>
     </>
