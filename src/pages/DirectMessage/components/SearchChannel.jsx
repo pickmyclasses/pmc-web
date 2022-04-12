@@ -4,13 +4,20 @@ import { useChatContext } from 'stream-chat-react';
 import { SearchIcon } from '../assets';
 
 
-const SearchChannel = () => {
+const SearchChannel = () => 
+{
     const [query, setQuery] = useState('');
     const [loading, setLoading] = useState(false);
 
 
     const getChannels = async () => {
-        
+        try{
+            //TODO: get Channel
+
+        }catch(e)
+        {
+            setQuery('');
+        }
     }
 
     const onSearch = (event) => {
