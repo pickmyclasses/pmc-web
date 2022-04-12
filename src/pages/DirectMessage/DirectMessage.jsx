@@ -4,8 +4,9 @@ import { Chat } from 'stream-chat-react';
 import Cookies from 'universal-cookie';
 
 import { ContainerChannel, ContainerChannelList, Auth } from './components';
-
+import 'stream-chat-react/dist/css/index.css';
 import './DirectMessage.css';
+
 
 const API_KEY = '9z6vzf5r88js';
 

@@ -31,9 +31,22 @@ const ContainerChannel = ({
         )
     }
 
+    // => () means return object
+    const EmptyState = () => (
+        <div className='channel-empty__container'>
+            <p className='channel-empty__first'>This is the beginning of your chat history</p>
+            <p className='channel-empty__second'>Send messages</p>
+        </div>
+    )
+
     return(
-        <div>
-            ContainerChannel
+        <div className='channel__container'>
+            <Channel 
+                EmptyStateIndicator={EmptyState}
+                Message={(messageProps, index) => <MessageTeam key={index} {...messageProps} />}
+            >
+                <InnerChannel/>
+            </Channel>
         </div>
     )
 }
