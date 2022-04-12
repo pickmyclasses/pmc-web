@@ -15,6 +15,9 @@ let optionExam = {
     axisPointer: {
       type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
     },
+    formatter: function (params) {
+      return params[0] + '%';
+    },
   },
   legend: { bottom: 1 },
   grid: {
@@ -40,7 +43,7 @@ let optionExam = {
       stack: 'total',
       color: '#aed6dc',
       label: {
-        show: false,
+        show: true,
       },
       emphasis: {
         focus: 'series',
@@ -53,7 +56,7 @@ let optionExam = {
       stack: 'total',
       color: '#ff9a8d',
       label: {
-        show: false,
+        show: true,
       },
       emphasis: {
         focus: 'series',
@@ -100,7 +103,7 @@ let optionHomework = {
       stack: 'total',
       color: '#aed6dc',
       label: {
-        show: false,
+        show: true,
       },
       emphasis: {
         focus: 'series',
@@ -113,7 +116,7 @@ let optionHomework = {
       stack: 'total',
       color: '#ff9a8d',
       label: {
-        show: false,
+        show: true,
       },
       emphasis: {
         focus: 'series',
@@ -159,7 +162,7 @@ let optionRecommend = {
       stack: 'total',
       color: '#aed6dc',
       label: {
-        show: false,
+        show: true,
       },
       emphasis: {
         focus: 'series',
@@ -172,7 +175,7 @@ let optionRecommend = {
       stack: 'total',
       color: '#ff9a8d',
       label: {
-        show: false,
+        show: true,
       },
       emphasis: {
         focus: 'series',
@@ -205,9 +208,11 @@ function generateHomeworkHeavy(reviews) {
   optionHomework.series[1].data[0] = 0;
   optionHomework.series[0].color = '#568EA6';
   optionHomework.series[1].color = '#F18C8E';
+  let count = 0;
   for (let i = 0; i < reviews.length; i++) {
     if (reviews[i].isHomeworkHeavy) {
       optionHomework.series[0].data[0] += 1;
+      count++;
     } else {
       optionHomework.series[1].data[0] += 1;
     }

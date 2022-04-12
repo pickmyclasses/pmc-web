@@ -61,8 +61,13 @@ let option = {
 
       progress: {
         show: true,
-        overlap: true,
+        overlap: false,
         roundCap: true,
+        clip: false,
+        itemStyle: {
+          borderWidth: 1,
+          borderColor: '#464646',
+        },
       },
       axisLine: {
         roundCap: true,
