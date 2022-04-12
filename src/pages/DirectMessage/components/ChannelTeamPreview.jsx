@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ChannelTeamPreview = () => {
+const ChannelTeamPreview = ({}) => {
     return(
         <div></div>
     )
