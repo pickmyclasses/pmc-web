@@ -2,11 +2,6 @@ import React, { useState } from 'react';
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
 import { grey, cyan } from '@mui/material/colors';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-library.add(fas);
 
 export default function DropdownButton({ name, children }) {
   const [clicked, setClicked] = useState(false);
@@ -41,6 +36,13 @@ export default function DropdownButton({ name, children }) {
     },
   };
 
+  const childrenWithProps = React.Children.map(children, (child) => {
+    if (React.isValidElement(child)) {
+      return React.cloneElement(child, { setOptionSelected });
+    }
+    return child;
+  });
+
   return (
     <>
       <Button
@@ -50,11 +52,7 @@ export default function DropdownButton({ name, children }) {
         onClick={handleClick}
       >
         <div style={{ textTransform: 'lowercase' }}> {name}</div>
-        {clicked ? (
-          <FontAwesomeIcon icon={['fas', 'caret-down']} style={{ marginLeft: '5px' }} />
-        ) : (
-          <FontAwesomeIcon icon={['fas', 'caret-right']} style={{ marginLeft: '5px' }} />
-        )}
+        &nbsp;{clicked ? '▾' : '▸'}
       </Button>
       <Menu
         anchorEl={anchorEl}
@@ -90,7 +88,7 @@ export default function DropdownButton({ name, children }) {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {React.cloneElement(children, { setOptionSelected: setOptionSelected })}
+        {childrenWithProps}
       </Menu>
     </>
   );

@@ -2,11 +2,7 @@ import React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import { grey } from '@mui/material/colors';
 import Button from '@mui/material/Button';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
 import SearchBar from '../Search/SearchBar';
-
-library.add(fas);
 
 export default function ProfessorButton() {
   const handleSearch = () => {

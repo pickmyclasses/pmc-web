@@ -1,23 +1,13 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
 
-library.add(fas);
-
-export default function SpecialCoursesButton({ setOptionSelected }) {
+export default function SpecialCoursesButton() {
   const [honorClicked, setHonorClicked] = useState(true);
   const [specialClicked, setSpecialClicked] = useState(true);
   const [independentClicked, setIndependentClicked] = useState(true);
   const [thesisClicked, setThesisClicked] = useState(true);
-
-  useEffect(() => {
-    !honorClicked || !specialClicked || !independentClicked || !thesisClicked
-      ? setOptionSelected(true)
-      : setOptionSelected(false);
-  }, [honorClicked, specialClicked, independentClicked, thesisClicked, setOptionSelected]);
 
   return (
     <>
