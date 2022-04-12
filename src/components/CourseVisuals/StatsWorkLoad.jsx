@@ -15,9 +15,6 @@ let optionExam = {
     axisPointer: {
       type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
     },
-    formatter: function (params) {
-      return params[0] + '%';
-    },
   },
   legend: { bottom: 1 },
   grid: {
@@ -43,7 +40,7 @@ let optionExam = {
       stack: 'total',
       color: '#aed6dc',
       label: {
-        show: true,
+        show: false,
       },
       emphasis: {
         focus: 'series',
@@ -56,7 +53,7 @@ let optionExam = {
       stack: 'total',
       color: '#ff9a8d',
       label: {
-        show: true,
+        show: false,
       },
       emphasis: {
         focus: 'series',
@@ -103,7 +100,7 @@ let optionHomework = {
       stack: 'total',
       color: '#aed6dc',
       label: {
-        show: true,
+        show: false,
       },
       emphasis: {
         focus: 'series',
@@ -116,7 +113,7 @@ let optionHomework = {
       stack: 'total',
       color: '#ff9a8d',
       label: {
-        show: true,
+        show: false,
       },
       emphasis: {
         focus: 'series',
@@ -162,7 +159,7 @@ let optionRecommend = {
       stack: 'total',
       color: '#aed6dc',
       label: {
-        show: true,
+        show: false,
       },
       emphasis: {
         focus: 'series',
@@ -175,7 +172,7 @@ let optionRecommend = {
       stack: 'total',
       color: '#ff9a8d',
       label: {
-        show: true,
+        show: false,
       },
       emphasis: {
         focus: 'series',
