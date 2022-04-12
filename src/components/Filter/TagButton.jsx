@@ -7,12 +7,16 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 
-export default function TagButton() {
+export default function TagButton({ optionSelected, setOptionSelected }) {
   const [tags, setTags] = useState([]);
 
   useMount(() => {
     fetchTagList().then(setTags);
   });
+
+  const handleClear = () => {
+    setOptionSelected([]);
+  };
 
   return (
     <>
@@ -24,13 +28,16 @@ export default function TagButton() {
             getOptionLabel={(option) => {
               return option?.name;
             }}
+            value={optionSelected}
+            onChange={(event, value) => setOptionSelected(value)}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
             filterSelectedOptions
             renderInput={(params) => <TextField {...params} />}
           />
         </Stack>
       </MenuItem>
       <MenuItem>
-        <Button variant='contained' sx={{ width: '100%' }}>
+        <Button variant='contained' sx={{ width: '100%' }} onClick={handleClear}>
           Clear
         </Button>
       </MenuItem>

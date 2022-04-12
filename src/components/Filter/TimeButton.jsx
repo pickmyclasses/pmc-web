@@ -17,17 +17,13 @@ export default function TimeButton({ optionSelected, setOptionSelected }) {
   };
 
   const setStartTime = (event) => {
-    let newVal = [];
-    newVal[0] = event.target.value;
-    newVal[1] = value[1];
+    let newVal = [event.target.value, value[1]];
     setValue(newVal);
     setOptionSelected(newVal);
   };
 
   const setEndTime = (event) => {
-    let newVal = [];
-    newVal[0] = value[0];
-    newVal[1] = event.target.value;
+    let newVal = [value[0], event.target.value];
     setValue(newVal);
     setOptionSelected(newVal);
   };

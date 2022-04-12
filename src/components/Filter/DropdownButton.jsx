@@ -52,7 +52,7 @@ export default function DropdownButton({ name, children }) {
             ? buttonStyleBeforeClick
             : buttonStyleAfterClick
         }
-        style={{ marginRight: '1%' }}
+        style={{ marginRight: '2.9em' }}
         onClick={handleClick}
       >
         <div style={{ textTransform: 'lowercase' }}> {name}</div>
@@ -63,7 +63,7 @@ export default function DropdownButton({ name, children }) {
         onClose={handleClose}
         onClick={() => setClicked(!clicked)}
         PaperProps={{
-          elevation: 0,
+          elevation: 2,
           sx: {
             overflow: 'visible',
             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',

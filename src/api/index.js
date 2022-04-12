@@ -247,6 +247,9 @@ export const putTagsByCourseID = (courseID, body) => axios.put(`/course/${course
 
 export const fetchTagList = () => axios.get('/course/tag').then((data) => data.data.data);
 
+export const fetchProfessorList = () =>
+  axios.get('/professor/list').then((data) => data.data.data);
+
 export const fetchReviewTagsByCourseID = (courseID, body) =>
   axios.get(`/course/${courseID}/tag`).then((data) => data.data.data);
 
