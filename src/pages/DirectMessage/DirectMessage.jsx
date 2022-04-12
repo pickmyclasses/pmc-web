@@ -11,7 +11,20 @@ const API_KEY = '9z6vzf5r88js';
 
 const client = StreamChat.getInstance(API_KEY);
 
-const authToken = false;
+const cookies = new Cookies();
+
+const authToken = cookies.get("token");
+
+if(authToken) {
+    client.connectUser({
+        id: cookies.get("userId"),
+        name: cookies.get("username"),
+        fullName: cookies.get("fullName"),
+        image: cookies.get("avatarURL"),
+        hashedPassword: cookies.get("hashedPassword"),
+        phoneNumber: cookies.get("phoneNumber"),
+    })
+}
 
 const DirectMessage = () => 
 {
