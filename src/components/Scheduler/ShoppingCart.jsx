@@ -105,7 +105,7 @@ export default function ShoppingCart({
       {!noSummary && (
         <Stack alignItems='center'>
           <Typography
-            marginTop='12px'
+            marginTop='8px'
             variant='body2'
             color={hasHighlights ? theme.palette.primary.main : ''}
           >
