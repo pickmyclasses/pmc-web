@@ -15,6 +15,7 @@ const cookies = new Cookies();
 
 const authToken = cookies.get("token");
 
+// connect the user and get all the messages
 if(authToken) {
     client.connectUser({
         id: cookies.get("userId"),
@@ -23,7 +24,7 @@ if(authToken) {
         image: cookies.get("avatarURL"),
         hashedPassword: cookies.get("hashedPassword"),
         phoneNumber: cookies.get("phoneNumber"),
-    })
+    }, authToken)
 }
 
 const DirectMessage = () => 
