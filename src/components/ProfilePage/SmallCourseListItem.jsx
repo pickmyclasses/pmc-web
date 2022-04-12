@@ -1,4 +1,4 @@
-import { AddBox, Delete, Edit, Info, RateReview } from '@mui/icons-material';
+import { AddBox, ChatBubble, Delete, Edit, Info } from '@mui/icons-material';
 import { Card, ListItem, Stack, Tab, Tooltip, Typography } from '@mui/material';
 import CourseEligibilityIndicator from 'components/CourseCardGrid/CourseCard/CourseEligibilityIndicator';
 import React, { createElement, useRef, useState } from 'react';
@@ -104,7 +104,7 @@ const actionItemComponents = {
     color: 'text.secondary',
   },
   'review': {
-    iconType: RateReview,
+    iconType: ChatBubble,
     label: 'Review',
     description: 'Review this course',
     color: 'text.secondary',

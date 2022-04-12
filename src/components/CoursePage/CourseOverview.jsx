@@ -51,12 +51,12 @@ export default function CourseOverview() {
     fetchCoursesBySearch({
       keyword: course.title.split(/\s+/)[0],
       pageSize: numRecommendedCourses + 1,
-    }).then((data) => {
+    }).then(({ data }) =>
       // The current course itself might show up in the search results. Remove it.
       setRecommendedCourses(
         data.filter((x) => +x.id !== +course.id).slice(0, numRecommendedCourses)
-      );
-    });
+      )
+    );
   }, [course]);
 
   const coursePageURL = '/course/' + course.id;
