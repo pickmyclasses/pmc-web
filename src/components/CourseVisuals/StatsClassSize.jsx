@@ -1,67 +1,39 @@
 import ReactECharts from 'echarts-for-react';
 
-const gaugeData = [
-  {
-    value: 54,
-    name: '',
-    title: {
-      offsetCenter: ['0%', '0%'],
-    },
-    detail: {
-      valueAnimation: true,
-      offsetCenter: ['0%', '0%'],
-    },
-  },
-];
 let option = {
+  xAxis: {
+    type: 'category',
+    data: [
+      '2020 Spring',
+      '2020 Fall',
+      '2021 Spring',
+      '2021 Fall',
+      '2022 Spring',
+      '2022 Fall',
+      '2023 Spring',
+    ],
+    show: false,
+  },
+  yAxis: {
+    type: 'value',
+    show: false,
+  },
+  tooltip: {
+    trigger: 'axis',
+  },
+  legend: {},
   series: [
     {
-      type: 'gauge',
-      startAngle: 90,
-      endAngle: -270,
-      pointer: {
-        show: false,
-      },
-      progress: {
-        show: true,
-        overlap: false,
-        roundCap: true,
-        clip: false,
-        itemStyle: {
-          borderWidth: 1,
-          borderColor: '#464646',
-        },
-      },
-      axisLine: {
-        lineStyle: {
-          width: 10,
-        },
-      },
-      splitLine: {
-        show: false,
-        distance: 0,
-        length: 10,
-      },
-      axisTick: {
-        show: false,
-      },
-      axisLabel: {
-        show: false,
-        distance: 50,
-      },
-      data: gaugeData,
-      title: {
-        fontSize: 14,
-      },
-      detail: {
-        width: 20,
-        height: 14,
-        fontSize: 14,
-        color: 'auto',
-        borderColor: 'auto',
-        borderRadius: 20,
-        borderWidth: 1,
-        formatter: '{value}',
+      data: [56, 78, 52, 34, 67, 67, 56],
+      type: 'line',
+      smooth: true,
+      showSymbol: false,
+      color: '#568EA6 ',
+      markPoint: {
+        data: [
+          { type: 'max', name: 'Max' },
+          { type: 'min', name: 'Min' },
+        ],
       },
     },
   ],

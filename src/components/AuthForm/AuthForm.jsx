@@ -41,17 +41,20 @@ export default function AuthForm() {
       .then((data) => {
         setErrorMessage('');
         const userInfo = {
-          name: `${data.data.firstName} ${data.data.lastName}`,
-          token: data.data.token,
-          role: data.data.role,
-          userID: data.data.id,
-          collegeID: data.data.collegeID,
+          name: `${data.firstName} ${data.lastName}`,
+          token: data.token,
+          role: data.role,
+          userID: data.id,
+          collegeID: data.collegeID,
+          major: data.major,
+          emphasis: data.emphasis,
+          schoolYear: data.schoolYear,
         };
         setUser(userInfo);
         localStorage.setItem('user', JSON.stringify(userInfo));
 
         navigate(location?.state?.linkTo || '/', { replace: true });
-        enqueueSnackbar(`Welcome back, ${data.data.firstName}!`);
+        enqueueSnackbar(`Welcome back, ${data.firstName}!`);
       })
       .catch((err) => {
         setIsLoginLoading(false);
@@ -68,6 +71,7 @@ export default function AuthForm() {
             variant: snackBarMessage['serverError'].variant,
           });
         }
+        console.error('Login failed:', err);
       });
   };
 

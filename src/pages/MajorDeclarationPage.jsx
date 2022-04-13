@@ -272,7 +272,10 @@ export default function MajorDeclarationPage() {
             selectedMajor?.name,
             selectedEmphasis === 'No Emphasis' ? undefined : selectedEmphasis,
             (+selectedYear + 1).toString()
-          ).then(() => navigateIfAllowed(location.state?.linkTo || '/'));
+          )
+            .then((x) => (alert('** x: ' + JSON.stringify(x)), x))
+            // TODO Q: Deal with the response above (x) and renew local user data^
+            .then(() => navigateIfAllowed(location.state?.linkTo || '/'));
         }}
       >
         Start Now!

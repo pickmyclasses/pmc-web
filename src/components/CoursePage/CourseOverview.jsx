@@ -48,10 +48,7 @@ export default function CourseOverview() {
 
   // Generate the recommended course list.
   useEffect(() => {
-    fetchCoursesBySearch({
-      keyword: course.title.split(/\s+/)[0],
-      pageSize: numRecommendedCourses + 1,
-    }).then(({ data }) =>
+    fetchCoursesBySearch(course.title.split(/\s+/)[0]).then(({ data }) =>
       // The current course itself might show up in the search results. Remove it.
       setRecommendedCourses(
         data.filter((x) => +x.id !== +course.id).slice(0, numRecommendedCourses)
@@ -73,8 +70,14 @@ export default function CourseOverview() {
           <Typography variant='subtitle2'>Full Description</Typography>
           <Typography variant='body1'>{course.description}</Typography>
           <Typography variant='subtitle2'>Reward</Typography>
-          <Stack direction='row' spacing='24px'>
-            <LabelWithIcon color='primary' iconType={School} label='CS major requirement' />
+          <Stack direction='row' spacing='24px' flexWrap='wrap'>
+            {course.degreeCatalogs?.length > 0 && (
+              <LabelWithIcon
+                color='primary'
+                iconType={School}
+                label={course.degreeCatalogs.map((x) => x.join(' — ')).join(', ')}
+              />
+            )}
             <LabelWithIcon
               color='info'
               iconType={WatchLater}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { Stack, Typography } from '@mui/material';
 import { fetchCoursesBySearch } from '../api';
@@ -7,16 +7,19 @@ import CourseResultList from '../components/CourseCardGrid/CourseResultList';
 import FilterVerticalContainer from '../components/Filter/FilterVerticalContainer';
 import Scrollbars from 'react-custom-scrollbars-2';
 import ContainerWithLoadingIndication from '../components/Page/ContainerWithLoadingIndication';
+import { UserContext } from 'App';
 
 export default function SearchPage({ shouldShowScheduler }) {
+  const { user } = useContext(UserContext);
+  const urlParams = useParams();
+
   const [courses, setCourses] = useState(null);
   const [numResults, setNumResults] = useState(NaN);
 
-  const urlParams = useParams();
-
   // TODO: fix this hard coded number
   useEffect(() => {
-    fetchCoursesBySearch({ keyword: urlParams.query, pageSize: 12 }).then(({ data, total }) => {
+    if (!urlParams?.query) return;
+    fetchCoursesBySearch(urlParams.query, user?.userID).then(({ data, total }) => {
       setCourses(data);
       setNumResults(total);
     });

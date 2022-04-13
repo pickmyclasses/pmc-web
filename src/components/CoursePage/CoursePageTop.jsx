@@ -41,7 +41,9 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
         </CourseEligibilityIndicator>
       </CenterAligningFlexBox>
       <Typography variant='body1' color={theme.palette.text.secondary}>
-        CS major requirement &nbsp;•&nbsp;&nbsp;
+        {course.degreeCatalogs?.length > 0 && (
+          <>{course.degreeCatalogs[0][0]}&nbsp;•&nbsp;&nbsp;</>
+        )}
         {formatCreditRange(course)}
       </Typography>
     </Box>

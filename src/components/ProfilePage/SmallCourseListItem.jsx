@@ -63,7 +63,9 @@ export default function SmallCourseListItem({
               </Typography>
             </CourseEligibilityIndicator>
             <Typography variant='caption' color='text.secondary' noWrap>
-              CS Major Requirement&nbsp;&nbsp;•&nbsp;&nbsp;
+              {course.degreeCatalogs?.length > 0 && (
+                <>{course.degreeCatalogs[0][0]}&nbsp;&nbsp;•&nbsp;&nbsp;</>
+              )}
               {formatCreditRange(course)}
             </Typography>
           </Stack>
