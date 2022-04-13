@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, useChatContext } from 'stream-chat-react';
 
+// Inviting the users
+// Where 'children' are the users
 const ListContainer = ({ children }) => {
     return (
         <div className="user-list__container">
@@ -14,8 +16,11 @@ const ListContainer = ({ children }) => {
 }
 
 const UserItem = ({ user, setSelectedUsers }) => {
+
+    // boolean selected used for toggling the value
     const [selected, setSelected] = useState(false)
 
+    // Select and un-select process
     const handleSelect = () => {
         if(selected) {
             setSelectedUsers((prevUsers) => prevUsers.filter((prevUser) => prevUser !== user.id))
@@ -29,6 +34,7 @@ const UserItem = ({ user, setSelectedUsers }) => {
     return (
         <div className="user-item__wrapper" onClick={handleSelect}>
             <div className="user-item__name-wrapper">
+                {/* name is used to hover to the avatar */}
                 <Avatar image={user.image} name={user.fullName || user.id} size={32} />
                 <p className="user-item__name">{user.fullName || user.id}</p>
             </div>
