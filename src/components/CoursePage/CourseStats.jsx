@@ -1,30 +1,52 @@
 import React, { createContext, useContext, useState, useEffect, Avatar } from 'react';
 
-import StatsPieChart from '../CourseVisuals/StatsPieChart';
 import StatsStackedBar from '../CourseVisuals/StatsStackedBar';
 import StatsProfessorSum from '../CourseVisuals/StatsProfessorSum';
 import StatsInfoDump from '../CourseVisuals/StatsInfoDump';
 import StatsLoading from 'components/CourseVisuals/StatsLoading';
-import StatsTags from 'components/CourseVisuals/StatsTags';
 import StatsClassSize from 'components/CourseVisuals/StatsClassSize';
 import StatsPopularity from 'components/CourseVisuals/StatsPopularity';
 import StatsDetailedCard from '../CourseVisuals/StatsDetailedCard';
 import StatsDetailedProfessor from 'components/CourseVisuals/StatsDetailedProfessor';
 import StatsDetailedAverage from 'components/CourseVisuals/StatsDetailedAverage';
-
+import StatsWorkLoad from 'components/CourseVisuals/StatsWorkLoad';
 import Button from '@mui/material/Button';
 
 import { Grid, Typography, Card, Stack, Link, Box } from '@mui/material';
 import { CourseContext } from '../../pages/CoursePage';
 import { motion } from 'framer-motion';
 import ClickableIndicator from '../CourseCardGrid/CourseCard/ClickableIndicator';
-import { PreventableNavigationContext } from '../PreventableNavigation/ContainerWithPreventableNavigation';
 
 export default function CourseStats() {
   const { course, reviews, professorRanking, courseLoad, courseTrend } =
     useContext(CourseContext);
   const [condition, setCondition] = useState('default');
 
+  const renderWorkLoadSummry = () => (
+    <MotionCard
+      initial='initial'
+      onClick={() => setCondition('stackBarDetailed')}
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+        overflow: 'visible',
+      }}
+    >
+      <Stack padding='24px' height='calc(100% - 48px)'>
+        <Box flex={1}>
+          <StatsWorkLoad reviews={reviews} />
+        </Box>
+        <Link>
+          <ClickableIndicator propagate>
+            <Typography variant='subtitle2'>See Details</Typography>
+          </ClickableIndicator>
+        </Link>
+      </Stack>
+    </MotionCard>
+  );
   const renderProfessorSummery = () => (
     <MotionCard
       initial='initial'
@@ -51,30 +73,30 @@ export default function CourseStats() {
       </Stack>
     </MotionCard>
   );
-  const renderTagsSummary = () => (
-    <MotionCard
-      initial='initial'
-      whileHover='mouseEntered'
-      sx={{
-        width: '100%',
-        height: '100%',
-        cursor: 'pointer',
-        '&:hover': { boxShadow: 6 },
-      }}
-    >
-      <Stack padding='24px' height='calc(100% - 48px)'>
-        <Box flex={1}>
-          <Typography variant='subtitle2'>Course Top Tags</Typography>
-          <StatsTags tags={course.tags} />
-        </Box>
-        <Link>
-          <ClickableIndicator propagate>
-            <Typography variant='subtitle2'>See Details</Typography>
-          </ClickableIndicator>
-        </Link>
-      </Stack>
-    </MotionCard>
-  );
+  // const renderTagsSummary = () => (
+  //   <MotionCard
+  //     initial='initial'
+  //     whileHover='mouseEntered'
+  //     sx={{
+  //       width: '100%',
+  //       height: '100%',
+  //       cursor: 'pointer',
+  //       '&:hover': { boxShadow: 6 },
+  //     }}
+  //   >
+  //     <Stack padding='24px' height='calc(100% - 48px)'>
+  //       <Box flex={1}>
+  //         <Typography variant='subtitle2'>Course Work Load</Typography>
+  //         <StatsTags tags={course.tags} />
+  //       </Box>
+  //       <Link>
+  //         <ClickableIndicator propagate>
+  //           <Typography variant='subtitle2'>See Details</Typography>
+  //         </ClickableIndicator>
+  //       </Link>
+  //     </Stack>
+  //   </MotionCard>
+  // );
 
   const renderClassSizeSummary = () => (
     <MotionCard
@@ -302,7 +324,7 @@ export default function CourseStats() {
             </Grid>
             <Grid container spacing='32px' marginBottom='16px'>
               <Grid item xs={6}>
-                {renderTagsSummary()}
+                {renderWorkLoadSummry()}
               </Grid>
               <Grid item xs={3}>
                 {renderClassSizeSummary()}

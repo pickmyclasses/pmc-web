@@ -2,16 +2,11 @@ import React, { useState } from 'react';
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
 import { grey, cyan } from '@mui/material/colors';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-library.add(fas);
 
 export default function DropdownButton({ name, children }) {
   const [clicked, setClicked] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [optionSelected, setOptionSelected] = useState(false);
+  const [optionSelected, setOptionSelected] = useState([]);
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -41,20 +36,26 @@ export default function DropdownButton({ name, children }) {
     },
   };
 
+  const childrenWithProps = React.Children.map(children, (child) => {
+    if (React.isValidElement(child)) {
+      return React.cloneElement(child, { optionSelected, setOptionSelected });
+    }
+    return child;
+  });
+
   return (
     <>
       <Button
         variant='contained'
-        sx={optionSelected ? buttonStyleAfterClick : buttonStyleBeforeClick}
-        style={{ marginRight: '1%' }}
+        sx={
+          optionSelected.length === 0 || (optionSelected[0] === '' && optionSelected[1] === '')
+            ? buttonStyleBeforeClick
+            : buttonStyleAfterClick
+        }
+        style={{ marginRight: '2.9em' }}
         onClick={handleClick}
       >
         <div style={{ textTransform: 'lowercase' }}> {name}</div>
-        {clicked ? (
-          <FontAwesomeIcon icon={['fas', 'caret-down']} style={{ marginLeft: '5px' }} />
-        ) : (
-          <FontAwesomeIcon icon={['fas', 'caret-right']} style={{ marginLeft: '5px' }} />
-        )}
       </Button>
       <Menu
         anchorEl={anchorEl}
@@ -62,7 +63,7 @@ export default function DropdownButton({ name, children }) {
         onClose={handleClose}
         onClick={() => setClicked(!clicked)}
         PaperProps={{
-          elevation: 0,
+          elevation: 2,
           sx: {
             overflow: 'visible',
             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
@@ -90,7 +91,7 @@ export default function DropdownButton({ name, children }) {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {React.cloneElement(children, { setOptionSelected: setOptionSelected })}
+        {childrenWithProps}
       </Menu>
     </>
   );

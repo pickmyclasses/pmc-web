@@ -69,10 +69,10 @@ export default function HistoryDisplay({ historyCourses, onRemoveHistoryCourse =
       <Card sx={{ zIndex: 99, overflow: 'visible' }}>
         <Stack padding='20px' spacing='12px'>
           <LabelWithIcon
+            color='action'
             iconType={Class}
             label='Courses you have taken'
             variant='overline'
-            size='small'
           />
           <HistoryBreakdownChart
             historyBreakdown={historyBreakdown}

@@ -1,19 +1,31 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
 
-library.add(fas);
+export default function TimeButton({ optionSelected, setOptionSelected }) {
+  const [value, setValue] = useState(['', '']);
 
-export default function TimeButton() {
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  useEffect(() => {
+    if (optionSelected.length) setValue(optionSelected);
+  }, [optionSelected]);
 
   const handleClear = () => {
-    setStartTime('');
-    setEndTime('');
+    const newVal = ['', ''];
+    setValue(newVal);
+    setOptionSelected(newVal);
+  };
+
+  const setStartTime = (event) => {
+    let newVal = [event.target.value, value[1]];
+    setValue(newVal);
+    setOptionSelected(newVal);
+  };
+
+  const setEndTime = (event) => {
+    let newVal = [value[0], event.target.value];
+    setValue(newVal);
+    setOptionSelected(newVal);
   };
 
   return (
@@ -22,8 +34,8 @@ export default function TimeButton() {
         <TextField
           label='start time'
           type='time'
-          value={startTime}
-          onChange={(event) => setStartTime(event.target.value)}
+          value={value[0]}
+          onChange={(event) => setStartTime(event)}
           InputLabelProps={{
             shrink: true,
           }}
@@ -37,8 +49,8 @@ export default function TimeButton() {
         <TextField
           label='end time'
           type='time'
-          value={endTime}
-          onChange={(event) => setEndTime(event.target.value)}
+          value={value[1]}
+          onChange={(event) => setEndTime(event)}
           InputLabelProps={{
             shrink: true,
           }}

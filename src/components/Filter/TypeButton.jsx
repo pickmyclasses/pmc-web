@@ -1,65 +1,47 @@
-import { React, useState, useEffect, useContext } from 'react';
+import { React, useEffect, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { userSelectionContext } from './FilterVerticalContainer';
 
-library.add(fas);
-
-export default function TypeButton({ setOptionSelected }) {
-  const [onlineChecked, setOnlineChecked] = useState(true);
-  const [offlineChecked, setOfflineChecked] = useState(true);
-  const [hybridChecked, setHybridChecked] = useState(true);
-
-  const { setSelection } = useContext(userSelectionContext);
+export default function TypeButton({ optionSelected, setOptionSelected }) {
+  const [checked, setChecked] = useState([]);
 
   useEffect(() => {
-    setSelection(onlineChecked);
-    !onlineChecked || !offlineChecked || !hybridChecked
-      ? setOptionSelected(true)
-      : setOptionSelected(false);
-  }, [onlineChecked, offlineChecked, hybridChecked, setOptionSelected, setSelection]);
+    setChecked(optionSelected);
+  }, [optionSelected]);
+
+  const checkOptions = [
+    { id: 1, name: 'Online offerings' },
+    { id: 2, name: 'In person offerings' },
+    { id: 3, name: 'Hybrid offerings' },
+  ];
+
+  const handleToggle = (id) => {
+    const curIdx = checked.indexOf(id);
+    const newChecked = [...checked];
+    curIdx === -1 ? newChecked.push(id) : newChecked.splice(curIdx, 1);
+    setChecked(newChecked);
+    setOptionSelected(newChecked);
+  };
 
   return (
     <>
-      <MenuItem>
-        <FormControlLabel
-          control={
-            <Checkbox
-              size='small'
-              checked={onlineChecked}
-              onChange={() => setOnlineChecked(!onlineChecked)}
+      {checkOptions.map((check) => {
+        return (
+          <MenuItem key={check.id}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  size='small'
+                  checked={checked.indexOf(check.id) === -1 ? false : true}
+                  onChange={() => handleToggle(check.id)}
+                />
+              }
+              label={check.name}
             />
-          }
-          label={'Online offerings'}
-        />
-      </MenuItem>
-      <MenuItem>
-        <FormControlLabel
-          control={
-            <Checkbox
-              size='small'
-              checked={offlineChecked}
-              onChange={() => setOfflineChecked(!offlineChecked)}
-            />
-          }
-          label={'In-person offerings'}
-        />
-      </MenuItem>
-      <MenuItem>
-        <FormControlLabel
-          control={
-            <Checkbox
-              size='small'
-              checked={hybridChecked}
-              onChange={() => setHybridChecked(!hybridChecked)}
-            />
-          }
-          label={'Hybrid offerings'}
-        />
-      </MenuItem>
+          </MenuItem>
+        );
+      })}
     </>
   );
 }

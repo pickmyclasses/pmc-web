@@ -58,15 +58,5 @@ function populateProfessorLabels(professorRanking, reviews) {
 
 export default function StatsDetailedAverage({ reviews, professorRanking, courseLoad }) {
   populateProfessorLabels(professorRanking, reviews);
-  console.log(courseLoad);
   return <ReactECharts option={option} style={{ height: 380 }} onEvents={{}} />;
 }
-
-const dataset = [
-  ['CS 1410', 3.5],
-  ['CS 2420', 3.7],
-  ['CS 3810', 3.5],
-  ['CS 4400', 3.7],
-  ['CS 4500', 3.7],
-  ['CS 2100', 3.0],
-];

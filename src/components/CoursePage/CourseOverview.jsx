@@ -51,7 +51,7 @@ export default function CourseOverview() {
     fetchCoursesBySearch({
       keyword: course.title.split(/\s+/)[0],
       pageSize: numRecommendedCourses + 1,
-    }).then((data) =>
+    }).then(({ data }) =>
       // The current course itself might show up in the search results. Remove it.
       setRecommendedCourses(
         data.filter((x) => +x.id !== +course.id).slice(0, numRecommendedCourses)
@@ -66,7 +66,7 @@ export default function CourseOverview() {
         <Stack spacing='12px' flex={1}>
           {course.tags.length > 0 && (
             <>
-              <Typography variant='subtitle2'>Top Tags</Typography>
+              <Typography variant='subtitle2'>Keywords</Typography>
               <TagList tags={course.tags.map((x) => x.name)} />
             </>
           )}
@@ -116,6 +116,7 @@ export default function CourseOverview() {
               tags={['Fun projects', 'Hands on', 'No exams']}
               variant='outlined'
               color='success'
+              disableInteractive
             />
           </Box>
           <Divider orientation='vertical' />
@@ -127,6 +128,7 @@ export default function CourseOverview() {
               tags={['Useless lectures', 'Assignment-heavy', 'Less practical']}
               variant='outlined'
               color='error'
+              disableInteractive
             />
           </Box>
         </Stack>

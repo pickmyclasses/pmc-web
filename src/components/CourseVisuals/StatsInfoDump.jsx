@@ -12,6 +12,9 @@ const gaugeData = [
     detail: {
       offsetCenter: ['-80%', '115%'],
     },
+    itemStyle: {
+      color: '#568EA6 ',
+    },
   },
   {
     value: 60,
@@ -22,18 +25,22 @@ const gaugeData = [
     detail: {
       offsetCenter: ['80%', '115%'],
     },
+    itemStyle: {
+      color: '#F18C8E',
+    },
   },
 ];
 let option = {
   series: [
     {
       type: 'gauge',
+
       anchor: {
         show: true,
         showAbove: true,
         size: 8,
         itemStyle: {
-          color: '#FAC858',
+          color: '#568EA6',
         },
       },
       pointer: {
@@ -54,8 +61,13 @@ let option = {
 
       progress: {
         show: true,
-        overlap: true,
+        overlap: false,
         roundCap: true,
+        clip: false,
+        itemStyle: {
+          borderWidth: 1,
+          borderColor: '#464646',
+        },
       },
       axisLine: {
         roundCap: true,
@@ -96,16 +108,6 @@ export default function statsInfoDump({ courseLoad }) {
   gaugeData[1].value = courseLoad.majorAverageGrade * 25;
   //generateLetterGrade(courseLoad.courseAverageGrade)
   return (
-    // <Stack padding='10px 10px ' spacing='12px'>
-    //   <Box padding='8px 8px 4px'>
-    //     <Stack>
-    //       <Typography variant='subtitle1'>Average Grade A-</Typography>
-    //       <Typography variant='subtitle1'>Extra Credit offered</Typography>
-    //       <Typography variant='subtitle1'>Exam Heavy</Typography>
-    //       <Typography variant='subtitle1'>Homework Heavy</Typography>
-    //     </Stack>
-    //   </Box>
-    // </Stack>
     <ReactECharts
       option={option}
       opts={{ renderer: 'svg' }}

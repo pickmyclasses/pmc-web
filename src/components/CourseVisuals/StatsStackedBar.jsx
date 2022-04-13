@@ -1,50 +1,12 @@
 import React, { useState } from 'react';
 import ReactECharts from 'echarts-for-react';
-import Box from '@mui/material/Box';
-
-// let option = {
-//   title: {
-//     text: 'Rating Distribution',
-//     subtext: '',
-//     x: 'center',
-//   },
-//   tooltip: {
-//     trigger: 'item',
-//     formatter: '{a} <br/>{b} : {c} ({d}%)',
-//   },
-//   legend: {
-//     orient: 'vertical',
-//     left: 'left',
-//     data: ['One Stars', 'Two Stars', 'Three Stars', 'Four Stars', 'Five Stars'],
-//   },
-//   series: [
-//     {
-//       name: 'Distribution',
-//       type: 'bar',
-//       radius: '55%',
-//       center: ['50%', '60%'],
-//       data: [
-//         { value: 0, name: 'One Stars' },
-//         { value: 0, name: 'Two Stars' },
-//         { value: 0, name: 'Three Stars' },
-//         { value: 0, name: 'Four Stars' },
-//         { value: 0, name: 'Five Stars' },
-//       ],
-//       itemStyle: {
-//         emphasis: {
-//           shadowBlur: 10,
-//           shadowOffsetX: 0,
-//           shadowColor: 'rgba(0, 0, 0, 0.5)',
-//         },
-//       },
-//     },
-//   ],
-// };
+import { Typography, Box } from '@mui/material';
+import { pluralize } from '../../utils';
 
 let option = {
-  color: ['#b85042', '#cfb845', '#e1dd72', '#a8c66c', '#1b6535'],
+  color: ['#1E1F26', '#cfb845', '#e1dd72', '#a8c66c', '#1b6535'],
   title: {
-    text: 'Rating Distribution',
+    text: '',
     subtext: '',
   },
   tooltip: {
@@ -55,6 +17,7 @@ let option = {
   },
   legend: { bottom: 1 },
   grid: {
+    top: '3%',
     left: '4%',
     bottom: '15%',
   },
@@ -73,9 +36,9 @@ let option = {
       name: 'One Stars',
       type: 'bar',
       stack: 'total',
-      color: '#b85042',
+      color: '#F18C8E ',
       label: {
-        show: true,
+        show: false,
       },
       emphasis: {
         focus: 'series',
@@ -86,9 +49,9 @@ let option = {
       name: 'Two Star',
       type: 'bar',
       stack: 'total',
-      color: '#cfb845',
+      color: '#F0B7A4 ',
       label: {
-        show: true,
+        show: false,
       },
       emphasis: {
         focus: 'series',
@@ -99,9 +62,10 @@ let option = {
       name: 'Three Star',
       type: 'bar',
       stack: 'total',
-      color: '#e1dd72',
+      color: '#F1D1B5 ',
+
       label: {
-        show: true,
+        show: false,
       },
       emphasis: {
         focus: 'series',
@@ -112,9 +76,9 @@ let option = {
       name: 'Four Star',
       type: 'bar',
       stack: 'total',
-      color: '#a8c66c',
+      color: '#568EA6 ',
       label: {
-        show: true,
+        show: false,
       },
       emphasis: {
         focus: 'series',
@@ -125,9 +89,10 @@ let option = {
       name: 'Five Star',
       type: 'bar',
       stack: 'total',
-      color: '#1b6535',
+      color: '#305F72',
+
       label: {
-        show: true,
+        show: false,
       },
       emphasis: {
         focus: 'series',
@@ -146,7 +111,6 @@ function onChartClick(param, echarts) {
   //console.log(param, echarts);
 }
 function generateStarValues(reviews) {
-  option.title.subtext = 'Based on ' + reviews.length + ' reviews';
   let distribution = [0, 0, 0, 0, 0];
   for (let i = 0; i < reviews.length; i++) {
     distribution[reviews[i].rating - 1] += 1;
@@ -160,15 +124,23 @@ function generateStarValues(reviews) {
 }
 export default function StatsStackedBar({ reviews }) {
   generateStarValues(reviews, option);
+
+  // 'Based on ' + reviews.length + ' reviews'
   return (
-    <ReactECharts
-      option={option}
-      style={{ height: 200 }}
-      onChartReady={onChartReady}
-      onEvents={{
-        'click': onChartClick,
-        'legendselectchanged': onChartLegendselectchanged,
-      }}
-    />
+    <Box flex={1}>
+      <Typography variant='subtitle2'>Rating Distribution</Typography>
+      <Typography variant='body2' align='left' fontStyle='italic' sx={{ opacity: 0.75 }}>
+        {reviews.length ? `Based on ${pluralize(reviews.length, 'review')}` : 'No reviews'}
+      </Typography>
+      <ReactECharts
+        option={option}
+        style={{ height: 150 }}
+        onChartReady={onChartReady}
+        onEvents={{
+          'click': onChartClick,
+          'legendselectchanged': onChartLegendselectchanged,
+        }}
+      />
+    </Box>
   );
 }

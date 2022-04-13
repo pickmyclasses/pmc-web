@@ -1,37 +1,50 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
 import { isNumeric } from '../../utils';
 
-library.add(fas);
+export default function CreditButton({ optionSelected, setOptionSelected }) {
+  const [value, setValue] = useState(['', '']);
 
-export default function CreditButton() {
-  const [maxCredit, setMaxCredit] = useState('');
-  const [minCredit, setMinCredit] = useState('');
+  useEffect(() => {
+    if (optionSelected.length) setValue(optionSelected);
+  }, [optionSelected]);
 
   const handleMaxCredit = (event) => {
-    const newVal = event.target.value;
-    isNumeric(event.target.value) ? setMaxCredit(newVal) : setMaxCredit('');
+    let newVal = [];
+    isNumeric(event.target.value) ? (newVal[1] = event.target.value) : (newVal[1] = '');
+    newVal[0] = value[0];
+    setValue(newVal);
+    setOptionSelected(newVal);
   };
 
   const handleMinCredit = (event) => {
-    const newVal = event.target.value;
-    isNumeric(event.target.value) ? setMinCredit(newVal) : setMinCredit('');
+    let newVal = [];
+    isNumeric(event.target.value) ? (newVal[0] = event.target.value) : (newVal[0] = '');
+    newVal[1] = value[1];
+    setValue(newVal);
+    setOptionSelected(newVal);
   };
 
   return (
     <>
       <MenuItem sx={{ maxWidth: 100 }}>
         <FormControl sx={{ width: '100%' }}>
-          <OutlinedInput placeholder='min ' value={minCredit} onChange={handleMinCredit} />
+          <OutlinedInput
+            placeholder='min '
+            value={value[0]}
+            onChange={(event) => handleMinCredit(event)}
+          />
         </FormControl>
       </MenuItem>
       <MenuItem sx={{ maxWidth: 100 }}>
         <FormControl sx={{ width: '100%' }}>
-          <OutlinedInput placeholder='max' value={maxCredit} onChange={handleMaxCredit} />
+          <OutlinedInput
+            placeholder='max'
+            value={value[1]}
+            onChange={(event) => handleMaxCredit(event)}
+          />
         </FormControl>
       </MenuItem>
     </>
