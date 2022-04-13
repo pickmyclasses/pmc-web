@@ -1,20 +1,23 @@
 import React from 'react';
 import { Avatar, useChatContext } from 'stream-chat-react';
 
-const ChannelTeamPreview = ({ setActiveChannel, setIsCreating, setIsEditing, setToggleContainer, channel, type }) => {
+const ChannelTeamPreview = ({ setActiveChannel, setIsCreating, setIsEditing, setToggleContainer, channel, type }) => 
+{
+    // assigned channel to activeChannel
+    // client is the client side that we set up in the grand parent component using API SECRET
     const { channel: activeChannel, client } = useChatContext();
 
-    const ChannelPreview = () => (
+    // Name of the channels
+    const ChannelNames = () => (
         <p className="channel-preview__item">
             # {channel?.data?.name || channel?.data?.id}
         </p>
     );
 
 
-    const DirectPreview = () => {
+    // Name of the DM contacts
+    const DMContactNames = () => {
         const members = Object.values(channel.state.members).filter(({ user }) => user.id !== client.userID);
-    
-        console.log(members[0]);
 
         return (
             <div className="channel-preview__item single">
@@ -43,7 +46,7 @@ const ChannelTeamPreview = ({ setActiveChannel, setIsCreating, setIsEditing, set
             }
         }}
         >
-            {type === 'team' ? <ChannelPreview /> : <DirectPreview />}
+            {type === 'team' ? <ChannelNames /> : <DMContactNames />}
         </div>
     );
 }
