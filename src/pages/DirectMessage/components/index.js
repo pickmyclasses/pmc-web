@@ -7,4 +7,6 @@ export { default as Auth } from './Auth';
 export { default as InnerChannel } from './InnerChannel';
 export { default as ChannelCreate } from './ChannelCreate';
 export { default as ChannelEdit } from './ChannelEdit';
-export { default as MessageTeam } from './MessageTeam';
+export { default as Message } from './Message';
+export { default as ListUsers } from './ListUsers';
+export { default as DropdownResults } from './DropdownResults';
