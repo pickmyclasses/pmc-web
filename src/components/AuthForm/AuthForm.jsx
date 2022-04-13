@@ -37,24 +37,13 @@ export default function AuthForm() {
     const email = data.get('email');
     const password = data.get('password');
 
-    login({ email, password })
-      .then((data) => {
+    login(email, password, true)
+      .then((user) => {
         setErrorMessage('');
-        const userInfo = {
-          name: `${data.firstName} ${data.lastName}`,
-          token: data.token,
-          role: data.role,
-          userID: data.id,
-          collegeID: data.collegeID,
-          major: data.major,
-          emphasis: data.emphasis,
-          schoolYear: data.schoolYear,
-        };
-        setUser(userInfo);
-        localStorage.setItem('user', JSON.stringify(userInfo));
+        setUser(user);
 
         navigate(location?.state?.linkTo || '/', { replace: true });
-        enqueueSnackbar(`Welcome back, ${data.firstName}!`);
+        enqueueSnackbar(`Welcome back, ${user.firstName}!`);
       })
       .catch((err) => {
         setIsLoginLoading(false);

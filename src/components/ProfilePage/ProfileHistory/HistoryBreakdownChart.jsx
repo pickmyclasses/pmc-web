@@ -24,7 +24,7 @@ export default function HistoryBreakdownChart({
         (acc, { title, completedCourses, inProgressCourses, courseNeeded: total }, i) => {
           // Start out with no colors, then play transition
           const completed = isFirstRender ? 0 : Math.min(completedCourses.length, total);
-          const inProgress = Math.min(inProgressCourses.length, total);
+          const inProgress = Math.min(inProgressCourses.length, total - completed);
           const toGo = total - completed - inProgress;
           acc.push({ value: completed, title, completed, inProgress, toGo });
           acc.push({ value: inProgress, title, completed, inProgress, toGo });

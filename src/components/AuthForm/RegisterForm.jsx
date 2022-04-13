@@ -36,10 +36,8 @@ export default function RegisterForm() {
   const [isRegisterLoading, setIsRegisterLoading] = useState(false);
 
   useMount(() => {
-    if (user) {
-      navigate('/', { replace: true });
-    }
-    fetchCollegeList().then(setCollegeList);
+    if (user) navigate('/', { replace: true });
+    else fetchCollegeList().then(setCollegeList);
   });
 
   const handleSubmit = (event) => {
@@ -57,28 +55,14 @@ export default function RegisterForm() {
       enqueueSnackbar('Please fill out all fields', { variant: 'error' });
     } else {
       setIsRegisterLoading(true);
-      register({ email, firstName, lastName, college, password, rePassword })
-        .then(() => login({ email, password }))
-        .then((data) => {
-          const userInfo = {
-            name: `${data.firstName} ${data.lastName}`,
-            token: data.token,
-            role: data.role,
-            userID: data.id,
-            collegeID: data.collegeID,
-            major: data.major,
-            emphasis: data.emphasis,
-            schoolYear: data.schoolYear,
-          };
-          setUser(userInfo);
-          localStorage.setItem('user', JSON.stringify(userInfo));
-
-          requestAnimationFrame(() =>
-            navigateIfAllowed('/profile/roadmap/declare', null, {
-              replace: true,
-              state: { linkTo: '/', isNewUser: true },
-            })
-          );
+      register(email, firstName, lastName, college, password, rePassword)
+        .then(() => login(email, password, true))
+        .then((user) => {
+          setUser(user);
+          navigateIfAllowed('/profile/roadmap/declare', null, {
+            replace: true,
+            state: { linkTo: '/', isNewUser: true },
+          });
         })
         .catch((err) => {
           setIsRegisterLoading(false);

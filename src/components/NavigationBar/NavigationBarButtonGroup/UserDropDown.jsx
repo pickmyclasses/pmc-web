@@ -22,7 +22,6 @@ export default function UserDropDown() {
 
   const handleLogOutMenuItemClick = () => {
     setUser(null);
-    localStorage.clear();
     navigate('/');
   };
 

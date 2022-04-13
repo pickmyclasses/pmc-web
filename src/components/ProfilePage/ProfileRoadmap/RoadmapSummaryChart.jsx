@@ -3,7 +3,12 @@ import React from 'react';
 
 export default function RoadmapSummaryChart() {
   return (
-    <EChartsReact option={$option} style={{ height: '100%' }} opts={{ renderer: 'svg' }} />
+    <EChartsReact
+      option={$option}
+      style={{ height: '100%' }}
+      opts={{ renderer: 'svg' }}
+      onEvents={{ click: (...args) => console.log('*= summary e', args) }}
+    />
   );
 }
 

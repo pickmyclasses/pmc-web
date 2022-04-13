@@ -71,18 +71,20 @@ export default function CourseOverview() {
           <Typography variant='body1'>{course.description}</Typography>
           <Typography variant='subtitle2'>Reward</Typography>
           <Stack direction='row' spacing='24px' flexWrap='wrap'>
-            {course.degreeCatalogs?.length > 0 && (
-              <LabelWithIcon
-                color='primary'
-                iconType={School}
-                label={course.degreeCatalogs.map((x) => x.join(' — ')).join(', ')}
-              />
-            )}
             <LabelWithIcon
               color='info'
               iconType={WatchLater}
               label={formatCreditRange(course)}
             />
+            {course.degreeCatalogs?.length > 0 && (
+              <LabelWithIcon
+                color='primary'
+                iconType={School}
+                label={course.degreeCatalogs.map((x) => x.join(' — ')).join(', ')}
+                align='flex-start'
+                height='fit-content'
+              />
+            )}
           </Stack>
         </Stack>
         <Link component={PreventableLink} to={coursePageURL + '/stats'}>
