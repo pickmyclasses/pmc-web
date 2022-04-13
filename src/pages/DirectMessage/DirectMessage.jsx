@@ -3,7 +3,7 @@ import { StreamChat } from 'stream-chat';
 import { Chat } from 'stream-chat-react';
 import Cookies from 'universal-cookie';
 
-import { ContainerChannel, ContainerChannelList, Auth } from './components';
+import { ContainerChannel, ContainerChannelList, AdminAuthentication } from './components';
 import 'stream-chat-react/dist/css/index.css';
 import './DirectMessage.css';
 
@@ -34,7 +34,7 @@ const DirectMessage = () =>
     const [isCreating, setIsCreating] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
-    if(!authToken) return <Auth/>
+    if(!authToken) return <AdminAuthentication/>
 
     return (
         <div className='app_wrapper'>
