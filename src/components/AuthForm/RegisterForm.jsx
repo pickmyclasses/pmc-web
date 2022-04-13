@@ -61,11 +61,14 @@ export default function RegisterForm() {
         .then(() => login({ email, password }))
         .then((data) => {
           const userInfo = {
-            name: `${data.data.firstName} ${data.data.lastName}`,
-            token: data.data.token,
-            role: data.data.role,
-            userID: data.data.id,
-            collegeID: data.data.collegeID,
+            name: `${data.firstName} ${data.lastName}`,
+            token: data.token,
+            role: data.role,
+            userID: data.id,
+            collegeID: data.collegeID,
+            major: data.major,
+            emphasis: data.emphasis,
+            schoolYear: data.schoolYear,
           };
           setUser(userInfo);
           localStorage.setItem('user', JSON.stringify(userInfo));
@@ -82,7 +85,7 @@ export default function RegisterForm() {
           enqueueSnackbar('Sorry, something went wrong. Please try again later.', {
             variant: 'error',
           });
-          console.error('Registration failed:', JSON.stringify(err));
+          console.error('Registration failed:', err);
         });
     }
   };

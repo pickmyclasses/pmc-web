@@ -36,9 +36,8 @@ export default function ProfileHistory() {
     fetchHistoryCourses(user.userID).then((courses) => setHistoryCourses(courses.reverse()))
   );
 
-  const handleSearch = (query) => {
-    fetchCoursesBySearch({ keyword: query, pageSize: 6 }).then(setSearchResultCourses);
-  };
+  const handleSearch = (query) =>
+    fetchCoursesBySearch(query, user.userID).then(({ data }) => setSearchResultCourses(data));
 
   const handleAddHistoryCourse = (course, shouldUpdateViewOnly = false) => {
     setHistoryCourses([course, ...historyCourses.filter((x) => x.id !== course.id)]);

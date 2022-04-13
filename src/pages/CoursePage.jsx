@@ -48,7 +48,7 @@ export default function CoursePage() {
   const { user } = useContext(UserContext);
   const refreshCourseData = useCallback(
     (courseID) => {
-      fetchCourseByID(courseID).then(setCourse);
+      fetchCourseByID(courseID, user?.userID).then(setCourse);
       fetchReviewsByCourseID(courseID).then(setReviews);
       fetchReviewTagsByCourseID(courseID).then(setReviewTags);
       fetchProfessorByCourseID(courseID).then(setProfessors);
