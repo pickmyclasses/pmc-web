@@ -11,15 +11,17 @@ let option = {
   },
   tooltip: {
     trigger: 'axis',
+    marginTop: '5%',
     axisPointer: {
       type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
     },
   },
-  legend: { bottom: 1 },
+
+  legend: { orient: 'vertical', left: 0, top: 'center' },
   grid: {
-    top: '3%',
-    left: '4%',
-    bottom: '15%',
+    top: '10%',
+    left: '25%',
+    bottom: '0%',
   },
   xAxis: {
     type: 'value',
@@ -134,7 +136,7 @@ export default function StatsStackedBar({ reviews }) {
       </Typography>
       <ReactECharts
         option={option}
-        style={{ height: 150 }}
+        style={{ height: 150, width: 450 }}
         onChartReady={onChartReady}
         onEvents={{
           'click': onChartClick,

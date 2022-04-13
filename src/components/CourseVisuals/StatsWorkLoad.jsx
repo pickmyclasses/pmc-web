@@ -16,25 +16,27 @@ let optionExam = {
       type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
     },
   },
-  legend: { bottom: 1 },
+  legend: { show: false },
+
   grid: {
-    top: '20%',
-    left: '4%',
-    bottom: '15%',
+    top: '-33%',
+    left: '0%',
+    right: '4%',
+    bottom: '33%',
   },
-  yAxis: {
+  xAxis: {
     type: 'value',
     showGrid: false,
     show: false,
   },
-  xAxis: {
+  yAxis: {
     show: false,
     type: 'category',
     data: [''],
   },
   series: [
     {
-      barWidth: '50%',
+      barWidth: '100%',
       name: 'Yes',
       type: 'bar',
       stack: 'total',
@@ -76,25 +78,26 @@ let optionHomework = {
       type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
     },
   },
-  legend: { bottom: 1 },
+  legend: { show: false },
   grid: {
-    top: '20%',
-    left: '4%',
-    bottom: '15%',
+    top: '-33%',
+    left: '0%',
+    right: '4%',
+    bottom: '33%',
   },
-  yAxis: {
+  xAxis: {
     type: 'value',
     showGrid: false,
     show: false,
   },
-  xAxis: {
+  yAxis: {
     show: false,
     type: 'category',
     data: [''],
   },
   series: [
     {
-      barWidth: '50%',
+      barWidth: '100%',
       name: 'Yes',
       type: 'bar',
       stack: 'total',
@@ -135,25 +138,26 @@ let optionRecommend = {
       type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
     },
   },
-  legend: { bottom: 1 },
+  legend: { show: false },
   grid: {
-    top: '20%',
-    left: '4%',
-    bottom: '15%',
+    top: '-33%',
+    left: '0%',
+    right: '4%',
+    bottom: '33%',
   },
-  yAxis: {
+  xAxis: {
     type: 'value',
     showGrid: false,
     show: false,
   },
-  xAxis: {
+  yAxis: {
     show: false,
     type: 'category',
     data: [''],
   },
   series: [
     {
-      barWidth: '50%',
+      barWidth: '100%',
       name: 'Yes',
       type: 'bar',
       stack: 'total',
@@ -238,36 +242,24 @@ export default function StatsWorkLoad({ reviews }) {
   generateRecommendation(reviews);
 
   return (
-    <Stack direction='row' spacing={1}>
+    <Stack direction='column' spacing={1}>
       <Box flex={1}>
-        <Typography
-          variant='subtitle2'
-          align='center'
-          sx={{ marginLeft: '-28px', marginBottom: '-25px' }}
-        >
+        <Typography variant='subtitle2' align='left' sx={{}}>
           Exam Heavy
         </Typography>
-        <ReactECharts option={optionExam} style={{ height: 200, width: 200 }} />
+        <ReactECharts option={optionExam} style={{ height: '33%', width: '100%' }} />
       </Box>
       <Box flex={1}>
-        <Typography
-          variant='subtitle2'
-          align='center'
-          sx={{ marginLeft: '-28px', marginBottom: '-25px' }}
-        >
+        <Typography variant='subtitle2' align='left' sx={{}}>
           Homework Heavy
         </Typography>
-        <ReactECharts option={optionHomework} style={{ height: 200, width: 200 }} />
+        <ReactECharts option={optionHomework} style={{ height: '33%', width: '100%' }} />
       </Box>
       <Box flex={1}>
-        <Typography
-          variant='subtitle2'
-          align='center'
-          sx={{ marginLeft: '-28px', marginBottom: '-25px' }}
-        >
+        <Typography variant='subtitle2' align='left' sx={{}}>
           Recommendation
         </Typography>
-        <ReactECharts option={optionRecommend} style={{ height: 200, width: 200 }} />
+        <ReactECharts option={optionRecommend} style={{ height: '33%', width: '100%' }} />
       </Box>
     </Stack>
   );

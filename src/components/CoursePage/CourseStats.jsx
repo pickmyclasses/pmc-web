@@ -312,24 +312,25 @@ export default function CourseStats() {
           <div>
             {' '}
             <Grid container spacing='32px' marginBottom='16px'>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 {reviews.length === 0 ? renderPlaceHolder() : renderRatingSummery()}
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={4}>
                 {reviews.length === 0 ? renderPlaceHolder() : renderProfessorSummery()}
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={4}>
                 {reviews.length === 0 ? renderPlaceHolder() : renderInfoSummery()}
               </Grid>
             </Grid>
             <Grid container spacing='32px' marginBottom='16px'>
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 {renderWorkLoadSummry()}
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={4}>
                 {renderClassSizeSummary()}
               </Grid>
-              <Grid item xs={3}>
+
+              <Grid item xs={4}>
                 {renderPopularitySummary()}
               </Grid>
             </Grid>
