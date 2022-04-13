@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
 import { MessageList, MessageInput, Thread, Window, useChannelActionContext, Avatar, useChannelStateContext, useChatContext } from 'stream-chat-react';
 
+
+// Context provides a way to pass data through the component tree without having to pass props down manually at every level.
 export const GiphyContext = React.createContext({});
 
-const InnerChannel = ({ setIsEditing }) => {
+const ChannelCore = ({ setIsEditing }) => 
+{
+  // boolean used to send GIF
   const [giphyState, setGiphyState] = useState(false);
+
+  // sendMessage is a function object in useChannelActionContext
   const { sendMessage } = useChannelActionContext();
   
-  const overrideSubmitHandler = (message) => {
-    let updatedMessage = {
+  const overrideSubmitHandler = (message) => 
+  {
+    // the object that represent the message to be sent
+    let updatedMessage = 
+    {
       attachments: message.attachments,
       mentioned_users: message.mentioned_users,
       parent_id: message.parent?.id,
@@ -16,16 +25,25 @@ const InnerChannel = ({ setIsEditing }) => {
       text: message.text,
     };
     
-    if (giphyState) {
+    // if the user sends giphy
+    if (giphyState) 
+    {
+      // spread the updateMessage with the value at property text : `/giphy ${message.text}
       updatedMessage = { ...updatedMessage, text: `/giphy ${message.text}` };
     }
     
-    if (sendMessage) {
+    // When sending the message, switch the Giphy state back to false
+    if (sendMessage) 
+    {
       sendMessage(updatedMessage);
+
       setGiphyState(false);
     }
   };
 
+  // The MessageList component renders a scrollable list of messages. The UI for each individual message is rendered conditionally based on its message.type valu
+  // The Window component handles width changes in the main channel to ensure a seamless user experience when opening and closing a Thread component.
+  // The Thread component renders a list of replies tied to a single parent message in a channel's main message list.
   return (
     <GiphyContext.Provider value={{ giphyState, setGiphyState }}>
       <div style={{ display: 'flex', width: '100%' }}>
@@ -40,30 +58,35 @@ const InnerChannel = ({ setIsEditing }) => {
   );
 };
 
+// This is the team channel header
 const TeamChannelHeader = ({ setIsEditing }) => {
     const { channel, watcher_count } = useChannelStateContext();
     const { client } = useChatContext();
   
-    const MessagingHeader = () => {
+    const MessagingHeader = () => 
+    {
+      // members are the members of a channel or the direct message receiver
       const members = Object.values(channel.state.members).filter(({ user }) => user.id !== client.userID);
-      const additionalMembers = members.length - 3;
-  
+
+      // if the channel is direct message
       if(channel.type === 'messaging') 
       {
         return (
           <div className='team-channel-header__name-wrapper'>
             {members.map(({ user }, i) => (
               <div key={i} className='team-channel-header__name-multi'>
+                {/* This is the avater + name which display as the avater of the members in the dirrect message */}
                 <Avatar image={user.image} name={user.fullName || user.id} size={32} />
+
+                {/* This is the name displayed on the white bar to the left of "X user(s) online" */}
                 <p className='team-channel-header__name user'>{user.fullName || user.id}</p>
               </div>
             ))}
-  
-            {additionalMembers > 0 && <p className='team-channel-header__name user'>and {additionalMembers} more</p>}
           </div>
         );
       }
   
+      // The edit button area
       return (
         <div className='team-channel-header__channel-wrapper'>
           <p className='team-channel-header__name'># {channel.data.name}</p>
@@ -74,20 +97,21 @@ const TeamChannelHeader = ({ setIsEditing }) => {
       );
     };
   
-    const getWatcherText = (watchers) => {
-      if (!watchers) return 'No users online';
-      if (watchers === 1) return '1 user online';
-      return `${watchers} users online`;
+    // Get number of users online
+    const getNumberOfUsersOnline = (num) => {
+      if (!num) return 'No users online';
+      if (num === 1) return '1 user online';
+      return `${num} users online`;
     };
   
     return (
       <div className='team-channel-header__container'>
         <MessagingHeader />
         <div className='team-channel-header__right'>
-          <p className='team-channel-header__right-text'>{getWatcherText(watcher_count)}</p>
+          <p className='team-channel-header__right-text'>{getNumberOfUsersOnline(watcher_count)}</p>
         </div>
       </div>
     );
   };
 
-  export default InnerChannel;
+  export default ChannelCore;
