@@ -1,8 +1,8 @@
 import axios from 'axios';
 import Color from 'color';
-import { formatCourseName } from 'utils';
+import { capitalizeFirst, formatCourseName } from 'utils';
 
-export const login = (body) => axios.post('/login', body).then((response) => response.data);
+export const login = (body) => axios.post('/login', body).then(({ data }) => data.data);
 
 export const register = (body) =>
   axios.post('/register', body).then((response) => response.data);
@@ -20,9 +20,9 @@ export const declareMajor = (userID, majorName, emphasisName, schoolYear) =>
  * Fetches the course but also injects the fake image URL. Basically pretends `ImageURL` was an
  * actual field of the course.
  */
-export const fetchCourseByID = (courseID, userID = undefined) =>
+export const fetchCourseByID = (courseID, userID = NaN) =>
   new Promise((onFetched) =>
-    axios.get(`/course/${courseID}`).then((data) => {
+    axios.get(`/course/${courseID}${isNaN(userID) ? '' : '?userID=' + userID}`).then((data) => {
       const course = data.data.data;
       injectFakePropertiesToCourse(course);
       onFetched(course);
@@ -42,19 +42,15 @@ export const getColorByCourse = (course) =>
 
 const injectFakePropertiesToCourse = (course) => {
   course.ImageURL = getFakeCourseImageURL(course);
-  // prettier-ignore
-  course.requirementID = (2<<24)+(['CS1030','MATH1210','CS1410','MATH1220','CS2420','CS2100','CS3500','CS3505','CS3810','CS4150','CS4400'].includes(course.catalogCourseName)? 0:formatCourseName(course.catalogCourseName).split(' ')[0]==='CS'?1:course.catalogCourseName.includes('MATH')?2:3);
   // Hide courses that don't have a start time (corrupted data from backend?)
   course.classes = course.classes.filter((x) => !x.offerDate || x.startTime);
   injectLocationMapURLToClasses(course.classes);
 };
 
-export const fetchAllCourses = () => axios.get('/course/list');
-
-export const fetchHomePageCourses = () => fakeFetchHomePageCourses();
+export const fetchHomePageCourses = (userID = NaN) => fakeFetchHomePageCourses();
 
 // TODO (QC): Get rid of this, although it might be hard to.
-const fakeFetchHomePageCourses = () => {
+const fakeFetchHomePageCourses = (userID) => {
   const recommendedCategories = {
     // 'Major Requirements To Go': [22963],
     // 'Major Requirements To Go': [22948, 22949, 22963],
@@ -67,7 +63,7 @@ const fakeFetchHomePageCourses = () => {
 
   return Promise.all(
     Object.entries(recommendedCategories).map(([category, courseIDs]) =>
-      Promise.all(courseIDs.map((id) => fetchCourseByID(id))).then((courses) => ({
+      Promise.all(courseIDs.map((id) => fetchCourseByID(id, userID))).then((courses) => ({
         category,
         courses,
       }))
@@ -75,8 +71,8 @@ const fakeFetchHomePageCourses = () => {
   );
 };
 
-export const fetchCoursesBySearch = (body) =>
-  axios.post('/course/search', body).then(({ data }) => {
+export const fetchCoursesBySearch = (query, userID = NaN) =>
+  axios.post('/course/search', { keyword: query, pageSize: 12, userID }).then(({ data }) => {
     for (let course of data.data) injectFakePropertiesToCourse(course);
     return data;
   });
@@ -129,44 +125,10 @@ export const addOrUpdateCustomEvent = (userID, customEvent) =>
 export const removeCustomEventByID = (eventID) =>
   axios.put('/schedule?type=custom-event', { id: eventID });
 
-const generateFakeRequirements = () => [
-  {
-    id: (2 << 24) + 0,
-    title: 'Major Requirements',
-    completedCourses: [],
-    inProgressCourses: [],
-    numRequiredCourses: 11,
-  },
-  {
-    id: (2 << 24) + 1,
-    title: 'Major Electives',
-    completedCourses: [],
-    inProgressCourses: [],
-    numRequiredCourses: 7,
-  },
-  {
-    id: (2 << 24) + 2,
-    title: 'Math/Science Electives',
-    completedCourses: [],
-    inProgressCourses: [],
-    numRequiredCourses: 5,
-  },
-  {
-    id: (2 << 24) + 3,
-    title: 'General Education',
-    completedCourses: [],
-    inProgressCourses: [],
-    numRequiredCourses: 13,
-  },
-];
-
-// TODO Q: Search the word "fake" in source code and get rid of all of them.
-export const fetchRequirements = async (userID) => {
-  let requirements = generateFakeRequirements();
-  const [{ scheduledClasses }, historyCourses] = await Promise.all([
-    fetchScheduledClassesAndCustomEvents(userID),
-    fetchHistoryCourses(userID),
-  ]);
+export const fetchRequirements = async (user) => {
+  const { scheduledClasses } = await fetchScheduledClassesAndCustomEvents(user.userID);
+  const historyCourses = await fetchHistoryCourses(user.userID);
+  const requirements = await fetchRequirementsByMajor(user.major, user.emphasis);
   return getRequirementsFromScheduleAndHistory(
     requirements,
     scheduledClasses.map((x) => x.course),
@@ -174,25 +136,46 @@ export const fetchRequirements = async (userID) => {
   );
 };
 
+const fetchRequirementsByMajor = (majorName, emphasisName) =>
+  axios
+    .get(`college/2/major/course/requirements?major=${majorName}&emphasis=${emphasisName}`)
+    .then(({ data }) => data.data);
+
 /** Argument `requirements` is modified in-place. */
 export const getRequirementsFromScheduleAndHistory = (
   requirements,
   scheduledCourses,
   historyCourses
 ) => {
+  for (let requirement of requirements) {
+    requirement.title = requirement.setName
+      .replace(/courses/gi, '')
+      .trim()
+      .split(/\s+/)
+      .map(capitalizeFirst)
+      .join(' ');
+
+    requirement.completedCourses = [];
+    requirement.inProgressCourses = [];
+  }
   for (let course of scheduledCourses) {
-    const target = requirements.find((x) => x.id === course.requirementID);
-    if (target && !target.inProgressCourses.find((x) => x.id === course.id))
-      target.inProgressCourses.push(course);
+    const targets = requirements.filter((x) =>
+      (course.degreeCatalogs || []).map((y) => y[0]).includes(x)
+    );
+    for (let target of targets)
+      if (!target.inProgressCourses.find((x) => x.id === course.id))
+        target.inProgressCourses.push(course);
   }
   for (let course of historyCourses) {
-    const target = requirements.find((x) => x.id === course.requirementID);
-    if (
-      target &&
-      !target.completedCourses.find((x) => x.id === course.id) &&
-      !target.inProgressCourses.find((x) => x.id === course.id)
-    )
-      target.completedCourses.push(course);
+    const targets = requirements.filter((x) =>
+      (course.degreeCatalogs || []).map((y) => y[0]).includes(x)
+    );
+    for (let target of targets)
+      if (
+        !target.completedCourses.find((x) => x.id === course.id) &&
+        !target.inProgressCourses.find((x) => x.id === course.id)
+      )
+        target.completedCourses.push(course);
   }
 
   return requirements;

@@ -15,7 +15,7 @@ export default function RequirementList({ requirements = [] }) {
     <Stack spacing='12px'>
       <Divider />
       <ClickableIndicator onClick={() => navigateIfAllowed('/profile/roadmap')}>
-        <Typography variant='subtitle2'>Degree Progress</Typography>
+        <Typography variant='subtitle2'>Requirements</Typography>
       </ClickableIndicator>
       <HistoryBreakdownChart
         historyBreakdown={requirements}

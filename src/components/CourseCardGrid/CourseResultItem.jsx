@@ -48,7 +48,9 @@ export default function CourseResultItem({ course }) {
           sx={{ '*': { minWidth: 0, textOverflow: 'ellipsis', overflow: 'hidden' } }}
         >
           <Typography variant='body2' color={theme.palette.text.secondary}>
-            CS major requirement &nbsp;&nbsp;•&nbsp;&nbsp;
+            {course.degreeCatalogs?.length > 0 && (
+              <>{course.degreeCatalogs[0][0]}&nbsp;•&nbsp;&nbsp;</>
+            )}
             {formatCreditRange(course)}&nbsp;&nbsp;•&nbsp;&nbsp;
           </Typography>
           <LabeledRatingDisplay value={course.overallRating} />

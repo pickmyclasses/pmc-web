@@ -14,14 +14,14 @@ export default function HistoryBreakdownChart({
 
   useEffect(() => {
     const totalCourses = historyBreakdown.reduce(
-      (acc, { numRequiredCourses }) => acc + numRequiredCourses,
+      (acc, { courseNeeded }) => acc + courseNeeded,
       0
     );
     const gapValue = totalCourses * (8 / 576);
 
     setChartData(
       historyBreakdown.reduce(
-        (acc, { title, completedCourses, inProgressCourses, numRequiredCourses: total }, i) => {
+        (acc, { title, completedCourses, inProgressCourses, courseNeeded: total }, i) => {
           // Start out with no colors, then play transition
           const completed = isFirstRender ? 0 : Math.min(completedCourses.length, total);
           const inProgress = Math.min(inProgressCourses.length, total);
@@ -140,7 +140,7 @@ const formatTooltipText = (title, completed, inProgress, toGo) =>
     .filter(Boolean)
     .join('');
 
-const getShortenedCategoryTitle = (fullName) => {
+export const getShortenedCategoryTitle = (fullName) => {
   if (!fullName?.trim()) return '';
   if (fullName.toLowerCase().includes('math')) return 'Math';
   if (fullName.toLowerCase().includes('elective')) return 'Electives';

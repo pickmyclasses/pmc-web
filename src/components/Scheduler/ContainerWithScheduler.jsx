@@ -20,7 +20,7 @@ export default function ContainerWithScheduler({ children }) {
       if (user) {
         Promise.all([
           fetchScheduledClassesAndCustomEvents(user.userID),
-          fetchRequirements(user.userID),
+          fetchRequirements(user),
         ]).then(([{ scheduledClasses, customEvents }, requirements]) => {
           setClassesInShoppingCart(scheduledClasses);
           setCustomEvents(customEvents);
