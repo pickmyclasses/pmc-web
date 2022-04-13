@@ -1,5 +1,6 @@
 import React from 'react';
 
+// + button to add Channel
 const AddChannel = ({setCreateType, setIsCreating, setIsEditing, setToggleContainer, type}) => {
     return(
         <button
@@ -15,6 +16,7 @@ const AddChannel = ({setCreateType, setIsCreating, setIsEditing, setToggleContai
 
 }
 
+// if error = true, means the parent component failed to get the list of channel
 const ChannelTeamList = ({ setToggleContainer, children, error = false, loading, type, isCreating, setIsCreating, setCreateType, setIsEditing }) => {
     if(error) {
         return type === 'team' ? (
@@ -26,6 +28,7 @@ const ChannelTeamList = ({ setToggleContainer, children, error = false, loading,
         ) : null
     }
 
+    // if loading = true, means the parent component is still loading the list of channel
     if(loading) {
         return (
             <div className="team-channel-list">
@@ -36,9 +39,16 @@ const ChannelTeamList = ({ setToggleContainer, children, error = false, loading,
         )
     }
 
+    // children are the members inside the Channels and Direct Message list
+    // else{
+    //     console.log(children);
+    // }
+
+
     return (
         <div className="team-channel-list">
             <div className="team-channel-list__header">
+                {/* if type === 'team', the label will be 'Channels', otherwise 'Direct Message' */}
                 <p className="team-channel-list__header__title">
                     {type === 'team' ? 'Channels' : 'Direct Messages'}
                 </p>
