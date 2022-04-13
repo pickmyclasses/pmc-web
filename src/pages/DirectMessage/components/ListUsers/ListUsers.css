@@ -1,0 +1,59 @@
+  
+  .panel-user-list {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .panel-user-list-header {
+    display: flex;
+    align-items: center;
+    margin: 0px 20px;
+    justify-content: space-between;
+  }
+  
+  .panel-user-list-header p {
+    font-family: Helvetica Neue, sans-serif;
+    font-size: 14px;
+    line-height: 17px;
+    color: #858688;
+    margin-top: 16px;
+  }
+  
+  .status-message-user-list {
+    font-family: Helvetica Neue, sans-serif;
+    font-size: 16px;
+    color: #2c2c30;
+    margin: 20px;
+  }
+  
+  .panel-user-selection {
+    display: flex;
+    align-items: center;
+    margin: 0px 20px;
+    justify-content: space-between;
+  }
+  
+  .panel-user-selection:hover {
+    background: #f7f6f8;
+    cursor: pointer;
+  }
+  
+  .panel-user-name-and-avatar {
+    display: flex;
+    align-items: center;
+    flex: 2;
+    text-align: left;
+  }
+  
+  .panel-user-name-and-avatar p {
+    font-family: Helvetica Neue, sans-serif;
+    font-size: 14px;
+    line-height: 17px;
+    color: #2c2c30;
+    word-break: break-all;
+  }
+  
+  .panel-user-name {
+    font-weight: 500;
+  }

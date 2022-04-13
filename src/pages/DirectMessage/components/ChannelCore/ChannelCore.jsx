@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MessageList, MessageInput, Thread, Window, useChannelActionContext, Avatar, useChannelStateContext, useChatContext } from 'stream-chat-react';
-
+import './ChannelCore.css';
 
 // Context provides a way to pass data through the component tree without having to pass props down manually at every level.
 export const GiphyContext = React.createContext({});
@@ -72,14 +72,14 @@ const TeamChannelHeader = ({ setIsEditing }) => {
       if(channel.type === 'messaging') 
       {
         return (
-          <div className='team-channel-header__name-wrapper'>
+          <div className='channel-core-header'>
             {members.map(({ user }, i) => (
-              <div key={i} className='team-channel-header__name-multi'>
-                {/* This is the avater + name which display as the avater of the members in the dirrect message */}
+              <div key={i} className='channel-core-header-avatar'>
+                {/* This is the avatar in the white area*/}
                 <Avatar image={user.image} name={user.fullName || user.id} size={32} />
 
                 {/* This is the name displayed on the white bar to the left of "X user(s) online" */}
-                <p className='team-channel-header__name user'>{user.fullName || user.id}</p>
+                <p className='channel-core-header-avatar user'>{user.fullName || user.id}</p>
               </div>
             ))}
           </div>
@@ -88,8 +88,8 @@ const TeamChannelHeader = ({ setIsEditing }) => {
   
       // The edit button area
       return (
-        <div className='team-channel-header__channel-wrapper'>
-          <p className='team-channel-header__name'># {channel.data.name}</p>
+        <div className='channel-core-edit-area'>
+          <p className='channel-core-edit-area-text'># {channel.data.name}</p>
           <span style={{ display: 'flex' }} onClick={() => setIsEditing(true)}>
             <button>Edit</button>
           </span>
@@ -105,10 +105,10 @@ const TeamChannelHeader = ({ setIsEditing }) => {
     };
   
     return (
-      <div className='team-channel-header__container'>
+      <div className='channel-core'>
         <MessagingHeader />
-        <div className='team-channel-header__right'>
-          <p className='team-channel-header__right-text'>{getNumberOfUsersOnline(watcher_count)}</p>
+        <div className='channel-core-user-counter-div'>
+          <p className='channel-core-user-counter-text'>{getNumberOfUsersOnline(watcher_count)}</p>
         </div>
       </div>
     );

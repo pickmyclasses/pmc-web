@@ -1,28 +1,29 @@
 import React from 'react';
 import { ChannelList, useChatContext } from 'stream-chat-react';
 import Cookies from 'universal-cookie';
-import { ChannelTeamList, ChannelTeamPreview } from './';
-import HospitalIcon from '../img/hospital.png'
-import LogoutIcon from '../img/logout.png'
+import { ChannelTeamList, ChannelTeamPreview } from '..';
+import HospitalIcon from '../../img/hospital.png';
+import LogoutIcon from '../../img/logout.png';
+
+import './ContainerChannelList.css';
 
 const cookies = new Cookies();
 
 // The sidebar that contains icons, will add link to admin's data table
 const SideBar = ({ logout }) => (
-    <div className="channel-list__sidebar">
-        <div className="channel-list__sidebar__icon1">
-            <div className="icon1__inner">
+    <div className="channel-list-sidebar">
+        <div className="channel-list-sidebar-icon1">
+            <div className="icon">
                 <img src={HospitalIcon} alt="Hospital" width="30" />
             </div>
         </div>
-        <div className="channel-list__sidebar__icon2">
-            <div className="icon1__inner" onClick={logout}>
+        <div className="channel-list-sidebar-icon2">
+            <div className="icon" onClick={logout}>
                 <img src={LogoutIcon} alt="Logout" width="30" />
             </div>
         </div>
     </div>
 );
-
 
 const customChannelTeamFilter = (channels) => {
     return channels.filter((channel) => channel.type === 'team');
@@ -61,11 +62,11 @@ const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEdi
             {/*SideBar with a log out function */}
             <SideBar logout={logout} />
 
-            <div className="channel-list__list__wrapper">
+            <div className="channel-list-wrapper">
 
                 {/* The title of the bar */}
-                <div className="channel-list__header">
-                    <p className="channel-list__header__text">Administrators</p>
+                <div className="channel-list-header">
+                    <p className="channel-list-header-text">Administrators</p>
                 </div>
                 
                 {/* This list is the Channels list. ChannelList is a built-in component of stream-chat-react*/}
@@ -128,7 +129,7 @@ const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEdi
 const ContainerChannelList = ({ setCreateType, setIsCreating, setIsEditing }) => {
     return (
         <>
-            <div className="channel-list__container">
+            <div className="channel-list-container">
               <ChannelListContent 
                 setIsCreating={setIsCreating} 
                 setCreateType={setCreateType} 

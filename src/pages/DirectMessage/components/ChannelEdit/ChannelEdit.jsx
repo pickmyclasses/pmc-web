@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useChatContext } from 'stream-chat-react';
-
-import { ListUsers } from './';
+import { ListUsers } from '..';
+import './ChannelEdit.css';
 
 const ChannelNameInput = ({ channelName = '', setChannelName }) => {
     const handleChange = (event) => {
@@ -11,7 +11,7 @@ const ChannelNameInput = ({ channelName = '', setChannelName }) => {
     }
 
     return (
-        <div className="channel-name-input__wrapper">
+        <div className="channel-edit-add">
             <p>Name</p>
             <input value={channelName} onChange={handleChange} placeholder="channel-name" />
             <p>Add Members</p>
@@ -43,8 +43,8 @@ const ChannelEdit = ({ setIsEditing }) => {
     }
 
     return (
-        <div className="edit-channel__container">
-            <div className="edit-channel__header">
+        <div className="panel-edit-channel">
+            <div className="panel-edit-channel-header">
                 <p>Edit Channel</p>
                 <button onClick={() => { setIsEditing(false); }}>
                     Close
@@ -52,7 +52,7 @@ const ChannelEdit = ({ setIsEditing }) => {
             </div>
             <ChannelNameInput channelName={channelName} setChannelName={setChannelName} />
             <ListUsers setSelectedUsers={setSelectedUsers} />
-            <div className="edit-channel__button-wrapper" onClick={updateChannel}>
+            <div className="panel-edit-channel-button" onClick={updateChannel}>
                 <p>Save Changes</p>
             </div>
         </div>

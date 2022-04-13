@@ -3,10 +3,13 @@ import { Avatar, useChatContext } from 'stream-chat-react';
 
 // Inviting the users
 // Where 'children' are the users
+
+import './ListUsers.css';
+
 const ListContainer = ({ children }) => {
     return (
-        <div className="user-list__container">
-            <div className="user-list__header">
+        <div className="panel-user-list">
+            <div className="panel-user-list-header">
                 <p>User</p>
                 <p>Invite</p>
             </div>
@@ -32,11 +35,11 @@ const UserItem = ({ user, setSelectedUsers }) => {
     }
 
     return (
-        <div className="user-item__wrapper" onClick={handleSelect}>
-            <div className="user-item__name-wrapper">
+        <div className="panel-user-selection" onClick={handleSelect}>
+            <div className="panel-user-name-and-avatar">
                 {/* name is used to hover to the avatar */}
                 <Avatar image={user.image} name={user.fullName || user.id} size={32} />
-                <p className="user-item__name">{user.fullName || user.id}</p>
+                <p className="panel-user-name">{user.fullName || user.id}</p>
             </div>
             {selected ? "X" : "O"}
         </div>
@@ -81,7 +84,7 @@ const ListUsers = ({ setSelectedUsers }) => {
     if(error) {
         return (
             <ListContainer>
-                <div className="user-list__message">
+                <div className="status-message-user-list">
                     Error loading, please refresh and try again.
                 </div>
             </ListContainer>
@@ -91,7 +94,7 @@ const ListUsers = ({ setSelectedUsers }) => {
     if(listEmpty) {
         return (
             <ListContainer>
-                <div className="user-list__message">
+                <div className="status-message-user-list">
                     No users found.
                 </div>
             </ListContainer>
@@ -100,7 +103,7 @@ const ListUsers = ({ setSelectedUsers }) => {
 
     return (
         <ListContainer>
-            {loading ? <div className="user-list__message">
+            {loading ? <div className="status-message-user-list">
                 Loading users...
             </div> : (
                 users?.map((user, i) => (
