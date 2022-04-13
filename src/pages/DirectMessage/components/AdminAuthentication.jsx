@@ -15,7 +15,7 @@ const initialState = {
 
 const AdminAuthentication = () => {
     const [form, setForm] = useState(initialState);
-    const [isSignup, setIsSignup] = useState(false);
+    const isSignup = false;
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
