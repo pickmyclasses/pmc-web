@@ -125,7 +125,7 @@ export default function StatsDetailedCard({ courseTrend }) {
   populateDataset(courseTrend);
   return (
     <Box>
-      <Typography variant='subtitle2'>Average Ratings / Professors</Typography>
+      <Typography variant='subtitle2'>Average Ratings / Semesters</Typography>
       <ReactECharts option={option} style={{ height: 200 }} onEvents={{}} />
     </Box>
   );
