@@ -160,7 +160,7 @@ export const getRequirementsFromScheduleAndHistory = (
   }
   for (let course of scheduledCourses) {
     const targets = requirements.filter((x) =>
-      (course.degreeCatalogs || []).map((y) => y[0]).includes(x)
+      (course.degreeCatalogs || []).map((y) => y[0]).includes(x.setName)
     );
     for (let target of targets)
       if (!target.inProgressCourses.find((x) => x.id === course.id))
@@ -168,7 +168,7 @@ export const getRequirementsFromScheduleAndHistory = (
   }
   for (let course of historyCourses) {
     const targets = requirements.filter((x) =>
-      (course.degreeCatalogs || []).map((y) => y[0]).includes(x)
+      (course.degreeCatalogs || []).map((y) => y[0]).includes(x.setName)
     );
     for (let target of targets)
       if (
