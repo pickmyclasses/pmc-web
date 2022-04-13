@@ -39,11 +39,11 @@ export default function CourseStats() {
         <Box flex={1}>
           <StatsWorkLoad reviews={reviews} />
         </Box>
-        <Link>
+        {/* <Link>
           <ClickableIndicator propagate>
             <Typography variant='subtitle2'>See Details</Typography>
           </ClickableIndicator>
-        </Link>
+        </Link> */}
       </Stack>
     </MotionCard>
   );
@@ -65,11 +65,11 @@ export default function CourseStats() {
 
           <StatsProfessorSum professorRanking={professorRanking} />
         </Box>
-        <Link>
+        {/* <Link>
           <ClickableIndicator propagate>
             <Typography variant='subtitle2'>See Details</Typography>
           </ClickableIndicator>
-        </Link>
+        </Link> */}
       </Stack>
     </MotionCard>
   );
@@ -115,11 +115,11 @@ export default function CourseStats() {
           <Typography variant='subtitle2'>Class Size</Typography>
           <StatsClassSize reviews={reviews} />
         </Box>
-        <Link>
+        {/* <Link>
           <ClickableIndicator propagate>
             <Typography variant='subtitle2'>See Details</Typography>
           </ClickableIndicator>
-        </Link>
+        </Link> */}
       </Stack>
     </MotionCard>
   );
@@ -138,14 +138,14 @@ export default function CourseStats() {
     >
       <Stack padding='24px' height='calc(100% - 48px)'>
         <Box flex={1}>
-          <Typography variant='subtitle2'>Average Grades </Typography>
+          <Typography variant='subtitle2'>Average Grades / Major Averages </Typography>
           <StatsInfoDump courseLoad={courseLoad} />
         </Box>
-        <Link>
+        {/* <Link>
           <ClickableIndicator propagate>
             <Typography variant='subtitle2'>See Details</Typography>
           </ClickableIndicator>
-        </Link>
+        </Link> */}
       </Stack>
     </MotionCard>
   );
@@ -167,11 +167,11 @@ export default function CourseStats() {
           <Typography variant='subtitle2'>Course Popularity </Typography>
           <StatsPopularity reviews={reviews} />
         </Box>
-        <Link>
+        {/* <Link>
           <ClickableIndicator propagate>
             <Typography variant='subtitle2'>See Details</Typography>
           </ClickableIndicator>
-        </Link>
+        </Link> */}
       </Stack>
     </MotionCard>
   );
@@ -220,11 +220,11 @@ export default function CourseStats() {
         <Box flex={1}>
           <StatsStackedBar reviews={reviews} />
         </Box>
-        <Link>
+        {/* <Link>
           <ClickableIndicator propagate>
             <Typography variant='subtitle2'>See Details</Typography>
           </ClickableIndicator>
-        </Link>
+        </Link> */}
       </Stack>
     </MotionCard>
   );
@@ -243,10 +243,9 @@ export default function CourseStats() {
     >
       <Stack height='calc(100% - 48px)' padding='24px'>
         <Box flex={1}>
-          <Button variant='text' onClick={() => setCondition('default')}>
+          {/* <Button variant='text' onClick={() => setCondition('default')}>
             Return
-          </Button>
-
+          </Button> */}
           <StatsDetailedCard courseTrend={courseTrend} />
         </Box>
       </Stack>
@@ -267,9 +266,9 @@ export default function CourseStats() {
     >
       <Stack height='calc(100% - 48px)' padding='24px'>
         <Box flex={1}>
-          <Button variant='text' onClick={() => setCondition('default')}>
+          {/* <Button variant='text' onClick={() => setCondition('default')}>
             Return
-          </Button>
+          </Button> */}
 
           <StatsDetailedProfessor reviews={reviews} professorRanking={professorRanking} />
         </Box>
@@ -291,9 +290,9 @@ export default function CourseStats() {
     >
       <Stack height='calc(100% - 48px)' padding='24px'>
         <Box flex={1}>
-          <Button variant='text' onClick={() => setCondition('default')}>
+          {/* <Button variant='text' onClick={() => setCondition('default')}>
             Return
-          </Button>
+          </Button> */}
 
           <StatsDetailedAverage
             reviews={reviews}
@@ -318,20 +317,21 @@ export default function CourseStats() {
               <Grid item xs={4}>
                 {reviews.length === 0 ? renderPlaceHolder() : renderProfessorSummery()}
               </Grid>
+
               <Grid item xs={4}>
-                {reviews.length === 0 ? renderPlaceHolder() : renderInfoSummery()}
+                {reviews.length === 0 ? renderPlaceHolder() : renderWorkLoadSummry()}
               </Grid>
             </Grid>
             <Grid container spacing='32px' marginBottom='16px'>
               <Grid item xs={4}>
-                {renderWorkLoadSummry()}
+                {reviews.length === 0 ? renderPlaceHolder() : renderDetailedCard()}
               </Grid>
               <Grid item xs={4}>
-                {renderClassSizeSummary()}
+                {reviews.length === 0 ? renderPlaceHolder() : renderDetailedProfessor()}
               </Grid>
 
               <Grid item xs={4}>
-                {renderPopularitySummary()}
+                {reviews.length === 0 ? renderPlaceHolder() : renderInfoSummery()}
               </Grid>
             </Grid>
           </div>
@@ -339,20 +339,20 @@ export default function CourseStats() {
       case 'stackBarDetailed':
         return (
           <div>
-            <Grid item xs={12}>
+            <Grid item xs={4}>
               {renderDetailedCard()}
             </Grid>
           </div>
         );
       case 'detailedProfessor':
         return (
-          <Grid item xs={12}>
+          <Grid item xs={4}>
             {renderDetailedProfessor()}
           </Grid>
         );
       case 'detailedAverage':
         return (
-          <Grid item xs={12}>
+          <Grid item xs={4}>
             {renderDetailedAverage()}
           </Grid>
         );

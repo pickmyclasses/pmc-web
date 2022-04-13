@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
+import { Typography, Box } from '@mui/material';
 
-let professors = [];
 let option = {
   title: {
-    left: 'center',
-    text: 'Average Student Grade by Professors',
+    left: '',
+    text: '',
   },
   tooltip: {
     trigger: 'axis',
@@ -19,6 +19,7 @@ let option = {
     bottom: '5%',
     containLabel: true,
   },
+
   xAxis: [
     {
       type: 'category',
@@ -26,6 +27,7 @@ let option = {
       axisTick: {
         alignWithLabel: true,
       },
+      show: false,
     },
   ],
   yAxis: [
@@ -43,9 +45,10 @@ let option = {
     {
       name: 'Average Grade',
       type: 'scatter',
-      barWidth: '40%',
+      barWidth: '30%',
       data: [],
       symbolSize: 55,
+      color: '#F18C8E',
     },
   ],
 };
@@ -78,5 +81,10 @@ function populateProfessorLabels(professorRanking, reviews) {
 
 export default function StatsDetailedProfessor({ reviews, professorRanking }) {
   populateProfessorLabels(professorRanking, reviews);
-  return <ReactECharts option={option} style={{ height: 380 }} onEvents={{}} />;
+  return (
+    <Box>
+      <Typography variant='subtitle2'>Average Ratings / Professors</Typography>
+      <ReactECharts option={option} style={{ height: '200px' }} onEvents={{}} />
+    </Box>
+  );
 }
