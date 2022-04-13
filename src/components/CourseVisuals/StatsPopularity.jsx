@@ -27,6 +27,7 @@ let option = {
       type: 'line',
       smooth: true,
       showSymbol: false,
+      color: '#568EA6 ',
     },
   ],
 };
