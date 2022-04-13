@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ChannelList, useChatContext } from 'stream-chat-react';
 import Cookies from 'universal-cookie';
 
-import { SearchChannel, ChannelTeamList, ChannelTeamPreview } from './';
+import { ChannelTeamList, ChannelTeamPreview } from './';
 import HospitalIcon from '../img/hospital.png'
 import LogoutIcon from '../img/logout.png'
 
@@ -69,6 +69,8 @@ const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEdi
                     <p className="channel-list__header__text">Administrators</p>
                 </div>
                 
+                {/* This list is the Channels list. ChannelList is a built-in component of stream-chat-react*/}
+                {/* ChannelTeamList and ChannelTeamPreview are custom components */}
                 <ChannelList 
                     filters={filters}
                     channelRenderFilterFn={customChannelTeamFilter}
@@ -93,6 +95,8 @@ const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEdi
                         />
                     )}
                 />
+
+                {/*This list is the direct message list */}
                 <ChannelList 
                     filters={filters}
                     channelRenderFilterFn={customChannelMessagingFilter}
@@ -123,8 +127,6 @@ const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEdi
 }
 
 const ContainerChannelList = ({ setCreateType, setIsCreating, setIsEditing }) => {
-    const [toggleContainer, setToggleContainer] = useState(false);
-
     return (
         <>
             <div className="channel-list__container">
@@ -132,19 +134,6 @@ const ContainerChannelList = ({ setCreateType, setIsCreating, setIsEditing }) =>
                 setIsCreating={setIsCreating} 
                 setCreateType={setCreateType} 
                 setIsEditing={setIsEditing} 
-              />
-            </div>
-
-            <div className="channel-list__container-responsive"
-                style={{ left: toggleContainer ? "0%" : "-89%", backgroundColor: "#005fff"}}
-            >
-                <div className="channel-list__container-toggle" onClick={() => setToggleContainer((prevToggleContainer) => !prevToggleContainer)}>
-                </div>
-                <ChannelListContent 
-                setIsCreating={setIsCreating} 
-                setCreateType={setCreateType} 
-                setIsEditing={setIsEditing}
-                setToggleContainer={setToggleContainer}
               />
             </div>
         </>
