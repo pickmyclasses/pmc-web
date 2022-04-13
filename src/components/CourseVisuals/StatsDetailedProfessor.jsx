@@ -83,7 +83,7 @@ export default function StatsDetailedProfessor({ reviews, professorRanking }) {
   populateProfessorLabels(professorRanking, reviews);
   return (
     <Box>
-      <Typography variant='subtitle2'>Average Ratings / Professors</Typography>
+      <Typography variant='subtitle2'>Average Grades / Professors</Typography>
       <ReactECharts option={option} style={{ height: '200px' }} onEvents={{}} />
     </Box>
   );
