@@ -25,7 +25,7 @@ const SideBar = ({ logout }) => (
 
 const CompanyHeader = () => (
     <div className="channel-list__header">
-        <p className="channel-list__header__text">PickMyClasses</p>
+        <p className="channel-list__header__text">Administrators</p>
     </div>
 )
 
