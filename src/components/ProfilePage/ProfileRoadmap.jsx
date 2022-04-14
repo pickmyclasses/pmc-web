@@ -46,10 +46,10 @@ export default function ProfileRoadmap() {
     ).then(setCourseLists);
   }, [requirements]);
 
-  if ('4') {
+  if (user) {
     return (
       <ContainerWithLoadingIndication isLoading={!courseLists}>
-        <Stack spacing='48px'>
+        <Stack spacing='48px' paddingBottom='32px'>
           {courseLists &&
             courseLists.map(({ title, numCoursesRequired, courses }) => (
               <Stack key={title}>
