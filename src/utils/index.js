@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import Color from 'color';
+import md5 from 'md5';
 
 /**
  * CleanObject removes the empty parts of the request
@@ -239,4 +241,21 @@ export function calculateAverageScore({ reviews }) {
 export const isNumeric = (str) => {
   if (typeof str != 'string') return false;
   return !isNaN(str) && !isNaN(parseFloat(str));
+};
+
+export const getInitials = (name) => {
+  const tokens = name.split(/\s+/);
+  const firstAndLast = name.includes(',')
+    ? [tokens[1], tokens[0]]
+    : [tokens[0], tokens[tokens.length - 1]];
+  return firstAndLast.map((x) => x.charAt(0).toUpperCase()).join('');
+};
+
+export const getColorByString = (s, fixSaturationAndLightness = true) => {
+  const color = Color(
+    '#' +
+      md5(s.split('').reduce((acc, x) => ((acc << 5) - acc + x.charCodeAt(0)) | 0, 0)).slice(-6)
+  );
+  if (!fixSaturationAndLightness) return color.hex();
+  return color.saturationl(25).lightness(50).hex();
 };
