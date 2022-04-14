@@ -10,8 +10,7 @@ import StatsDetailedCard from '../CourseVisuals/StatsDetailedCard';
 import StatsDetailedProfessor from 'components/CourseVisuals/StatsDetailedProfessor';
 import StatsDetailedAverage from 'components/CourseVisuals/StatsDetailedAverage';
 import StatsWorkLoad from 'components/CourseVisuals/StatsWorkLoad';
-import Button from '@mui/material/Button';
-
+import StatsPieChart from 'components/CourseVisuals/StatsPieChart';
 import { Grid, Typography, Card, Stack, Link, Box } from '@mui/material';
 import { CourseContext } from '../../pages/CoursePage';
 import { motion } from 'framer-motion';
@@ -25,7 +24,7 @@ export default function CourseStats() {
   const renderWorkLoadSummry = () => (
     <MotionCard
       initial='initial'
-      onClick={() => setCondition('stackBarDetailed')}
+      // onClick={() => setCondition('stackBarDetailed')}
       whileHover='mouseEntered'
       sx={{
         width: '100%',
@@ -50,13 +49,14 @@ export default function CourseStats() {
   const renderProfessorSummery = () => (
     <MotionCard
       initial='initial'
-      onClick={() => setCondition('detailedProfessor')}
+      // onClick={() => setCondition('detailedProfessor')}
       whileHover='mouseEntered'
       sx={{
         width: '100%',
         height: '100%',
         cursor: 'pointer',
         '&:hover': { boxShadow: 6 },
+        overflow: 'visible',
       }}
     >
       <Stack padding='24px' height='calc(100% - 48px)'>
@@ -113,7 +113,7 @@ export default function CourseStats() {
       <Stack padding='24px' height='calc(100% - 48px)'>
         <Box flex={1}>
           <Typography variant='subtitle2'>Class Size</Typography>
-          <StatsClassSize reviews={reviews} />
+          <StatsPieChart reviews={reviews} />
         </Box>
         {/* <Link>
           <ClickableIndicator propagate>
@@ -127,7 +127,7 @@ export default function CourseStats() {
   const renderInfoSummery = () => (
     <MotionCard
       initial='initial'
-      onClick={() => setCondition('detailedAverage')}
+      // onClick={() => setCondition('detailedAverage')}
       whileHover='mouseEntered'
       sx={{
         width: '100%',
@@ -206,7 +206,7 @@ export default function CourseStats() {
   const renderRatingSummery = () => (
     <MotionCard
       initial='initial'
-      onClick={() => setCondition('stackBarDetailed')}
+      // onClick={() => setCondition('stackBarDetailed')}
       whileHover='mouseEntered'
       sx={{
         width: '100%',
@@ -218,7 +218,7 @@ export default function CourseStats() {
     >
       <Stack padding='24px' height='calc(100% - 48px)'>
         <Box flex={1}>
-          <StatsStackedBar reviews={reviews} />
+          <StatsPieChart reviews={reviews} />
         </Box>
         {/* <Link>
           <ClickableIndicator propagate>
@@ -286,6 +286,7 @@ export default function CourseStats() {
         height: '100%',
         cursor: 'pointer',
         '&:hover': { boxShadow: 6 },
+        overflow: 'visible !important',
       }}
     >
       <Stack height='calc(100% - 48px)' padding='24px'>

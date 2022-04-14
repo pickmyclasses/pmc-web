@@ -7,6 +7,7 @@ let option = {
     left: '',
     text: '',
   },
+
   tooltip: {
     trigger: 'axis',
     axisPointer: {
@@ -14,8 +15,8 @@ let option = {
     },
   },
   grid: {
-    left: '3%',
-    right: '4%',
+    left: '10%',
+    right: '10%',
     bottom: '5%',
     containLabel: true,
   },
@@ -24,10 +25,17 @@ let option = {
     {
       type: 'category',
       data: [],
-      axisTick: {
-        alignWithLabel: true,
+      boundaryGap: false,
+      splitLine: {
+        show: true,
       },
-      show: false,
+      axisLine: {
+        show: true,
+      },
+      axisLabel: {
+        interval: 0,
+        show: false,
+      },
     },
   ],
   yAxis: [
@@ -45,14 +53,12 @@ let option = {
     {
       name: 'Average Grade',
       type: 'scatter',
-      barWidth: '30%',
       data: [],
-      symbolSize: 55,
+      symbolSize: 25,
       color: '#F18C8E',
     },
   ],
 };
-
 function generateLetterGrade(value) {
   if (value >= (3.7 + 4) / 2) return 'A';
   if (value >= (3.3 + 3.7) / 2) return 'A-';
@@ -66,12 +72,12 @@ function generateLetterGrade(value) {
   if (value >= (0.7 + 1) / 2) return 'D';
   return 'F';
 }
-
 function populateProfessorLabels(professorRanking, reviews) {
   option.xAxis[0].data = [];
   option.series[0].data = [];
   for (let i = 0; i < professorRanking.length; i++) {
     option.xAxis[0].data.push(professorRanking[i].name);
+
     option.series[0].data.push(generateLetterGrade(professorRanking[i].rating));
 
     // console.log(option.xAxis[0].data);

@@ -8,9 +8,6 @@ let semesters = [];
 let option = {
   tooltip: {
     trigger: 'axis',
-    position: function (pt) {
-      return [pt[0], '10%'];
-    },
   },
   grid: {
     top: '10%',
@@ -47,6 +44,8 @@ let option = {
   series: [
     {
       name: 'Average Ratings',
+      avoidLabelOverlap: false,
+
       type: 'line',
       symbol: 'none',
       sampling: 'lttb',

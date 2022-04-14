@@ -12,6 +12,7 @@ let option = {
 
   tooltip: {
     trigger: 'axis',
+    confine: true,
     axisPointer: {
       type: 'shadow',
     },
