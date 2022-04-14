@@ -53,7 +53,7 @@ export default function ContainerWithScheduler({ children }) {
  *   classesInShoppingCart: Array<{classData, course}>,
  *   requirements: Array<Object>,
  *   customEvents: Array<Object>,
- *   refreshSchedulerData: function(function(): *): void,
+ *   refreshSchedulerData: (onComplete: () => void = null) => void,
  * }>}
  */
 export const SchedulerContext = createContext();

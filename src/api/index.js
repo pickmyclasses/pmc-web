@@ -1,11 +1,21 @@
 import axios from 'axios';
 import Color from 'color';
-import { capitalizeFirst, formatCourseName } from 'utils';
+import { capitalizeFirst } from 'utils';
 
-export const login = (body) => axios.post('/login', body).then(({ data }) => data.data);
+export const login = (email, password) =>
+  axios.post('/login', { email, password }).then(({ data }) => formatUserInfo(data.data, true));
 
-export const register = (body) =>
-  axios.post('/register', body).then((response) => response.data);
+const formatUserInfo = ({ id, token, ...userInfo }, shouldIncludeToken = false) => ({
+  name: `${userInfo.firstName} ${userInfo.lastName}`,
+  userID: id,
+  ...userInfo,
+  ...(shouldIncludeToken && { token }),
+});
+
+export const register = (email, firstName, lastName, college, password, rePassword) =>
+  axios
+    .post('/register', { email, firstName, lastName, college, password, rePassword })
+    .then(({ data }) => data);
 
 export const fetchCollegeMajorList = (collegeID) =>
   axios.get(`/college/${collegeID}/major/list`).then(({ data }) => data.data);
@@ -14,7 +24,9 @@ export const fetchMajorEmphasisList = (collegeID, majorName) =>
   axios.get(`/college/${collegeID}/emphasis?major=${majorName}`).then(({ data }) => data.data);
 
 export const declareMajor = (userID, majorName, emphasisName, schoolYear) =>
-  axios.post('/user/major', { userID, majorName, emphasisName, schoolYear });
+  axios
+    .post('/user/major', { userID, majorName, emphasisName, schoolYear })
+    .then(({ data }) => formatUserInfo(data.data));
 
 /**
  * Fetches the course but also injects the fake image URL. Basically pretends `ImageURL` was an
@@ -128,7 +140,9 @@ export const removeCustomEventByID = (eventID) =>
 export const fetchRequirements = async (user) => {
   const { scheduledClasses } = await fetchScheduledClassesAndCustomEvents(user.userID);
   const historyCourses = await fetchHistoryCourses(user.userID);
-  const requirements = await fetchRequirementsByMajor(user.major, user.emphasis);
+  const requirements = user.major
+    ? await fetchRequirementsByMajor(user.major, user.emphasis)
+    : [];
   return getRequirementsFromScheduleAndHistory(
     requirements,
     scheduledClasses.map((x) => x.course),
@@ -148,16 +162,12 @@ export const getRequirementsFromScheduleAndHistory = (
   historyCourses
 ) => {
   for (let requirement of requirements) {
-    requirement.title = requirement.setName
-      .replace(/courses/gi, '')
-      .trim()
-      .split(/\s+/)
-      .map(capitalizeFirst)
-      .join(' ');
+    requirement.title = requirement.setName.replace(/courses/gi, '').trim();
 
     requirement.completedCourses = [];
     requirement.inProgressCourses = [];
   }
+
   for (let course of scheduledCourses) {
     const targets = requirements.filter((x) =>
       (course.degreeCatalogs || []).map((y) => y[0]).includes(x.setName)

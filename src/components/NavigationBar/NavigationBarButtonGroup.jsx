@@ -14,13 +14,7 @@ import PreventableLink from 'components/PreventableNavigation/PreventableLink';
  * navigation bar.
  */
 export default function NavigationBarButtonGroup() {
-  const { user, setUser } = useContext(UserContext);
-
-  useMount(() => {
-    const loggedInUser = localStorage.getItem('user');
-    if (loggedInUser) setUser(JSON.parse(loggedInUser));
-    else setUser(null);
-  });
+  const { user } = useContext(UserContext);
 
   const renderTabsForLoggedIn = () => [
     <SchedulerDropDown key='scheduler' />,

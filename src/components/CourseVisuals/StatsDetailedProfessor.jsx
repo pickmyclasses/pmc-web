@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
+import { Typography, Box } from '@mui/material';
 
-let professors = [];
 let option = {
   title: {
-    left: 'center',
-    text: 'Average Student Grade by Professors',
+    left: '',
+    text: '',
   },
+
   tooltip: {
     trigger: 'axis',
     axisPointer: {
@@ -14,17 +15,26 @@ let option = {
     },
   },
   grid: {
-    left: '3%',
-    right: '4%',
+    left: '10%',
+    right: '10%',
     bottom: '5%',
     containLabel: true,
   },
+
   xAxis: [
     {
       type: 'category',
       data: [],
-      axisTick: {
-        alignWithLabel: true,
+      boundaryGap: false,
+      splitLine: {
+        show: true,
+      },
+      axisLine: {
+        show: true,
+      },
+      axisLabel: {
+        interval: 0,
+        show: false,
       },
     },
   ],
@@ -43,13 +53,12 @@ let option = {
     {
       name: 'Average Grade',
       type: 'scatter',
-      barWidth: '40%',
       data: [],
-      symbolSize: 55,
+      symbolSize: 25,
+      color: '#F18C8E',
     },
   ],
 };
-
 function generateLetterGrade(value) {
   if (value >= (3.7 + 4) / 2) return 'A';
   if (value >= (3.3 + 3.7) / 2) return 'A-';
@@ -63,12 +72,12 @@ function generateLetterGrade(value) {
   if (value >= (0.7 + 1) / 2) return 'D';
   return 'F';
 }
-
 function populateProfessorLabels(professorRanking, reviews) {
   option.xAxis[0].data = [];
   option.series[0].data = [];
   for (let i = 0; i < professorRanking.length; i++) {
     option.xAxis[0].data.push(professorRanking[i].name);
+
     option.series[0].data.push(generateLetterGrade(professorRanking[i].rating));
 
     // console.log(option.xAxis[0].data);
@@ -78,5 +87,10 @@ function populateProfessorLabels(professorRanking, reviews) {
 
 export default function StatsDetailedProfessor({ reviews, professorRanking }) {
   populateProfessorLabels(professorRanking, reviews);
-  return <ReactECharts option={option} style={{ height: 380 }} onEvents={{}} />;
+  return (
+    <Box>
+      <Typography variant='subtitle2'>Average Grades / Professors</Typography>
+      <ReactECharts option={option} style={{ height: '200px' }} onEvents={{}} />
+    </Box>
+  );
 }

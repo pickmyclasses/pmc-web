@@ -61,7 +61,7 @@ export default function CourseOverview() {
     <Card sx={{ width: '100%', height: '100%' }}>
       <Stack padding='24px' spacing='12px' height='calc(100% - 48px)'>
         <Stack spacing='12px' flex={1}>
-          {course.tags.length > 0 && (
+          {course.tags.length > 0 && '' && (
             <>
               <Typography variant='subtitle2'>Keywords</Typography>
               <TagList tags={course.tags.map((x) => x.name)} />
@@ -71,18 +71,20 @@ export default function CourseOverview() {
           <Typography variant='body1'>{course.description}</Typography>
           <Typography variant='subtitle2'>Reward</Typography>
           <Stack direction='row' spacing='24px' flexWrap='wrap'>
-            {course.degreeCatalogs?.length > 0 && (
-              <LabelWithIcon
-                color='primary'
-                iconType={School}
-                label={course.degreeCatalogs.map((x) => x.join(' — ')).join(', ')}
-              />
-            )}
             <LabelWithIcon
               color='info'
               iconType={WatchLater}
               label={formatCreditRange(course)}
             />
+            {course.degreeCatalogs?.length > 0 && (
+              <LabelWithIcon
+                color='primary'
+                iconType={School}
+                label={course.degreeCatalogs.map((x) => x.join(' — ')).join(', ')}
+                align='flex-start'
+                height='fit-content'
+              />
+            )}
           </Stack>
         </Stack>
         <Link component={PreventableLink} to={coursePageURL + '/stats'}>
@@ -116,7 +118,10 @@ export default function CourseOverview() {
               Top Pros
             </Typography>
             <TagList
-              tags={['Fun projects', 'Hands on', 'No exams']}
+              tags={course.tags
+                .filter((x) => x.type === 1)
+                .slice(0, 3)
+                .map((x) => x.name)}
               variant='outlined'
               color='success'
               disableInteractive
@@ -128,7 +133,10 @@ export default function CourseOverview() {
               Top Cons
             </Typography>
             <TagList
-              tags={['Useless lectures', 'Assignment-heavy', 'Less practical']}
+              tags={course.tags
+                .filter((x) => x.type === 0)
+                .slice(0, 3)
+                .map((x) => x.name)}
               variant='outlined'
               color='error'
               disableInteractive

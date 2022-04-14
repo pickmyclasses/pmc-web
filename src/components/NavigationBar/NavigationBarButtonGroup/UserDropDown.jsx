@@ -1,9 +1,7 @@
 import {
-  AccountBalance,
   AccountCircle,
   EventNote,
   ExitToApp,
-  Groups,
   History,
   Person,
   School,
@@ -22,7 +20,6 @@ export default function UserDropDown() {
 
   const handleLogOutMenuItemClick = () => {
     setUser(null);
-    localStorage.clear();
     navigate('/');
   };
 
@@ -47,8 +44,6 @@ export default function UserDropDown() {
       text: 'History',
       props: { component: PreventableLink, to: '/profile/history', divider: true },
     },
-    { icon: Groups, text: 'Discussion Board' },
-    { icon: AccountBalance, text: 'My University', props: { divider: true } },
     { icon: ExitToApp, text: 'Log out', handleClick: handleLogOutMenuItemClick },
   ];
 

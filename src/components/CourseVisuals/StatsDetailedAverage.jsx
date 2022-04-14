@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
 import * as echarts from 'echarts';
+import { Typography } from '@mui/material';
 
 let professors = [];
 let option = {
@@ -11,6 +12,7 @@ let option = {
 
   tooltip: {
     trigger: 'axis',
+    confine: true,
     axisPointer: {
       type: 'shadow',
     },
@@ -58,5 +60,8 @@ function populateProfessorLabels(professorRanking, reviews) {
 
 export default function StatsDetailedAverage({ reviews, professorRanking, courseLoad }) {
   populateProfessorLabels(professorRanking, reviews);
+  <Typography variant='subtitle2' align='left' sx={{}}>
+    Exam Heavy
+  </Typography>;
   return <ReactECharts option={option} style={{ height: 380 }} onEvents={{}} />;
 }

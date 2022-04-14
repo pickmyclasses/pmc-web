@@ -20,8 +20,8 @@ let optionExam = {
 
   grid: {
     top: '-33%',
-    left: '0%',
-    right: '4%',
+    left: '5%',
+    right: '5%',
     bottom: '33%',
   },
   xAxis: {
@@ -81,8 +81,8 @@ let optionHomework = {
   legend: { show: false },
   grid: {
     top: '-33%',
-    left: '0%',
-    right: '4%',
+    left: '5%',
+    right: '5%',
     bottom: '33%',
   },
   xAxis: {
@@ -141,8 +141,8 @@ let optionRecommend = {
   legend: { show: false },
   grid: {
     top: '-33%',
-    left: '0%',
-    right: '4%',
+    left: '5%',
+    right: '5%',
     bottom: '33%',
   },
   xAxis: {
@@ -242,25 +242,48 @@ export default function StatsWorkLoad({ reviews }) {
   generateRecommendation(reviews);
 
   return (
-    <Stack direction='column' spacing={1}>
-      <Box flex={1}>
-        <Typography variant='subtitle2' align='left' sx={{}}>
-          Exam Heavy
-        </Typography>
-        <ReactECharts option={optionExam} style={{ height: '33%', width: '100%' }} />
-      </Box>
-      <Box flex={1}>
-        <Typography variant='subtitle2' align='left' sx={{}}>
-          Homework Heavy
-        </Typography>
-        <ReactECharts option={optionHomework} style={{ height: '33%', width: '100%' }} />
-      </Box>
-      <Box flex={1}>
-        <Typography variant='subtitle2' align='left' sx={{}}>
-          Recommendation
-        </Typography>
-        <ReactECharts option={optionRecommend} style={{ height: '33%', width: '100%' }} />
-      </Box>
-    </Stack>
+    <Box>
+      <Typography variant='subtitle2'>Course Load</Typography>
+      <Stack direction='column' spacing={1}>
+        <Box flex={1}>
+          <Typography
+            variant='body2'
+            align='center'
+            fontStyle='italic'
+            sx={{ opacity: 0.75, marginLeft: 3 }}
+            align='left'
+          >
+            Exam Heavy
+          </Typography>
+          <ReactECharts option={optionExam} style={{ height: '33%', width: '100%' }} />
+        </Box>
+        <Box flex={1}>
+          <Typography
+            variant='body2'
+            align='center'
+            fontStyle='italic'
+            sx={{ opacity: 0.75, marginLeft: 3 }}
+            align='left'
+          >
+            {' '}
+            Homework Heavy
+          </Typography>
+          <ReactECharts option={optionHomework} style={{ height: '33%', width: '100%' }} />
+        </Box>
+        <Box flex={1}>
+          <Typography
+            variant='body2'
+            align='center'
+            fontStyle='italic'
+            sx={{ opacity: 0.75, marginLeft: 3 }}
+            align='left'
+          >
+            {' '}
+            Recommendation
+          </Typography>
+          <ReactECharts option={optionRecommend} style={{ height: '33%', width: '100%' }} />
+        </Box>
+      </Stack>
+    </Box>
   );
 }
