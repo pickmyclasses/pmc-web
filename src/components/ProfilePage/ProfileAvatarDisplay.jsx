@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Person } from '@mui/icons-material';
 import { Avatar, Stack, Typography } from '@mui/material';
 import { UserContext } from '../../App';
 
@@ -9,16 +8,11 @@ export default function ProfileAvatarDisplay() {
 
   return (
     <Stack alignItems='center' width='100%'>
-      <Avatar
-        sx={{ width: '120px', height: '120px', marginBottom: '16px' }}
-        src={user && 'https://i.insider.com/60817ec5354dde0018c06960?width=700'}
-      >
-        {/* The following is the default gray avatar that would become visible without the
-         *  the `src` prop in the Avatar above. */}
-        <Person sx={{ transform: 'scale(3.5)' }} />
+      <Avatar sx={{ width: '120px', height: '120px', marginBottom: '16px', fontSize: '48px' }}>
+        {[user.firstName, user.lastName].map((x) => x.charAt(0).toUpperCase()).join('')}
       </Avatar>
       <Typography variant='h6' fontWeight='normal'>
-        {user?.name || 'Guest User'}
+        {user.name}
       </Typography>
       <Typography variant='caption' sx={{ opacity: 0.75 }}>
         Profile

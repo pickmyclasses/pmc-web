@@ -104,11 +104,12 @@ const getSeriesItem = (
 });
 
 const chartBarColors = [
+  colors.green,
   colors.blue,
   colors.purple,
   colors.deepOrange,
-  colors.green,
   colors.cyan,
+  colors.brown,
 ].reduce((acc, color) => [...acc, color[300], color[200], colors.grey[400], 'white'], []);
 
 const getBorderRadius = (completed, inProgress, toGo, i) => {
