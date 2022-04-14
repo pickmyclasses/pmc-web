@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { Stack, Typography } from '@mui/material';
+import { LinearProgress, Stack, Typography } from '@mui/material';
 import { fetchCoursesBySearch } from '../api';
 import ContainerWithStaticScheduler from '../components/Scheduler/ContainerWithStaticScheduler';
-import CourseResultList from '../components/CourseCardGrid/CourseResultList';
+import CourseResultItem from './../components/CourseCardGrid/CourseResultItem';
 import FilterVerticalContainer from '../components/Filter/FilterVerticalContainer';
 import Scrollbars from 'react-custom-scrollbars-2';
 import ContainerWithLoadingIndication from '../components/Page/ContainerWithLoadingIndication';
@@ -13,18 +13,39 @@ export default function SearchPage({ shouldShowScheduler }) {
   const { user } = useContext(UserContext);
   const urlParams = useParams();
 
-  const [courses, setCourses] = useState(null);
+  const [courses, setCourses] = useState([]);
   const [numResults, setNumResults] = useState(NaN);
+  const [pageNum, setPageNum] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
 
-  // TODO: fix this hard coded number
+  const loader = useRef();
+  const lastElementRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (loader.current) loader.current.disconnect();
+      loader.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPageNum((pageNum) => pageNum + 1);
+        }
+      });
+      if (node) loader.current.observe(node);
+    },
+    [loading, hasMore]
+  );
+
   useEffect(() => {
     if (!urlParams?.query) return;
-    fetchCoursesBySearch(urlParams.query, user?.userID).then(({ data, total }) => {
-      setCourses(data);
+    setLoading(true);
+    fetchCoursesBySearch(urlParams?.query, user?.userID, pageNum).then(({ data, total }) => {
+      let newCourses = courses.concat(data);
+      setCourses(newCourses);
       setNumResults(total);
+      setHasMore(data.length > 0);
+      setLoading(false);
     });
     setCourses(null);
-  }, [urlParams?.query]);
+  }, [urlParams?.query, pageNum]);
 
   return (
     <>
@@ -36,8 +57,25 @@ export default function SearchPage({ shouldShowScheduler }) {
               <Typography variant='body2' gutterBottom>
                 Found {numResults} results for <b>"{urlParams.query}"</b>
               </Typography>
-              <CourseResultList courses={courses} />
+              <Stack spacing='24px'>
+                {courses?.map((course, i) => {
+                  if (courses?.length === i + 1) {
+                    return (
+                      <div key={i} ref={lastElementRef}>
+                        <CourseResultItem course={course} />
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div key={i}>
+                        <CourseResultItem course={course} />
+                      </div>
+                    );
+                  }
+                })}
+              </Stack>
             </Stack>
+            <LinearProgress sx={{ height: 8 }} />
           </Scrollbars>
         </ContainerWithLoadingIndication>
       </ContainerWithStaticScheduler>

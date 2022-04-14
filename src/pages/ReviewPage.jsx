@@ -1,10 +1,7 @@
 import React, { useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import { Box, Button, CircularProgress } from '@mui/material';
-import { fetchCourseByID } from '../api';
+import { Box, Button } from '@mui/material';
 import ReviewRatings from '../components/ReviewInputDetails/ReviewRatings';
 import ReviewComments from '../components/ReviewInputDetails/ReviewComments';
-import { useMount } from '../utils';
 import { postReview, postTagsByCourseID } from '../../src/api/index';
 import ReviewAnonymous from '../components/ReviewInputDetails/ReviewAnonymous';
 import ReviewRecommend from '../components/ReviewInputDetails/ReviewRecommend';
@@ -43,7 +40,6 @@ export default function ReviewPage() {
   const [negativeTags, setNegativeTags] = useState([]);
   const [professor, setProfessor] = useState('');
   const [semester, setSemester] = useState();
-  const urlParams = useParams();
   const { user } = useContext(UserContext);
   const [activeStep, setActiveStep] = React.useState(0);
   const { enqueueSnackbar } = useSnackbar();
