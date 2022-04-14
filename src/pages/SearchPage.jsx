@@ -38,6 +38,13 @@ export default function SearchPage({ shouldShowScheduler }) {
 
   useEffect(() => {
     if (!urlParams?.query) return;
+    fetchCoursesBySearch(urlParams?.query, user?.userID, pageNum).then(({ data, total }) => {
+      setCourses(data);
+      setNumResults(total);
+    });
+  }, [urlParams?.query]);
+
+  useEffect(() => {
     setLoading(true);
     fetchCoursesBySearch(urlParams?.query, user?.userID, pageNum).then(({ data, total }) => {
       let newCourses = courses.concat(data);
@@ -46,7 +53,7 @@ export default function SearchPage({ shouldShowScheduler }) {
       setHasMore(data.length > 0);
       setLoading(false);
     });
-  }, [urlParams?.query, pageNum]);
+  }, [pageNum]);
 
   return (
     <>
