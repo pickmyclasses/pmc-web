@@ -51,7 +51,7 @@ export default function ProfilePage() {
       sx={{
         textDecoration: 'none',
         justifyContent: 'flex-start',
-        '> svg': { marginLeft: '32px', marginRight: '24px !important' },
+        '> svg': { marginLeft: '28px', marginRight: '24px !important' },
       }}
     />
   );
@@ -87,9 +87,9 @@ export default function ProfilePage() {
  * `name` also determines the `:tab` parameter in the URL.
  */
 const tabs = {
-  '': { title: 'Dashboard', icon: Dashboard, content: ProfileDashboard },
-  'schedule': { title: 'Schedule', icon: EventNote, content: ProfileSchedule },
-  'roadmap': { title: 'Roadmap', icon: School, content: ProfileRoadmap },
+  // '': { title: 'Dashboard', icon: Dashboard, content: ProfileDashboard },
+  '': { title: 'Schedule', icon: EventNote, content: ProfileSchedule },
+  'roadmap': { title: 'Requirements', icon: School, content: ProfileRoadmap },
   'history': { title: 'History', icon: History, content: ProfileHistory },
 };
 

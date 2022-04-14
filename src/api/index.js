@@ -162,16 +162,12 @@ export const getRequirementsFromScheduleAndHistory = (
   historyCourses
 ) => {
   for (let requirement of requirements) {
-    requirement.title = requirement.setName
-      .replace(/courses/gi, '')
-      .trim()
-      .split(/\s+/)
-      .map(capitalizeFirst)
-      .join(' ');
+    requirement.title = requirement.setName.replace(/courses/gi, '').trim();
 
     requirement.completedCourses = [];
     requirement.inProgressCourses = [];
   }
+
   for (let course of scheduledCourses) {
     const targets = requirements.filter((x) =>
       (course.degreeCatalogs || []).map((y) => y[0]).includes(x.setName)

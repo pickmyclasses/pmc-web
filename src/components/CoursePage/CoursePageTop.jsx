@@ -42,7 +42,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
       </CenterAligningFlexBox>
       <Typography variant='body1' color={theme.palette.text.secondary}>
         {course.degreeCatalogs?.length > 0 && (
-          <>{formatCourseRequirementReward(course.degreeCatalogs)}&nbsp;•&nbsp;&nbsp;</>
+          <>{formatCourseRequirementReward(course.degreeCatalogs)}&nbsp;&nbsp;•&nbsp;&nbsp;</>
         )}
         {formatCreditRange(course)}
       </Typography>
