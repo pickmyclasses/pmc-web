@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
 import * as echarts from 'echarts';
+import { Typography, Box } from '@mui/material';
 
 let ratings = [];
 let semesters = [];
@@ -11,16 +12,16 @@ let option = {
       return [pt[0], '10%'];
     },
   },
+  grid: {
+    top: '10%',
+    left: '10%',
+    bottom: '20%',
+  },
   title: {
     left: 'center',
-    text: 'Overall Rating By Semesters',
+    text: '',
   },
-  toolbox: {
-    feature: {
-      restore: {},
-      saveAsImage: {},
-    },
-  },
+
   xAxis: {
     type: 'category',
     boundaryGap: false,
@@ -30,6 +31,7 @@ let option = {
     type: 'value',
     boundaryGap: [0, '100%'],
     max: 5,
+    show: false,
   },
   dataZoom: [
     {
@@ -48,30 +50,28 @@ let option = {
       type: 'line',
       symbol: 'none',
       sampling: 'lttb',
-      itemStyle: {
-        color: 'rgb(255, 70, 131)',
-      },
+      itemStyle: {},
       areaStyle: {
         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
           {
             offset: 1,
-            color: 'rgb(237, 41, 56)',
+            color: '#F18C8E',
           },
           {
             offset: 0.75,
-            color: 'rgb(178, 95, 74)',
+            color: '#F0B7A4',
           },
           {
             offset: 0.5,
-            color: 'rgb(119, 148, 92)',
+            color: '#F1D1B5 ',
           },
           {
             offset: 0.25,
-            color: 'rgb(59, 202, 109)',
+            color: '#568EA6',
           },
           {
             offset: 0,
-            color: 'rgb(0, 255, 127)',
+            color: '#305F72',
           },
         ]),
       },
@@ -123,5 +123,10 @@ function sortDataset(courseTrend) {
 export default function StatsDetailedCard({ courseTrend }) {
   sortDataset(courseTrend);
   populateDataset(courseTrend);
-  return <ReactECharts option={option} style={{ height: 380 }} onEvents={{}} />;
+  return (
+    <Box>
+      <Typography variant='subtitle2'>Average Ratings / Semesters</Typography>
+      <ReactECharts option={option} style={{ height: 200 }} onEvents={{}} />
+    </Box>
+  );
 }
