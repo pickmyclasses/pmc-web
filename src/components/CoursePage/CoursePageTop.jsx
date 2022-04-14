@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 import React, { createElement } from 'react';
-import { formatCourseName, formatCreditRange } from '../../utils';
+import { formatCourseName, formatCreditRange, capitalizeFirst } from '../../utils';
 import { CenterAligningFlexBox } from '../CourseCardGrid/CourseCard/CourseCard';
 import CourseEligibilityIndicator from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
 
@@ -42,7 +42,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
       </CenterAligningFlexBox>
       <Typography variant='body1' color={theme.palette.text.secondary}>
         {course.degreeCatalogs?.length > 0 && (
-          <>{course.degreeCatalogs[0][0]}&nbsp;•&nbsp;&nbsp;</>
+          <>{formatCourseRequirementReward(course.degreeCatalogs)}&nbsp;•&nbsp;&nbsp;</>
         )}
         {formatCreditRange(course)}
       </Typography>
@@ -105,3 +105,10 @@ export const TabsWithoutBottomGap = styled(Tabs)({
   '> *:first-of-type': { position: 'absolute', bottom: 0, width: '100%' },
   button: { width: '25%', minHeight: 0 },
 });
+
+export const formatCourseRequirementReward = (degreeCatalogs) =>
+  degreeCatalogs[0][0]
+    .replace(/(course)?s$/i, '')
+    .split(/\s+/)
+    .map(capitalizeFirst)
+    .join(' ');

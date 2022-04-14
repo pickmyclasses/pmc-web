@@ -21,6 +21,7 @@ import { declareMajor, fetchCollegeMajorList, fetchMajorEmphasisList } from 'api
 import { UserContext } from 'App';
 import ContainerWithLoadingIndication from 'components/Page/ContainerWithLoadingIndication';
 import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
+import { SchedulerContext } from 'components/Scheduler/ContainerWithScheduler';
 import React, { useContext, useEffect, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { useLocation } from 'react-router-dom';
@@ -30,7 +31,8 @@ import { capitalizeFirst } from 'utils';
 export default function MajorDeclarationPage() {
   const location = useLocation();
 
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+  const { refreshSchedulerData } = useContext(SchedulerContext);
   const { navigateIfAllowed } = useContext(PreventableNavigationContext);
 
   const [currStep, setCurrStep] = useState(-1);
@@ -272,10 +274,10 @@ export default function MajorDeclarationPage() {
             selectedMajor?.name,
             selectedEmphasis === 'No Emphasis' ? undefined : selectedEmphasis,
             (+selectedYear + 1).toString()
-          )
-            .then((x) => (alert('** x: ' + JSON.stringify(x)), x))
-            // TODO Q: Deal with the response above (x) and renew local user data^
-            .then(() => navigateIfAllowed(location.state?.linkTo || '/'));
+          ).then((updatedUserData) => {
+            setUser(Object.assign(user, updatedUserData));
+            refreshSchedulerData(() => navigateIfAllowed(location.state?.linkTo || '/'));
+          });
         }}
       >
         Start Now!

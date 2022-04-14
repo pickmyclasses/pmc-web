@@ -4,6 +4,7 @@ import CourseEligibilityIndicator from 'components/CourseCardGrid/CourseCard/Cou
 import React, { createElement, useRef, useState } from 'react';
 import { formatCourseName, formatCreditRange } from 'utils';
 import { getColorByCourse } from 'api';
+import { formatCourseRequirementReward } from 'components/CoursePage/CoursePageTop';
 
 /**
  * A list item like element that shows some basic info of a course, while optionally providing
@@ -64,7 +65,10 @@ export default function SmallCourseListItem({
             </CourseEligibilityIndicator>
             <Typography variant='caption' color='text.secondary' noWrap>
               {course.degreeCatalogs?.length > 0 && (
-                <>{course.degreeCatalogs[0][0]}&nbsp;&nbsp;•&nbsp;&nbsp;</>
+                <>
+                  {formatCourseRequirementReward(course.degreeCatalogs)}
+                  &nbsp;&nbsp;•&nbsp;&nbsp;
+                </>
               )}
               {formatCreditRange(course)}
             </Typography>

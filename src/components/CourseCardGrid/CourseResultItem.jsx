@@ -8,6 +8,7 @@ import TagList from './CourseCard/TagList';
 import ClickableIndicator from './CourseCard/ClickableIndicator';
 import CourseOfferingSummary from './CourseOfferingSummary';
 import LabeledRatingDisplay from './CourseCard/LabeledRatingDisplay';
+import { formatCourseRequirementReward } from 'components/CoursePage/CoursePageTop';
 
 /** A course search result item. */
 export default function CourseResultItem({ course }) {
@@ -49,7 +50,7 @@ export default function CourseResultItem({ course }) {
         >
           <Typography variant='body2' color={theme.palette.text.secondary}>
             {course.degreeCatalogs?.length > 0 && (
-              <>{course.degreeCatalogs[0][0]}&nbsp;•&nbsp;&nbsp;</>
+              <>{formatCourseRequirementReward(course.degreeCatalogs)}&nbsp;•&nbsp;&nbsp;</>
             )}
             {formatCreditRange(course)}&nbsp;&nbsp;•&nbsp;&nbsp;
           </Typography>
