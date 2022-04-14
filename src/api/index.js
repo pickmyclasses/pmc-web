@@ -1,6 +1,5 @@
 import axios from 'axios';
 import Color from 'color';
-import { capitalizeFirst } from 'utils';
 
 export const login = (email, password) =>
   axios.post('/login', { email, password }).then(({ data }) => formatUserInfo(data.data, true));
@@ -83,11 +82,13 @@ const fakeFetchHomePageCourses = (userID) => {
   );
 };
 
-export const fetchCoursesBySearch = (query, userID = NaN) =>
-  axios.post('/course/search', { keyword: query, pageSize: 12, userID }).then(({ data }) => {
-    for (let course of data.data) injectFakePropertiesToCourse(course);
-    return data;
-  });
+export const fetchCoursesBySearch = (query, userID = NaN, pageNumber) =>
+  axios
+    .post('/course/search', { keyword: query, pageSize: 12, userID, pageNumber: pageNumber })
+    .then(({ data }) => {
+      for (let course of data.data) injectFakePropertiesToCourse(course);
+      return data;
+    });
 
 export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
 
