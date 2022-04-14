@@ -1,6 +1,5 @@
 import axios from 'axios';
 import Color from 'color';
-import { useEffect } from 'react';
 
 export const login = (email, password) =>
   axios.post('/login', { email, password }).then(({ data }) => formatUserInfo(data.data, true));

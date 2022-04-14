@@ -8,6 +8,8 @@ import FilterVerticalContainer from '../components/Filter/FilterVerticalContaine
 import Scrollbars from 'react-custom-scrollbars-2';
 import ContainerWithLoadingIndication from '../components/Page/ContainerWithLoadingIndication';
 import { UserContext } from 'App';
+import Lottie from 'react-lottie-player';
+import emptyResult from '../assets/empty-box.json';
 
 export default function SearchPage({ shouldShowScheduler }) {
   const { user } = useContext(UserContext);
@@ -50,7 +52,7 @@ export default function SearchPage({ shouldShowScheduler }) {
     <>
       <FilterVerticalContainer />
       <ContainerWithStaticScheduler shouldShowScheduler={shouldShowScheduler}>
-        <ContainerWithLoadingIndication isLoading={courses.length === 0}>
+        <ContainerWithLoadingIndication isLoading={courses.length === 0 && numResults !== 0}>
           <Scrollbars autoHide>
             <Stack padding='24px' spacing='16px'>
               <Typography variant='body2' gutterBottom>
@@ -73,9 +75,24 @@ export default function SearchPage({ shouldShowScheduler }) {
                     );
                   }
                 })}
+                {numResults === 0 && (
+                  <Lottie
+                    loop
+                    animationData={emptyResult}
+                    play
+                    style={{
+                      width: '50%',
+                      height: '50%',
+                      marginLeft: '10em',
+                      marginTop: '5em',
+                    }}
+                  />
+                )}
               </Stack>
             </Stack>
-            {courses.length !== 0 && loading && <LinearProgress sx={{ height: 8 }} />}
+            {courses.length !== 0 && loading && numResults !== 0 && (
+              <LinearProgress sx={{ height: 8 }} />
+            )}
           </Scrollbars>
         </ContainerWithLoadingIndication>
       </ContainerWithStaticScheduler>
