@@ -17,7 +17,7 @@ export default function CourseOverallRatings({ reviews }) {
           <Grid container direction='column' spacing={1}>
             <Grid item>
               <Typography variant='h4' gutterBottom color='primary'>
-                Quality - {avgScore.toFixed(1)}/5
+                Overal Ratings {avgScore.toFixed(1)}/5
               </Typography>
             </Grid>
             <Grid item>

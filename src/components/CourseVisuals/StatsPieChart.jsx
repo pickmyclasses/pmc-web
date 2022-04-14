@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import ReactECharts from 'echarts-for-react';
-
+import { Typography, Box } from '@mui/material';
+import { pluralize } from '../../utils';
+const colorPalette = ['#F18C8E', '#F0B7A4', '#F1D1B5', '#568EA6', '#305F72'];
 let option = {
   title: {
-    text: 'Rating Distribution',
+    text: '',
     subtext: '',
     x: 'center',
   },
+
   tooltip: {
     trigger: 'item',
-    formatter: '{a} <br/>{b} : {c} ({d}%)',
+    formatter: '{b} : {c} ({d}%)',
   },
+
   legend: {
     orient: 'vertical',
     left: 'left',
@@ -18,10 +22,19 @@ let option = {
   },
   series: [
     {
+      label: {
+        show: false,
+      },
       name: 'Distribution',
       type: 'pie',
-      radius: '55%',
-      center: ['50%', '60%'],
+      radius: '90%',
+      center: ['60%', '48%'],
+
+      emphasis: {
+        label: {
+          show: false,
+        },
+      },
       data: [
         { value: 0, name: 'One Stars' },
         { value: 0, name: 'Two Stars' },
@@ -36,21 +49,12 @@ let option = {
           shadowColor: 'rgba(0, 0, 0, 0.5)',
         },
       },
+      color: colorPalette,
     },
   ],
 };
 
-function onChartLegendselectchanged(param, echarts) {
-  //console.log(param, echarts);
-}
-function onChartReady(echarts) {
-  //console.log('echarts is ready', echarts);
-}
-function onChartClick(param, echarts) {
-  //console.log(param, echarts);
-}
 function generateStarValues(reviews, option) {
-  option.title.subtext = 'Based on ' + reviews.length + ' reviews';
   for (let i = 0; i < reviews.length; i++) {
     option.series[0].data[reviews[i].rating - 1].value += 1;
   }
@@ -61,14 +65,12 @@ export default function ReviewPieChart({ reviews }) {
   generateStarValues(reviews, option);
 
   return (
-    <ReactECharts
-      option={option}
-      style={{ height: 400 }}
-      onChartReady={onChartReady}
-      onEvents={{
-        'click': onChartClick,
-        'legendselectchanged': onChartLegendselectchanged,
-      }}
-    />
+    <Box flex={1}>
+      <Typography variant='subtitle2'>Rating Distribution</Typography>
+      <Typography variant='body2' align='left' fontStyle='italic' sx={{ opacity: 0.75 }}>
+        {reviews.length ? `Based on ${pluralize(reviews.length, 'review')}` : 'No reviews'}
+      </Typography>
+      <ReactECharts option={option} style={{ height: 170 }} />
+    </Box>
   );
 }
