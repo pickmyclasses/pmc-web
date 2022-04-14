@@ -35,7 +35,7 @@ export default function ProfileRoadmap() {
 
     Promise.all(
       courseLists.map(({ title, numCoursesRequired, courseIDs }) =>
-        Promise.all(courseIDs.slice(0, 25).map((x) => fetchCourseByID(x, user.userID))).then(
+        Promise.all(courseIDs.slice(0, 15).map((x) => fetchCourseByID(x, user.userID))).then(
           (courses) => ({
             title,
             numCoursesRequired,
