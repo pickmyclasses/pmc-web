@@ -1,0 +1,32 @@
+.list-of-channels
+{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+.channels-error
+{
+    color: #ffffff;
+    padding: 0 16px;
+}
+  
+.channels-loading {
+    height: 115px;
+}
+  
+.list-of-channels-header {
+    padding: 0 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+  
+.list-of-channels-header-title {
+    font-family: Helvetica Neue, sans-serif;
+    font-size: 13px;
+    line-height: 16px;
+    height: 16px;
+    color: rgba(255, 255, 255, 0.66);
+    margin-bottom: 10px;
+}

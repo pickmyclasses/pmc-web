@@ -14,6 +14,7 @@ import ContainerWithPreventableNavigation from 'components/PreventableNavigation
 import FileUpload from './pages/Admin/FileUpload';
 import ProfilePage from 'pages/ProfilePage';
 import MajorDeclarationPage from 'pages/MajorDeclarationPage';
+import DirectMessage from 'pages/DirectMessage/DirectMessage';
 import { useMount } from 'utils';
 
 /**
@@ -58,6 +59,7 @@ export default function App() {
               <Route exact path='/admin' element={<AdminPage />} />
               <Route exact path='/admin-update' element={<UpdateData />} />
               <Route exact path='/file-upload' element={<FileUpload />} />
+              <Route exact path='/direct-message' element={<DirectMessage/>}/>
             </Routes>
           </ContainerWithNavigationBar>
         </ContainerWithPreventableNavigation>

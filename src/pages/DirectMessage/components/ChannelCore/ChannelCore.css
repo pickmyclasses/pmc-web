@@ -1,0 +1,60 @@
+.channel-core {
+    position: relative;
+    height: 62px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    background: #ffffff;
+    box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.1);
+    border-top-right-radius: 16px;
+    z-index: 1;
+  }
+  
+  .channel-core-edit-area {
+    display: flex;
+    align-items: center;
+  }
+  
+  .channel-core-edit-area-text {
+    font-family: Helvetica Neue, sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    color: #2c2c30;
+    margin-right: 8px;
+  }
+  
+  @media screen and (min-width: 1070px) {
+    .channel-core-header {
+      max-width: 700px;
+    }
+  }
+  
+  .channel-core-header::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .channel-core-header-avatar {
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+  }
+  
+  .channel-core-header-avatar.user {
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  .channel-core-user-counter-div{
+    flex: 0.55;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: right;
+  }
+  
+  .channel-core-user-counter-text {
+    font-family: Helvetica Neue, sans-serif;
+    font-size: 14px;
+    color: #858688;
+  }

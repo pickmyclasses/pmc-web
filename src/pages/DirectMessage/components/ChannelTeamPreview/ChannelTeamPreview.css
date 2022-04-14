@@ -1,0 +1,33 @@
+.channel-name {
+    height: 37px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .channel-name-selected {
+    height: auto;
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    font-weight: bold;
+    margin-right: 16px;
+    cursor: pointer;
+    z-index: 2;
+  }
+  
+  .channel-preview-item-names {
+    display: flex;
+    align-items: center;
+    font-family: Helvetica Neue, sans-serif;
+    font-size: 14px;
+    color: #ffffff;
+    padding: 0px 20px;
+    height: 100%;
+    width: 100%;
+    text-overflow: ellipsis;
+    word-break: break-all;
+  }
+  

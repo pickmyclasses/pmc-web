@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Button } from '@mui/material';
+import { Link } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import './UpdateData.css';
 
@@ -31,13 +33,17 @@ export default function UpdateData() {
     e.preventDefault();
     console.log(data);
 
+    let request_body = data;
+    request_body.table_name = tableName;
+
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: JSON.stringify(request_body),
     };
 
-    let URL = 'https://pmc-schedule-api.herokuapp.com/' + tableName + '/update';
+    let URL = 'https://pmc-schedule-api.herokuapp.com/update-data';
+    //let URL = 'http://localhost:5000/update-data';
     console.log(URL);
     fetch(URL, requestOptions)
       .then((res) => res.json())
@@ -54,7 +60,15 @@ export default function UpdateData() {
   return (
     <div className='updateDataDiv'>
       <h1 style={{ textAlign: 'center' }}>Update Data</h1>
-      <form onSubmit={handleSubmit}>
+      <Link to="/admin">
+        <Button
+          variant="contained"
+          color="primary"
+        >
+          Admin Data Table
+        </Button>
+      </Link>
+      <form onSubmit={handleSubmit} style={{ marginTop: '50px' }}>
         {dataToRender.map((obj) => (
           <div key={keyItem++}>
             <label>
