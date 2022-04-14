@@ -1,35 +1,8 @@
 import { Stack, Typography, Box, Avatar, Grid } from '@mui/material';
-import { formatInstructorName } from 'utils';
+import { formatInstructorName, getColorByString, getInitials } from 'utils';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
-function stringToColor(string) {
-  let hash = 0;
-  let i;
 
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = '#';
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-
-  return color;
-}
-
-function stringAvatar(name) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name),
-      width: 28,
-      height: 28,
-    },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-  };
-}
 function getTopRatedInstructors(professorRanking, num) {
   let instructors = [];
   let instructorRatings = [];
@@ -48,11 +21,19 @@ export default function StatsProfessorSum({ professorRanking }) {
   let topInstructors = instructorInfo[0];
   let topInstructorRatings = instructorInfo[1];
   return (
-    <Stack padding='10px 10px' spacing='16px'>
+    <Stack paddingY='12px' spacing='16px'>
       {topInstructors.map((instructor, i) => (
-        <Stack direction='row' justifyContent='space-between' width='100%' alignItems='center'>
-          <Stack direction='row' alignItems='center' spacing='4px'>
-            <Avatar {...stringAvatar(formatInstructorName(instructor))} />
+        <Stack
+          key={instructor}
+          direction='row'
+          justifyContent='space-between'
+          width='100%'
+          alignItems='center'
+        >
+          <Stack direction='row' alignItems='center' spacing='8px'>
+            <Avatar sx={{ backgroundColor: getColorByString(instructor), fontSize: '1rem' }}>
+              {getInitials(instructor)}
+            </Avatar>
             <Stack>
               <Typography variant='body2'>{formatInstructorName(instructor)}</Typography>
               <Typography variant='caption' sx={{ opacity: 0.75 }}>

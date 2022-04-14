@@ -12,7 +12,7 @@ import {
 import { CenterAligningFlexBox } from 'components/CourseCardGrid/CourseCard/CourseCard';
 import { getComponent } from 'components/Scheduler/ShoppingCart';
 import React from 'react';
-import { formatInstructorName } from 'utils';
+import { formatInstructorName, getColorByString, getInitials } from 'utils';
 import OfferingListingItem from './OfferingListingItem';
 
 export default function OfferingListingGroup({
@@ -40,7 +40,14 @@ export default function OfferingListingGroup({
           >
             <Box padding='8px 8px 4px'>
               <CenterAligningFlexBox>
-                <Avatar src='https://my.eng.utah.edu/~pajensen/Images/Peter.jpg' />
+                <Avatar
+                  sx={{
+                    backgroundColor: getColorByString(primaryClass.instructor),
+                    fontSize: '1rem',
+                  }}
+                >
+                  {getInitials(primaryClass.instructor)}
+                </Avatar>
                 <Stack marginLeft='12px'>
                   <Typography variant='subtitle1'>
                     {formatInstructorName(primaryClass.instructor)}

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Color from 'color';
+import { getColorByString } from 'utils';
 
 export const login = (email, password) =>
   axios.post('/login', { email, password }).then(({ data }) => formatUserInfo(data.data, true));
@@ -43,13 +43,7 @@ export const fetchCourseByID = (courseID, userID = NaN) =>
 const getFakeCourseImageURL = (course) =>
   `https://singlecolorimage.com/get/${getColorByCourse(course).substring(1)}/512x216`;
 
-export const getColorByCourse = (course) =>
-  '#' +
-  Color('#' + (parseInt(course.catalogCourseName, 36) * 2531).toString(16).slice(-3))
-    .desaturate(0.667)
-    .lightness(50)
-    .rgbNumber()
-    .toString(16);
+export const getColorByCourse = (course) => getColorByString(course.catalogCourseName);
 
 const injectFakePropertiesToCourse = (course) => {
   course.ImageURL = getFakeCourseImageURL(course);
@@ -82,7 +76,7 @@ const fakeFetchHomePageCourses = (userID) => {
   );
 };
 
-export const fetchCoursesBySearch = (query, userID = NaN, pageNumber) =>
+export const fetchCoursesBySearch = (query, userID = NaN, pageNumber = 0) =>
   axios
     .post('/course/search', { keyword: query, pageSize: 12, userID, pageNumber: pageNumber })
     .then(({ data }) => {
