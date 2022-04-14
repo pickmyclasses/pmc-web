@@ -37,6 +37,10 @@ export default function SearchPage({ shouldShowScheduler }) {
   );
 
   useEffect(() => {
+    setCourses([]);
+  }, [urlParams?.query]);
+
+  useEffect(() => {
     if (!urlParams?.query) return;
     setLoading(true);
     fetchCoursesBySearch(urlParams?.query, user?.userID, pageNum).then(({ data, total }) => {
