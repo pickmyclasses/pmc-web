@@ -17,7 +17,7 @@ export default function SearchPage({ shouldShowScheduler }) {
 
   const [courses, setCourses] = useState([]);
   const [numResults, setNumResults] = useState(NaN);
-  const [pageNum, setPageNum] = useState(0);
+  const [pageIndex, setPageIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(false);
 
@@ -28,7 +28,7 @@ export default function SearchPage({ shouldShowScheduler }) {
       if (loader.current) loader.current.disconnect();
       loader.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
-          setPageNum((pageNum) => pageNum + 1);
+          setPageIndex((pageIndex) => pageIndex + 1);
         }
       });
       if (node) loader.current.observe(node);
@@ -39,8 +39,8 @@ export default function SearchPage({ shouldShowScheduler }) {
   useEffect(() => {
     setCourses([]);
     if (!urlParams?.query) return;
-    setPageNum(0);
-    fetchCoursesBySearch(urlParams?.query, user?.userID, pageNum).then(({ data, total }) => {
+    setPageIndex(0);
+    fetchCoursesBySearch(urlParams?.query, user, pageIndex).then(({ data, total }) => {
       setCourses(data);
       setNumResults(total);
     });
@@ -48,14 +48,14 @@ export default function SearchPage({ shouldShowScheduler }) {
 
   useEffect(() => {
     setLoading(true);
-    fetchCoursesBySearch(urlParams?.query, user?.userID, pageNum).then(({ data, total }) => {
+    fetchCoursesBySearch(urlParams?.query, user?.userID, pageIndex).then(({ data, total }) => {
       let newCourses = courses.concat(data);
       setCourses(newCourses);
       setNumResults(total);
       setHasMore(data.length > 0);
       setLoading(false);
     });
-  }, [pageNum]);
+  }, [pageIndex]);
 
   // clean up
   useEffect(() => {

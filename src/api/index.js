@@ -76,11 +76,43 @@ const fakeFetchHomePageCourses = (userID) => {
   );
 };
 
-export const fetchCoursesBySearch = (query, userID = NaN, pageNumber = 0) =>
+const getRelevanceScoreByRequirements = (requirements, user) => {
+  const keywords =
+    {
+      '1': ['upper', 'elective', 'math', 'major', 'general', 'pre-'],
+      '2': ['upper', 'elective', 'pre-', 'math', 'general', 'major'],
+      '3': ['general', 'upper', 'math', 'major', 'capstone', 'elective'],
+      '4': ['general', 'upper', 'math', 'major', 'elective', 'capstone'],
+    }[user.schoolYear] || [];
+  return Math.max(
+    ...requirements.flat().map((requirementName) =>
+      keywords.lastIndexOf(
+        keywords
+          .concat()
+          .reverse()
+          .find((keyword) => requirementName.toLowerCase().includes(keyword))
+      )
+    )
+  );
+};
+
+export const fetchCoursesBySearch = (query, user = null, pageIndex = 0) =>
   axios
-    .post('/course/search', { keyword: query, pageSize: 12, userID, pageNumber: pageNumber })
+    .post('/course/search', {
+      keyword: query,
+      pageSize: 32,
+      userID: user?.userID,
+      pageNumber: pageIndex,
+    })
     .then(({ data }) => {
       for (let course of data.data) injectFakePropertiesToCourse(course);
+      if (user) {
+        data.data.sort(
+          (x, y) =>
+            getRelevanceScoreByRequirements(y.degreeCatalogs || [], user) -
+            getRelevanceScoreByRequirements(x.degreeCatalogs || [], user)
+        );
+      }
       return data;
     });
 
