@@ -127,7 +127,7 @@ export default function CourseStats() {
   const renderInfoSummery = () => (
     <MotionCard
       initial='initial'
-      onClick={() => setCondition('detailedAverage')}
+      // onClick={() => setCondition('detailedAverage')}
       whileHover='mouseEntered'
       sx={{
         width: '100%',
