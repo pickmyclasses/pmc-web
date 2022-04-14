@@ -28,7 +28,7 @@ let option = {
       name: 'Distribution',
       type: 'pie',
       radius: '90%',
-      center: ['60%', '48%'],
+      center: ['60%', '50%'],
 
       emphasis: {
         label: {
@@ -44,7 +44,7 @@ let option = {
       ],
       itemStyle: {
         emphasis: {
-          shadowBlur: 10,
+          shadowBlur: 5,
           shadowOffsetX: 0,
           shadowColor: 'rgba(0, 0, 0, 0.5)',
         },
