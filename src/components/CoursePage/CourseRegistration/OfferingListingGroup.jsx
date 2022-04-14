@@ -9,6 +9,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { Person } from '@mui/icons-material';
 import { CenterAligningFlexBox } from 'components/CourseCardGrid/CourseCard/CourseCard';
 import { getComponent } from 'components/Scheduler/ShoppingCart';
 import React from 'react';
@@ -40,14 +41,20 @@ export default function OfferingListingGroup({
           >
             <Box padding='8px 8px 4px'>
               <CenterAligningFlexBox>
-                <Avatar
-                  sx={{
-                    backgroundColor: getColorByString(primaryClass.instructor),
-                    fontSize: '1rem',
-                  }}
-                >
-                  {getInitials(primaryClass.instructor)}
-                </Avatar>
+                {primaryClass.instructor ? (
+                  <Avatar
+                    sx={{
+                      backgroundColor: getColorByString(primaryClass.instructor),
+                      fontSize: '1rem',
+                    }}
+                  >
+                    {getInitials(primaryClass.instructor)}
+                  </Avatar>
+                ) : (
+                  <Avatar>
+                    <Person />
+                  </Avatar>
+                )}
                 <Stack marginLeft='12px'>
                   <Typography variant='subtitle1'>
                     {formatInstructorName(primaryClass.instructor)}

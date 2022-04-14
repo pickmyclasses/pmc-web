@@ -1,5 +1,5 @@
 import { School } from '@mui/icons-material';
-import { Stack, Typography } from '@mui/material';
+import { Link, Stack, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import ProfilePageTabHeadingCard from './ProfilePageTabHeadingCard';
 import RoadmapSummaryCard from './ProfileRoadmap/RoadmapSummaryCard';
@@ -10,6 +10,7 @@ import { fetchCourseByID } from 'api';
 import ContainerWithLoadingIndication from 'components/Page/ContainerWithLoadingIndication';
 import { SectionOverline } from 'pages/HomePage';
 import { pluralize } from 'utils';
+import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 
 /** The roadmap tab of the user profile page. */
 export default function ProfileRoadmap() {
@@ -50,7 +51,7 @@ export default function ProfileRoadmap() {
     return (
       <ContainerWithLoadingIndication isLoading={!courseLists}>
         <Stack spacing='48px' paddingBottom='32px'>
-          {courseLists &&
+          {courseLists?.length ? (
             courseLists.map(({ title, numCoursesRequired, courses }) => (
               <Stack key={title}>
                 <SectionOverline>{title}</SectionOverline>
@@ -59,7 +60,12 @@ export default function ProfileRoadmap() {
                 </Typography>
                 <CourseCardGrid courses={courses} numColumns={5} />
               </Stack>
-            ))}
+            ))
+          ) : (
+            <Link component={PreventableLink} to='/profile/roadmap/declare'>
+              Declare major
+            </Link>
+          )}
         </Stack>
       </ContainerWithLoadingIndication>
     );

@@ -21,8 +21,10 @@ import { fetchCoursesBySearch } from 'api';
 import { SectionOverline } from 'pages/HomePage';
 import { PreventableNavigationContext } from '../PreventableNavigation/ContainerWithPreventableNavigation';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
+import { UserContext } from 'App';
 
 export default function CourseOverview() {
+  const { user } = useContext(UserContext);
   const { navigateIfAllowed } = useContext(PreventableNavigationContext);
   const { course, reviews } = useContext(CourseContext);
   const { classesInShoppingCart } = useContext(SchedulerContext);
@@ -48,7 +50,7 @@ export default function CourseOverview() {
 
   // Generate the recommended course list.
   useEffect(() => {
-    fetchCoursesBySearch(course.title.split(/\s+/)[0]).then(({ data }) =>
+    fetchCoursesBySearch(course.title.split(/\s+/)[0], user).then(({ data }) =>
       // The current course itself might show up in the search results. Remove it.
       setRecommendedCourses(
         data.filter((x) => +x.id !== +course.id).slice(0, numRecommendedCourses)
