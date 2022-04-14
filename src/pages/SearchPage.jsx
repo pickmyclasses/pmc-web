@@ -50,7 +50,7 @@ export default function SearchPage({ shouldShowScheduler }) {
     <>
       <FilterVerticalContainer />
       <ContainerWithStaticScheduler shouldShowScheduler={shouldShowScheduler}>
-        <ContainerWithLoadingIndication isLoading={!courses}>
+        <ContainerWithLoadingIndication isLoading={courses.length === 0}>
           <Scrollbars autoHide>
             <Stack padding='24px' spacing='16px'>
               <Typography variant='body2' gutterBottom>
@@ -75,7 +75,7 @@ export default function SearchPage({ shouldShowScheduler }) {
                 })}
               </Stack>
             </Stack>
-            {loading && <LinearProgress sx={{ height: 8 }} />}
+            {courses.length !== 0 && loading && <LinearProgress sx={{ height: 8 }} />}
           </Scrollbars>
         </ContainerWithLoadingIndication>
       </ContainerWithStaticScheduler>
