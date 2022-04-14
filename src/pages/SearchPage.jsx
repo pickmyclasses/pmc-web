@@ -57,6 +57,13 @@ export default function SearchPage({ shouldShowScheduler }) {
     });
   }, [pageNum]);
 
+  // clean up
+  useEffect(() => {
+    return () => {
+      setCourses([]);
+    };
+  }, []);
+
   return (
     <>
       <FilterVerticalContainer />
