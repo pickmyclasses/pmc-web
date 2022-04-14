@@ -44,7 +44,6 @@ export default function SearchPage({ shouldShowScheduler }) {
       setHasMore(data.length > 0);
       setLoading(false);
     });
-    setCourses(null);
   }, [urlParams?.query, pageNum]);
 
   return (
