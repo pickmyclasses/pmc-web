@@ -28,7 +28,7 @@ const AdminAuthentication = () => {
 
         const { username, password, phoneNumber, avatarURL } = form;
 
-        const URL = 'http://localhost:5001/auth';
+        const URL = 'https://pmc-admin-api.herokuapp.com/auth';
 
         const { data: { token, userId, hashedPassword, fullName } } = await axios.post(`${URL}/${isSignup ? 'signup' : 'login'}`, {
             username, password, fullName: form.fullName, phoneNumber, avatarURL,
@@ -49,12 +49,12 @@ const AdminAuthentication = () => {
     }
 
     return (
-        <div className="auth__form-container">
-            <div className="auth__form-container_fields">
-                <div className="auth__form-container_fields-content">
+        <div className="panel-authentication">
+            <div className="pannel-authentication-fields">
+                <div className="pannel-authentication-fields-content">
                     <p>{isSignup ? 'Sign Up' : 'Sign In'}</p>
                     <form onSubmit={handleSubmit}>
-                        <div className="auth__form-container_fields-content_input">
+                        <div className="pannel-authentication-fields-content-input">
                             <label htmlFor="username">Username</label>
                                 <input 
                                     name="username" 
@@ -64,7 +64,7 @@ const AdminAuthentication = () => {
                                     required
                                 />
                             </div>
-                        <div className="auth__form-container_fields-content_input">
+                        <div className="pannel-authentication-fields-content-input">
                                 <label htmlFor="password">Password</label>
                                 <input 
                                     name="password" 
@@ -74,7 +74,7 @@ const AdminAuthentication = () => {
                                     required
                                 />
                             </div>
-                        <div className="auth__form-container_fields-content_button">
+                        <div className="pannel-authentication-fields-content-button">
                             <button>{isSignup ? "Sign Up" : "Sign In"}</button>
                         </div>
                     </form>
