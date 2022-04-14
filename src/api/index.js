@@ -85,7 +85,7 @@ const fakeFetchHomePageCourses = (userID) => {
 
 export const fetchCoursesBySearch = (query, userID = NaN, pageNumber) =>
   axios
-    .post('/course/search', { keyword: query, pageSize: 50, userID, pageNumber: pageNumber })
+    .post('/course/search', { keyword: query, pageSize: 12, userID, pageNumber: pageNumber })
     .then(({ data }) => {
       for (let course of data.data) injectFakePropertiesToCourse(course);
       return data;

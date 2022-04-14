@@ -60,6 +60,7 @@ export default function SearchPage({ shouldShowScheduler }) {
                 {courses?.map((course, i) => {
                   if (courses?.length === i + 1) {
                     return (
+                      // need a div here otherwise gives warning from useRef
                       <div key={i} ref={lastElementRef}>
                         <CourseResultItem course={course} />
                       </div>
