@@ -74,7 +74,7 @@ export default function SearchPage({ shouldShowScheduler }) {
                 })}
               </Stack>
             </Stack>
-            <LinearProgress sx={{ height: 8 }} />
+            {loading && <LinearProgress sx={{ height: 8 }} />}
           </Scrollbars>
         </ContainerWithLoadingIndication>
       </ContainerWithStaticScheduler>
