@@ -42,7 +42,7 @@ let option = {
     {
       show: false,
       type: 'category',
-      data: ['F', 'D', 'D+', 'C-', 'C', 'C+', 'B-', 'B', 'B+', 'A-', 'A'],
+      data: ['D', 'D+', 'C-', 'C', 'C+', 'B-', 'B', 'B+', 'A-', 'A'],
       axisLabel: {
         fontSize: 14,
         align: 'right',
@@ -63,7 +63,7 @@ function generateLetterGrade(value) {
   if (value >= (3.7 + 4) / 2) return 'A';
   if (value >= (3.3 + 3.7) / 2) return 'A-';
   if (value >= (3 + 3.3) / 2) return 'B+';
-  if (value >= (2.7 + 4) / 2) return 'B';
+  if (value >= (2.7 + 3) / 2) return 'B';
   if (value >= (2.3 + 2.7) / 2) return 'B-';
   if (value >= (2 + 2.3) / 2) return 'C+';
   if (value >= (1.7 + 2) / 2) return 'C';
@@ -77,7 +77,7 @@ function populateProfessorLabels(professorRanking, reviews) {
   option.series[0].data = [];
   for (let i = 0; i < professorRanking.length; i++) {
     option.xAxis[0].data.push(professorRanking[i].name);
-
+    console.log(professorRanking[i].grade);
     option.series[0].data.push(generateLetterGrade(professorRanking[i].grade));
   }
 }
