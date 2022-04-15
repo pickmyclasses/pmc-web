@@ -107,7 +107,7 @@ export const TabsWithoutBottomGap = styled(Tabs)({
 });
 
 export const formatCourseRequirementReward = (degreeCatalogs) =>
-  degreeCatalogs[0][0]
+  degreeCatalogs[degreeCatalogs.length - 1][0]
     .replace(/(course)?s$/i, '')
     .split(/\s+/)
     .map((x) => (x.length > 2 ? capitalizeFirst(x) : x))

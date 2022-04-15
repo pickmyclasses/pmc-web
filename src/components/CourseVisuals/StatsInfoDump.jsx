@@ -93,7 +93,7 @@ function generateLetterGrade(value) {
   if (value >= (3.7 + 4) / 2) return 'A';
   if (value >= (3.3 + 3.7) / 2) return 'A-';
   if (value >= (3 + 3.3) / 2) return 'B+';
-  if (value >= (2.7 + 4) / 2) return 'B';
+  if (value >= (2.7 + 3) / 2) return 'B';
   if (value >= (2.3 + 2.7) / 2) return 'B-';
   if (value >= (2 + 2.3) / 2) return 'C+';
   if (value >= (1.7 + 2) / 2) return 'C';
@@ -106,7 +106,7 @@ function generateLetterGrade(value) {
 export default function statsInfoDump({ courseLoad }) {
   gaugeData[0].value = courseLoad.courseAverageGrade * 25;
   gaugeData[1].value = courseLoad.majorAverageGrade * 25;
-  //generateLetterGrade(courseLoad.courseAverageGrade)
+  generateLetterGrade(courseLoad.courseAverageGrade);
   return (
     <ReactECharts
       option={option}

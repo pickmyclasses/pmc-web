@@ -66,8 +66,8 @@ export default function CourseEligibilityIndicator({
 export const getEligibility = (course, classesInShoppingCart) => {
   if (!course.classes?.length) return 'not-offered';
   if (classesInShoppingCart.some((x) => x.course.id === course.id)) return 'in-shopping-cart';
-  // TODO Q: For demonstration purposes, CS 4000 is listed as ineligible for any user.
-  if (+course.id === 22958) return 'incomplete-prerequisites';
+  if (!course.prerequisiteList.isCompleted) return 'incomplete-prerequisites';
+  if (course.isTaken) return 'taken';
   return 'eligible';
 };
 

@@ -50,7 +50,9 @@ export default function CourseResultItem({ course }) {
         >
           <Typography variant='body2' color={theme.palette.text.secondary}>
             {course.degreeCatalogs?.length > 0 && (
-              <>{formatCourseRequirementReward(course.degreeCatalogs)}&nbsp;•&nbsp;&nbsp;</>
+              <>
+                {formatCourseRequirementReward(course.degreeCatalogs)}&nbsp;&nbsp;•&nbsp;&nbsp;
+              </>
             )}
             {formatCreditRange(course)}&nbsp;&nbsp;•&nbsp;&nbsp;
           </Typography>

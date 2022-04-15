@@ -60,4 +60,5 @@ const contentByEligibility = {
     'Ineligible',
     'You do not fulfill all prerequisites. Click to view prerequisites.',
   ],
+  'taken': ['warning', DoDisturb, 'Taken', 'You have taken this course in the past.'],
 };

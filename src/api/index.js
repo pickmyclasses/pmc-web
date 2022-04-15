@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getColorByString } from 'utils';
+import { formatPrerequisites, getColorByString } from 'utils';
 
 export const login = (email, password) =>
   axios.post('/login', { email, password }).then(({ data }) => formatUserInfo(data.data, true));
@@ -31,52 +31,103 @@ export const declareMajor = (userID, majorName, emphasisName, schoolYear) =>
  * Fetches the course but also injects the fake image URL. Basically pretends `ImageURL` was an
  * actual field of the course.
  */
-export const fetchCourseByID = (courseID, userID = NaN) =>
-  new Promise((onFetched) =>
-    axios.get(`/course/${courseID}${isNaN(userID) ? '' : '?userID=' + userID}`).then((data) => {
-      const course = data.data.data;
-      injectFakePropertiesToCourse(course);
-      onFetched(course);
-    })
+export const fetchCourseByID = async (courseID, userID = NaN) => {
+  const { data } = await axios.get(
+    `/course/${courseID}${isNaN(userID) ? '' : '?userID=' + userID}`
   );
+  const course = data.data;
+  await injectFakePropertiesToCourse(course);
+  return course;
+};
 
 const getFakeCourseImageURL = (course) =>
   `https://singlecolorimage.com/get/${getColorByCourse(course).substring(1)}/512x216`;
 
 export const getColorByCourse = (course) => getColorByString(course.catalogCourseName);
 
-const injectFakePropertiesToCourse = (course) => {
+const injectFakePropertiesToCourse = async (course) => {
   course.ImageURL = getFakeCourseImageURL(course);
   // Hide courses that don't have a start time (corrupted data from backend?)
   course.classes = course.classes.filter((x) => !x.offerDate || x.startTime);
   injectLocationMapURLToClasses(course.classes);
+  course.prerequisiteList = await getPrerequisiteList(course);
+  course.isTaken = historyCourseIDs.has(course.id);
+  return course;
 };
 
-export const fetchHomePageCourses = (userID = NaN) => fakeFetchHomePageCourses();
-
-// TODO (QC): Get rid of this, although it might be hard to.
-const fakeFetchHomePageCourses = (userID) => {
-  const recommendedCategories = {
-    // 'Major Requirements To Go': [22963],
-    // 'Major Requirements To Go': [22948, 22949, 22963],
-    // 'Highest Rated Electives': [22961, 22971, 22951, 22970, 22998, 23000],
-    'Highest Rated Math/Science Courses': [27247, 27245, 22417, 22933, 21976, 27266],
-    'Highest Rated Gen-Ed Courses': [
-      31826, 28270, 24777, 21978, 28354, 29897, 30546, 24764, 21072, 31570,
-    ],
+const getPrerequisiteList = async (course) => {
+  let [prerequisiteList, numPrerequisites] = formatPrerequisites(course.prerequisites);
+  let courseNames = new Set();
+  const courseNamePattern = /[A-Z]{2,5} \d{3,4}/;
+  const formatCourseName = (s) => s.replace(' ', '').toUpperCase();
+  const getCoursesIDsFromPrerequisiteList = (prerequisiteList) => {
+    for (let item of prerequisiteList.items) {
+      if (typeof item === 'string') {
+        const extractedCourseNames = item.match(courseNamePattern);
+        if (extractedCourseNames?.length === 1)
+          courseNames.add(formatCourseName(extractedCourseNames[0]));
+      } else {
+        getCoursesIDsFromPrerequisiteList(item);
+      }
+    }
   };
-
-  return Promise.all(
-    Object.entries(recommendedCategories).map(([category, courseIDs]) =>
-      Promise.all(courseIDs.map((id) => fetchCourseByID(id, userID))).then((courses) => ({
-        category,
-        courses,
-      }))
-    )
+  getCoursesIDsFromPrerequisiteList(prerequisiteList);
+  const courseIDByName = new Map(
+    (await fetchCourseIDsByCourseNames([...courseNames])).map(({ name, id }) => [name, id])
   );
+  const checkPrerequisiteList = (prerequisiteList) => {
+    let checkedList = {
+      type: 'list',
+      policy: prerequisiteList.policy,
+      items: prerequisiteList.items
+        .map((item) => {
+          if (typeof item === 'string') {
+            const extractedCourseNames = item.match(courseNamePattern);
+            if (extractedCourseNames?.length === 1) {
+              const courseName = formatCourseName(extractedCourseNames[0]);
+              if (courseIDByName.has(courseName))
+                return {
+                  type: 'course',
+                  name: item,
+                  id: courseIDByName.get(courseName),
+                  isCompleted: historyCourseIDs.has(courseIDByName.get(courseName)),
+                };
+            }
+            // return { type: 'text', text: item, isCompleted: true };
+            return null;
+          }
+          return { ...checkPrerequisiteList(item) };
+        })
+        .filter((x) => x && (x.type !== 'list' || x.numItems)),
+    };
+    checkedList.numItems = checkedList.items
+      .map((x) => (x.type === 'list' ? x.numItems : +(x.type === 'course')))
+      .reduce((acc, x) => acc + x, 0);
+    checkedList.isCompleted =
+      !checkedList.numItems || checkedList.items[checkedList.policy]((x) => x.isCompleted);
+    return checkedList;
+  };
+  return checkPrerequisiteList(prerequisiteList);
 };
 
-const getRelevanceScoreByRequirements = (requirements, user) => {
+export const fetchCourseIDsByCourseNames = (courseNames) =>
+  axios.post('/course', { courseNameList: courseNames }).then(({ data }) => data.data);
+
+export const fetchHomePageCourses = async (userID) => {
+  const { data } = await axios.get(`/user/${userID}/recommend`);
+  for (let { courseList } of data.data.courseCatalogList) {
+    for (let course of courseList) await injectFakePropertiesToCourse(course);
+  }
+  return data.data.courseCatalogList;
+};
+
+const getRequirementAdjustedRelevanceScore = (query, course, user) => {
+  if (
+    query.toLowerCase().replace(/\s+/g, '') ===
+    course.catalogCourseName.toLowerCase().replace(/\s+/g, '')
+  )
+    return Infinity;
+
   const keywords =
     {
       '1': ['upper', 'elective', 'math', 'major', 'general', 'pre-'],
@@ -84,6 +135,7 @@ const getRelevanceScoreByRequirements = (requirements, user) => {
       '3': ['general', 'upper', 'math', 'major', 'capstone', 'elective'],
       '4': ['general', 'upper', 'math', 'major', 'elective', 'capstone'],
     }[user.schoolYear] || [];
+  const requirements = course.degreeCatalogs || [];
   return Math.max(
     ...requirements.flat().map((requirementName) =>
       keywords.lastIndexOf(
@@ -96,21 +148,21 @@ const getRelevanceScoreByRequirements = (requirements, user) => {
   );
 };
 
-export const fetchCoursesBySearch = (query, user = null, pageIndex = 0) =>
+export const fetchCoursesBySearch = (query, user = null, pageIndex = 0, pageSize = 24) =>
   axios
     .post('/course/search', {
       keyword: query,
-      pageSize: 32,
       userID: user?.userID,
       pageNumber: pageIndex,
+      pageSize,
     })
-    .then(({ data }) => {
-      for (let course of data.data) injectFakePropertiesToCourse(course);
+    .then(async ({ data }) => {
+      for (let course of data.data) await injectFakePropertiesToCourse(course);
       if (user) {
         data.data.sort(
           (x, y) =>
-            getRelevanceScoreByRequirements(y.degreeCatalogs || [], user) -
-            getRelevanceScoreByRequirements(x.degreeCatalogs || [], user)
+            getRequirementAdjustedRelevanceScore(query, y, user) -
+            getRequirementAdjustedRelevanceScore(query, x, user)
         );
       }
       return data;
@@ -128,11 +180,11 @@ export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseI
  * }
  * ```.
  */
-export const fetchScheduledClassesAndCustomEvents = (userID) =>
-  axios.get(`schedule?userID=${userID}`).then(({ data }) => {
-    for (let { course } of data.data.scheduledClasses) injectFakePropertiesToCourse(course);
-    return data.data;
-  });
+export const fetchScheduledClassesAndCustomEvents = async (userID) => {
+  const { data } = await axios.get(`schedule?userID=${userID}`);
+  for (let { course } of data.data.scheduledClasses) await injectFakePropertiesToCourse(course);
+  return data.data;
+};
 
 // TODO Q: Get rid of all this once the backend has the support for it.
 const injectLocationMapURLToClasses = (classes) => {
@@ -190,7 +242,6 @@ export const getRequirementsFromScheduleAndHistory = (
 ) => {
   for (let requirement of requirements) {
     requirement.title = requirement.setName.replace(/courses/gi, '').trim();
-
     requirement.completedCourses = [];
     requirement.inProgressCourses = [];
   }
@@ -224,17 +275,22 @@ export const addClassIDToSchedule = (userID, classID) =>
 export const removeClassIDFromSchedule = (userID, classID) =>
   axios.put('/schedule?type=class', { userID, classID });
 
+// TODO Q: This is only a workaround for the current implementation of prerequisite list.
+let historyCourseIDs = new Set();
+
 /**
  * Fetches the courses a user has taken in the past.
  *
  * @param {Number} userID
  * @return {Promise<Array<Object>>}
  */
-export const fetchHistoryCourses = (userID) =>
-  axios.get(`/user/${userID}/history`).then(({ data }) => {
-    for (let course of data.data) injectFakePropertiesToCourse(course);
-    return data.data;
-  });
+export const fetchHistoryCourses = async (userID) => {
+  const { data } = await axios.get(`/user/${userID}/history`);
+
+  historyCourseIDs = new Set(data.data.map((x) => x.id));
+  for (let course of data.data) await injectFakePropertiesToCourse(course);
+  return data.data;
+};
 
 /**
  * Ensures that a user's history contains a particular course.
