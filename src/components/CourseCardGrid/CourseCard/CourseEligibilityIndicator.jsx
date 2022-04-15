@@ -67,6 +67,7 @@ export const getEligibility = (course, classesInShoppingCart) => {
   if (!course.classes?.length) return 'not-offered';
   if (classesInShoppingCart.some((x) => x.course.id === course.id)) return 'in-shopping-cart';
   if (!course.prerequisiteList.isCompleted) return 'incomplete-prerequisites';
+  if (course.isTaken) return 'taken';
   return 'eligible';
 };
 
