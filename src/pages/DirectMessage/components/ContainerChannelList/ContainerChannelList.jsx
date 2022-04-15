@@ -2,7 +2,8 @@ import React from 'react';
 import { ChannelList, useChatContext } from 'stream-chat-react';
 import Cookies from 'universal-cookie';
 import { ChannelTeamList, ChannelTeamPreview } from '..';
-import HospitalIcon from '../../img/hospital.png';
+import { Button } from '@mui/material';
+import { Link } from "react-router-dom";
 import LogoutIcon from '../../img/logout.png';
 
 import './ContainerChannelList.css';
@@ -12,11 +13,9 @@ const cookies = new Cookies();
 // The sidebar that contains icons, will add link to admin's data table
 const SideBar = ({ logout }) => (
     <div className="channel-list-sidebar">
-        <div className="channel-list-sidebar-icon1">
-            <div className="icon">
-                <img src={HospitalIcon} alt="Hospital" width="30" />
-            </div>
-        </div>
+        <Link to="/admin">
+            <button>Data Table</button>
+        </Link>
         <div className="channel-list-sidebar-icon2">
             <div className="icon" onClick={logout}>
                 <img src={LogoutIcon} alt="Logout" width="30" />

@@ -25,8 +25,6 @@ const FileUpload = () =>
     // TODO: Post the form to the back-end
     const URL = "http://localhost:5000/upload_files";
 
-    console.log(formData);
-
     fetch(URL, 
     {
       method: 'POST',
@@ -41,7 +39,7 @@ const FileUpload = () =>
       }
       else 
       {
-        console.log(data)
+        alert(data.message);
       }
     })
 };

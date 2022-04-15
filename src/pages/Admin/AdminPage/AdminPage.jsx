@@ -1,5 +1,5 @@
 import React , {useState} from 'react';
-import Table from './Table';
+import Table from '../Table/Table';
 
 export default function AdminPage(props)
 {
