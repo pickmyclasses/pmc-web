@@ -3,7 +3,7 @@ import { Avatar, Button, Grid, Typography, Container } from '@material-ui/core';
 import { Paper } from '@mui/material';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyles from './AuthPage.styles';
-import Input from '../../../components/TextInput/Input';
+import Input from '../TextInput/Input';
 import Icon from '../../../components/Icon/Icon';
 import { useDispatch } from 'react-redux';
 import { GoogleLogin } from 'react-google-login';
