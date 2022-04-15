@@ -88,7 +88,8 @@ function populateDataset(courseTrend) {
   ratings = [];
   for (let i = 0; i < courseTrend.length; i++) {
     semesters.push(courseTrend[i].semesterName);
-    ratings.push(courseTrend[i].rating);
+    // Round the ratings to 2 decimal places
+    ratings.push(Math.round(courseTrend[i].rating * 100) / 100);
   }
   option.xAxis.data = semesters;
   option.series[0].data = ratings;
