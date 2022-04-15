@@ -6,34 +6,51 @@ import { Link } from "react-router-dom";
 
 export default function Table(props) 
 {
+    // a field type boolean to check if the data has been completely loaded or not
     const [isLoaded, setIsLoaded] = useState(false);
+    // a field type string to store the table name
     const [tableName, setTableName] = useState(props.tableName);
-    const [testData, setTestData] = useState([]);
+    // a field type array to store the rows where each row is an object of data
+    const [renderData, setRenderData] = useState([]);
+    // error object to capture the error messages
     const [error, setError] = useState(null);
 
+    // the domain
     const DOMAIN = "http://localhost:5002/";
 
+    // when the table name of props changes, set table name of this component accordingly
     useEffect(() => {
       setTableName(props.tableName);
     }, [props.tableName]);
 
+    // When the table name changes, the call back function (the first parameter) will be called
     useEffect(() => 
     {
+        // setIsLoaded to false until the data is completely loaded
         setIsLoaded(false);
+        // call the fetch function. fetch is a function used to make API call
         fetch(DOMAIN + tableName)
+            // turns the result into json
             .then(res => res.json())
+            // after the result is the data response
             .then(
                 (data) => {
+                    // once the data is completely loaded, set isLoaded to true
                     setIsLoaded(true);
-                    setTestData(data);
+                    // assigned the data fetched to renderData 
+                    setRenderData(data);
                 },
-                (error) => {
+                (error) => 
+                {
+                    // once the error arrives, set isLoaded to true because stop loading
                     setIsLoaded(true);
+                    // set the error received to the error object
                     setError(error);
                 }
             );
     }, [tableName]);
 
+    // the function handle the click of the delete button
     let deleteClick = (e) => {
       const URL = DOMAIN + tableName + "/delete/" + e.row.id;
       console.log(URL);
@@ -58,9 +75,9 @@ export default function Table(props)
     } else 
     {
         let columns = [];
-        if(testData.length > 0)
+        if(renderData.length > 0)
         {
-            for(let key in testData[0])
+            for(let key in renderData[0])
             {
                 let temp = {}
                 temp.field=key;
@@ -130,7 +147,7 @@ export default function Table(props)
           <div style={{ height: 500, width: '100%' }}>
             <DataGrid
             columns={columns}
-            rows={testData}
+            rows={renderData}
             />
           </div>
         );
