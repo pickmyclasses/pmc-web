@@ -148,13 +148,33 @@ const getRequirementAdjustedRelevanceScore = (query, course, user) => {
   );
 };
 
-export const fetchCoursesBySearch = (query, user = null, pageIndex = 0, pageSize = 24) =>
+export const fetchCoursesBySearch = (
+  query,
+  user = null,
+  pageIndex = 0,
+  pageSize = 12,
+  hideNoOffering,
+  onlineOffering,
+  weekdays,
+  startTime,
+  endTime
+) =>
   axios
     .post('/course/search', {
+      includedProfessors: [],
+      IncludedTags: [],
       keyword: query,
-      userID: user?.userID,
+      minCredit: 0,
+      maxCredit: 0,
+      isOnline: onlineOffering,
+      weekday: weekdays,
+      startTime: startTime,
+      endTime: endTime,
+      minRating: 0,
+      hideNoOffering: hideNoOffering,
       pageNumber: pageIndex,
-      pageSize,
+      pageSize: pageSize,
+      userID: user?.userID,
     })
     .then(async ({ data }) => {
       for (let course of data.data) await injectFakePropertiesToCourse(course);
@@ -166,6 +186,9 @@ export const fetchCoursesBySearch = (query, user = null, pageIndex = 0, pageSize
         );
       }
       return data;
+    })
+    .catch((err) => {
+      console.log(hideNoOffering);
     });
 
 export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
