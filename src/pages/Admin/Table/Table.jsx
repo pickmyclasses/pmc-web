@@ -65,6 +65,27 @@ export default function Table(props)
                 temp.width=200;
                 columns.push(temp);
             }
+            if(tableName === 'files_upload')
+            {
+
+              columns.push({
+                field: "Link",
+                renderCell: (cellValues) => {
+                  console.log(cellValues.row.name);
+                  const URL = "http://localhost:5000/uploads/" + cellValues.row.name;
+                  return (
+                      <Button
+                        href = {URL}
+                        variant="contained"
+                        color="primary"
+                      >
+                        Link
+                      </Button>
+
+                  );
+                }
+            });
+            }
             columns.push({
                 field: "Update",
                 renderCell: (cellValues) => {
