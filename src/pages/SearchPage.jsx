@@ -63,7 +63,7 @@ export default function SearchPage({ shouldShowScheduler }) {
       urlParams?.query,
       user,
       pageIndex,
-      12,
+      30,
       noOffering,
       onlineOffering,
       dateStr,
