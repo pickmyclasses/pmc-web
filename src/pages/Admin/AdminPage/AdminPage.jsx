@@ -37,6 +37,7 @@ export default function AdminPage(props)
             <option value="user">user</option>
             <option value="user_course_history">user_course_history</option>            
             <option value="user_voted_tag">user_voted_tag</option>
+            <option value="files_upload">files_upload</option>
         </select>
         <div style={{marginBottom: '20px', marginTop: '20px'}}>---------------------------------------------------</div>
 
