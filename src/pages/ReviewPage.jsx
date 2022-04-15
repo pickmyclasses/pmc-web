@@ -187,7 +187,7 @@ export default function ReviewPage() {
             radioLabel={'Grade Received'}
             options={[
               { optionValue: 'A', optionLabel: 'A' },
-              { optionValue: 'A-', optionLabel: 'A' },
+              { optionValue: 'A-', optionLabel: 'A-' },
               { optionValue: 'B+', optionLabel: 'B+' },
               { optionValue: 'B', optionLabel: 'B' },
               { optionValue: 'B-', optionLabel: 'B-' },
