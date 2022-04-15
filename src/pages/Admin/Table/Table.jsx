@@ -88,7 +88,8 @@ export default function Table(props)
                 }
             });
             }
-            columns.push({
+            else{
+              columns.push({
                 field: "Update",
                 renderCell: (cellValues) => {
                   return (
@@ -121,6 +122,8 @@ export default function Table(props)
                   );
                 }
             });
+            }
+
         }
 
         return (
