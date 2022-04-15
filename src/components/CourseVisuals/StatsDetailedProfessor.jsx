@@ -78,10 +78,7 @@ function populateProfessorLabels(professorRanking, reviews) {
   for (let i = 0; i < professorRanking.length; i++) {
     option.xAxis[0].data.push(professorRanking[i].name);
 
-    option.series[0].data.push(generateLetterGrade(professorRanking[i].rating));
-
-    // console.log(option.xAxis[0].data);
-    // console.log(option.series);
+    option.series[0].data.push(generateLetterGrade(professorRanking[i].grade));
   }
 }
 
