@@ -55,16 +55,15 @@ let option = {
 };
 
 function generateStarValues(reviews, option) {
-  for (let i = 0; i < reviews.length; i++) {
-    option.series[0].data[reviews[i].rating - 1].value = 0;
+  for (let i = 0; i < 5; i++) {
+    option.series[0].data[i].value = 0;
   }
   for (let i = 0; i < reviews.length; i++) {
+    console.log(reviews[i].rating);
     option.series[0].data[reviews[i].rating - 1].value += 1;
   }
 }
 export default function ReviewPieChart({ reviews }) {
-  const [count, setCount] = useState(0);
-
   generateStarValues(reviews, option);
 
   return (

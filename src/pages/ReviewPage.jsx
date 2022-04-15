@@ -187,10 +187,15 @@ export default function ReviewPage() {
             radioLabel={'Grade Received'}
             options={[
               { optionValue: 'A', optionLabel: 'A' },
+              { optionValue: 'A-', optionLabel: 'A-' },
+              { optionValue: 'B+', optionLabel: 'B+' },
               { optionValue: 'B', optionLabel: 'B' },
+              { optionValue: 'B-', optionLabel: 'B-' },
+              { optionValue: 'C+', optionLabel: 'C+' },
               { optionValue: 'C', optionLabel: 'C' },
+              { optionValue: 'C-', optionLabel: 'C-' },
+              { optionValue: 'D+', optionLabel: 'D+' },
               { optionValue: 'D', optionLabel: 'D' },
-              { optionValue: 'F', optionLabel: 'F' },
             ]}
             radioValue={GradeReceived}
             onChange={(GradeReceived) => {
