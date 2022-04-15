@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useContext, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { grey, cyan } from '@mui/material/colors';
@@ -11,9 +11,12 @@ import RatingButton from './RatingButton';
 import TypeButton from './TypeButton';
 import DropdownButton from './DropdownButton';
 import SpecialCoursesButton from './SpecialCoursesButton';
+import { FilterContext } from 'pages/SearchPage';
 
 export default function FilterGroup() {
   const [hideClicked, setHideClicked] = useState(false);
+
+  const { noOffering, setNoOffering } = useContext(FilterContext);
 
   const buttonStyleBeforeClick = {
     color: grey[900],
@@ -33,6 +36,11 @@ export default function FilterGroup() {
     },
   };
 
+  const handleNoOfferingClick = () => {
+    setHideClicked(!hideClicked);
+    setNoOffering(!noOffering);
+  };
+
   const buttonGroup = [
     { name: 'type', component: <TypeButton /> },
     { name: 'course level', component: <SpecialCoursesButton /> },
@@ -50,7 +58,7 @@ export default function FilterGroup() {
           variant='contained'
           sx={hideClicked ? buttonStyleAfterClick : buttonStyleBeforeClick}
           style={{ marginLeft: '10%', marginRight: '5%' }}
-          onClick={() => setHideClicked(!hideClicked)}
+          onClick={handleNoOfferingClick}
         >
           <div style={{ textTransform: 'lowercase' }}>hide no offerings</div>
         </Button>

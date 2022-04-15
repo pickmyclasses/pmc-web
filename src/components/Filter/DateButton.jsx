@@ -1,10 +1,12 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { FilterContext } from 'pages/SearchPage';
 
 export default function DateButton({ optionSelected, setOptionSelected }) {
   const [check, setCheck] = useState([]);
+  const { setWeekdays } = useContext(FilterContext);
 
   useEffect(() => {
     setCheck(optionSelected);
@@ -24,6 +26,7 @@ export default function DateButton({ optionSelected, setOptionSelected }) {
     curIdx === -1 ? newChecked.push(id) : newChecked.splice(curIdx, 1);
     setCheck(newChecked);
     setOptionSelected(newChecked);
+    setWeekdays(newChecked);
   };
 
   return (
