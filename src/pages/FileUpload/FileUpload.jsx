@@ -23,7 +23,8 @@ const FileUpload = () =>
     formData.append("files", file);
 
     // TODO: Post the form to the back-end
-    const URL = "http://localhost:5000/upload_files";
+    const URL = "https://pmc-schedule-api.herokuapp.com/upload_files";
+    //const URL = "http://localhost:5000/upload_files";
 
     fetch(URL, 
     {
