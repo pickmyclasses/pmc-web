@@ -113,28 +113,12 @@ const getPrerequisiteList = async (course) => {
 export const fetchCourseIDsByCourseNames = (courseNames) =>
   axios.post('/course', { courseNameList: courseNames }).then(({ data }) => data.data);
 
-export const fetchHomePageCourses = (userID = NaN) => fakeFetchHomePageCourses();
-
-// TODO (QC): Get rid of this, although it might be hard to.
-const fakeFetchHomePageCourses = (userID) => {
-  const recommendedCategories = {
-    // 'Major Requirements To Go': [22963],
-    // 'Major Requirements To Go': [22948, 22949, 22963],
-    // 'Highest Rated Electives': [22961, 22971, 22951, 22970, 22998, 23000],
-    'Highest Rated Math/Science Courses': [27247, 27245, 22417, 22933, 21976, 27266],
-    'Highest Rated Gen-Ed Courses': [
-      31826, 28270, 24777, 21978, 28354, 29897, 30546, 24764, 21072, 31570,
-    ],
-  };
-
-  return Promise.all(
-    Object.entries(recommendedCategories).map(([category, courseIDs]) =>
-      Promise.all(courseIDs.map((id) => fetchCourseByID(id, userID))).then((courses) => ({
-        category,
-        courses,
-      }))
-    )
-  );
+export const fetchHomePageCourses = async (userID) => {
+  const { data } = await axios.get(`/user/${userID}/recommend`);
+  for (let { courseList } of data.data.courseCatalogList) {
+    for (let course of courseList) await injectFakePropertiesToCourse(course);
+  }
+  return data.data.courseCatalogList;
 };
 
 const getRelevanceScoreByRequirements = (requirements, user) => {
