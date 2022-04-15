@@ -99,47 +99,6 @@ export default function SearchPage({ shouldShowScheduler }) {
     });
   }, [pageIndex]);
 
-  // useEffect(() => {
-  //   setCourses([]);
-  //   if (!urlParams?.query) return;
-  //   setPageIndex(0);
-  //   let weekdayStr = convertDateToStr(weekdays);
-  //   console.log(weekdayStr);
-  //   fetchCoursesBySearch(
-  //     urlParams?.query,
-  //     user,
-  //     pageIndex,
-  //     12,
-  //     noOffering,
-  //     onlineOffering,
-  //     weekdayStr
-  //   ).then(({ data, total }) => {
-  //     setCourses(data);
-  //     setNumResults(total);
-  //   });
-  // }, [urlParams?.query, noOffering, onlineOffering, weekdays]);
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   let weekdayStr = convertDateToStr(weekdays);
-  //   console.log(weekdayStr);
-  //   fetchCoursesBySearch(
-  //     urlParams?.query,
-  //     user,
-  //     pageIndex,
-  //     12,
-  //     noOffering,
-  //     onlineOffering,
-  //     weekdayStr
-  //   ).then(({ data, total }) => {
-  //     let newCourses = courses.concat(data);
-  //     setCourses(newCourses);
-  //     setNumResults(total);
-  //     setHasMore(data.length > 0);
-  //     setLoading(false);
-  //   });
-  // }, [pageIndex]);
-
   // clean up
   useEffect(() => {
     return () => {
