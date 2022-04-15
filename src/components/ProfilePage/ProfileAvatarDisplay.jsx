@@ -14,8 +14,8 @@ export default function ProfileAvatarDisplay() {
       <Typography variant='h6' fontWeight='normal'>
         {user.name}
       </Typography>
-      <Typography variant='caption' sx={{ opacity: 0.75 }}>
-        Profile
+      <Typography variant='caption' sx={{ opacity: 0.75 }} align='center'>
+        {user.major}
       </Typography>
     </Stack>
   );
