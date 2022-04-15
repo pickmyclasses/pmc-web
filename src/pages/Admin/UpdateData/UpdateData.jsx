@@ -42,8 +42,8 @@ export default function UpdateData() {
       body: JSON.stringify(request_body),
     };
 
-    let URL = 'https://pmc-schedule-api.herokuapp.com/update-data';
-    //let URL = 'http://localhost:5000/update-data';
+    // let URL = 'https://pmc-schedule-api.herokuapp.com/update-data';
+     let URL = 'http://localhost:5002/update-data';
     console.log(URL);
     fetch(URL, requestOptions)
       .then((res) => res.json())

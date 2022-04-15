@@ -11,6 +11,8 @@ export default function Table(props)
     const [testData, setTestData] = useState([]);
     const [error, setError] = useState(null);
 
+    const DOMAIN = "http://localhost:5002/";
+
     useEffect(() => {
       setTableName(props.tableName);
     }, [props.tableName]);
@@ -18,7 +20,7 @@ export default function Table(props)
     useEffect(() => 
     {
         setIsLoaded(false);
-        fetch("https://pmc-schedule-api.herokuapp.com/" + tableName)
+        fetch(DOMAIN + tableName)
             .then(res => res.json())
             .then(
                 (data) => {
@@ -33,9 +35,9 @@ export default function Table(props)
     }, [tableName]);
 
     let deleteClick = (e) => {
-      const URL = "https://pmc-schedule-api.herokuapp.com/" + tableName + "/delete/" + e.row.id;
+      const URL = DOMAIN + tableName + "/delete/" + e.row.id;
       console.log(URL);
-      fetch("https://pmc-schedule-api.herokuapp.com/" + tableName + "/delete/" + e.row.id)
+      fetch(DOMAIN + tableName + "/delete/" + e.row.id)
       .then(res => res.json())
       .then(
           (data) => {
@@ -71,8 +73,8 @@ export default function Table(props)
               columns.push({
                 field: "Link",
                 renderCell: (cellValues) => {
-                  console.log(cellValues.row.name);
-                  const URL = "http://localhost:5000/uploads/" + cellValues.row.name;
+
+                  const URL = DOMAIN + "uploads/" + cellValues.row.name;
                   return (
                       <Button
                         href = {URL}
