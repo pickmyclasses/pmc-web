@@ -121,7 +121,13 @@ export const fetchHomePageCourses = async (userID) => {
   return data.data.courseCatalogList;
 };
 
-const getRelevanceScoreByRequirements = (requirements, user) => {
+const getRequirementAdjustedRelevanceScore = (query, course, user) => {
+  if (
+    query.toLowerCase().replace(/\s+/g, '') ===
+    course.catalogCourseName.toLowerCase().replace(/\s+/g, '')
+  )
+    return Infinity;
+
   const keywords =
     {
       '1': ['upper', 'elective', 'math', 'major', 'general', 'pre-'],
@@ -129,6 +135,7 @@ const getRelevanceScoreByRequirements = (requirements, user) => {
       '3': ['general', 'upper', 'math', 'major', 'capstone', 'elective'],
       '4': ['general', 'upper', 'math', 'major', 'elective', 'capstone'],
     }[user.schoolYear] || [];
+  const requirements = course.degreeCatalogs || [];
   return Math.max(
     ...requirements.flat().map((requirementName) =>
       keywords.lastIndexOf(
@@ -141,7 +148,7 @@ const getRelevanceScoreByRequirements = (requirements, user) => {
   );
 };
 
-export const fetchCoursesBySearch = (query, user = null, pageIndex = 0, pageSize = 32) =>
+export const fetchCoursesBySearch = (query, user = null, pageIndex = 0, pageSize = 24) =>
   axios
     .post('/course/search', {
       keyword: query,
@@ -154,8 +161,8 @@ export const fetchCoursesBySearch = (query, user = null, pageIndex = 0, pageSize
       if (user) {
         data.data.sort(
           (x, y) =>
-            getRelevanceScoreByRequirements(y.degreeCatalogs || [], user) -
-            getRelevanceScoreByRequirements(x.degreeCatalogs || [], user)
+            getRequirementAdjustedRelevanceScore(query, y, user) -
+            getRequirementAdjustedRelevanceScore(query, x, user)
         );
       }
       return data;
