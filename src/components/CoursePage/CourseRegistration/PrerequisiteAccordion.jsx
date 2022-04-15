@@ -4,9 +4,12 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Link,
   Stack,
   Typography,
 } from '@mui/material';
+import ClickableIndicator from 'components/CourseCardGrid/CourseCard/ClickableIndicator';
+import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 import React, { useContext, useEffect, useState } from 'react';
 import { formatPrerequisites, capitalizeFirst, pluralize } from 'utils';
 import { getEligibility } from '../../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
@@ -14,73 +17,69 @@ import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
 import LabelWithIcon from '../LabelWithIcon';
 
 export default function PrerequisiteAccordion({ course }) {
-  const { classesInShoppingCart } = useContext(SchedulerContext);
-
   const [isEligible, setIsEligible] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [prerequisiteList, setPrerequisiteList] = useState({});
-  const [numPrerequisites, setNumPrerequisites] = useState(null);
 
   useEffect(() => {
-    const isEligible =
-      getEligibility(course, classesInShoppingCart) !== 'incomplete-prerequisites';
+    const isEligible = course.prerequisiteList.isCompleted;
     setIsEligible(isEligible);
     setIsExpanded(!isEligible);
+  }, [course]);
 
-    const [prerequisiteList, count] = formatPrerequisites(course.prerequisites);
-
-    setPrerequisiteList(prerequisiteList);
-    setNumPrerequisites(count);
-  }, [course, classesInShoppingCart]);
-
-  // TODO Q: This is only a placeholder.
-  const iconType = isEligible ? Check : Close;
+  const iconTypes = [Close, Check];
 
   const renderPrerequisiteItem = (item, key) =>
-    typeof item === 'string' ? (
-      <LabelWithIcon
-        key={key}
-        align='flex-start'
-        size='small'
-        height='2em'
-        iconType={iconType}
-        label={item}
-      />
-    ) : (
+    item.type === 'list' ? (
       <Stack key={key}>
         <LabelWithIcon
           align='flex-start'
           height='1.75em'
           size='small'
-          iconType={iconType}
-          label={capitalizeFirst(
-            [item.condition, item.operator === 'some' ? 'one' : 'all', 'of the following:']
-              .filter(Boolean)
-              .join(' ')
-          )}
+          iconType={iconTypes[+item.isCompleted]}
+          label={(item.policy === 'some' ? 'One' : 'All') + ' of the following:'}
         />
         <Box paddingLeft='28px'>{item.items.map((x, i) => renderPrerequisiteItem(x, i))}</Box>
       </Stack>
+    ) : (
+      item.type !== 'text' && (
+        <LabelWithIcon
+          key={key}
+          align='flex-start'
+          size='small'
+          height='2em'
+          iconType={iconTypes[+item.isCompleted]}
+          label={
+            <Link
+              component={PreventableLink}
+              to={'/course/' + item.id}
+              target='_blank'
+              color='text.primary'
+            >
+              {item.name}
+            </Link>
+          }
+        />
+      )
     );
 
   return (
     <Accordion
       disableGutters
       expanded={isExpanded}
-      onChange={() => numPrerequisites && setIsExpanded(!isExpanded)}
+      onChange={() => course.prerequisiteList.numItems && setIsExpanded(!isExpanded)}
     >
-      <AccordionSummary expandIcon={numPrerequisites > 0 && <ExpandMore />}>
+      <AccordionSummary expandIcon={course.prerequisiteList.numItems > 0 && <ExpandMore />}>
         <Stack padding='12px 8px' spacing='12px'>
           <Typography variant='subtitle2'>Enrollment Requirements</Typography>
           <Typography variant='body2'>
-            {pluralize(numPrerequisites || 'No', 'prerequisite')}
+            {pluralize(course.prerequisiteList.numItems || 'No', 'prerequisite')}
           </Typography>
           <LabelWithIcon
             color={isEligible ? 'success' : 'error'}
-            iconType={iconType}
+            iconType={iconTypes[+isEligible]}
             label={
               isEligible
-                ? numPrerequisites
+                ? course.prerequisiteList.numItems
                   ? 'You fulfill all prerequisites for this course'
                   : 'This course is open to everyone'
                 : 'You have unfulfilled prerequisites'
@@ -89,11 +88,21 @@ export default function PrerequisiteAccordion({ course }) {
         </Stack>
       </AccordionSummary>
       <AccordionDetails sx={{ borderTop: '1px lightgray solid' }}>
-        <Stack padding='8px 8px 0px' spacing='12px' whiteSpace='pre-wrap'>
-          {prerequisiteList.hasOwnProperty('items') && (
+        <Stack padding='8px 8px 8px' spacing='12px' whiteSpace='pre-wrap'>
+          {course.prerequisiteList.hasOwnProperty('items') && (
             <>
               <Typography variant='subtitle2'>Course Prerequisites</Typography>
-              {renderPrerequisiteItem(prerequisiteList)}
+              {renderPrerequisiteItem(course.prerequisiteList)}
+              <ClickableIndicator>
+                <Link
+                  component={PreventableLink}
+                  to='/profile/history'
+                  variant='subtitle2'
+                  color='text.secondary'
+                >
+                  Tell us what courses you have taken
+                </Link>
+              </ClickableIndicator>
             </>
           )}
         </Stack>

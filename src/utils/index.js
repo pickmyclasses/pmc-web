@@ -181,7 +181,7 @@ export const formatPrerequisites = (s) => {
 
 const prunePrerequisiteList = (p) => {
   const res = {
-    operator: p.includes('AND') ? 'every' : 'some',
+    policy: p.includes('AND') ? 'every' : 'some',
     items: p
       .map((x) => (typeof x === 'object' ? prunePrerequisiteList(x)[0] : x.trim()))
       .filter(
@@ -252,10 +252,7 @@ export const getInitials = (name) => {
 };
 
 export const getColorByString = (s, fixSaturationAndLightness = true) => {
-  const color = Color(
-    '#' +
-      md5(s.split('').reduce((acc, x) => ((acc << 5) - acc + x.charCodeAt(0)) | 0, 0)).slice(-6)
-  );
+  const color = Color('#' + md5(s).slice(3, 9));
   if (!fixSaturationAndLightness) return color.hex();
   return color.saturationl(25).lightness(50).hex();
 };
