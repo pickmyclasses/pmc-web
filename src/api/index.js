@@ -51,18 +51,21 @@ const injectFakePropertiesToCourse = async (course) => {
   course.classes = course.classes.filter((x) => !x.offerDate || x.startTime);
   injectLocationMapURLToClasses(course.classes);
   course.prerequisiteList = await getPrerequisiteList(course);
+  course.isTaken = historyCourseIDs.has(course.id);
   return course;
 };
 
 const getPrerequisiteList = async (course) => {
   let [prerequisiteList, numPrerequisites] = formatPrerequisites(course.prerequisites);
   let courseNames = new Set();
-  const courseNamePattern = /^[A-Z]{2,5} ?\d{3,4}$/;
+  const courseNamePattern = /[A-Z]{2,5} \d{3,4}/;
   const formatCourseName = (s) => s.replace(' ', '').toUpperCase();
   const getCoursesIDsFromPrerequisiteList = (prerequisiteList) => {
     for (let item of prerequisiteList.items) {
       if (typeof item === 'string') {
-        if (courseNamePattern.test(item)) courseNames.add(formatCourseName(item));
+        const extractedCourseNames = item.match(courseNamePattern);
+        if (extractedCourseNames?.length === 1)
+          courseNames.add(formatCourseName(extractedCourseNames[0]));
       } else {
         getCoursesIDsFromPrerequisiteList(item);
       }
@@ -79,14 +82,16 @@ const getPrerequisiteList = async (course) => {
       items: prerequisiteList.items
         .map((item) => {
           if (typeof item === 'string') {
-            const courseName = formatCourseName(item);
-            if (courseNamePattern.test(item) && courseIDByName.has(courseName)) {
-              return {
-                type: 'course',
-                name: item,
-                id: courseIDByName.get(courseName),
-                isCompleted: historyCourseIDs.has(courseIDByName.get(courseName)),
-              };
+            const extractedCourseNames = item.match(courseNamePattern);
+            if (extractedCourseNames?.length === 1) {
+              const courseName = formatCourseName(extractedCourseNames[0]);
+              if (courseIDByName.has(courseName))
+                return {
+                  type: 'course',
+                  name: item,
+                  id: courseIDByName.get(courseName),
+                  isCompleted: historyCourseIDs.has(courseIDByName.get(courseName)),
+                };
             }
             // return { type: 'text', text: item, isCompleted: true };
             return null;
