@@ -3,11 +3,12 @@ import { fetchHomePageCourses } from '../api';
 import ContainerWithStaticScheduler from '../components/Scheduler/ContainerWithStaticScheduler';
 import CourseCardGrid from '../components/CourseCardGrid/CourseCardGrid';
 import ClickableIndicator from '../components/CourseCardGrid/CourseCard/ClickableIndicator';
-import { Box, Divider, Typography, colors } from '@mui/material';
+import { Box, Divider, Typography, colors, Link } from '@mui/material';
 import { NavigationBarContext } from '../components/NavigationBar/ContainerWithNavigationBar';
 import Scrollbars from 'react-custom-scrollbars-2';
 import ContainerWithLoadingIndication from '../components/Page/ContainerWithLoadingIndication';
 import { UserContext } from 'App';
+import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 
 export default function HomePage() {
   const { user } = useContext(UserContext);
@@ -27,7 +28,11 @@ export default function HomePage() {
                 <Box key={i}>
                   {i > 0 && <Divider sx={{ marginY: '8px' }} />}
                   <ClickableIndicator>
-                    <SectionOverline>{directCourseSetName}</SectionOverline>
+                    {/* TODO Q: This link should link to roadmap and scroll to the
+                     *  corresponding section */}
+                    <Link component={PreventableLink} to='/profile/roadmap' underline='none'>
+                      <SectionOverline>{directCourseSetName}</SectionOverline>
+                    </Link>
                   </ClickableIndicator>
                   <Box sx={{ padding: '8px 0 16px 0' }}>
                     <CourseCardGrid
