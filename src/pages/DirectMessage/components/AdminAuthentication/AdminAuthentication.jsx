@@ -5,7 +5,7 @@ import './AdminAuthentication.css';
 
 const cookies = new Cookies();
 
-
+// the initial object that represent the data in the form
 const initialState = {
     fullName: '',
     username: '',
@@ -15,33 +15,45 @@ const initialState = {
     avatarURL: '',
 }
 
-const AdminAuthentication = () => {
+const AdminAuthentication = () => 
+{
+    // set property form with the initial state
     const [form, setForm] = useState(initialState);
     const isSignup = false;
 
-    const handleChange = (e) => {
+    // handle change: ... means spreading the property of the form with the respective
+    // field = e.target.name with e.target.value
+    const handleChange = (e) => 
+    {
         setForm({ ...form, [e.target.name]: e.target.value });
     }
 
-    const handleSubmit = async (e) => {
+    // handleSubmit will be called when the user submit the form
+    const handleSubmit = async (e) => 
+    {
+        // prevent reloading the form
         e.preventDefault();
 
+        // fetch these fields from the form
         const { username, password, phoneNumber, avatarURL } = form;
 
         const URL = 'https://pmc-admin-api.herokuapp.com/auth';
         
         //const URL = 'http://localhost:5003/auth';
 
-        const { data: { token, userId, hashedPassword, fullName } } = await axios.post(`${URL}/${isSignup ? 'signup' : 'login'}`, {
+        const { data: { token, userId, hashedPassword, fullName } } = await axios.post(`${URL}/${isSignup ? 'signup' : 'login'}`, 
+        {
             username, password, fullName: form.fullName, phoneNumber, avatarURL,
         });
 
+        // when the user login, set these fields in the cookies accordingly
         cookies.set('token', token);
         cookies.set('username', username);
         cookies.set('fullName', fullName);
         cookies.set('userId', userId);
 
-        if(isSignup) {
+        if(isSignup) 
+        {
             cookies.set('phoneNumber', phoneNumber);
             cookies.set('avatarURL', avatarURL);
             cookies.set('hashedPassword', hashedPassword);
@@ -54,28 +66,32 @@ const AdminAuthentication = () => {
         <div className="panel-authentication">
             <div className="pannel-authentication-fields">
                 <div className="pannel-authentication-fields-content">
-                    <p>{isSignup ? 'Sign Up' : 'Sign In'}</p>
+                    <p>Sign In</p>
+                    {/*The form to log in */}
                     <form onSubmit={handleSubmit}>
+                        {/*The username dive */}
                         <div className="pannel-authentication-fields-content-input">
                             <label htmlFor="username">Username</label>
-                                <input 
-                                    name="username" 
-                                    type="text"
-                                    placeholder="Username"
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
+                            <input 
+                                name="username" 
+                                type="text"
+                                placeholder="Username"
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        {/*The password*/}
                         <div className="pannel-authentication-fields-content-input">
-                                <label htmlFor="password">Password</label>
-                                <input 
-                                    name="password" 
-                                    type="password"
-                                    placeholder="Password"
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
+                            <label htmlFor="password">Password</label>
+                            <input 
+                                name="password" 
+                                type="password"
+                                placeholder="Password"
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        {/* Submit Button */}
                         <div className="pannel-authentication-fields-content-button">
                             <button>{isSignup ? "Sign Up" : "Sign In"}</button>
                         </div>
