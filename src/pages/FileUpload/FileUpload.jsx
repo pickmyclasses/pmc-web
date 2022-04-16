@@ -1,8 +1,6 @@
-import axios from 'axios';
-
 import React,{useState} from 'react';
 
-// continue
+// component FileUpload renders when the user navigate to the file-upload page
 const FileUpload = () =>
 {
   const [file, setFile] = useState(null);
@@ -16,30 +14,36 @@ const FileUpload = () =>
   // On file upload 
   const onFileUpload = () => 
   {
+    // form data is an object that captures the file uploaded
     const formData = new FormData();
 
     // Update the formData object
     formData.append("name", file.name);
     formData.append("files", file);
 
-    // TODO: Post the form to the back-end
+    // The endpoint of the API
     // const URL = "https://pmc-schedule-api.herokuapp.com/upload_files";
     const URL = "http://localhost:5002/upload_files";
 
+    // Post the uploaded file to the backend
     fetch(URL, 
     {
       method: 'POST',
       body: formData,
     })
+    // status code
     .then(resp => resp.json())
+    // the response object
     .then(data => 
     {
+      // if there are errors, alert the errors  
       if (data.errors) 
       {
         alert(data.errors)
       }
       else 
       {
+        // else alert the response message
         alert(data.message);
       }
     })
@@ -49,6 +53,7 @@ const FileUpload = () =>
 // file upload is complete
 const fileData = () => 
 {
+  // if file received, which is not null, render the file information as shown in the fields below
   if (file) 
   {
     return (
@@ -62,17 +67,19 @@ const fileData = () =>
           </p>
       </div>
     );
+    // if file has not been uploaded, render the message below
   }else 
   {
     return (
       <div>
         <br />
-        <h4>Please select a file before clicking the Upload button</h4>
+        <h4>Please select a file</h4>
       </div>
     );
   }
 };
 
+  // the File Upload Page component
   return (
     <div>
       <h3> File Upload Page </h3>
@@ -80,6 +87,7 @@ const fileData = () =>
         <input type="file" onChange={onFileChange} />
         <button onClick={onFileUpload}> Upload! </button>
       </div>
+      {/*render the file information or the message */}
       {fileData()}
     </div>
   );

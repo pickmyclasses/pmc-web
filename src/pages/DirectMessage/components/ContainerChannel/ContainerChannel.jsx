@@ -34,6 +34,7 @@ const ContainerChannel = ({ isCreating, setIsCreating, isEditing, setIsEditing, 
     // The <MessageTeam /> component is the component of each message
     return (
         <div className="channel-big-container">
+            {/*The channel where chat takes place */}
             <Channel
                 EmptyStateIndicator={InitialMessages}
                 Message={(messageProps, i) => <MessageTeam key={i} {...messageProps} />}

@@ -33,11 +33,14 @@ const ChannelTeamPreview = ({ setActiveChannel, setIsCreating, setIsEditing, set
     }
 
     return (
+        //change the class name depends on where the channel is being selected or not
+        //because the css will be different
         <div className={
             channel?.id === activeChannel?.id
                 ? 'channel-name-selected'
                 : 'channel-name'
         }
+        // shows the details of the channel when click and set the field to default value
         onClick={() => {
             setIsCreating(false);
             setIsEditing(false);
@@ -47,6 +50,7 @@ const ChannelTeamPreview = ({ setActiveChannel, setIsCreating, setIsEditing, set
             }
         }}
         >
+            {/*if type === 'team', shows Channels, else show direct message contacts */}
             {type === 'team' ? <ChannelNames /> : <DMContactNames />}
         </div>
     );
