@@ -4,6 +4,7 @@ import { ArrowCircleUp } from '@mui/icons-material';
 import { gridSpacing } from '../../constants/constants';
 import SubCard from '../Skeleton/SubCard';
 
+// Option for the user to write the positive side of things
 export default function ReviewPros({ value, onChange }) {
   return (
     <SubCard>

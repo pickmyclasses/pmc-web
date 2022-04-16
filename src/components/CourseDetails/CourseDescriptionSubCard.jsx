@@ -6,6 +6,11 @@ import MuiTypography from '@mui/material/Typography';
 import SubCard from '../Skeleton/SubCard';
 import { gridSpacing } from '../../constants/constants';
 
+/**
+ * The description card for the course
+ *
+ * @param course - the given course
+ */
 export default function CourseDescriptionSubCard({ course }) {
   return (
     <SubCard title='Course Description' spacing={gridSpacing}>

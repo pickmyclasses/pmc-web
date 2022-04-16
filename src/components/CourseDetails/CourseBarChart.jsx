@@ -3,6 +3,10 @@ import { Card, CardContent, Grid } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 
 const gridSpacing = 3;
+
+/**
+ * Rendering a bar chart for a course
+ */
 const CourseBarChart = () => (
   <Card>
     <CardContent>

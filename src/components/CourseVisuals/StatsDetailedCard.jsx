@@ -120,6 +120,7 @@ function sortDataset(courseTrend) {
   });
 }
 
+//  Visualize the detailed card with Average Ratings and Semesters
 export default function StatsDetailedCard({ courseTrend }) {
   sortDataset(courseTrend);
   populateDataset(courseTrend);

@@ -86,6 +86,7 @@ function populateCourseTags(tags) {
   }
 }
 
+// Visualze the stats tags with a tree map
 export default function StatsTags({ tags }) {
   populateCourseTags(tags);
   return <ReactECharts option={option} style={{ height: 150 }} onEvents={{}} />;

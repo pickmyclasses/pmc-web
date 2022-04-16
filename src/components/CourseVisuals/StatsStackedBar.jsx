@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactECharts from 'echarts-for-react';
 import { Typography, Box } from '@mui/material';
 import { pluralize } from '../../utils';
@@ -103,15 +103,7 @@ let option = {
     },
   ],
 };
-function onChartLegendselectchanged(param, echarts) {
-  //console.log(param, echarts);
-}
-function onChartReady(echarts) {
-  //console.log('echarts is ready', echarts);
-}
-function onChartClick(param, echarts) {
-  //console.log(param, echarts);
-}
+
 function generateStarValues(reviews) {
   let distribution = [0, 0, 0, 0, 0];
   for (let i = 0; i < reviews.length; i++) {
@@ -125,25 +117,16 @@ function generateStarValues(reviews) {
   }
 }
 
+// Visualize the rating distribution with a stacked bar
 export default function StatsStackedBar({ reviews }) {
   generateStarValues(reviews, option);
-
-  // 'Based on ' + reviews.length + ' reviews'
   return (
     <Box flex={1}>
       <Typography variant='subtitle2'>Rating Distribution</Typography>
       <Typography variant='body2' align='left' fontStyle='italic' sx={{ opacity: 0.75 }}>
         {reviews.length ? `Based on ${pluralize(reviews.length, 'review')}` : 'No reviews'}
       </Typography>
-      <ReactECharts
-        option={option}
-        style={{ height: 150, width: 450 }}
-        onChartReady={onChartReady}
-        onEvents={{
-          'click': onChartClick,
-          'legendselectchanged': onChartLegendselectchanged,
-        }}
-      />
+      <ReactECharts option={option} style={{ height: 150, width: 450 }} />
     </Box>
   );
 }
