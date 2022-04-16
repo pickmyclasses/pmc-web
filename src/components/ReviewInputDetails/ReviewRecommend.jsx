@@ -52,6 +52,7 @@ const IOSSwitch = styled((props) => (
   },
 }));
 
+// Give the options for the user to input the checkboxes
 export default function Checkboxes({ value, onChange }) {
   const [toggle, setToggle] = useState(true);
   return (

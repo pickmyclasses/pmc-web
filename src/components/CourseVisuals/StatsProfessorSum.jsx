@@ -1,4 +1,4 @@
-import { Stack, Typography, Box, Avatar, Grid } from '@mui/material';
+import { Stack, Typography, Avatar } from '@mui/material';
 import { formatInstructorName, getColorByString, getInitials } from 'utils';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
@@ -17,6 +17,7 @@ function getTopRatedInstructors(professorRanking, num) {
   return instructorInfo;
 }
 
+// Visualize the professor overall performance based on the student's reviews
 export default function StatsProfessorSum({ professorRanking }) {
   let instructorInfo = getTopRatedInstructors(professorRanking, 3);
   let topInstructors = instructorInfo[0];

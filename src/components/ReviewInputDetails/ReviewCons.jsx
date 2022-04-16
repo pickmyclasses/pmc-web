@@ -4,6 +4,7 @@ import { ArrowCircleDown } from '@mui/icons-material';
 import { gridSpacing } from '../../constants/constants';
 import SubCard from '../Skeleton/SubCard';
 
+// Option for the user to write the negative side or cons of a course
 export default function ReviewCons({ value, onChange }) {
   return (
     <SubCard>

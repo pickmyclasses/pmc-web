@@ -23,13 +23,11 @@ export const FilterContext = createContext();
 export default function SearchPage({ shouldShowScheduler }) {
   const { user } = useContext(UserContext);
   const urlParams = useParams();
-
   const [courses, setCourses] = useState([]);
   const [numResults, setNumResults] = useState(NaN);
   const [pageIndex, setPageIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(false);
-
   const [noOffering, setNoOffering] = useState(false);
   const [onlineOffering, setOnlineOffering] = useState(false);
   const [weekdays, setWeekdays] = useState('');

@@ -5,6 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+// Option for the user to select the professor when writing a review
 export default function ReviewDropdownProfessor({ options, value, onChange }) {
   return (
     <Box width='192px'>

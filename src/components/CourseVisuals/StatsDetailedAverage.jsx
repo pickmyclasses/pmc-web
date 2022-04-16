@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
-import * as echarts from 'echarts';
 import { Typography } from '@mui/material';
 
-let professors = [];
 let option = {
   title: {
     left: 'center',
@@ -58,6 +56,7 @@ function populateProfessorLabels(professorRanking, reviews) {
   }
 }
 
+// Visualize the detailed average grade
 export default function StatsDetailedAverage({ reviews, professorRanking, courseLoad }) {
   populateProfessorLabels(professorRanking, reviews);
   <Typography variant='subtitle2' align='left' sx={{}}>

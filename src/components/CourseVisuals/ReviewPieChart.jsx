@@ -9,6 +9,7 @@ function generateStarValues(reviews, data) {
   }
 }
 
+// Review Pie Chart
 export default function ReviewPieChart({ reviews }) {
   const data = [
     { name: 'One-Star', value: 0 },

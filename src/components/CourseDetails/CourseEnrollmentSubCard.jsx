@@ -8,6 +8,11 @@ import CourseChip from '../../components/CourseDetails/CourseChip';
 //TODO 2: Assign different colors to the tag e.g red to show the user hasn't completed the class, blue vice-versa
 const gridSpacing = 3;
 
+/**
+ * The enrollment card that shows all the enrollment information
+ *
+ * @param course - the given course
+ */
 export default function CourseEnrollmentSubCard({ course }) {
   return (
     <SubCard title='Enrollment Information'>

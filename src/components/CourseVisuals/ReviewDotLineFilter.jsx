@@ -6,11 +6,10 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { FilterContext } from '../CoursePage/CourseStats';
 
+// Generate Reviews with Filtering Method
 export default function ReviewDotLineFilter() {
   const { filterMethods, filterMethod, setFilterMethod } = useContext(FilterContext);
-
   const handleChange = (e) => setFilterMethod(e.target.value);
-
   return (
     <Box width='192px'>
       <FormControl fullWidth>

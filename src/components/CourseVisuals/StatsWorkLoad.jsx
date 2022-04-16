@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactECharts from 'echarts-for-react';
 import Stack from '@mui/material/Stack';
 import { Typography, Box } from '@mui/material';
@@ -209,11 +209,9 @@ function generateHomeworkHeavy(reviews) {
   optionHomework.series[1].data[0] = 0;
   optionHomework.series[0].color = '#568EA6';
   optionHomework.series[1].color = '#F18C8E';
-  let count = 0;
   for (let i = 0; i < reviews.length; i++) {
     if (reviews[i].isHomeworkHeavy) {
       optionHomework.series[0].data[0] += 1;
-      count++;
     } else {
       optionHomework.series[1].data[0] += 1;
     }
@@ -236,6 +234,7 @@ function generateRecommendation(reviews) {
   }
 }
 
+//Visualize the work load based on a reviews
 export default function StatsWorkLoad({ reviews }) {
   generateExamHeavy(reviews);
   generateHomeworkHeavy(reviews);
@@ -248,7 +247,6 @@ export default function StatsWorkLoad({ reviews }) {
         <Box flex={1}>
           <Typography
             variant='body2'
-            align='center'
             fontStyle='italic'
             sx={{ opacity: 0.75, marginLeft: 3 }}
             align='left'
@@ -260,7 +258,6 @@ export default function StatsWorkLoad({ reviews }) {
         <Box flex={1}>
           <Typography
             variant='body2'
-            align='center'
             fontStyle='italic'
             sx={{ opacity: 0.75, marginLeft: 3 }}
             align='left'
@@ -273,7 +270,6 @@ export default function StatsWorkLoad({ reviews }) {
         <Box flex={1}>
           <Typography
             variant='body2'
-            align='center'
             fontStyle='italic'
             sx={{ opacity: 0.75, marginLeft: 3 }}
             align='left'

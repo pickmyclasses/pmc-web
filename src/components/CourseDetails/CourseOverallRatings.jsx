@@ -8,6 +8,11 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import CourseFilterReview from '../../components/CourseDetails/CourseFilterReview';
 
+/**
+ * Displaying the overall ratings of the course based on reviews
+ *
+ * @param reviews - the reviews for the given course
+ */
 export default function CourseOverallRatings({ reviews }) {
   let avgScore = calculateAverageScore({ reviews });
   return (
@@ -17,7 +22,7 @@ export default function CourseOverallRatings({ reviews }) {
           <Grid container direction='column' spacing={1}>
             <Grid item>
               <Typography variant='h4' gutterBottom color='primary'>
-                Overal Ratings {avgScore.toFixed(1)}/5
+                Overall Ratings {avgScore.toFixed(1)}/5
               </Typography>
             </Grid>
             <Grid item>
@@ -38,7 +43,6 @@ export default function CourseOverallRatings({ reviews }) {
           </Grid>
         </Box>
       </SubCard>
-
       <Grid>
         <Box sx={{ marginY: '12px' }}>
           <Grid container direction='column' spacing={1}>

@@ -4,6 +4,7 @@ import { ArrowCircleDown } from '@mui/icons-material';
 import { gridSpacing } from '../../constants/constants';
 import SubCard from '../Skeleton/SubCard';
 
+// Option for the user to write additional comments for a review
 export default function ReviewComments({ value, onChange }) {
   return (
     <SubCard>

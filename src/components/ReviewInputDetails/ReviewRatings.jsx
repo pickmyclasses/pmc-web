@@ -17,6 +17,7 @@ const labels = {
   5: 'Excellent',
 };
 
+// Offer the options to give the user a rating star from 1 star to 5 star
 export default function ReviewRatings({ course, value, onChange }) {
   const [hover, setHover] = React.useState(-1);
   return (
