@@ -10,6 +10,8 @@ Follow this document for
 See the documentation for other repositories here:
 
 - [Website Backend](https://capstone-cs.eng.utah.edu/EmptyTome/pmc-server): The main controller of PickMyClasses that receives and processes frontend requests as well as communicates with our database
+- [Data Table and File Upload Backend](https://capstone-cs.eng.utah.edu/EmptyTome/pmc-admin-data-table-api): The backend of the data table and file upload functions.
+- [Direct Message System Backend](https://capstone-cs.eng.utah.edu/EmptyTome/pmc-admin-dm-server): The backend of the direct message sytem.
 - [Data Scraper](https://capstone-cs.eng.utah.edu/EmptyTome/pmc-server): The tool to extract, format, and store data for courses and majors from the University of Utah public course [catalog](https://registrar.utah.edu/Catalog-schedules.php)
 
 ---
@@ -36,9 +38,13 @@ To launch the website frontend, do these:
 
 1. Follow [this tutorial](https://capstone-cs.eng.utah.edu/EmptyTome/pmc-server) and have the website backend (pmc-web) launched on the same machine or on some accessible Internet address.
 
-2. Edit the file `.env.dev` in this directory. Assign the backend's Internet address to the `REACT_APP_SERVER_URL` variable.
+2. Launch the back-end of the data table and file-upload like the README [here](https://capstone-cs.eng.utah.edu/EmptyTome/pmc-admin-data-table-api)
 
-3. Execute the following shell command in this directory:
+3. Launch the back-end of the direct message system like the README [here](https://capstone-cs.eng.utah.edu/EmptyTome/pmc-admin-dm-server)
+
+4. Edit the file `.env.dev` in this directory. Assign the backend's Internet address to the `REACT_APP_SERVER_URL` variable.
+
+5. Execute the following shell command in this directory:
 
    ```sh
    npm start
