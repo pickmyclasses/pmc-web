@@ -3,7 +3,9 @@
 }
 
 .admindiv{
-    height: 100vh !important; 
+    height: 150vh !important; 
+    overflow-y: scroll; 
+    overflow-x: scroll; 
 }
 
 .table{
@@ -17,7 +19,3 @@
 .selector-label{
     margin-right: 10px;
 }
-body {
-    overflow-y: scroll; /* Show vertical scrollbar */
-    overflow-x: scroll; /* Show horizontal scrollbar */
-  }

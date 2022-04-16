@@ -144,7 +144,7 @@ export default function Table(props)
         }
 
         return (
-          <div style={{ height: 500, width: '100%' }}>
+          <div className='adminTableData' style={{ height: 800, width: '100%' }}>
             <DataGrid
             columns={columns}
             rows={renderData}
