@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, useChatContext } from 'stream-chat-react';
 
-// Inviting the users
+// This is the front-end of the pannel to invite the users to the chat channel
 // Where 'children' are the users
 
 import './ListUsers.css';
 
-const ListContainer = ({ children }) => {
+const ListContainer = ({ children }) => 
+{
     return (
         <div className="panel-user-list">
             <div className="panel-user-list-header">
@@ -18,19 +19,21 @@ const ListContainer = ({ children }) => {
     )
 }
 
-const UserItem = ({ user, setSelectedUsers }) => {
-
+const UserItem = ({ user, setSelectedUsers }) => 
+{
     // boolean selected used for toggling the value
     const [selected, setSelected] = useState(false)
 
     // Select and un-select process
-    const handleSelect = () => {
-        if(selected) {
+    const handleSelect = () => 
+    {
+        if(selected) 
+        {
             setSelectedUsers((prevUsers) => prevUsers.filter((prevUser) => prevUser !== user.id))
-        } else {
+        } else 
+        {
             setSelectedUsers((prevUsers) => [...prevUsers, user.id])
         }
-
         setSelected((prevSelected) => !prevSelected)
     }
 
@@ -47,15 +50,18 @@ const UserItem = ({ user, setSelectedUsers }) => {
 }
 
 
-const ListUsers = ({ setSelectedUsers }) => {
+const ListUsers = ({ setSelectedUsers }) => 
+{
     const { client } = useChatContext();
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [listEmpty, setListEmpty] = useState(false);
     const [error, setError] = useState(false);
 
-    useEffect(() => {
-        const getUsers = async () => {
+    useEffect(() => 
+    {
+        const getUsers = async () => 
+        {
             if(loading) return;
 
             setLoading(true);

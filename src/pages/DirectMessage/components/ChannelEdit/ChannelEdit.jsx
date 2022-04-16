@@ -3,10 +3,11 @@ import { useChatContext } from 'stream-chat-react';
 import { ListUsers } from '..';
 import './ChannelEdit.css';
 
-const ChannelNameInput = ({ channelName = '', setChannelName }) => {
-    const handleChange = (event) => {
+const ChannelNameInput = ({ channelName = '', setChannelName }) => 
+{
+    const handleChange = (event) => 
+    {
         event.preventDefault();
-
         setChannelName(event.target.value);
     }
 
@@ -19,21 +20,25 @@ const ChannelNameInput = ({ channelName = '', setChannelName }) => {
     )
 }
 
-const ChannelEdit = ({ setIsEditing }) => {
+const ChannelEdit = ({ setIsEditing }) => 
+{
     const { channel } = useChatContext();
     const [channelName, setChannelName] = useState(channel?.data?.name);
     const [selectedUsers, setSelectedUsers] = useState([])
 
-    const updateChannel = async (event) => {
+    const updateChannel = async (event) => 
+    {
         event.preventDefault();
 
         const nameChanged = channelName !== (channel.data.name || channel.data.id);
 
-        if(nameChanged) {
+        if(nameChanged) 
+        {
             await channel.update({ name: channelName }, { text: `Channel name changed to ${channelName}`});
         }
 
-        if(selectedUsers.length) {
+        if(selectedUsers.length) 
+        {
             await channel.addMembers(selectedUsers);
         }
 
