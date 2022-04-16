@@ -29,6 +29,8 @@ const AdminAuthentication = () => {
         const { username, password, phoneNumber, avatarURL } = form;
 
         const URL = 'https://pmc-admin-api.herokuapp.com/auth';
+        
+        //const URL = 'http://localhost:5003/auth';
 
         const { data: { token, userId, hashedPassword, fullName } } = await axios.post(`${URL}/${isSignup ? 'signup' : 'login'}`, {
             username, password, fullName: form.fullName, phoneNumber, avatarURL,

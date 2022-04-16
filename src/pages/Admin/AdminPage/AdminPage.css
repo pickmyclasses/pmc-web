@@ -3,7 +3,9 @@
 }
 
 .admindiv{
-    height: 100vh !important; 
+    height: 150vh !important; 
+    overflow-y: scroll; 
+    overflow-x: scroll; 
 }
 
 .table{
