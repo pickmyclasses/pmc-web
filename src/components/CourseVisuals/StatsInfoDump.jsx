@@ -1,5 +1,3 @@
-import { Stack, Typography, Box } from '@mui/material';
-
 import ReactECharts from 'echarts-for-react';
 
 const gaugeData = [
@@ -103,6 +101,7 @@ function generateLetterGrade(value) {
   return 'F';
 }
 
+// Visualize the average grade as well as the course load
 export default function statsInfoDump({ courseLoad }) {
   gaugeData[0].value = courseLoad.courseAverageGrade * 25;
   gaugeData[1].value = courseLoad.majorAverageGrade * 25;

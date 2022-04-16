@@ -82,6 +82,7 @@ function populateProfessorLabels(professorRanking, reviews) {
   }
 }
 
+// Average Grades with respect to professors
 export default function StatsDetailedProfessor({ reviews, professorRanking }) {
   populateProfessorLabels(professorRanking, reviews);
   return (

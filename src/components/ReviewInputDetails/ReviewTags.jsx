@@ -5,8 +5,8 @@ import { gridSpacing } from '../../constants/constants';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 const filter = createFilterOptions();
 
+// Give the option for the user to input tags or from tag suggestion
 export default function ReviewTags({ tags, tagsLabel, tagSuggestion, onChange }) {
-  // TODO: remove this when I can read from the back-end
   return (
     <Grid container spacing={gridSpacing}>
       <Grid

@@ -7,6 +7,7 @@ import FormLabel from '@mui/material/FormLabel';
 import { Grid } from '@mui/material';
 import { gridSpacing } from '../../constants/constants';
 
+// Framework for the radio buttons group functionality when writing a review
 export default function RowRadioButtonsGroup({ radioLabel, options, radioValue, onChange }) {
   return (
     <Grid container spacing={gridSpacing}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactECharts from 'echarts-for-react';
 import { Typography, Box } from '@mui/material';
 import { pluralize } from '../../utils';
@@ -63,9 +63,10 @@ function generateStarValues(reviews, option) {
     option.series[0].data[reviews[i].rating - 1].value += 1;
   }
 }
+
+// Visualize the rating distribution with student's reviews
 export default function ReviewPieChart({ reviews }) {
   generateStarValues(reviews, option);
-
   return (
     <Box flex={1}>
       <Typography variant='subtitle2'>Rating Distribution</Typography>

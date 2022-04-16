@@ -38,6 +38,7 @@ let option = {
     },
   ],
 };
+// Stats Class Size Visualization with line chart
 export default function StatsClassSize({ reviews }) {
   return <ReactECharts option={option} style={{ height: 150 }} onEvents={{}} />;
 }

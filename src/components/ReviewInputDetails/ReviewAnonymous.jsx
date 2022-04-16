@@ -52,6 +52,7 @@ const IOSSwitch = styled((props) => (
   },
 }));
 
+// Option for the user to stay anonymous when writing a review
 export default function Checkboxes({ userName, value, onChange }) {
   const [toggle, setToggle] = useState(true);
   return (

@@ -1,6 +1,7 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
+// Generate line data
 function generateLineData(reviews) {
   const reviewArray = [];
   for (let i = 0; i < reviews.length; i++) {
@@ -14,6 +15,7 @@ function generateLineData(reviews) {
   return reviewArray;
 }
 
+// Visualize line chart with reviews data
 export default function ReviewDotLineChart({ reviews }) {
   const reviewArray = generateLineData(reviews);
   return (

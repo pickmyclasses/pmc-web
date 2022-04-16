@@ -41,6 +41,11 @@ function NumberLinearProgress(props) {
   );
 }
 
+/**
+ * Compute the rating distribution based on reviews
+ *
+ * @param reviews - the reviews for the given course
+ */
 function getRatingDistribution(reviews) {
   let distribution = Array(5).fill(0);
   if (reviews) {

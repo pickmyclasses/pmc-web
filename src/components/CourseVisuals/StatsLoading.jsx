@@ -49,6 +49,8 @@ let option = {
     ],
   },
 };
+
+// Placeholder for stats tab
 export default function StatsLoading() {
   return <ReactECharts option={option} style={{ height: 150 }} />;
 }

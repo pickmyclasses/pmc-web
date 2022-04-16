@@ -6,6 +6,10 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { FilterContext } from '../CoursePage/CourseReviews';
 
+/**
+ * Course Filtering Functionaity
+ * Sorting method: most recent, highest rated, lowest rated
+ */
 export default function CourseFilterReview() {
   const { filterMethod, setFilterMethod } = useContext(FilterContext);
 
