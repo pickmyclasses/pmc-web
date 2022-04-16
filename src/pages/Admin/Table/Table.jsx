@@ -52,38 +52,47 @@ export default function Table(props)
 
     // the function handle the click of the delete button
     let deleteClick = (e) => {
+      // end point of the delete API
       const URL = DOMAIN + tableName + "/delete/" + e.row.id;
-      console.log(URL);
-      fetch(DOMAIN + tableName + "/delete/" + e.row.id)
-      .then(res => res.json())
-      .then(
-          (data) => {
-              alert(data.message);
-          },
-          (error) => {
-              alert(error);
-          }
+
+      // call the delete api
+      fetch(URL).then(res => res.json()).then((data) => 
+      {
+        alert(data.message);
+      },
+      (error) => 
+      {
+        alert(error);
+      }
       );
     }
 
+    // if there is an error
     if (error) 
     {
+        // return the error message
         return <div>Error: {error.message}</div>;
+    // if isLoaded = false means still loading
     } else if (!isLoaded) 
     {
+        // render loading...
         return <div>Loading...</div>;
     } else 
     {
+        // preparing the columns. The component DataGrid of the library '@mui/x-data-grid' needs an array of column names
         let columns = [];
         if(renderData.length > 0)
         {
             for(let key in renderData[0])
             {
+                // columns is an array objects that has 2 fields: field and width
+                // field is the name of the column and width is the width of the column
                 let temp = {}
                 temp.field=key;
                 temp.width=200;
                 columns.push(temp);
             }
+            // if table name is 'files_upload', append a Link button
             if(tableName === 'files_upload')
             {
 
@@ -105,6 +114,7 @@ export default function Table(props)
                 }
             });
             }
+            // if table name is not 'files_upload', append update and delete button
             else{
               columns.push({
                 field: "Update",
@@ -144,7 +154,7 @@ export default function Table(props)
         }
 
         return (
-          <div className='adminTableData' style={{ height: 800, width: '100%' }}>
+          <div style={{ height: 800, width: '100%' }}>
             <DataGrid
             columns={columns}
             rows={renderData}
