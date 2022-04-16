@@ -7,6 +7,7 @@ Install the Prerequisites
 3. Use Git to navigate to the /pmc-web subfolder
 4. Install the NPM (https://www.npmjs.com/package/npm-git-install)
 5. Install the application libraries using `npm install` 
+6. Run the two servers in pmc-admin-data-table-api and pmc-admin-dm server using `npm start` (Please read the README in those two folders)
 6. Run the application with command `npm start` and you should see the application running on the default localhost
 
 
