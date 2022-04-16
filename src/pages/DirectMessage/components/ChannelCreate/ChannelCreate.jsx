@@ -16,6 +16,7 @@ const ChannelNameInput = ({ channelName = '', setChannelName }) =>
         setChannelName(event.target.value);
     }
 
+    // Header of the pannel to add members
     return (
         <div className="channel-edit-add">
             <p>Name</p>
