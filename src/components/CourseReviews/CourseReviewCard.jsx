@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { Stack, Typography, Grid, Paper } from '@mui/material';
+import { Stack, Typography, Grid } from '@mui/material';
 
 export const CourseReviewCard = ({ review }) => {
   return (
