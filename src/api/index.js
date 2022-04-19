@@ -187,9 +187,7 @@ export const fetchCoursesBySearch = (
       }
       return data;
     })
-    .catch((err) => {
-      console.log(hideNoOffering);
-    });
+    .catch((err) => {});
 
 export const fetchClassByID = (classID) => axios.get(`/class/${classID}`);
 

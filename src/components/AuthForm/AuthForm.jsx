@@ -60,7 +60,6 @@ export default function AuthForm() {
             variant: snackBarMessage['serverError'].variant,
           });
         }
-        console.error('Login failed:', err);
       });
   };
 
