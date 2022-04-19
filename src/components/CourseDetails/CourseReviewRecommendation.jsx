@@ -6,7 +6,6 @@ import Stack from '@mui/material/Stack';
 function RenderStatus(isRecommended) {
   let statusTitle;
   let statusColor;
-  let statusInstruction;
   if (!isRecommended) {
     statusTitle = `Don't pick this course!`;
     statusColor = 'error';
@@ -15,8 +14,8 @@ function RenderStatus(isRecommended) {
     statusColor = 'success';
   }
   return (
-    <Stack sx={{ width: '25%' }} spacing={1}>
-      <Alert variant='outlined' severity={statusColor}>
+    <Stack sx={{ width: '50%' }} spacing={1}>
+      <Alert severity={statusColor}>
         <AlertTitle>{statusTitle}</AlertTitle>
       </Alert>
     </Stack>

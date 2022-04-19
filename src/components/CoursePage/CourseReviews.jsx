@@ -32,7 +32,7 @@ export default function CourseReviews() {
   );
   const renderReviewCards = () =>
     sortedReviews.map((review, i) => (
-      <Grid item xs={12} key={i}>
+      <Grid item xs={6} key={i}>
         <CourseReviewCard review={review} key={review.id} />
       </Grid>
     ));
