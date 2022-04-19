@@ -9,12 +9,9 @@ import ReviewRadioButtons from '../components/ReviewInputDetails/ReviewRadioButt
 import ReviewDropdownSemester from '../components/ReviewInputDetails/ReviewDropdownSemester';
 import ReviewDropdownProfessor from '../components/ReviewInputDetails/ReviewDropdownProfessor';
 import Stack from '@mui/material/Stack';
-
 import { useSnackbar } from 'notistack';
 import { UserContext } from '../App';
-
 import { Link } from 'react-router-dom';
-
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';

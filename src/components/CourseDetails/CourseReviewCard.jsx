@@ -8,7 +8,7 @@ import CourseReviewRecommendation from '../CourseDetails/CourseReviewRecommendat
 import Stack from '@mui/material/Stack';
 import { Box } from '@material-ui/core';
 import CourseReviewSentence from 'components/CourseDetails/CourseReviewSentence';
-
+import CourseReviewVoting from './CourseReviewVoting';
 const titleAdd = 'Additional feedbacks?';
 
 export default function CourseReviewCard({ review }) {
@@ -47,6 +47,8 @@ export default function CourseReviewCard({ review }) {
         <Divider />
         <Stack direction='row' spacing={1} sx={{ padding: '12px 12px' }}>
           <CourseReviewRecommendation isRecommended={review.recommended} />
+
+          <CourseReviewVoting review={review} />
         </Stack>
       </Box>
     </SubCard>

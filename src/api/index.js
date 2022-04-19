@@ -339,6 +339,8 @@ export const removeHistoryCourse = (userID, courseID) =>
 export const fetchReviewsByCourseID = (courseID) =>
   axios.get(`/course/${courseID}/review`).then((data) => data.data.data.reviews);
 
+export const putReview = (courseID, body) => axios.put(`/course/${courseID}/review`, body);
+
 export const postReview = (courseID, body) => axios.post(`/course/${courseID}/review`, body);
 export const postTagsByCourseID = (courseID, body) =>
   axios.post(`/course/${courseID}/tag`, body);
