@@ -7,6 +7,9 @@ let option = {
   },
   series: [
     {
+      color: ['#F18C8E ', '#568EA6 '],
+      roam: false,
+
       levels: [
         {
           // itemStyle: {
@@ -15,7 +18,6 @@ let option = {
           // },
         },
         {
-          color: ['#b85042', '#1b6535'],
           colorMappingBy: 'id',
           itemStyle: {
             gapWidth: 1,
@@ -89,5 +91,5 @@ function populateCourseTags(tags) {
 // Visualze the stats tags with a tree map
 export default function StatsTags({ tags }) {
   populateCourseTags(tags);
-  return <ReactECharts option={option} style={{ height: 150 }} onEvents={{}} />;
+  return <ReactECharts option={option} style={{ height: 200 }} onEvents={{}} />;
 }

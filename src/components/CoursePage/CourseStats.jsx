@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, Avatar } from 'react';
 
+import StatsTags from 'components/CourseVisuals/StatsTags';
 import StatsStackedBar from '../CourseVisuals/StatsStackedBar';
 import StatsProfessorSum from '../CourseVisuals/StatsProfessorSum';
 import StatsInfoDump from '../CourseVisuals/StatsInfoDump';
@@ -73,30 +74,30 @@ export default function CourseStats() {
       </Stack>
     </MotionCard>
   );
-  // const renderTagsSummary = () => (
-  //   <MotionCard
-  //     initial='initial'
-  //     whileHover='mouseEntered'
-  //     sx={{
-  //       width: '100%',
-  //       height: '100%',
-  //       cursor: 'pointer',
-  //       '&:hover': { boxShadow: 6 },
-  //     }}
-  //   >
-  //     <Stack padding='24px' height='calc(100% - 48px)'>
-  //       <Box flex={1}>
-  //         <Typography variant='subtitle2'>Course Work Load</Typography>
-  //         <StatsTags tags={course.tags} />
-  //       </Box>
-  //       <Link>
-  //         <ClickableIndicator propagate>
-  //           <Typography variant='subtitle2'>See Details</Typography>
-  //         </ClickableIndicator>
-  //       </Link>
-  //     </Stack>
-  //   </MotionCard>
-  // );
+  const renderTagsSummary = () => (
+    <MotionCard
+      initial='initial'
+      whileHover='mouseEntered'
+      sx={{
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
+        '&:hover': { boxShadow: 6 },
+      }}
+    >
+      <Stack padding='24px' height='calc(100% - 48px)'>
+        <Box flex={1}>
+          <Typography variant='subtitle2'>Top Pros / Cons</Typography>
+          <StatsTags tags={course.tags} />
+        </Box>
+        {/* <Link>
+          <ClickableIndicator propagate>
+            <Typography variant='subtitle2'>See Details</Typography>
+          </ClickableIndicator>
+        </Link> */}
+      </Stack>
+    </MotionCard>
+  );
 
   const renderClassSizeSummary = () => (
     <MotionCard
@@ -112,8 +113,8 @@ export default function CourseStats() {
     >
       <Stack padding='24px' height='calc(100% - 48px)'>
         <Box flex={1}>
-          <Typography variant='subtitle2'>Class Size</Typography>
-          <StatsPieChart reviews={reviews} />
+          <Typography variant='subtitle2'>Grade Distribution</Typography>
+          <StatsClassSize reviews={reviews} />
         </Box>
         {/* <Link>
           <ClickableIndicator propagate>
@@ -335,20 +336,32 @@ export default function CourseStats() {
                 {reviews.length === 0 ? renderPlaceHolder() : renderInfoSummery()}
               </Grid>
             </Grid>
+            <Grid container spacing='32px' marginBottom='16px'>
+              <Grid item xs={4}>
+                {reviews.length === 0 ? renderPlaceHolder() : renderTagsSummary()}
+              </Grid>
+              <Grid item xs={4}>
+                {reviews.length === 0 ? renderPlaceHolder() : renderPopularitySummary()}
+              </Grid>
+
+              <Grid item xs={4}>
+                {reviews.length === 0 ? renderPlaceHolder() : renderClassSizeSummary()}
+              </Grid>
+            </Grid>
           </div>
         );
       case 'stackBarDetailed':
         return (
           <div>
             <Grid item xs={4}>
-              {renderDetailedCard()}
+              {renderPopularitySummary()}
             </Grid>
           </div>
         );
       case 'detailedProfessor':
         return (
           <Grid item xs={4}>
-            {renderDetailedProfessor()}
+            {}
           </Grid>
         );
       case 'detailedAverage':
