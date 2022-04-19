@@ -1,22 +1,31 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import { Stack, Typography, Grid, Paper } from '@mui/material';
+import React, { useState } from 'react';
+import { Grid, Avatar, Box, Card, CardContent, Typography, Button } from '@mui/material';
+import ThumbUpOffAltOutlinedIcon from '@mui/icons-material/ThumbUpOffAltOutlined';
+import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
+import { getInitials } from 'utils';
+import { ThumbDown, ThumbUp } from '@mui/icons-material';
 
 export const CourseReviewCard = ({ review }) => {
   return (
     <>
-      <Stack direction='row' spacing={2}>
-        <CourseReviewContent
-          rating={review.rating}
-          username={review.username}
-          anonymous={review.anonymous}
-          professor={review.classProfessor}
-          date={review.createdAt}
-          semester={`${review.classSemester.season} ${review.classSemester.year}`}
-          comment={review.comment}
-        />
-        <CourseReviewContent rating={review.rating} />
-      </Stack>
+      <Grid container spacing={2} sx={{ fontFamily: 'Roboto' }}>
+        <Grid item xs={8}>
+          <CourseReviewContent
+            rating={review.rating}
+            username={review.username}
+            anonymous={review.anonymous}
+            professor={review.classProfessor}
+            semester={`${review.classSemester.season} ${review.classSemester.year}`}
+            comment={review.comment}
+            createdAt={review.createdAt}
+            grade={review.gradeReceived}
+            isExamHeavy={review.isExamHeavy}
+            isHomeworkHeavy={review.isHomeworkHeavy}
+            dislikes={review.dislikedCount}
+            likes={review.likedCount}
+          />
+        </Grid>
+      </Grid>
     </>
   );
 };
@@ -25,76 +34,133 @@ const CourseReviewContent = ({
   rating,
   username,
   anonymous,
-  semester,
   professor,
-  date,
+  semester,
   comment,
+  createdAt,
+  grade,
+  isExamHeavy,
+  isHomeworkHeavy,
+  dislikes,
+  likes,
 }) => {
-  return (
-    <Box sx={{ width: '100%', height: '26em', bgcolor: '#e5e5dc', flexGrow: 1 }}>
-      <Grid container spacing={3}>
-        <Grid item xs={3}>
-          <CourseReviewNumberCard number={rating} color={'#26495c'} text={'Rating'} />
-          <CourseReviewNumberCard number={4} color={'#c66b3d'} text={'Difficulty'} />
-          <CourseReviewNumberCard number={5} color={'#ff9a8d'} text={'Recommended'} />
-        </Grid>
-        <Grid item xs={9}>
-          <UserInfo
-            username={username}
-            anonymous={anonymous}
-            professor={professor}
-            semester={semester}
-            date={date}
-          />
-          <Comment comment={comment} />
-        </Grid>
-      </Grid>
-    </Box>
-  );
-};
+  const [liked, setLiked] = useState(false);
+  const [disliked, setDisliked] = useState(false);
 
-const CourseReviewNumberCard = ({ number, color, text }) => {
+  const handleLike = () => {
+    setLiked(!liked);
+  };
+
+  const handleDislike = () => {
+    setDisliked(!disliked);
+  };
+
+  let date = new Date(createdAt);
+  let createDateLocal = date.toLocaleDateString();
+
   return (
     <>
-      <Box
-        sx={{
-          width: '80%',
-          height: '20%',
-          textAlign: 'center',
-          marginTop: '20%',
-          marginLeft: '10%',
-        }}
-      >
-        <Box sx={{ marginBottom: '3%', fontWeight: 'bold' }}>{text}</Box>
-        <Box
-          sx={{
-            fontSize: '3em',
-            bgcolor: color,
-            color: 'white',
-            verticalAlign: 'middle',
-          }}
-        >
-          {number}
-          <Typography variant={'body2'} component={'span'}>
-            &nbsp; / 5.0
-          </Typography>
-        </Box>
-      </Box>
+      <Card sx={{ width: '100%', height: '24em' }}>
+        <CardContent>
+          <Grid container spacing={1}>
+            <Grid item xs={1}>
+              <Avatar
+                sx={{
+                  width: 74,
+                  height: 74,
+                  marginTop: '12%',
+                  marginLeft: '5%',
+                }}
+              >
+                {getInitials(username)}
+              </Avatar>
+            </Grid>
+            <Grid item xs={8} sx={{ position: 'relative', height: '23em' }}>
+              <Box sx={{ marginTop: '3%', marginLeft: '3%' }}>
+                <Typography variant='h6' gutterBottom component='div' color={'#5EBEC4'}>
+                  {anonymous ? 'Anonymous Student' : username}
+                </Typography>
+                <Typography variant='body2' gutterBottom component='div' color={'#646C79'}>
+                  Took the course with professor
+                  <span style={{ color: '#3d78b3' }}>
+                    <i> {professor}</i>
+                  </span>{' '}
+                  in semester {semester}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  marginLeft: '3%',
+                  marginTop: '5%',
+                  fontSize: '1em',
+                  maxWidth: '100%',
+                  Height: '70%',
+                  lineHeight: '2em',
+                  color: '#171824',
+                }}
+              >
+                {comment !== '' ? comment : 'This user did not leave a comment!'}
+              </Box>
+              <Box sx={{ position: 'absolute', bottom: '0', marginLeft: '3%' }}>
+                <Typography variant='body2' gutterBottom component='div' color='#646C79'>
+                  reviewed at <i>{createDateLocal}</i>
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={3} sx={{ position: 'relative' }}>
+              <Box
+                sx={{
+                  bgcolor: rating > 3 ? '#50ad69' : '#d93030',
+                  marginTop: '5%',
+                  width: '30%',
+                  height: '17%',
+                  color: 'white',
+                  marginLeft: '50%',
+                  textAlign: 'center',
+                }}
+              >
+                <Typography variant='h3' component='div' gutterBottom>
+                  {rating}
+                </Typography>
+              </Box>
+              <Box>
+                <Button
+                  variant='text'
+                  sx={{ marginLeft: '2%', marginBottom: '5%', display: 'block' }}
+                >
+                  {semester}
+                </Button>
+                <Button
+                  variant='text'
+                  sx={{ marginLeft: '2%', marginBottom: '5%', display: 'block' }}
+                >
+                  {grade}
+                </Button>
+                <Button
+                  variant='text'
+                  sx={{ marginLeft: '2%', marginBottom: '5%', display: 'block' }}
+                >
+                  {isExamHeavy ? 'YES' : 'NO'}
+                </Button>
+                <Button
+                  variant='text'
+                  sx={{ marginLeft: '2%', marginBottom: '5%', display: 'block' }}
+                >
+                  Homework- {isHomeworkHeavy ? 'Yes' : 'No'}
+                </Button>
+                <Box sx={{ position: 'absolute', bottom: '0', right: '0' }}>
+                  <Button onClick={handleLike}>
+                    {liked ? <ThumbUp /> : <ThumbUpOffAltOutlinedIcon />}
+                  </Button>
+                  <Button onClick={handleDislike}>
+                    {disliked ? <ThumbDown /> : <ThumbDownOutlinedIcon />}
+                  </Button>
+                </Box>
+              </Box>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
     </>
   );
-};
-
-const UserInfo = ({ anonymous, username, date, professor, semester }) => {
-  return (
-    <Box width={'80%'} height={'40%'}>
-      <Box> {anonymous ? 'Anonymous Student' : username} </Box>
-      <Box> {semester} </Box>
-      <Box> {professor} </Box>
-      <Box> {date} </Box>
-    </Box>
-  );
-};
-
-const Comment = ({ comment }) => {
-  return <Box> {comment} </Box>;
 };
