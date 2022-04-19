@@ -10,17 +10,14 @@ function RenderStatus(isRecommended) {
   if (!isRecommended) {
     statusTitle = `Don't pick this course!`;
     statusColor = 'error';
-    statusInstruction = 'The user did not recommend this course.';
   } else {
     statusTitle = 'Pick this course!';
     statusColor = 'success';
-    statusInstruction = 'The user recommended this course.';
   }
   return (
     <Stack sx={{ width: '25%' }} spacing={1}>
       <Alert variant='outlined' severity={statusColor}>
         <AlertTitle>{statusTitle}</AlertTitle>
-        <strong>{statusInstruction}</strong>
       </Alert>
     </Stack>
   );
