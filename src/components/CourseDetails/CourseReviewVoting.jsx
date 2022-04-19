@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
@@ -7,14 +7,11 @@ import Typography from '@mui/material/Typography';
 import { putReview } from '../../../src/api/index';
 
 function postReviewLikedDislikedCount({ review }, likedVal, dislikedVal) {
-  console.log(review.courseID);
   putReview(review.courseID, {
     likedCount: likedVal,
     dislikedCount: dislikedVal,
   })
-    .catch((error) => {
-      console.log(error);
-    })
+    .catch((error) => {})
     .then();
 }
 

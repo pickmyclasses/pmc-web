@@ -59,7 +59,6 @@ function generateStarValues(reviews, option) {
     option.series[0].data[i].value = 0;
   }
   for (let i = 0; i < reviews.length; i++) {
-    console.log(reviews[i].rating);
     option.series[0].data[reviews[i].rating - 1].value += 1;
   }
 }

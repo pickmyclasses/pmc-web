@@ -69,7 +69,6 @@ export default function RegisterForm() {
           enqueueSnackbar('Sorry, something went wrong. Please try again later.', {
             variant: 'error',
           });
-          console.error('Registration failed:', err);
         });
     }
   };
