@@ -7,7 +7,6 @@ function getTopRatedInstructors(professorRanking, num) {
   let instructors = [];
   let instructorRatings = [];
   let instructorInfo = [];
-  console.log(professorRanking);
   for (let i = 0; i < professorRanking.length; i++) {
     instructors.push(professorRanking[i].name);
     instructorRatings.push(professorRanking[i].rating);
