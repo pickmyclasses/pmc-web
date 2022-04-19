@@ -9,6 +9,7 @@ import Stack from '@mui/material/Stack';
 import { Box } from '@material-ui/core';
 import CourseReviewSentence from 'components/CourseDetails/CourseReviewSentence';
 import CourseReviewVoting from './CourseReviewVoting';
+import CoureReviewTooltip from 'components/CourseDetails/CoureReviewTooltip';
 const titleAdd = 'Additional feedbacks?';
 
 export default function CourseReviewCard({ review }) {
@@ -32,22 +33,25 @@ export default function CourseReviewCard({ review }) {
             />
           </Stack>
         </Grid>
+
         <Divider />
 
         <Grid item>
           <CourseReviewSentence review={review} />
         </Grid>
         <Grid item>
-          {review.comment.length === 0 ? (
-            <></>
-          ) : (
-            <CourseComments title={titleAdd} comment={review.comment} />
-          )}
+          <CourseComments title={titleAdd} comment={review.comment} />
         </Grid>
+
         <Divider />
         <Stack direction='row' spacing={1} sx={{ padding: '12px 12px' }}>
           <CourseReviewRecommendation isRecommended={review.recommended} />
-
+          {/* {review.comment.length === 0 ? (
+            <></>
+          ) : (
+            // <CoureReviewTooltip message={review.comment} />
+            
+          )} */}
           <CourseReviewVoting review={review} />
         </Stack>
       </Box>

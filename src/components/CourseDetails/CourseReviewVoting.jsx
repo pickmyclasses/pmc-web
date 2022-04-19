@@ -26,20 +26,21 @@ export default function CourseReviewVoting(review) {
   );
 
   const handleThumpUpclicked = (e) => {
-    setThumpUpclicked(!thumpUpclicked);
-    setLikeCount(likedCount + 1);
     if (thumpDownclicked) {
       setThumpDownclicked(!thumpDownclicked);
       setDislikeCount(dislikedCount - 1);
+    } else if (!thumpUpclicked) {
+      setThumpUpclicked(!thumpUpclicked);
+      setLikeCount(likedCount + 1);
     }
   };
   const handleThumpDownclicked = (e) => {
-    setThumpDownclicked(!thumpDownclicked);
-    setDislikeCount(dislikedCount + 1);
-
     if (thumpUpclicked) {
       setThumpUpclicked(!thumpUpclicked);
       setLikeCount(likedCount - 1);
+    } else if (!thumpDownclicked) {
+      setThumpDownclicked(!thumpDownclicked);
+      setDislikeCount(dislikedCount + 1);
     }
   };
 

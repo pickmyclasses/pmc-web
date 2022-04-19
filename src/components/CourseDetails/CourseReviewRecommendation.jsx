@@ -1,26 +1,19 @@
 import * as React from 'react';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
 import Stack from '@mui/material/Stack';
+import MoodIcon from '@mui/icons-material/Mood';
+import { red, green } from '@mui/material/colors';
+
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+const emoji = (isRecommended) => {
+  if (isRecommended) {
+    return <MoodIcon fontSize='large' style={{ color: green[200] }} />;
+  } else {
+    return <SentimentVeryDissatisfiedIcon fontSize='large' style={{ color: red[200] }} />;
+  }
+};
 
 function RenderStatus(isRecommended) {
-  let statusTitle;
-  let statusColor;
-  let statusInstruction;
-  if (!isRecommended) {
-    statusTitle = `Don't pick this course!`;
-    statusColor = 'error';
-  } else {
-    statusTitle = 'Pick this course!';
-    statusColor = 'success';
-  }
-  return (
-    <Stack sx={{ width: '25%' }} spacing={1}>
-      <Alert variant='outlined' severity={statusColor}>
-        <AlertTitle>{statusTitle}</AlertTitle>
-      </Alert>
-    </Stack>
-  );
+  return <Stack spacing={1}>{emoji(isRecommended)}</Stack>;
 }
 
 export default function CourseReviewStatus(props) {
