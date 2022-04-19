@@ -1,7 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, Avatar } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 import StatsTags from 'components/CourseVisuals/StatsTags';
-import StatsStackedBar from '../CourseVisuals/StatsStackedBar';
 import StatsProfessorSum from '../CourseVisuals/StatsProfessorSum';
 import StatsInfoDump from '../CourseVisuals/StatsInfoDump';
 import StatsLoading from 'components/CourseVisuals/StatsLoading';

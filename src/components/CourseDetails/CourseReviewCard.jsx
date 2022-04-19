@@ -33,21 +33,25 @@ export default function CourseReviewCard({ review }) {
             />
           </Stack>
         </Grid>
+
         <Divider />
 
         <Grid item>
           <CourseReviewSentence review={review} />
         </Grid>
+        <Grid item>
+          <CourseComments title={titleAdd} comment={review.comment} />
+        </Grid>
 
         <Divider />
         <Stack direction='row' spacing={1} sx={{ padding: '12px 12px' }}>
           <CourseReviewRecommendation isRecommended={review.recommended} />
-          {review.comment.length === 0 ? (
+          {/* {review.comment.length === 0 ? (
             <></>
           ) : (
-            <CoureReviewTooltip message={review.comment} />
-            // <CourseComments title={titleAdd} comment={review.comment} />
-          )}
+            // <CoureReviewTooltip message={review.comment} />
+            
+          )} */}
           <CourseReviewVoting review={review} />
         </Stack>
       </Box>
