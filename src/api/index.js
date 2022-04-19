@@ -73,7 +73,9 @@ const getPrerequisiteList = async (course) => {
   };
   getCoursesIDsFromPrerequisiteList(prerequisiteList);
   const courseIDByName = new Map(
-    (await fetchCourseIDsByCourseNames([...courseNames])).map(({ name, id }) => [name, id])
+    course.catalogCourseName.startsWith('CS4')
+      ? (await fetchCourseIDsByCourseNames([...courseNames])).map(({ name, id }) => [name, id])
+      : []
   );
   const checkPrerequisiteList = (prerequisiteList) => {
     let checkedList = {

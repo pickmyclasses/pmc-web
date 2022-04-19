@@ -2,7 +2,8 @@ import React, { useState, useEffect, createContext, useContext } from 'react';
 import { Grid, Box, Typography } from '@mui/material';
 import CourseOverallRatings from '../CourseDetails/CourseOverallRatings';
 import { CourseContext } from '../../pages/CoursePage';
-import { CourseReviewCard } from '../CourseReviews/CourseReviewCard';
+import CourseReviewCard from '../CourseDetails/CourseReviewCard';
+// import { CourseReviewCard } from '../CourseReviews/CourseReviewCard';
 
 export default function CourseReviews() {
   const { reviews } = useContext(CourseContext);
