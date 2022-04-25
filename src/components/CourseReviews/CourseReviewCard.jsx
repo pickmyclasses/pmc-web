@@ -63,7 +63,7 @@ const CourseReviewContent = ({
   let hours = '';
   if (hourSpent === 0) hours = 'Less than expected';
   else if (hourSpent === 1) hours = 'As expected';
-  else hours = 'More than expected than';
+  else hours = 'More than expected';
 
   return (
     <>
