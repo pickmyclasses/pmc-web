@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
 import {
   Card,
   CardContent,
@@ -16,8 +15,6 @@ import {
   Button,
   Link,
 } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { UserContext } from 'App';
 import { CourseContext } from '../../pages/CoursePage';
 import ReviewTags from '../ReviewInputDetails/ReviewTags';
@@ -108,13 +105,16 @@ export const ComposerCard = ({
     fetchTagList().then((data) => setTagList(data));
   }, []);
 
-  console.log(tagList);
   const postNonAnonymousReview = () => {
     postCourseReview(false);
   };
 
   const postAnonymousReview = () => {
     postCourseReview(true);
+  };
+
+  const handleGoBack = () => {
+    setOpenComposer(false);
   };
 
   const postCourseReview = (anonymous = true) => {
@@ -389,7 +389,12 @@ export const ComposerCard = ({
             </Button>
           </Box>
 
-          <Link component='button' variant='body1' sx={{ marginTop: '3em' }}>
+          <Link
+            component='button'
+            variant='body1'
+            sx={{ marginTop: '3em' }}
+            onClick={handleGoBack}
+          >
             I will come back and review later
           </Link>
         </Box>
