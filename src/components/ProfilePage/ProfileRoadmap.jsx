@@ -41,7 +41,7 @@ export default function ProfileRoadmap() {
     setRequirementProgressByID(requirementProgressByID);
   }, [requirements, historyCourses]);
 
-  const handleSummaryRequirementClick = (requirementID) => alert('*= click ' + requirementID);
+  const handleSummaryRequirementClick = (requirement) => alert('*= click ' + requirement.id);
 
   return (
     <Stack spacing='24px' paddingBottom='32px'>
