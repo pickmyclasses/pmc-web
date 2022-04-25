@@ -6,7 +6,7 @@ import {
   Person,
   School,
 } from '@mui/icons-material';
-import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
+import { Divider, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 import PopupState, { bindMenu, bindTrigger } from 'material-ui-popup-state';
 import React, { useContext, createElement } from 'react';
@@ -42,7 +42,8 @@ export default function UserDropDown() {
     {
       icon: History,
       text: 'History',
-      props: { component: PreventableLink, to: '/profile/history', divider: true },
+      divider: true,
+      props: { component: PreventableLink, to: '/profile/history' },
     },
     { icon: ExitToApp, text: 'Log out', handleClick: handleLogOutMenuItemClick },
   ];
@@ -63,17 +64,20 @@ export default function UserDropDown() {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
           >
-            {menuItems.map(({ icon, text, handleClick, props }, i) => (
-              <MenuItem
-                key={i}
-                onClick={handleClick || popupState.close}
-                sx={{ height: '48px' }}
-                {...props}
-              >
-                <ListItemIcon sx={{ marginLeft: '8px' }}>{createElement(icon)}</ListItemIcon>
-                <ListItemText sx={{ marginLeft: '16px' }}>{text}</ListItemText>
-              </MenuItem>
-            ))}
+            {menuItems.map(({ icon, text, handleClick, divider, props }, i) =>
+              [
+                <MenuItem
+                  key={i}
+                  onClick={handleClick || popupState.close}
+                  sx={{ height: '48px' }}
+                  {...props}
+                >
+                  <ListItemIcon sx={{ marginLeft: '8px' }}>{createElement(icon)}</ListItemIcon>
+                  <ListItemText sx={{ marginLeft: '16px' }}>{text}</ListItemText>
+                </MenuItem>,
+                divider && <Divider key={i + '-divider'} />,
+              ].filter(Boolean)
+            )}
           </Menu>
         </>
       )}
