@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import StatsTags from 'components/CourseVisuals/StatsTags';
 import StatsProfessorSum from '../CourseVisuals/StatsProfessorSum';
@@ -11,6 +11,7 @@ import StatsDetailedProfessor from 'components/CourseVisuals/StatsDetailedProfes
 import StatsDetailedAverage from 'components/CourseVisuals/StatsDetailedAverage';
 import StatsWorkLoad from 'components/CourseVisuals/StatsWorkLoad';
 import StatsPieChart from 'components/CourseVisuals/StatsPieChart';
+import ReviewNotAvailable from 'components/CourseVisuals/ReviewNotAvailable';
 import { Grid, Typography, Card, Stack, Link, Box } from '@mui/material';
 import { CourseContext } from '../../pages/CoursePage';
 import { motion } from 'framer-motion';
@@ -20,6 +21,11 @@ export default function CourseStats() {
   const { course, reviews, professorRanking, courseLoad, courseTrend, coursePopularity } =
     useContext(CourseContext);
   const [condition, setCondition] = useState('default');
+  useEffect(() => {
+    if (reviews.length === 0) {
+      setCondition('null');
+    }
+  }, [reviews]);
   const renderWorkLoadSummry = () => (
     <MotionCard
       initial='initial'
@@ -312,38 +318,38 @@ export default function CourseStats() {
             {' '}
             <Grid container spacing='32px' marginBottom='16px'>
               <Grid item xs={4}>
-                {reviews.length === 0 ? renderPlaceHolder() : renderRatingSummery()}
+                {renderRatingSummery()}
               </Grid>
               <Grid item xs={4}>
-                {reviews.length === 0 ? renderPlaceHolder() : renderProfessorSummery()}
+                {renderProfessorSummery()}
               </Grid>
 
               <Grid item xs={4}>
-                {reviews.length === 0 ? renderPlaceHolder() : renderWorkLoadSummry()}
+                {renderWorkLoadSummry()}
               </Grid>
             </Grid>
             <Grid container spacing='32px' marginBottom='16px'>
               <Grid item xs={4}>
-                {reviews.length === 0 ? renderPlaceHolder() : renderDetailedCard()}
+                {renderDetailedCard()}
               </Grid>
               <Grid item xs={4}>
-                {reviews.length === 0 ? renderPlaceHolder() : renderDetailedProfessor()}
+                {renderDetailedProfessor()}
               </Grid>
 
               <Grid item xs={4}>
-                {reviews.length === 0 ? renderPlaceHolder() : renderInfoSummery()}
+                {renderInfoSummery()}
               </Grid>
             </Grid>
             <Grid container spacing='32px' marginBottom='16px'>
               <Grid item xs={4}>
-                {reviews.length === 0 ? renderPlaceHolder() : renderTagsSummary()}
+                {renderTagsSummary()}
               </Grid>
               <Grid item xs={4}>
-                {reviews.length === 0 ? renderPlaceHolder() : renderPopularitySummary()}
+                {renderPopularitySummary()}
               </Grid>
 
               <Grid item xs={4}>
-                {reviews.length === 0 ? renderPlaceHolder() : renderClassSizeSummary()}
+                {renderClassSizeSummary()}
               </Grid>
             </Grid>
           </div>
@@ -368,6 +374,8 @@ export default function CourseStats() {
             {renderDetailedAverage()}
           </Grid>
         );
+      case 'null':
+        return <ReviewNotAvailable />;
       default:
         break;
     }
