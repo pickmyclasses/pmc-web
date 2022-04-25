@@ -55,6 +55,19 @@ const injectFakePropertiesToCourse = (course) => {
   return course;
 };
 
+export const fetchCoursesByIDs = async (courseIDs, userID = NaN) => {
+  const courses = await Promise.all(
+    courseIDs.map((courseID) =>
+      axios
+        .get(`course/${courseID}${isNaN(userID) ? '' : '?userID=' + userID}`)
+        .then(({ data }) => data.data)
+    )
+  );
+  for (let course of courses) injectFakePropertiesToCourse(course);
+  await PrerequisitesManager.prepareAndAssign(courses);
+  return courses;
+};
+
 export const fetchCourseIDsByCourseNames = (courseNames) =>
   axios.post('/course', { courseNameList: courseNames }).then(({ data }) => data.data);
 

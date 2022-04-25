@@ -1,5 +1,9 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { fetchScheduledClassesAndCustomEvents, fetchRequirements } from '../../api';
+import {
+  fetchScheduledClassesAndCustomEvents,
+  fetchRequirements,
+  fetchHistoryCourses,
+} from '../../api';
 import { UserContext } from '../../App';
 
 /**
@@ -14,6 +18,7 @@ export default function ContainerWithScheduler({ children }) {
   const [classesInShoppingCart, setClassesInShoppingCart] = useState([]);
   const [customEvents, setCustomEvents] = useState([]);
   const [requirements, setRequirements] = useState([]);
+  const [historyCourses, setHistoryCourses] = useState([]);
 
   const refreshSchedulerData = useCallback(
     (onComplete) => {
@@ -21,16 +26,19 @@ export default function ContainerWithScheduler({ children }) {
         Promise.all([
           fetchScheduledClassesAndCustomEvents(user.userID),
           fetchRequirements(user),
-        ]).then(([{ scheduledClasses, customEvents }, requirements]) => {
+          fetchHistoryCourses(user.userID),
+        ]).then(([{ scheduledClasses, customEvents }, requirements, historyCourses]) => {
           setClassesInShoppingCart(scheduledClasses);
           setCustomEvents(customEvents);
           setRequirements(requirements);
+          setHistoryCourses(historyCourses);
           onComplete?.();
         });
       } else {
         setClassesInShoppingCart([]);
         setCustomEvents([]);
         setRequirements([]);
+        setHistoryCourses([]);
         onComplete?.();
       }
     },
@@ -41,7 +49,13 @@ export default function ContainerWithScheduler({ children }) {
 
   return (
     <SchedulerContext.Provider
-      value={{ classesInShoppingCart, customEvents, requirements, refreshSchedulerData }}
+      value={{
+        classesInShoppingCart,
+        customEvents,
+        requirements,
+        refreshSchedulerData,
+        historyCourses,
+      }}
     >
       {children}
     </SchedulerContext.Provider>
@@ -53,6 +67,7 @@ export default function ContainerWithScheduler({ children }) {
  *   classesInShoppingCart: Array<{classData, course}>,
  *   requirements: Array<Object>,
  *   customEvents: Array<Object>,
+ *   historyCourses: Array<Object>,
  *   refreshSchedulerData: (onComplete: () => void = null) => void,
  * }>}
  */

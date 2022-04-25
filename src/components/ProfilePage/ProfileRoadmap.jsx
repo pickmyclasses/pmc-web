@@ -6,7 +6,7 @@ import RoadmapSummaryCard from './ProfileRoadmap/RoadmapSummaryCard';
 import { SchedulerContext } from 'components/Scheduler/ContainerWithScheduler';
 import CourseCardGrid from 'components/CourseCardGrid/CourseCardGrid';
 import { UserContext } from 'App';
-import { fetchCourseByID } from 'api';
+import { fetchCourseByID, fetchCoursesByIDs } from 'api';
 import ContainerWithLoadingIndication from 'components/Page/ContainerWithLoadingIndication';
 import { SectionOverline } from 'pages/HomePage';
 import { pluralize } from 'utils';
@@ -14,62 +14,34 @@ import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 
 /** The roadmap tab of the user profile page. */
 export default function ProfileRoadmap() {
-  const { user } = useContext(UserContext);
-  const { requirements } = useContext(SchedulerContext);
+  const { requirements, historyCourses } = useContext(SchedulerContext);
 
   const [expandedRequirements, setExpandedRequirements] = useState([]);
-  const [courseLists, setCourseLists] = useState(null); // TODO Q: Not where we want to be.
+  // const [courseLists, setCourseLists] = useState(null); // TODO Q: Not where we want to be.
+  const [requirementProgressByID, setRequirementProgressByID] = useState({});
 
   useEffect(() => {
-    let courseLists = [];
-    const getCourseLists = (requirement) => {
-      if (requirement.courseList?.length)
-        courseLists.push({
-          title: requirement.setName,
-          numCoursesRequired: requirement.courseNeeded,
-          courseIDs: requirement.courseList,
-        });
-      if (requirement.subSets?.length)
-        for (let subset of requirement.subSets) getCourseLists(subset);
+    let requirementProgressByID = {};
+    const getRequirementProgress = (requirement) => {
+      let completed = requirement.courseList?.reduce(
+        (acc, courseID) => acc + !!historyCourses.find((x) => x.id === courseID),
+        0
+      );
+      if (requirement.subSets)
+        for (let subset of requirement.subSets)
+          completed += getRequirementProgress(subset).completed;
+
+      return (requirementProgressByID[requirement.id] = {
+        completed,
+        total: requirement.courseNeeded,
+      });
     };
-    getCourseLists({ subSets: requirements });
+    for (let requirement of requirements) getRequirementProgress(requirement);
 
-    Promise.all(
-      courseLists.map(({ title, numCoursesRequired, courseIDs }) =>
-        Promise.all(courseIDs.slice(0, 15).map((x) => fetchCourseByID(x, user.userID))).then(
-          (courses) => ({
-            title,
-            numCoursesRequired,
-            courses,
-          })
-        )
-      )
-    ).then(setCourseLists);
-  }, [requirements]);
+    setRequirementProgressByID(requirementProgressByID);
+  }, [requirements, historyCourses]);
 
-  if (user) {
-    return (
-      <ContainerWithLoadingIndication isLoading={!courseLists}>
-        <Stack spacing='48px' paddingBottom='32px'>
-          {courseLists?.length ? (
-            courseLists.map(({ title, numCoursesRequired, courses }) => (
-              <Stack key={title}>
-                <SectionOverline>{title}</SectionOverline>
-                <Typography variant='body2' color='text.secondary' marginBottom='16px'>
-                  {pluralize(numCoursesRequired, 'course')} required
-                </Typography>
-                <CourseCardGrid courses={courses} numColumns={5} />
-              </Stack>
-            ))
-          ) : (
-            <Link component={PreventableLink} to='/profile/roadmap/declare'>
-              Declare major
-            </Link>
-          )}
-        </Stack>
-      </ContainerWithLoadingIndication>
-    );
-  }
+  const handleSummaryRequirementClick = (requirementID) => alert('*= click ' + requirementID);
 
   return (
     <Stack spacing='24px' paddingBottom='32px'>
@@ -86,8 +58,8 @@ export default function ProfileRoadmap() {
       >
         <RoadmapSummaryCard
           requirements={requirements}
-          expandedRequirements={expandedRequirements}
-          onExpandedRequirementsChange={setExpandedRequirements}
+          requirementProgressByID={requirementProgressByID}
+          onRequirementClick={handleSummaryRequirementClick}
         />
       </Stack>
       <Stack
@@ -102,4 +74,4 @@ export default function ProfileRoadmap() {
 
 const summaryCardHeight = '(100vh - 72px - 2 * 32px)';
 
-const summaryCardWidth = '50%';
+const summaryCardWidth = '37.5%';

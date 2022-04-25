@@ -3,7 +3,7 @@ import { Grid, Avatar, Box, Card, CardContent, Typography, Button, Paper } from 
 import ThumbUpOffAltOutlinedIcon from '@mui/icons-material/ThumbUpOffAltOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import { ThumbDown, ThumbUp } from '@mui/icons-material';
-import { getInitials } from 'utils';
+import { formatInstructorName, getInitials } from 'utils';
 
 export const CourseReviewCard = ({ review }) => {
   return (
@@ -91,7 +91,7 @@ const CourseReviewContent = ({
                 <Typography variant='body2' gutterBottom component='div' color={'#646C79'}>
                   Took the course with professor
                   <span style={{ color: '#3d78b3' }}>
-                    <i> {professor}</i>
+                    <i> {formatInstructorName(professor)}</i>
                   </span>{' '}
                   in {semester}
                 </Typography>

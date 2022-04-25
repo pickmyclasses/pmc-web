@@ -429,7 +429,7 @@ export default function Timeline({
               position='absolute'
               right={`calc(${100 - selectedEventData.firstColumn * columnWidth}% + 8px)`}
               top={`max(${getTopByTime(selectedEventData.earliestStart) * 100}%, 0%)`}
-              zIndex={1000}
+              zIndex={1001}
               sx={{
                 transition: isDataCardEditable && getTransitionForStyles(['right', 'top'], 0.5),
               }}

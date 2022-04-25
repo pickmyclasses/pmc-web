@@ -8,8 +8,9 @@ import {
 } from 'api';
 import { UserContext } from 'App';
 import ContainerWithLoadingIndication from 'components/Page/ContainerWithLoadingIndication';
+import { SchedulerContext } from 'components/Scheduler/ContainerWithScheduler';
 import { useSnackbar } from 'notistack';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { formatCourseName, useMount } from 'utils';
 import AddToHistorySearchList from './ProfileHistory/AddToHistorySearchList';
 import HistoryDisplay from './ProfileHistory/HistoryDisplay';
@@ -18,29 +19,27 @@ import ProfilePageTabHeadingCard from './ProfilePageTabHeadingCard';
 /** The schedule tab of the user profile page. */
 export default function ProfileHistory() {
   const { user } = useContext(UserContext);
+  const { historyCourses } = useContext(SchedulerContext);
   const { enqueueSnackbar } = useSnackbar();
 
   /** The list of courses to show in the history area (right half of the tab). */
-  const [historyCourses, setHistoryCourses] = useState(null);
+  const [shownHistoryCourses, setShownHistoryCourses] = useState(null);
 
   /** The list of courses to show in the search area (left half of the tab). */
   const [searchResultCourses, setSearchResultCourses] = useState([]);
 
-  // The history data is only fetched once when this tab is rendered. This component then
-  // assumes the history is always up-to-date and shows any changes the user makes in real-time
-  // without refetching any data from the backend.
+  // This component assumes the history is always up-to-date and shows any changes the user
+  // makes in real-time without refetching any data from the backend.
   //
   // The fetched data is reversed by default to show the most recent addition first and old
   // courses last.
-  useMount(() =>
-    fetchHistoryCourses(user.userID).then((courses) => setHistoryCourses(courses.reverse()))
-  );
+  useEffect(() => setShownHistoryCourses(historyCourses.concat().reverse()), [historyCourses]);
 
   const handleSearch = (query) =>
     fetchCoursesBySearch(query, user, 0, 8).then(({ data }) => setSearchResultCourses(data));
 
   const handleAddHistoryCourse = (course, shouldUpdateViewOnly = false) => {
-    setHistoryCourses([course, ...historyCourses.filter((x) => x.id !== course.id)]);
+    setShownHistoryCourses([course, ...shownHistoryCourses.filter((x) => x.id !== course.id)]);
     if (!shouldUpdateViewOnly) {
       addOrUpdateHistoryCourse(user.userID, course.id).catch(() => {
         enqueueSnackbar(
@@ -53,7 +52,7 @@ export default function ProfileHistory() {
   };
 
   const handleRemoveHistoryCourse = (course, shouldUpdateViewOnly = false) => {
-    setHistoryCourses(historyCourses.filter((x) => x.id !== course.id));
+    setShownHistoryCourses(shownHistoryCourses.filter((x) => x.id !== course.id));
     if (!shouldUpdateViewOnly) {
       removeHistoryCourse(user.userID, course.id).catch(() => {
         enqueueSnackbar(
@@ -68,7 +67,7 @@ export default function ProfileHistory() {
   };
 
   return (
-    <ContainerWithLoadingIndication isLoading={!historyCourses}>
+    <ContainerWithLoadingIndication isLoading={!shownHistoryCourses}>
       <Stack spacing='24px' height='100%'>
         <ProfilePageTabHeadingCard
           iconType={History}
@@ -79,7 +78,7 @@ export default function ProfileHistory() {
           <Grid item xs={5} paddingRight='24px' height='100%'>
             <AddToHistorySearchList
               searchResultCourses={searchResultCourses}
-              historyCourses={historyCourses}
+              historyCourses={shownHistoryCourses}
               onSearch={handleSearch}
               onAddHistoryCourse={handleAddHistoryCourse}
               onRemoveHistoryCourse={handleRemoveHistoryCourse}
@@ -88,7 +87,7 @@ export default function ProfileHistory() {
           <Divider orientation='vertical' />
           <Grid item xs={7} paddingLeft='24px' height='100%'>
             <HistoryDisplay
-              historyCourses={historyCourses}
+              historyCourses={shownHistoryCourses}
               onRemoveHistoryCourse={handleRemoveHistoryCourse}
             />
           </Grid>
