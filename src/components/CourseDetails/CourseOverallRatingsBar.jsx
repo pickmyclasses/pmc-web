@@ -3,6 +3,7 @@ import { Grid } from '@mui/material';
 import LinearProgress from '@mui/material/LinearProgress';
 import { makeStyles } from '@mui/styles';
 import { Box, Typography } from '@material-ui/core';
+
 const useStyles = makeStyles({
   orange: {
     '& .MuiLinearProgress-barColorPrimary': {

@@ -1,14 +1,16 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
-import { Grid, Box, Typography } from '@mui/material';
-import CourseOverallRatings from '../CourseDetails/CourseOverallRatings';
+import { Box, Grid, Container } from '@mui/material';
+import Scrollbars from 'react-custom-scrollbars-2';
 import { CourseContext } from '../../pages/CoursePage';
-import CourseReviewCard from '../CourseDetails/CourseReviewCard';
-// import { CourseReviewCard } from '../CourseReviews/CourseReviewCard';
+import { CourseReviewCard } from '../CourseReviews/CourseReviewCard';
+import { CourseReviewOverviewCard } from 'components/CourseReviews/CourseReviewOverviewCard';
+import { CourseReviewComposerCard } from 'components/CourseReviews/CourseReviewComposerCard';
 
 export default function CourseReviews() {
   const { reviews } = useContext(CourseContext);
   const [sortedReviews, setSortedReviews] = useState(reviews);
   const [filterMethod, setFilterMethod] = useState('most-recent');
+
   useEffect(() => {
     const comparatorByFilterMethod = {
       'most-recent': (x, y) =>
@@ -16,34 +18,30 @@ export default function CourseReviews() {
       'highest-rated': (x, y) => y.rating - x.rating,
       'lowest-rated': (x, y) => x.rating - y.rating,
     };
-
     setSortedReviews(reviews.concat().sort(comparatorByFilterMethod[filterMethod]));
   }, [filterMethod, reviews]);
 
-  const renderReviewSkeletons = () => (
-    <Box sx={{ padding: '12px 24px', '> *': { marginY: '12px !important' } }}>
-      <Typography>No reviews for this course written yet.</Typography>
-    </Box>
-  );
-
-  const renderReviewCards = () =>
-    sortedReviews.map((review, i) => (
-      <Grid item xs={12} key={i}>
-        <CourseReviewCard review={review} />
-      </Grid>
-    ));
-
   return (
-    <Box>
-      <Grid container spacing='32px' marginBottom='16px'>
+    <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0, fontFamily: 'Roboto' }}>
+      <Grid container spacing={2}>
         <Grid item xs={12}>
-          <FilterContext.Provider value={{ filterMethod, setFilterMethod }}>
-            <CourseOverallRatings reviews={reviews} />
-          </FilterContext.Provider>
+          <CourseReviewComposerCard />
         </Grid>
-        {sortedReviews ? renderReviewCards() : renderReviewSkeletons()}
+        <Grid item xs={4}>
+          <CourseReviewOverviewCard reviews={sortedReviews} />
+        </Grid>
+        <Grid item xs={8} sx={{ height: '100vh', overflow: 'auto' }}>
+          <Scrollbars autoHide>
+            {sortedReviews &&
+              sortedReviews.map((review, i) => (
+                <Box key={i}>
+                  <CourseReviewCard review={review} />
+                </Box>
+              ))}
+          </Scrollbars>
+        </Grid>
       </Grid>
-    </Box>
+    </Container>
   );
 }
 

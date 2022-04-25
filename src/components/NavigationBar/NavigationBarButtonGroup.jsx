@@ -5,7 +5,6 @@ import { navigationBarTheme } from './NavigationBar';
 import SchedulerDropDown from './NavigationBarButtonGroup/SchedulerDropDown';
 import UserDropDown from './NavigationBarButtonGroup/UserDropDown';
 import { School } from '@mui/icons-material';
-import { useMount } from '../../utils';
 import LinkToAuthForm from 'components/AuthForm/LinkToAuthForm';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 
@@ -25,6 +24,7 @@ export default function NavigationBarButtonGroup() {
       component={PreventableLink}
       to='/profile/roadmap'
     />,
+
     <UserDropDown key='user' />,
   ];
 

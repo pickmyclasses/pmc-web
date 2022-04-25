@@ -59,7 +59,7 @@ export default function App() {
               <Route exact path='/admin' element={<AdminPage />} />
               <Route exact path='/admin-update' element={<UpdateData />} />
               <Route exact path='/file-upload' element={<FileUpload />} />
-              <Route exact path='/direct-message' element={<DirectMessage/>}/>
+              <Route exact path='/direct-message' element={<DirectMessage />} />
             </Routes>
           </ContainerWithNavigationBar>
         </ContainerWithPreventableNavigation>
