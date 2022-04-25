@@ -33,32 +33,48 @@ let option = {
         { value: 30, name: 'B' },
         { value: 10, name: 'C' },
         { value: 80, name: 'D' },
+        { value: 80, name: 'E' },
+        { value: 80, name: 'F' },
       ],
     },
   ],
 };
 
+function resetOption() {
+  let dataContent = [
+    { value: 0, name: 'A' },
+    { value: 0, name: 'B' },
+    { value: 0, name: 'C' },
+    { value: 0, name: 'D' },
+    { value: 0, name: 'E' },
+    { value: 0, name: 'F' },
+  ];
+  option.series[0].data = dataContent;
+}
+
 function populateData(reviews) {
   // Reset the value in the chart to '0'
-  for (let i = 0; i < option.series[0].data.length; i++) {
-    option.series[0].data[i].value = 0;
-  }
+  resetOption();
   // Append the data to the grade distribution
   for (let i = 0; i < reviews.length; i++) {
     let gradeIndex = reviews[i].gradeReceived.charCodeAt(0) - 'A'.charCodeAt(0);
     option.series[0].data[gradeIndex].value += 1;
   }
 
-  // Remove the items if their values are 0
+  let dataContent = [];
+  // Create a new array and push the element from the old array only if their values aren't 0.
   for (let i = 0; i < option.series[0].data.length; i++) {
-    if (option.series[0].data[i].value === 0) {
-      option.series[0].data.splice(i, i + 1);
+    if (option.series[0].data[i].value !== 0) {
+      dataContent.push(option.series[0].data[i]);
     }
   }
+  option.series[0].data = dataContent;
 }
 
 // Stats Class Size Visualization with line
 export default function StatsClassSize({ reviews }) {
   populateData(reviews);
+  console.log(option.series[0].data);
+
   return <ReactECharts option={option} style={{ height: 200 }} onEvents={{}} />;
 }
