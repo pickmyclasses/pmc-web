@@ -10,6 +10,7 @@ import Lottie from 'react-lottie-player';
 import poster from '../assets/poster.json';
 import graduation from '../assets/education-reward.json';
 import Scrollbars from 'react-custom-scrollbars-2';
+import Footer from 'components/Footer/Footer';
 
 const useStyle = makeStyles({
   main: {
@@ -93,51 +94,62 @@ const WelcomePage = () => {
   const classes = useStyle();
 
   return (
-    <Scrollbars>
-      <div className={classes.main}>
-        <Box className={classes.mainForm}>
-          <div className={classes.headings}>Data-driven course catalogs, Easier searching</div>
-          <div className={classes.headingTwo}>
-            Make your college life a journey!
+    <>
+      <Scrollbars>
+        <div className={classes.main}>
+          <Box className={classes.mainForm}>
+            <div className={classes.headings}>
+              Data-driven course catalogs, Easier searching
+            </div>
+            <div className={classes.headingTwo}>
+              Make your college life a journey!
+              <Lottie
+                loop
+                animationData={graduation}
+                play
+                style={{ width: '14%', marginLeft: 'auto', marginRight: 'auto' }}
+              />
+            </div>
+            <div className={classes.searchBarContainer}>
+              <SearchBar
+                textColor={grey[900]}
+                backgroundColor={grey[50]}
+                onSearch={handleSearch}
+                maxWidth={'70%'}
+                focusHoverColor={grey[300]}
+                placeholderText={''}
+                borderRadiusRatio={'43px'}
+                fontSize={'1.7em'}
+              />
+            </div>
+            <div className={classes.searchBarText}>Searching for your classes now!</div>
+            <div className={classes.registerText}>
+              Or, register for your customized scheduler and recommendations!
+            </div>
+            <Box display='flex'>
+              <Button className={classes.linkBnt}>
+                <Link to='/register' className={classes.link}>
+                  register now!
+                </Link>
+              </Button>
+            </Box>
+            <Link to='/auth' className={classes.loginLink}>
+              Already a user? log in now!
+            </Link>
+          </Box>
+          <Box sx={{ paddingRight: '4%' }}>
             <Lottie
               loop
-              animationData={graduation}
+              animationData={poster}
               play
-              style={{ width: '14%', marginLeft: 'auto', marginRight: 'auto' }}
+              style={{ width: '100%', height: '100%' }}
             />
-          </div>
-          <div className={classes.searchBarContainer}>
-            <SearchBar
-              textColor={grey[900]}
-              backgroundColor={grey[50]}
-              onSearch={handleSearch}
-              maxWidth={'70%'}
-              focusHoverColor={grey[300]}
-              placeholderText={''}
-              borderRadiusRatio={'43px'}
-              fontSize={'1.7em'}
-            />
-          </div>
-          <div className={classes.searchBarText}>Searching for your classes now!</div>
-          <div className={classes.registerText}>
-            Or, register for your customized scheduler and recommendations!
-          </div>
-          <Box display='flex'>
-            <Button className={classes.linkBnt}>
-              <Link to='/register' className={classes.link}>
-                register now!
-              </Link>
-            </Button>
           </Box>
-          <Link to='/auth' className={classes.loginLink}>
-            Already a user? log in now!
-          </Link>
-        </Box>
-        <Box sx={{ paddingRight: '4%' }}>
-          <Lottie loop animationData={poster} play style={{ width: '100%', height: '100%' }} />
-        </Box>
-      </div>
-    </Scrollbars>
+        </div>
+
+        <Footer />
+      </Scrollbars>
+    </>
   );
 };
 

@@ -332,3 +332,10 @@ export const fetchRatingTrend = async (courseID, body) => {
   const res = await axios.get(`/stats/course/${courseID}/rating/trend`);
   return await res.data.data;
 };
+
+export const fetchCourseKeywordTags = async (context) => {};
+
+export const fetchUserReviewInfo = async (userID, courseID) => {
+  const res = await axios.get(`/course/${courseID}/review/user?userID=${userID}`);
+  return await res.data.data;
+};
