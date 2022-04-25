@@ -54,9 +54,83 @@ export const CourseReviewComposerCard = () => {
     },
   ];
 
+  const spentHoursOptions = [
+    {
+      value: 0,
+      label: 'less than expected',
+    },
+    {
+      value: 1,
+      label: 'as expected',
+    },
+    {
+      value: 2,
+      label: 'more than expected',
+    },
+  ];
+
+  const gradeReceivedOptions = [
+    {
+      value: 'A',
+      label: 'A',
+    },
+    {
+      value: 'A-',
+      label: 'A-',
+    },
+    {
+      value: 'B+',
+      label: 'B+',
+    },
+    {
+      value: 'B',
+      label: 'B',
+    },
+    {
+      value: 'B-',
+      label: 'B-',
+    },
+    {
+      value: 'C+',
+      label: 'C+',
+    },
+    {
+      value: 'C',
+      label: 'C',
+    },
+    {
+      value: 'C-',
+      label: 'C-',
+    },
+    {
+      value: 'D+',
+      label: 'D+',
+    },
+    {
+      value: 'D',
+      label: 'D',
+    },
+    {
+      value: 'D-',
+      label: 'D-',
+    },
+    {
+      value: 'E',
+      label: 'E',
+    },
+    {
+      value: 'F',
+      label: 'F',
+    },
+  ];
+
   return (
-    <Card sx={{ height: '25em', width: '100%' }}>
+    <Card sx={{ height: '100vh', width: '100%' }}>
       <CardContent>
+        <Box sx={{ textAlign: 'center' }}>
+          We just have a few questions for you, and this will help the future students! Let's do
+          it!
+        </Box>
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant='h6'>Rate this course</Typography>
           <RatingHearts />
@@ -68,6 +142,17 @@ export const CourseReviewComposerCard = () => {
           <RadioButtonGroup radioOptions={examOptions} />
           <Typography component={'legend'}>Does the course offer extra credits?</Typography>
           <RadioButtonGroup radioOptions={extraCreditOptions} />
+          <Typography component={'legend'}>
+            In average, a 4 credit class requires about 20 hours/week, Do you think you have
+            spent more time than that?
+          </Typography>
+          <RadioButtonGroup radioOptions={spentHoursOptions} />
+          <Typography component={'legend'}>What grade did you get from the course?</Typography>
+          <RadioButtonGroup radioOptions={gradeReceivedOptions} />
+          <Typography component={'legend'}>
+            Is there a good thing you want to tell us about the course? (you can pick from the
+            previous tags or create you own)
+          </Typography>
         </Box>
       </CardContent>
     </Card>
