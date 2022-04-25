@@ -74,7 +74,6 @@ function populateData(reviews) {
 // Stats Class Size Visualization with line
 export default function StatsClassSize({ reviews }) {
   populateData(reviews);
-  console.log(option.series[0].data);
 
   return <ReactECharts option={option} style={{ height: 200 }} onEvents={{}} />;
 }

@@ -18,6 +18,7 @@ import {
   fetchProfessorRanking,
   fetchCourseLoad,
   fetchRatingTrend,
+  fetchCoursePopularity,
 } from '../api';
 import CoursePageTop, { imageHeight } from '../components/CoursePage/CoursePageTop';
 import CourseOverview from '../components/CoursePage/CourseOverview';
@@ -40,6 +41,7 @@ export default function CoursePage() {
   const [professorRanking, setProfessorRanking] = useState();
   const [courseLoad, setCourseLoad] = useState();
   const [courseTrend, setCourseTrend] = useState();
+  const [coursePopularity, setCoursePopularity] = useState();
   // This avoids the useRef()'s not updating problem with useEffect().
   // See https://stackoverflow.com/a/67906087)
   // We can potentially include this pattern in the utils collection to reuse it.
@@ -55,7 +57,7 @@ export default function CoursePage() {
       fetchProfessorRanking(courseID).then(setProfessorRanking);
       fetchCourseLoad(courseID).then(setCourseLoad);
       fetchRatingTrend(courseID).then(setCourseTrend);
-
+      fetchCoursePopularity(courseID).then(setCoursePopularity);
       if (user) fetchSemestersByCollegeID(user.collegeID).then(setSemesters);
     },
     [user]
@@ -103,6 +105,7 @@ export default function CoursePage() {
                 professorRanking,
                 courseLoad,
                 courseTrend,
+                coursePopularity,
               }}
             >
               {createElement(tabs[activeTabName].content)}

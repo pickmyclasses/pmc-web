@@ -67,7 +67,6 @@ export const fetchHomePageCourses = async (userID) => {
   await PrerequisitesManager.assign(
     data.data.courseCatalogList.map((x) => x.courseList).flat()
   );
-  console.log('*= courses', data.data);
 
   return data.data.courseCatalogList;
 };
@@ -320,6 +319,11 @@ export const fetchCollegeList = () => axios.get(`/college/list`).then(({ data })
 
 export const fetchCourseLoad = async (courseID, body) => {
   const res = await axios.get(`/stats/course/${courseID}/load`);
+  return await res.data.data;
+};
+
+export const fetchCoursePopularity = async (courseID, body) => {
+  const res = await axios.get(`/stats/course/${courseID}/popularity`);
   return await res.data.data;
 };
 

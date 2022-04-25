@@ -17,10 +17,9 @@ import { motion } from 'framer-motion';
 import ClickableIndicator from '../CourseCardGrid/CourseCard/ClickableIndicator';
 
 export default function CourseStats() {
-  const { course, reviews, professorRanking, courseLoad, courseTrend } =
+  const { course, reviews, professorRanking, courseLoad, courseTrend, coursePopularity } =
     useContext(CourseContext);
   const [condition, setCondition] = useState('default');
-
   const renderWorkLoadSummry = () => (
     <MotionCard
       initial='initial'
@@ -165,7 +164,7 @@ export default function CourseStats() {
       <Stack padding='24px' height='calc(100% - 48px)'>
         <Box flex={1}>
           <Typography variant='subtitle2'>Course Popularity </Typography>
-          <StatsPopularity reviews={reviews} />
+          <StatsPopularity coursePopularity={coursePopularity} />
         </Box>
         {/* <Link>
           <ClickableIndicator propagate>
