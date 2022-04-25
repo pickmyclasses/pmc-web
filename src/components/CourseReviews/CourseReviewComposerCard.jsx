@@ -108,13 +108,16 @@ export const ComposerCard = ({
     fetchTagList().then((data) => setTagList(data));
   }, []);
 
-  console.log(tagList);
   const postNonAnonymousReview = () => {
     postCourseReview(false);
   };
 
   const postAnonymousReview = () => {
     postCourseReview(true);
+  };
+
+  const handleGoBack = () => {
+    setOpenComposer(false);
   };
 
   const postCourseReview = (anonymous = true) => {
@@ -389,7 +392,12 @@ export const ComposerCard = ({
             </Button>
           </Box>
 
-          <Link component='button' variant='body1' sx={{ marginTop: '3em' }}>
+          <Link
+            component='button'
+            variant='body1'
+            sx={{ marginTop: '3em' }}
+            onClick={handleGoBack}
+          >
             I will come back and review later
           </Link>
         </Box>
