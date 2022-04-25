@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
 import {
   Card,
   CardContent,
@@ -16,8 +15,6 @@ import {
   Button,
   Link,
 } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { UserContext } from 'App';
 import { CourseContext } from '../../pages/CoursePage';
 import ReviewTags from '../ReviewInputDetails/ReviewTags';
