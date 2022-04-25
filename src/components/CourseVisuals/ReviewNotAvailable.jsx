@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
-import NoData from './../../assets/NoData.png';
+import NoData from './../../assets/school-question.svg';
 
 // Inform the user to write review
 export default function ReviewNotAvailable() {
