@@ -4,6 +4,7 @@ import LabelWithIcon from 'components/CoursePage/LabelWithIcon';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 import { SchedulerContext } from 'components/Scheduler/ContainerWithScheduler';
 import React, { useContext, useEffect, useState } from 'react';
+import HistoryBreakdownChart from '../ProfileHistory/HistoryBreakdownChart';
 import RoadmapSummaryChart from './RoadmapSummaryChart';
 
 export default function RoadmapSummaryCard({ ...chartProps }) {
@@ -34,8 +35,15 @@ export default function RoadmapSummaryCard({ ...chartProps }) {
 
   return (
     <Card sx={{ height: '100%', overflow: 'visible' }}>
-      <Stack padding='24px' spacing='12px' height='calc(100% - 48px)'>
+      <Stack padding='24px' spacing='16px' height='calc(100% - 48px)'>
         <LabelWithIcon color='action' iconType={PieChart} label='Summary' variant='overline' />
+        <HistoryBreakdownChart
+          historyBreakdown={requirements}
+          style={{ height: 32 * requirements.length + 'px' }}
+        />
+        <Typography variant='subtitle2' align='center' sx={{ paddingTop: '20px' }}>
+          Requirement Breakdown
+        </Typography>
         <Stack flex={1}>
           <RoadmapSummaryChart {...chartProps} />
         </Stack>
@@ -46,7 +54,6 @@ export default function RoadmapSummaryCard({ ...chartProps }) {
           color='text.secondary'
           variant='caption'
           align='center'
-          paddingBottom='12px'
         >
           Edit what courses you've taken
         </Link>
