@@ -54,7 +54,6 @@ export default function RoadmapSummaryChart({
   };
 
   const formatTooltipText = (requirement) => {
-    console.log('*= r', requirement);
     const { completed, total } = requirementProgressByID?.[requirement.id] || {};
 
     return [
