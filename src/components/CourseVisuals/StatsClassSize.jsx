@@ -9,7 +9,7 @@ let option = {
 
   tooltip: {
     trigger: 'item',
-    formatter: '{a} <br/>{b} : {c}%',
+    formatter: '{b} received : {c}',
   },
 
   legend: {
@@ -21,7 +21,7 @@ let option = {
     {
       color: ['#568EA6', '#F1D1B5', '#F0B7A4', '#F18C8E'],
 
-      name: 'Pyramid',
+      name: '',
       type: 'funnel',
       width: '60%',
       height: '85%',
@@ -39,7 +39,22 @@ let option = {
 };
 
 function populateData(reviews) {
-  for (let i = 0; i < reviews.length; i++) {}
+  // Reset the value in the chart to '0'
+  for (let i = 0; i < option.series[0].data.length; i++) {
+    option.series[0].data[i].value = 0;
+  }
+  // Append the data to the grade distribution
+  for (let i = 0; i < reviews.length; i++) {
+    let gradeIndex = reviews[i].gradeReceived.charCodeAt(0) - 'A'.charCodeAt(0);
+    option.series[0].data[gradeIndex].value += 1;
+  }
+
+  // Remove the items if their values are 0
+  for (let i = 0; i < option.series[0].data.length; i++) {
+    if (option.series[0].data[i].value === 0) {
+      option.series[0].data.splice(i, i + 1);
+    }
+  }
 }
 
 // Stats Class Size Visualization with line
