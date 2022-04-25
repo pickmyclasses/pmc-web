@@ -6,7 +6,15 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 const filter = createFilterOptions();
 
 // Give the option for the user to input tags or from tag suggestion
-export default function ReviewTags({ tags, tagsLabel, tagSuggestion, onChange }) {
+export default function ReviewTags({
+  tags,
+  tagsLabel,
+  tagSuggestion,
+  onChange,
+  showArrow = true,
+  label = 'word',
+  width = '700px',
+}) {
   return (
     <Grid container spacing={gridSpacing}>
       <Grid
@@ -22,14 +30,13 @@ export default function ReviewTags({ tags, tagsLabel, tagSuggestion, onChange })
           {tagsLabel}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-          <ArrowCircleUp sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+          {showArrow && <ArrowCircleUp sx={{ color: 'action.active', mr: 1, my: 0.5 }} />}
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
           <Autocomplete
             multiple
             selectOnFocus
             limitTags={8}
-            id='multiple-limit-tags'
             options={tagSuggestion}
             getOptionLabel={(option) => {
               // Select from the dropdown options
@@ -43,9 +50,9 @@ export default function ReviewTags({ tags, tagsLabel, tagSuggestion, onChange })
               onChange(value);
             }}
             renderInput={(params) => (
-              <TextField {...params} label={'words'} placeholder='Input' />
+              <TextField {...params} label={label} placeholder='Input' />
             )}
-            sx={{ width: '700px' }}
+            sx={{ width: width }}
             filterOptions={(options, params) => {
               const filtered = filter(options, params);
               const { inputValue } = params;
