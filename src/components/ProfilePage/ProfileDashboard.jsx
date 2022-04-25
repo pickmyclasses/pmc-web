@@ -28,7 +28,7 @@ const outputSchoolYears = (year) => {
 };
 
 const renderUserInfo = (user) => (
-  <Card sx={{ width: '90%', height: '40%' }}>
+  <Card sx={{ width: '90%', height: 'auto' }}>
     <Stack padding='24px' spacing='24px'>
       <Typography variant='h6'>Basic info</Typography>
 
