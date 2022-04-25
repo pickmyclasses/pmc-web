@@ -305,6 +305,7 @@ export const fetchReviewsByCourseID = (courseID) =>
 export const putReview = (courseID, body) => axios.put(`/course/${courseID}/review`, body);
 
 export const postReview = (courseID, body) => axios.post(`/course/${courseID}/review`, body);
+
 export const postTagsByCourseID = (courseID, body) =>
   axios.post(`/course/${courseID}/tag`, body);
 export const putTagsByCourseID = (courseID, body) => axios.put(`/course/${courseID}/tag`, body);

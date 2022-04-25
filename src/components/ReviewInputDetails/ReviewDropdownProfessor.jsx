@@ -8,12 +8,12 @@ import Select from '@mui/material/Select';
 // Option for the user to select the professor when writing a review
 export default function ReviewDropdownProfessor({ options, value, onChange }) {
   return (
-    <Box width='192px'>
-      <FormControl fullWidth>
+    <>
+      <FormControl sx={{ width: '192px' }}>
         <InputLabel>Professors</InputLabel>
         <Select
           value={value}
-          label='PrfessorsOptions'
+          label='ProfessorsOptions'
           onChange={(event) => {
             onChange(event.target.value);
           }}
@@ -25,6 +25,6 @@ export default function ReviewDropdownProfessor({ options, value, onChange }) {
           ))}
         </Select>
       </FormControl>
-    </Box>
+    </>
   );
 }

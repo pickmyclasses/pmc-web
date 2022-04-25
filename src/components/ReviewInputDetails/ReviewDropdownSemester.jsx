@@ -8,8 +8,8 @@ import Select from '@mui/material/Select';
 // Option for the user to select the semester when writing a review
 export default function ReviewDropdownSemester({ options, value, onChange }) {
   return (
-    <Box width='192px'>
-      <FormControl fullWidth>
+    <>
+      <FormControl sx={{ width: '192px' }}>
         <InputLabel>Semesters</InputLabel>
         <Select
           value={value}
@@ -25,6 +25,6 @@ export default function ReviewDropdownSemester({ options, value, onChange }) {
           ))}
         </Select>
       </FormControl>
-    </Box>
+    </>
   );
 }
