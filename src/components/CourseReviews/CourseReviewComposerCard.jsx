@@ -7,7 +7,6 @@ import {
   Rating,
   Typography,
   FormControl,
-  FormLabel,
   FormControlLabel,
   Radio,
   RadioGroup,
