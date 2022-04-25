@@ -55,6 +55,6 @@ let option = {
 };
 
 // Visualize the popularity of a course given by reviews
-export default function StatsPopularity({ reviews }) {
+export default function StatsPopularity({ coursePopularity }) {
   return <ReactECharts option={option} style={{ height: 200 }} onEvents={{}} />;
 }
