@@ -87,8 +87,8 @@ export default function ProfilePage() {
  * `name` also determines the `:tab` parameter in the URL.
  */
 const tabs = {
-  // '': { title: 'Dashboard', icon: Dashboard, content: ProfileDashboard },
-  '': { title: 'Schedule', icon: EventNote, content: ProfileSchedule },
+  '': { title: 'Dashboard', icon: Dashboard, content: ProfileDashboard },
+  'schedule': { title: 'Schedule', icon: EventNote, content: ProfileSchedule },
   'roadmap': { title: 'Requirements', icon: School, content: ProfileRoadmap },
   'history': { title: 'History', icon: History, content: ProfileHistory },
 };
