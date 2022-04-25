@@ -157,7 +157,7 @@ export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseI
 export const fetchScheduledClassesAndCustomEvents = async (userID) => {
   const { data } = await axios.get(`schedule?userID=${userID}`);
   for (let { course } of data.data.scheduledClasses) injectFakePropertiesToCourse(course);
-  PrerequisitesManager.prepareAndAssign(data.data.scheduledClasses.map((x) => x.course));
+  await PrerequisitesManager.prepareAndAssign(data.data.scheduledClasses.map((x) => x.course));
   return data.data;
 };
 
