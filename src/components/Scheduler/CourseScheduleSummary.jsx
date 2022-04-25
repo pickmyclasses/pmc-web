@@ -6,21 +6,22 @@ import { getComponent, getInstructor } from './ShoppingCart';
 
 export default function CourseScheduleSummary({ classes, plainText = false }) {
   const [sortedClasses, setSortedClasses] = useState([]);
+  const [instructorName, setInstructorName] = useState(null);
 
-  useEffect(
-    () =>
-      setSortedClasses(
-        classes
-          .map((x) => ({ component: getComponent(x), classData: x }))
-          .sort((x, y) => +(x.component !== 'Lecture') - +(y.component !== 'Lecture'))
-      ),
-    [classes]
-  );
+  useEffect(() => {
+    setSortedClasses(
+      classes
+        .map((x) => ({ component: getComponent(x), classData: x }))
+        .sort((x, y) => +(x.component !== 'Lecture') - +(y.component !== 'Lecture'))
+    );
+    const instructor = getInstructor(classes[0]);
+    setInstructorName(instructor && formatInstructorName(instructor));
+  }, [classes]);
 
   return (
     <Stack spacing={plainText ? 0 : '4px'}>
       <Typography variant='body2' noWrap>
-        Instructor: {formatInstructorName(getInstructor(classes[0]))}
+        Instructor: {instructorName || 'TBD'}
       </Typography>
       {sortedClasses.map(({ component, classData }) => (
         <Stack key={component} direction='row' alignItems='center'>
