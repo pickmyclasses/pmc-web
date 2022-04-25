@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { formatPrerequisites, getColorByString } from 'utils';
+import PrerequisitesManager from './Prerequisites/PrerequisitesManager';
 
 export const login = (email, password) =>
   axios.post('/login', { email, password }).then(({ data }) => formatUserInfo(data.data, true));
@@ -36,7 +37,8 @@ export const fetchCourseByID = async (courseID, userID = NaN) => {
     `/course/${courseID}${isNaN(userID) ? '' : '?userID=' + userID}`
   );
   const course = data.data;
-  await injectFakePropertiesToCourse(course);
+  injectFakePropertiesToCourse(course);
+  await PrerequisitesManager.prepareAndAssign([course]);
   return course;
 };
 
@@ -45,71 +47,12 @@ const getFakeCourseImageURL = (course) =>
 
 export const getColorByCourse = (course) => getColorByString(course.catalogCourseName);
 
-const injectFakePropertiesToCourse = async (course) => {
+const injectFakePropertiesToCourse = (course) => {
   course.ImageURL = getFakeCourseImageURL(course);
   // Hide courses that don't have a start time (corrupted data from backend?)
   course.classes = course.classes.filter((x) => !x.offerDate || x.startTime);
   injectLocationMapURLToClasses(course.classes);
-  course.prerequisiteList = await getPrerequisiteList(course);
-  course.isTaken = historyCourseIDs.has(course.id);
   return course;
-};
-
-const getPrerequisiteList = async (course) => {
-  let [prerequisiteList, numPrerequisites] = formatPrerequisites(course.prerequisites);
-  let courseNames = new Set();
-  const courseNamePattern = /[A-Z]{2,5} \d{3,4}/;
-  const formatCourseName = (s) => s.replace(' ', '').toUpperCase();
-  const getCoursesIDsFromPrerequisiteList = (prerequisiteList) => {
-    for (let item of prerequisiteList.items) {
-      if (typeof item === 'string') {
-        const extractedCourseNames = item.match(courseNamePattern);
-        if (extractedCourseNames?.length === 1)
-          courseNames.add(formatCourseName(extractedCourseNames[0]));
-      } else {
-        getCoursesIDsFromPrerequisiteList(item);
-      }
-    }
-  };
-  getCoursesIDsFromPrerequisiteList(prerequisiteList);
-  const courseIDByName = new Map(
-    course.catalogCourseName.startsWith('CS4')
-      ? (await fetchCourseIDsByCourseNames([...courseNames])).map(({ name, id }) => [name, id])
-      : []
-  );
-  const checkPrerequisiteList = (prerequisiteList) => {
-    let checkedList = {
-      type: 'list',
-      policy: prerequisiteList.policy,
-      items: prerequisiteList.items
-        .map((item) => {
-          if (typeof item === 'string') {
-            const extractedCourseNames = item.match(courseNamePattern);
-            if (extractedCourseNames?.length === 1) {
-              const courseName = formatCourseName(extractedCourseNames[0]);
-              if (courseIDByName.has(courseName))
-                return {
-                  type: 'course',
-                  name: item,
-                  id: courseIDByName.get(courseName),
-                  isCompleted: historyCourseIDs.has(courseIDByName.get(courseName)),
-                };
-            }
-            // return { type: 'text', text: item, isCompleted: true };
-            return null;
-          }
-          return { ...checkPrerequisiteList(item) };
-        })
-        .filter((x) => x && (x.type !== 'list' || x.numItems)),
-    };
-    checkedList.numItems = checkedList.items
-      .map((x) => (x.type === 'list' ? x.numItems : +(x.type === 'course')))
-      .reduce((acc, x) => acc + x, 0);
-    checkedList.isCompleted =
-      !checkedList.numItems || checkedList.items[checkedList.policy]((x) => x.isCompleted);
-    return checkedList;
-  };
-  return checkPrerequisiteList(prerequisiteList);
 };
 
 export const fetchCourseIDsByCourseNames = (courseNames) =>
@@ -118,8 +61,14 @@ export const fetchCourseIDsByCourseNames = (courseNames) =>
 export const fetchHomePageCourses = async (userID) => {
   const { data } = await axios.get(`/user/${userID}/recommend`);
   for (let { courseList } of data.data.courseCatalogList) {
-    for (let course of courseList) await injectFakePropertiesToCourse(course);
+    for (let course of courseList) injectFakePropertiesToCourse(course);
+    PrerequisitesManager.prepare(courseList);
   }
+  await PrerequisitesManager.assign(
+    data.data.courseCatalogList.map((x) => x.courseList).flat()
+  );
+  console.log('*= courses', data.data);
+
   return data.data.courseCatalogList;
 };
 
@@ -179,7 +128,9 @@ export const fetchCoursesBySearch = (
       userID: user?.userID,
     })
     .then(async ({ data }) => {
-      for (let course of data.data) await injectFakePropertiesToCourse(course);
+      for (let course of data.data) injectFakePropertiesToCourse(course);
+      await PrerequisitesManager.prepareAndAssign(data.data);
+
       if (user) {
         data.data.sort(
           (x, y) =>
@@ -205,7 +156,8 @@ export const fetchClassesByCourseID = (courseID) => axios.get(`/course/${courseI
  */
 export const fetchScheduledClassesAndCustomEvents = async (userID) => {
   const { data } = await axios.get(`schedule?userID=${userID}`);
-  for (let { course } of data.data.scheduledClasses) await injectFakePropertiesToCourse(course);
+  for (let { course } of data.data.scheduledClasses) injectFakePropertiesToCourse(course);
+  PrerequisitesManager.prepareAndAssign(data.data.scheduledClasses.map((x) => x.course));
   return data.data;
 };
 
@@ -298,9 +250,6 @@ export const addClassIDToSchedule = (userID, classID) =>
 export const removeClassIDFromSchedule = (userID, classID) =>
   axios.put('/schedule?type=class', { userID, classID });
 
-// TODO Q: This is only a workaround for the current implementation of prerequisite list.
-let historyCourseIDs = new Set();
-
 /**
  * Fetches the courses a user has taken in the past.
  *
@@ -310,8 +259,10 @@ let historyCourseIDs = new Set();
 export const fetchHistoryCourses = async (userID) => {
   const { data } = await axios.get(`/user/${userID}/history`);
 
-  historyCourseIDs = new Set(data.data.map((x) => x.id));
-  for (let course of data.data) await injectFakePropertiesToCourse(course);
+  PrerequisitesManager.historyCourseIDs = new Set(data.data.map((x) => x.id));
+  for (let course of data.data) injectFakePropertiesToCourse(course);
+  await PrerequisitesManager.prepareAndAssign(data.data);
+
   return data.data;
 };
 

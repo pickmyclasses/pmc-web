@@ -30,7 +30,7 @@ export default function RequirementList({ requirements = [] }) {
         underline='hover'
         textAlign='center'
       >
-        View graduation roadmap
+        View requirement details
       </Link>
     </Stack>
   );
