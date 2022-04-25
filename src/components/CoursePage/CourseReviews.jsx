@@ -34,7 +34,7 @@ export default function CourseReviews() {
 
   const ReviewContainer = () => {
     return (
-      <Container maxWidth='xl' sx={{ flex: 1, minHeight: 0, fontFamily: 'Roboto' }}>
+      <Container maxWidth='xl' sx={{ fontFamily: 'Roboto' }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <ProposalCard
