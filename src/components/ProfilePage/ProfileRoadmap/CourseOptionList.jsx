@@ -14,6 +14,15 @@ export default function CourseOptionList({ courseIDs }) {
     );
   }, [courseIDs]);
 
+  const handleCourseActionItemClick = (course, action) => {
+    window.open(
+      `/course/${course.id}${
+        action === 'register' ? '/registration' : action === 'review' ? '/reviews' : ''
+      }`,
+      '_blank'
+    );
+  };
+
   return (
     <Stack paddingBottom='16px'>
       <ContainerWithLoadingIndication isLoading={!courses}>
@@ -31,14 +40,9 @@ export default function CourseOptionList({ courseIDs }) {
                 course={course}
                 indicator={course.isTaken ? 'taken-check' : undefined}
                 autoHideActionItems
-                actionItems={['info', 'register']}
+                actionItems={['info', course.isTaken ? 'review' : 'register']}
                 defaultActionItem={'info'}
-                onActionItemClick={(_, action) =>
-                  window.open(
-                    `/course/${course.id}${action === 'register' ? '/registration' : ''}`,
-                    '_blank'
-                  )
-                }
+                onActionItemClick={handleCourseActionItemClick}
               />
             ))}
         </List>
