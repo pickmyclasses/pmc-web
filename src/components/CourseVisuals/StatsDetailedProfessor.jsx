@@ -23,7 +23,7 @@ let option = {
   grid: {
     left: '10%',
     right: '10%',
-    bottom: '5%',
+    bottom: '20%',
     containLabel: true,
   },
 

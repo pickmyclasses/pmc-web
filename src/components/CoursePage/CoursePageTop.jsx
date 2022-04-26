@@ -15,6 +15,7 @@ import React, { createElement } from 'react';
 import { formatCourseName, formatCreditRange, capitalizeFirst } from '../../utils';
 import { CenterAligningFlexBox } from '../CourseCardGrid/CourseCard/CourseCard';
 import CourseEligibilityIndicator from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
+import CourseShare from '../CoursePage/CourseShare';
 
 /**
  * The top portion of the course page that displays an image banner (like the channel art from
@@ -51,8 +52,9 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
 
   const renderActionItems = () => (
     <Box maxHeight='72px' overflow='hidden'>
-      <ActionItem label='Bookmark' icon={BookmarkBorder} onClick={() => alert('** bookmark')} />
-      <ActionItem label='Share' icon={Share} onClick={() => alert('** share')} />
+      {/* <ActionItem label='Bookmark' icon={BookmarkBorder} onClick={() => alert('** bookmark')} /> */}
+      {/* <ActionItem label='Share' icon={Share} onClick={() => CousreShare()} /> */}
+      {/* <CourseShare /> */}
     </Box>
   );
 

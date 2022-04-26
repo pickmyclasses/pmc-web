@@ -17,7 +17,7 @@ let optionExam = {
     textStyle: {
       fontWeight: 'bold',
     },
-    formatter: `{c} students give this question a {a}`,
+    formatter: `{c} students gave this question a {a}`,
     borderRadius: 15,
     borderWidth: 8,
   },
@@ -84,7 +84,7 @@ let optionHomework = {
     textStyle: {
       fontWeight: 'bold',
     },
-    formatter: `{c} students give this question a {a}`,
+    formatter: `{c} students gave this question a {a}`,
     borderRadius: 15,
     borderWidth: 8,
   },
@@ -149,7 +149,7 @@ let optionRecommend = {
     textStyle: {
       fontWeight: 'bold',
     },
-    formatter: `{c} students give this question a {a}`,
+    formatter: `{c} students gave this question a {a}`,
     borderRadius: 15,
     borderWidth: 8,
   },
