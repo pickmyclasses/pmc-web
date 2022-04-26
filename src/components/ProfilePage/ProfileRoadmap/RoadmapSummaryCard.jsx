@@ -1,9 +1,9 @@
-import { Apps, List, PieChart, ViewList, Widgets } from '@mui/icons-material';
-import { Card, Divider, Grid, Link, Skeleton, Stack, Typography } from '@mui/material';
+import { PieChart } from '@mui/icons-material';
+import { Card, Divider, Grid, Link, Stack, Typography } from '@mui/material';
 import LabelWithIcon from 'components/CoursePage/LabelWithIcon';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 import { SchedulerContext } from 'components/Scheduler/ContainerWithScheduler';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import HistoryBreakdownChart from '../ProfileHistory/HistoryBreakdownChart';
 import RoadmapSummaryChart from './RoadmapSummaryChart';
 
@@ -34,7 +34,7 @@ export default function RoadmapSummaryCard({ ...chartProps }) {
   }, [requirements, historyCourses]);
 
   return (
-    <Card sx={{ height: '100%', overflow: 'visible' }}>
+    <Card sx={{ height: 'calc(100%)', overflow: 'visible' }}>
       <Stack padding='24px' spacing='16px' height='calc(100% - 48px)'>
         <LabelWithIcon color='action' iconType={PieChart} label='Summary' variant='overline' />
         <HistoryBreakdownChart

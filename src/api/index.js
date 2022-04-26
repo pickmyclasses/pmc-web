@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { formatPrerequisites, getColorByString } from 'utils';
+import { getColorByString } from 'utils';
 import PrerequisitesManager from './Prerequisites/PrerequisitesManager';
 
 export const login = (email, password) =>

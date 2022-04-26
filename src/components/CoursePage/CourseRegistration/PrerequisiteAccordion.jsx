@@ -10,10 +10,8 @@ import {
 } from '@mui/material';
 import ClickableIndicator from 'components/CourseCardGrid/CourseCard/ClickableIndicator';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
-import React, { useContext, useEffect, useState } from 'react';
-import { formatPrerequisites, capitalizeFirst, pluralize } from 'utils';
-import { getEligibility } from '../../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
-import { SchedulerContext } from '../../Scheduler/ContainerWithScheduler';
+import React, { useEffect, useState } from 'react';
+import { pluralize } from 'utils';
 import LabelWithIcon from '../LabelWithIcon';
 
 export default function PrerequisiteAccordion({ course }) {

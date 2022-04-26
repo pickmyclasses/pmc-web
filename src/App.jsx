@@ -33,7 +33,7 @@ export default function App() {
   const setUserAndRemember = useCallback((newUser, shouldRemember = true) => {
     setUser(newUser);
     if (shouldRemember) localStorage.setItem('user', JSON.stringify(newUser));
-  });
+  }, []);
 
   // Loads the remembered user upon first render, if one exists.
   useMount(() => setUser(JSON.parse(localStorage.getItem('user'))));

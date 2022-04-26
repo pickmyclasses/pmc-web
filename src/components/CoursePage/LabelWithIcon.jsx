@@ -14,7 +14,7 @@ export default function LabelWithIcon({
   const theme = useTheme();
 
   return (
-    <Stack direction='row' alignItems={align} height={height}>
+    <Stack direction='row' alignItems={align} height={height} minWidth={noWrap && 0}>
       {createElement(iconType, {
         color,
         fontSize: size,

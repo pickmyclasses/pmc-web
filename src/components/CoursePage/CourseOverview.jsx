@@ -56,7 +56,7 @@ export default function CourseOverview() {
         data.filter((x) => +x.id !== +course.id).slice(0, numRecommendedCourses)
       )
     );
-  }, [course]);
+  }, [user, course]);
 
   const coursePageURL = '/course/' + course.id;
   const renderInfoSummary = () => (
