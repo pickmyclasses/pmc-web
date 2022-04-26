@@ -11,7 +11,7 @@ import Lottie from 'react-lottie-player';
 import emptyResult from '../../assets/cat-in-box.json';
 
 export default function CourseReviews() {
-  const { reviews, course } = useContext(CourseContext);
+  const { reviews, course, difficulty, professors, reviewTags } = useContext(CourseContext);
   const { user } = useContext(UserContext);
   const [sortedReviews, setSortedReviews] = useState(reviews);
   const [filterMethod, setFilterMethod] = useState('most-recent');
@@ -45,7 +45,13 @@ export default function CourseReviews() {
             />
           </Grid>
           <Grid item xs={4}>
-            <CourseReviewOverviewCard reviews={sortedReviews} />
+            <CourseReviewOverviewCard
+              reviews={sortedReviews}
+              overallRating={course.overallRating}
+              difficulty={difficulty}
+              professors={professors}
+              reviewTags={reviewTags}
+            />
           </Grid>
           <Grid item xs={8} sx={{ height: '100vh', overflow: 'auto' }}>
             <Scrollbars autoHide>

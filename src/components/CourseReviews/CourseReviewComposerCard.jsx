@@ -34,7 +34,7 @@ export const ProposalCard = ({
     setOpenComposer(true);
   };
 
-  let message = "Oops, seems like you haven't taken the course yet, or did we miss something?";
+  let message = "Oops, seems like you haven't taken the course yet, ";
   if (currentlyTaking) {
     message =
       'Seems like you are currently taking the course, we are sorry but you will need to finish the course before you can review the course';
@@ -48,16 +48,22 @@ export const ProposalCard = ({
   }
 
   return (
-    <Card sx={{ width: '100%', bgcolor: '#fffffe', textAlign: 'center' }}>
+    <Card sx={{ width: '100%', bgcolor: '#fffffe', textAlign: 'center', color: '#172c66' }}>
       <CardContent>
-        <Typography variant='h5' component={'legend'}>
-          {message}
+        <Typography variant='body1' component={'legend'}>
+          {message}{' '}
+          {!currentlyTaking && !hasTaken && !hasWrittenReviews && (
+            <Link sx={{ color: '#172c66' }} href='/profile/history'>
+              {' '}
+              go add this course to yours schedule now?
+            </Link>
+          )}
         </Typography>
         <Button
           variant='contained'
-          size='medium'
+          size='small'
           onClick={handleClick}
-          sx={{ marginTop: '3%' }}
+          sx={{ marginTop: '1%' }}
           disabled={!hasTaken && !hasWrittenReviews}
         >
           {hasWrittenReviews ? 'Go edit your review' : 'Go write a review!'}
@@ -100,6 +106,7 @@ export const ComposerCard = ({
       setGrade(reviewContent.gradeReceived);
       setComment(reviewContent.comment);
       setSelectedProfessor(reviewContent.classProfessor);
+      setSelectedSemester(reviewContent.classSemester);
     }
 
     fetchTagList().then((data) => setTagList(data));

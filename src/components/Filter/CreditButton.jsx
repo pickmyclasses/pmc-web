@@ -1,11 +1,13 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
 import { isNumeric } from '../../utils';
+import { FilterContext } from 'pages/SearchPage';
 
 export default function CreditButton({ optionSelected, setOptionSelected }) {
   const [value, setValue] = useState(['', '']);
+  const { setMinCreditHour, setMaxCreditHour } = useContext(FilterContext);
 
   useEffect(() => {
     if (optionSelected.length) setValue(optionSelected);
@@ -17,6 +19,7 @@ export default function CreditButton({ optionSelected, setOptionSelected }) {
     newVal[0] = value[0];
     setValue(newVal);
     setOptionSelected(newVal);
+    setMaxCreditHour(newVal);
   };
 
   const handleMinCredit = (event) => {
@@ -25,6 +28,7 @@ export default function CreditButton({ optionSelected, setOptionSelected }) {
     newVal[1] = value[1];
     setValue(newVal);
     setOptionSelected(newVal);
+    setMinCreditHour(newVal);
   };
 
   return (

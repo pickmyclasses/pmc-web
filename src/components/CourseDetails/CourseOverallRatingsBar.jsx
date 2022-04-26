@@ -60,7 +60,7 @@ export default function CustomizedProgressBars({ reviews }) {
   let ratingDistribution = getRatingDistribution(reviews);
 
   return (
-    <Grid container direction='column' spacing={1} width='50%'>
+    <Grid container direction='column' spacing={1} width='50%' display={'inline'}>
       {ratingDistribution.reverse().map((count, i) => (
         <Grid key={5 - i} item>
           <NumberLinearProgress stars={5 - i} value={Math.round((100 * count) / numReviews)} />

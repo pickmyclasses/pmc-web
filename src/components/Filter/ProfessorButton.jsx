@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -6,13 +6,20 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { useMount } from '../../utils';
 import { fetchProfessorList } from 'api';
+import { FilterContext } from 'pages/SearchPage';
 
 export default function ProfessorButton({ optionSelected, setOptionSelected }) {
   const [professors, setProfessors] = useState([]);
+  const { setIncludedProfessors } = useContext(FilterContext);
 
   useMount(() => {
     fetchProfessorList().then(setProfessors);
   });
+
+  const handleSelect = (event, value) => {
+    setOptionSelected(value);
+    setIncludedProfessors(value);
+  };
 
   return (
     <>
@@ -25,7 +32,7 @@ export default function ProfessorButton({ optionSelected, setOptionSelected }) {
               return option?.professorName;
             }}
             value={optionSelected}
-            onChange={(event, value) => setOptionSelected(value)}
+            onChange={handleSelect}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             filterSelectedOptions
             renderInput={(params) => <TextField {...params} />}

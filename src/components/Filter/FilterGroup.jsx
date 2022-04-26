@@ -1,6 +1,5 @@
 import { React, useContext, useState } from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import { Box, Grid, Button } from '@mui/material';
 import { grey, cyan } from '@mui/material/colors';
 import ProfessorButton from './ProfessorButton';
 import TagButton from './TagButton';
@@ -52,32 +51,34 @@ export default function FilterGroup() {
     { name: 'professor', component: <ProfessorButton /> },
   ];
   return (
-    <>
-      <Box sx={{ p: 2, border: '1px solid grey', backgroundColor: 'white' }}>
+    <Box
+      sx={{
+        p: 2,
+        border: '1px solid grey',
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+      }}
+    >
+      <Box sx={{ display: 'inline-block', marginRight: '6em' }}>
         <Button
           variant='contained'
           sx={hideClicked ? buttonStyleAfterClick : buttonStyleBeforeClick}
-          style={{ marginLeft: '10%', marginRight: '5%' }}
           onClick={handleNoOfferingClick}
+          mr='2em'
         >
           <div style={{ textTransform: 'lowercase' }}>hide no offerings</div>
         </Button>
-
-        {buttonGroup.map((button, i) => {
-          return (
-            <DropdownButton key={i} name={button.name}>
-              {button.component}
-            </DropdownButton>
-          );
-        })}
-
-        <Button variant='text' sx={{ mt: '0.4%' }}>
-          S<div style={{ textTransform: 'lowercase' }}>ave</div>
-        </Button>
-        <Button variant='text' sx={{ mt: '0.4%' }}>
-          R<div style={{ textTransform: 'lowercase' }}>eset</div>
-        </Button>
       </Box>
-    </>
+
+      {buttonGroup.map((button, i) => {
+        return (
+          <Box sx={{ display: 'inline-block', marginRight: '3em' }}>
+            <DropdownButton name={button.name}>{button.component}</DropdownButton>
+          </Box>
+        );
+      })}
+    </Box>
   );
 }

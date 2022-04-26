@@ -1,12 +1,14 @@
-import { React, useEffect, useState } from 'react';
+import { React, useContext, useEffect, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
+import { FilterContext } from 'pages/SearchPage';
 
 export default function RatingButton({ optionSelected, setOptionSelected }) {
   const [rating, setRating] = useState([0]);
+  const { setMinRating } = useContext(FilterContext);
 
   useEffect(() => {
     setRating(optionSelected);
@@ -24,6 +26,7 @@ export default function RatingButton({ optionSelected, setOptionSelected }) {
     let newVal = Array.from(event.target.value);
     setRating(newVal);
     setOptionSelected(newVal);
+    setMinRating(newVal);
   };
 
   return (
