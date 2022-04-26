@@ -10,9 +10,14 @@ import React, { createElement } from 'react';
  * @param {String} props.title The title of the tab.
  * @param {String} props.description A summary of what the tab does.
  */
-export default function ProfilePageTabHeadingCard({ iconType, title, description }) {
+export default function ProfilePageTabHeadingCard({
+  iconType,
+  title,
+  description,
+  sx: cardSX,
+}) {
   return (
-    <Card>
+    <Card sx={{ ...cardSX }}>
       <Stack padding='16px 20px' spacing='16px' direction='row' alignItems='center'>
         {createElement(iconType, { fontSize: 'large', color: 'action' })}
         <Stack spacing='4px'>

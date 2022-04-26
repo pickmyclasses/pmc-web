@@ -1,17 +1,12 @@
 import { History } from '@mui/icons-material';
 import { Divider, Grid, Stack } from '@mui/material';
-import {
-  addOrUpdateHistoryCourse,
-  fetchCoursesBySearch,
-  fetchHistoryCourses,
-  removeHistoryCourse,
-} from 'api';
+import { addOrUpdateHistoryCourse, fetchCoursesBySearch, removeHistoryCourse } from 'api';
 import { UserContext } from 'App';
 import ContainerWithLoadingIndication from 'components/Page/ContainerWithLoadingIndication';
 import { SchedulerContext } from 'components/Scheduler/ContainerWithScheduler';
 import { useSnackbar } from 'notistack';
 import React, { useContext, useEffect, useState } from 'react';
-import { formatCourseName, useMount } from 'utils';
+import { formatCourseName } from 'utils';
 import AddToHistorySearchList from './ProfileHistory/AddToHistorySearchList';
 import HistoryDisplay from './ProfileHistory/HistoryDisplay';
 import ProfilePageTabHeadingCard from './ProfilePageTabHeadingCard';

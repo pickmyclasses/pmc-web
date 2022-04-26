@@ -1,21 +1,20 @@
 import { colors } from '@mui/material';
-import Color from 'color';
 import EChartsReact from 'echarts-for-react';
-import React, { useEffect, useState } from 'react';
+import React, { memo } from 'react';
 import { pluralize } from 'utils';
-import HistoryBreakdownChart from '../ProfileHistory/HistoryBreakdownChart';
 
-export default function RoadmapSummaryChart({
+const RoadmapSummaryChart = ({
   requirements,
   requirementProgressByID,
   onRequirementClick,
   hideTransitions = false,
-}) {
-  const getChartOptions = (data, style) => ({
+}) => {
+  const getChartOptions = (data) => ({
     series: {
       data: data.map(getSeriesData),
       type: 'sunburst',
       radius: ['33.3%', '100%'],
+      sort: null,
       nodeClick: false,
     },
     color: chartBarColors,
@@ -27,9 +26,10 @@ export default function RoadmapSummaryChart({
       borderColor: '#ccc',
       transitionDuration: 0.25,
       hideDelay: 0,
-      position: 'right',
+      position: [0, '100%'],
       padding: [8, 16],
       textStyle: { fontSize: 16, lineHeight: 24, color: 'black' },
+      extraCssText: 'margin-top: 16px; margin-left: 16px; width: calc(100% - 64px);',
     },
   });
 
@@ -37,7 +37,7 @@ export default function RoadmapSummaryChart({
     const { completed, total } = requirementProgressByID?.[requirement.id] || {};
     return {
       requirement,
-      name: requirement.setName,
+      name: requirement.id,
       value: requirement.subSets?.length ? undefined : requirement.courseNeeded,
       children: requirement.subSets?.length
         ? requirement.subSets.map(getSeriesData)
@@ -47,7 +47,7 @@ export default function RoadmapSummaryChart({
       itemStyle: {
         borderWidth: 3,
         borderRadius: 4,
-        color: completed === 0 ? colors.grey[400] : undefined,
+        color: completed === 0 ? colors.grey[500] : undefined,
         opacity: completed < total ? 0.33 : undefined,
       },
     };
@@ -57,7 +57,7 @@ export default function RoadmapSummaryChart({
     const { completed, total } = requirementProgressByID?.[requirement.id] || {};
 
     return [
-      '<div style="text-align: center; max-width: 360px; white-space: normal;">',
+      '<div style="text-align: center; white-space: normal;">',
       `  <b style="font-weight: 500;">${requirement.setName}</b>`,
       '  <br />',
       '  <span style="font-size: 0.75rem; opacity: 0.75;">',
@@ -71,7 +71,8 @@ export default function RoadmapSummaryChart({
       .join('');
   };
 
-  const handleChartItemClick = (target) => onRequirementClick(target.data.requirement);
+  const handleChartItemClick = (target) =>
+    onRequirementClick(target.treePathInfo.slice(1).map(({ name }) => +name));
 
   return (
     <EChartsReact
@@ -81,7 +82,7 @@ export default function RoadmapSummaryChart({
       onEvents={{ click: handleChartItemClick }}
     />
   );
-}
+};
 
 const chartBarColors = [
   colors.brown,
@@ -90,4 +91,10 @@ const chartBarColors = [
   colors.purple,
   colors.deepOrange,
   colors.cyan,
-].map((color) => color[700]);
+].map((color) => color[800]);
+
+// Memoize to prevent the stupid EChart from flashing due to rerendering.
+export default memo(
+  RoadmapSummaryChart,
+  (x, y) => x.requirementProgressByID === y.requirementProgressByID
+);
