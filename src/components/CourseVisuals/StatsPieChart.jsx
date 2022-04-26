@@ -19,7 +19,7 @@ let option = {
     textStyle: {
       fontWeight: 'bold',
     },
-    formatter: '{d}% ({c}) students give this class a {b}',
+    formatter: '{d}% ({c}) students gave this class a {b}',
     borderRadius: 15,
     borderWidth: 8,
   },

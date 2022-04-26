@@ -16,7 +16,7 @@ let option = {
     textStyle: {
       fontWeight: 'bold',
     },
-    formatter: `The {a} for {b} is {c}`,
+    formatter: `The {a} for {b} are {c}`,
     borderRadius: 15,
     borderWidth: 8,
   },
@@ -43,50 +43,43 @@ let option = {
   },
   dataZoom: [
     {
-      type: 'inside',
+      type: 'slider',
       start: 0,
       end: 100,
-    },
-    {
-      start: 0,
-      end: 100,
+      filterMode: 'empty',
     },
   ],
   series: [
     {
       name: 'Average Ratings',
-      avoidLabelOverlap: false,
-
-      type: 'line',
-      symbol: 'none',
-      sampling: 'lttb',
-      itemStyle: {},
+      symbolSize: 25,
+      type: 'scatter',
       color: '#ff9a8d',
 
-      areaStyle: {
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          {
-            offset: 1,
-            color: '#F18C8E',
-          },
-          {
-            offset: 0.75,
-            color: '#F0B7A4',
-          },
-          {
-            offset: 0.5,
-            color: '#F1D1B5 ',
-          },
-          {
-            offset: 0.25,
-            color: '#568EA6',
-          },
-          {
-            offset: 0,
-            color: '#305F72',
-          },
-        ]),
-      },
+      // areaStyle: {
+      //   color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+      //     {
+      //       offset: 1,
+      //       color: '#F18C8E',
+      //     },
+      //     {
+      //       offset: 0.75,
+      //       color: '#F0B7A4',
+      //     },
+      //     {
+      //       offset: 0.5,
+      //       color: '#F1D1B5 ',
+      //     },
+      //     {
+      //       offset: 0.25,
+      //       color: '#568EA6',
+      //     },
+      //     {
+      //       offset: 0,
+      //       color: '#305F72',
+      //     },
+      //   ]),
+      // },
       data: ratings,
       smooth: true,
     },
