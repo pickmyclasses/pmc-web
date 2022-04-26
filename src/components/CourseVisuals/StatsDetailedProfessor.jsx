@@ -13,6 +13,12 @@ let option = {
     axisPointer: {
       type: 'shadow',
     },
+    textStyle: {
+      fontWeight: 'bold',
+    },
+    formatter: `The Average Grade for Professor {b} is {c}`,
+    borderRadius: 15,
+    borderWidth: 8,
   },
   grid: {
     left: '10%',

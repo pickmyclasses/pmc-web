@@ -87,6 +87,7 @@ export default function CourseStats() {
         height: '100%',
         cursor: 'pointer',
         '&:hover': { boxShadow: 6 },
+        overflow: 'visible',
       }}
     >
       <Stack padding='24px' height='calc(100% - 48px)'>
@@ -113,6 +114,7 @@ export default function CourseStats() {
         height: '100%',
         cursor: 'pointer',
         '&:hover': { boxShadow: 6 },
+        overflow: 'visible',
       }}
     >
       <Stack padding='24px' height='calc(100% - 48px)'>
@@ -165,6 +167,7 @@ export default function CourseStats() {
         height: '100%',
         cursor: 'pointer',
         '&:hover': { boxShadow: 6 },
+        overflow: 'visible',
       }}
     >
       <Stack padding='24px' height='calc(100% - 48px)'>
@@ -225,11 +228,6 @@ export default function CourseStats() {
         <Box flex={1}>
           <StatsPieChart reviews={reviews} />
         </Box>
-        {/* <Link>
-          <ClickableIndicator propagate>
-            <Typography variant='subtitle2'>See Details</Typography>
-          </ClickableIndicator>
-        </Link> */}
       </Stack>
     </MotionCard>
   );
@@ -237,20 +235,17 @@ export default function CourseStats() {
   const renderDetailedCard = () => (
     <MotionCard
       initial='initial'
-      //onClick={() => navigateIfAllowed(coursePageURL + '/registration')}
       whileHover='mouseEntered'
       sx={{
         width: '100%',
         height: '100%',
         cursor: 'pointer',
         '&:hover': { boxShadow: 6 },
+        overflow: 'visible',
       }}
     >
       <Stack height='calc(100% - 48px)' padding='24px'>
         <Box flex={1}>
-          {/* <Button variant='text' onClick={() => setCondition('default')}>
-            Return
-          </Button> */}
           <StatsDetailedCard courseTrend={courseTrend} />
         </Box>
       </Stack>
@@ -267,6 +262,7 @@ export default function CourseStats() {
         height: '100%',
         cursor: 'pointer',
         '&:hover': { boxShadow: 6 },
+        overflow: 'visible',
       }}
     >
       <Stack height='calc(100% - 48px)' padding='24px'>

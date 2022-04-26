@@ -4,17 +4,22 @@ import Stack from '@mui/material/Stack';
 import { Typography, Box } from '@mui/material';
 
 let optionExam = {
-  color: ['#aed6dc', '#ff9a8d'],
   title: {
     text: '',
     subtext: '',
     left: 'center',
   },
   tooltip: {
-    trigger: 'axis',
+    trigger: 'item',
     axisPointer: {
-      type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
+      type: 'shadow',
     },
+    textStyle: {
+      fontWeight: 'bold',
+    },
+    formatter: `{c} students give this question a {a}`,
+    borderRadius: 15,
+    borderWidth: 8,
   },
   legend: { show: false },
 
@@ -66,17 +71,22 @@ let optionExam = {
 };
 
 let optionHomework = {
-  color: ['#aed6dc', '#ff9a8d'],
   title: {
     text: '',
     subtext: '',
     left: 'center',
   },
   tooltip: {
-    trigger: 'axis',
+    trigger: 'item',
     axisPointer: {
-      type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
+      type: 'shadow',
     },
+    textStyle: {
+      fontWeight: 'bold',
+    },
+    formatter: `{c} students give this question a {a}`,
+    borderRadius: 15,
+    borderWidth: 8,
   },
   legend: { show: false },
   grid: {
@@ -98,7 +108,7 @@ let optionHomework = {
   series: [
     {
       barWidth: '100%',
-      name: 'Yes',
+      name: 'yes',
       type: 'bar',
       stack: 'total',
       color: '#aed6dc',
@@ -111,7 +121,7 @@ let optionHomework = {
       data: [],
     },
     {
-      name: 'No',
+      name: 'no',
       type: 'bar',
       stack: 'total',
       color: '#ff9a8d',
@@ -126,17 +136,22 @@ let optionHomework = {
   ],
 };
 let optionRecommend = {
-  color: ['#aed6dc', '#ff9a8d'],
   title: {
     text: '',
     subtext: '',
     left: 'center',
   },
   tooltip: {
-    trigger: 'axis',
+    trigger: 'item',
     axisPointer: {
-      type: 'shadow', // 'shadow' as default; can also be 'line' or 'shadow'
+      type: 'shadow',
     },
+    textStyle: {
+      fontWeight: 'bold',
+    },
+    formatter: `{c} students give this question a {a}`,
+    borderRadius: 15,
+    borderWidth: 8,
   },
   legend: { show: false },
   grid: {
@@ -158,7 +173,7 @@ let optionRecommend = {
   series: [
     {
       barWidth: '100%',
-      name: 'Yes',
+      name: 'yes',
       type: 'bar',
       stack: 'total',
       color: '#aed6dc',
@@ -171,7 +186,7 @@ let optionRecommend = {
       data: [],
     },
     {
-      name: 'No',
+      name: 'no',
       type: 'bar',
       stack: 'total',
       color: '#ff9a8d',
@@ -187,8 +202,8 @@ let optionRecommend = {
 };
 
 function generateExamHeavy(reviews) {
-  optionExam.series[0].title = 'Yes';
-  optionExam.series[1].title = 'No';
+  optionExam.series[0].title = 'yes';
+  optionExam.series[1].title = 'no';
   optionExam.series[0].data[0] = 0;
   optionExam.series[1].data[0] = 0;
   optionExam.series[0].color = '#568EA6';
@@ -203,8 +218,8 @@ function generateExamHeavy(reviews) {
 }
 
 function generateHomeworkHeavy(reviews) {
-  optionHomework.series[0].title = 'Yes';
-  optionHomework.series[1].title = 'No';
+  optionHomework.series[0].title = 'yes';
+  optionHomework.series[1].title = 'no';
   optionHomework.series[0].data[0] = 0;
   optionHomework.series[1].data[0] = 0;
   optionHomework.series[0].color = '#568EA6';
@@ -219,12 +234,11 @@ function generateHomeworkHeavy(reviews) {
 }
 
 function generateRecommendation(reviews) {
-  optionRecommend.series[0].title = 'Yes';
-  optionRecommend.series[1].title = 'No';
+  optionRecommend.series[0].title = 'yes';
+  optionRecommend.series[1].title = 'no';
   optionRecommend.series[0].data[0] = 0;
   optionRecommend.series[1].data[0] = 0;
-  optionRecommend.series[0].color = '#568EA6';
-  optionRecommend.series[1].color = '#F18C8E';
+
   for (let i = 0; i < reviews.length; i++) {
     if (reviews[i].recommended) {
       optionRecommend.series[0].data[0] += 1;

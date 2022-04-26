@@ -2,6 +2,7 @@ import React from 'react';
 import ReactECharts from 'echarts-for-react';
 import { Typography, Box } from '@mui/material';
 import { pluralize } from '../../utils';
+
 const colorPalette = ['#F18C8E', '#F0B7A4', '#F1D1B5', '#568EA6', '#305F72'];
 let option = {
   title: {
@@ -12,7 +13,15 @@ let option = {
 
   tooltip: {
     trigger: 'item',
-    formatter: '{b} : {c} ({d}%)',
+    axisPointer: {
+      type: 'shadow',
+    },
+    textStyle: {
+      fontWeight: 'bold',
+    },
+    formatter: '{d}% ({c}) students give this class a {b}',
+    borderRadius: 15,
+    borderWidth: 8,
   },
 
   legend: {
@@ -67,11 +76,19 @@ function generateStarValues(reviews, option) {
 export default function ReviewPieChart({ reviews }) {
   generateStarValues(reviews, option);
   return (
-    <Box flex={1}>
+    <Box>
       <Typography variant='subtitle2'>Rating Distribution</Typography>
-      <Typography variant='body2' align='left' fontStyle='italic' sx={{ opacity: 0.75 }}>
+
+      <Typography
+        color='action'
+        variant='body2'
+        align='left'
+        fontStyle='italic'
+        sx={{ opacity: 0.75 }}
+      >
         {reviews.length ? `Based on ${pluralize(reviews.length, 'review')}` : 'No reviews'}
       </Typography>
+
       <ReactECharts option={option} style={{ height: 170 }} />
     </Box>
   );

@@ -9,7 +9,15 @@ let option = {
 
   tooltip: {
     trigger: 'item',
-    formatter: '{b} received : {c}',
+    axisPointer: {
+      type: 'shadow',
+    },
+    textStyle: {
+      fontWeight: 'bold',
+    },
+    formatter: `{c} students received {b} from this course`,
+    borderRadius: 15,
+    borderWidth: 8,
   },
 
   legend: {

@@ -3,7 +3,15 @@ import ReactECharts from 'echarts-for-react';
 let option = {
   tooltip: {
     trigger: 'item',
-    formatter: `{b} {c} times`,
+    axisPointer: {
+      type: 'shadow',
+    },
+    textStyle: {
+      fontWeight: 'bold',
+    },
+    formatter: `Students mentioned {b} {c} times`,
+    borderRadius: 15,
+    borderWidth: 8,
   },
   series: [
     {
