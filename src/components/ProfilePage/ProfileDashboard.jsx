@@ -81,7 +81,6 @@ const renderUserInfo = (user) => (
 /** The dashboard (default) tab of the profile page. */
 export default function ProfileDashboard() {
   const { user } = useContext(UserContext);
-  console.log(user);
 
   return <>{renderUserInfo(user)}</>;
 }
