@@ -1,10 +1,12 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { FilterContext } from 'pages/SearchPage';
 
 export default function SpecialCoursesButton({ optionSelected, setOptionSelected }) {
   const [checked, setChecked] = useState([]);
+  const { setGraduateLevel } = useContext(FilterContext);
 
   const checkOptions = [
     { id: 1, name: 'graduate level courses' },
@@ -20,6 +22,7 @@ export default function SpecialCoursesButton({ optionSelected, setOptionSelected
     const newChecked = [...checked];
     curIdx === -1 ? newChecked.push(id) : newChecked.splice(curIdx, 1);
     setChecked(newChecked);
+    setGraduateLevel(newChecked);
     setOptionSelected(newChecked);
   };
 

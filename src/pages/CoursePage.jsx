@@ -19,6 +19,7 @@ import {
   fetchCourseLoad,
   fetchRatingTrend,
   fetchCoursePopularity,
+  fetchReviewDifficultyByCourseID,
 } from '../api';
 import CoursePageTop, { imageHeight } from '../components/CoursePage/CoursePageTop';
 import CourseOverview from '../components/CoursePage/CourseOverview';
@@ -42,6 +43,7 @@ export default function CoursePage() {
   const [courseLoad, setCourseLoad] = useState();
   const [courseTrend, setCourseTrend] = useState();
   const [coursePopularity, setCoursePopularity] = useState();
+  const [difficulty, setDifficulty] = useState(0);
   // This avoids the useRef()'s not updating problem with useEffect().
   // See https://stackoverflow.com/a/67906087)
   // We can potentially include this pattern in the utils collection to reuse it.
@@ -52,6 +54,7 @@ export default function CoursePage() {
     (courseID) => {
       fetchCourseByID(courseID, user?.userID).then(setCourse);
       fetchReviewsByCourseID(courseID).then(setReviews);
+      fetchReviewDifficultyByCourseID(courseID).then(setDifficulty);
       fetchReviewTagsByCourseID(courseID).then(setReviewTags);
       fetchProfessorByCourseID(courseID).then(setProfessors);
       fetchProfessorRanking(courseID).then(setProfessorRanking);
@@ -99,6 +102,7 @@ export default function CoursePage() {
                 refreshCourseData,
                 course,
                 reviews,
+                difficulty,
                 reviewTags,
                 professors,
                 semesters,

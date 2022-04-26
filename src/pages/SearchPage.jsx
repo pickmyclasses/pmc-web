@@ -33,6 +33,12 @@ export default function SearchPage({ shouldShowScheduler }) {
   const [weekdays, setWeekdays] = useState('');
   const [startTime, setStartTimeClock] = useState('');
   const [endTime, setEndTimeClock] = useState('');
+  const [graduateLevel, setGraduateLevel] = useState('');
+  const [minRating, setMinRating] = useState(0);
+  const [minCreditHour, setMinCreditHour] = useState(0);
+  const [maxCreditHour, setMaxCreditHour] = useState(0);
+  const [includedTags, setIncludedTags] = useState([]);
+  const [includedProfessors, setIncludedProfessors] = useState([]);
 
   const loader = useRef();
 
@@ -57,6 +63,7 @@ export default function SearchPage({ shouldShowScheduler }) {
     let dateStr = convertDateToStr(weekdays);
     let startTimeF = convertTimeToFloat(startTime);
     let endTimeF = convertTimeToFloat(endTime);
+    let graduateLevelStr = typeof graduateLevel === Array ? graduateLevel.join(',') : '';
     fetchCoursesBySearch(
       urlParams?.query,
       user,
@@ -66,18 +73,38 @@ export default function SearchPage({ shouldShowScheduler }) {
       onlineOffering,
       dateStr,
       startTimeF,
-      endTimeF
+      endTimeF,
+      graduateLevelStr,
+      minRating,
+      minCreditHour,
+      maxCreditHour,
+      includedTags.join(','),
+      includedProfessors.join(',')
     ).then(({ data, total }) => {
       setCourses(data);
       setNumResults(total);
     });
-  }, [urlParams?.query, noOffering, weekdays, onlineOffering, startTime, endTime]);
+  }, [
+    urlParams?.query,
+    noOffering,
+    weekdays,
+    onlineOffering,
+    startTime,
+    endTime,
+    graduateLevel,
+    minRating,
+    minCreditHour,
+    maxCreditHour,
+    includedTags,
+    includedProfessors,
+  ]);
 
   useEffect(() => {
     setLoading(true);
     let dateStr = convertDateToStr(weekdays);
     let startTimeF = convertTimeToFloat(startTime);
     let endTimeF = convertTimeToFloat(endTime);
+    let graduateLevelStr = typeof graduateLevel === Array ? graduateLevel.join(',') : '';
     fetchCoursesBySearch(
       urlParams?.query,
       user?.userID,
@@ -87,7 +114,13 @@ export default function SearchPage({ shouldShowScheduler }) {
       onlineOffering,
       dateStr,
       startTimeF,
-      endTimeF
+      endTimeF,
+      graduateLevelStr,
+      minRating,
+      minCreditHour,
+      maxCreditHour,
+      includedTags.join(','),
+      includedProfessors.join(',')
     ).then(({ data, total }) => {
       let newCourses = courses.concat(data);
       setCourses(newCourses);
@@ -115,6 +148,12 @@ export default function SearchPage({ shouldShowScheduler }) {
           setWeekdays,
           setStartTimeClock,
           setEndTimeClock,
+          setGraduateLevel,
+          setMinRating,
+          setMinCreditHour,
+          setMaxCreditHour,
+          setIncludedTags,
+          setIncludedProfessors,
         }}
       >
         <FilterGroup />

@@ -52,7 +52,6 @@ export default function DropdownButton({ name, children }) {
             ? buttonStyleBeforeClick
             : buttonStyleAfterClick
         }
-        style={{ marginRight: '2.9em' }}
         onClick={handleClick}
       >
         <div style={{ textTransform: 'lowercase' }}> {name}</div>

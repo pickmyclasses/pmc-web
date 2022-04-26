@@ -120,7 +120,13 @@ export const fetchCoursesBySearch = (
   onlineOffering,
   weekdays,
   startTime,
-  endTime
+  endTime,
+  graduateLevel,
+  minRating,
+  minCredit,
+  maxCredit,
+  tags,
+  professors
 ) =>
   axios
     .post('/course/search', {
@@ -301,6 +307,9 @@ export const removeHistoryCourse = (userID, courseID) =>
 
 export const fetchReviewsByCourseID = (courseID) =>
   axios.get(`/course/${courseID}/review`).then((data) => data.data.data.reviews);
+
+export const fetchReviewDifficultyByCourseID = (courseID) =>
+  axios.get(`/course/${courseID}/review`).then((data) => data.data.data.difficulty);
 
 export const putReview = (courseID, body) => axios.put(`/course/${courseID}/review`, body);
 
