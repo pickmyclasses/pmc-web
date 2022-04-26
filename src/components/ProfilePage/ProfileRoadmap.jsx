@@ -25,10 +25,11 @@ export default function ProfileRoadmap() {
   useEffect(() => {
     let requirementProgressByID = {};
     const getRequirementProgress = (requirement) => {
-      let completed = requirement.courseList?.reduce(
-        (acc, courseID) => acc + !!historyCourses.find((x) => x.id === courseID),
-        0
-      );
+      let completed =
+        requirement.courseList?.reduce(
+          (acc, courseID) => acc + !!historyCourses.find((x) => x.id === courseID),
+          0
+        ) || 0;
       if (requirement.subSets)
         for (let subset of requirement.subSets)
           completed += getRequirementProgress(subset).completed;

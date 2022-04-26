@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { TransitionGroup } from 'react-transition-group';
 import CourseOptionList from './CourseOptionList';
 import RequirementHeading from './RequirementDetailList/RequirementHeading';
-import { chartBarColors } from './RoadmapSummaryChart';
 
 export default function RequirementDetailList({
   requirement,
