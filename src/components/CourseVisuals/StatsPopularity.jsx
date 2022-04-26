@@ -11,7 +11,6 @@ let option = {
     splitLine: {
       show: true,
     },
-
     axisLine: {
       show: true,
     },
@@ -36,8 +35,18 @@ let option = {
     show: false,
     scale: true,
   },
+
   tooltip: {
     trigger: 'axis',
+    axisPointer: {
+      type: 'shadow',
+    },
+    textStyle: {
+      fontWeight: 'bold',
+    },
+    formatter: `{c} students attended this course on {b}`,
+    borderRadius: 15,
+    borderWidth: 8,
   },
   series: [
     {

@@ -6,8 +6,19 @@ import { Typography, Box } from '@mui/material';
 let ratings = [];
 let semesters = [];
 let option = {
+  color: ['#aed6dc', '#ff9a8d'],
+
   tooltip: {
     trigger: 'axis',
+    axisPointer: {
+      type: 'shadow',
+    },
+    textStyle: {
+      fontWeight: 'bold',
+    },
+    formatter: `The {a} for {b} is {c}`,
+    borderRadius: 15,
+    borderWidth: 8,
   },
   grid: {
     top: '10%',
@@ -50,6 +61,8 @@ let option = {
       symbol: 'none',
       sampling: 'lttb',
       itemStyle: {},
+      color: '#ff9a8d',
+
       areaStyle: {
         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
           {
@@ -84,6 +97,7 @@ function populateDataset(courseTrend) {
   // Clear out the data from both the variables and also the option so that its not pushing duplicate data
   option.xAxis.data = [];
   option.series[0].data = [];
+
   semesters = [];
   ratings = [];
   for (let i = 0; i < courseTrend.length; i++) {
