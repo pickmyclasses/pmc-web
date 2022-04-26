@@ -29,7 +29,7 @@ export default function CourseOptionList({ courseIDs }) {
               <SmallCourseListItem
                 key={course.id}
                 course={course}
-                indicator={course.isTaken ? 'taken' : undefined}
+                indicator={course.isTaken ? 'taken-check' : undefined}
                 autoHideActionItems
                 actionItems={['info', 'register']}
                 defaultActionItem={'info'}
