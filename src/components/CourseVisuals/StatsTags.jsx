@@ -109,7 +109,6 @@ let option = {
 function populateCourseTags(tags) {
   option.series[0].data[0].children = [];
   option.series[0].data[1].children = [];
-  console.log(tags);
   for (let i = 0; i < (tags.length > 5 ? 5 : tags.length); i++) {
     // Negative
     if (tags[i].type === 0) {
