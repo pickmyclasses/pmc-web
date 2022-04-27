@@ -9,7 +9,8 @@ import Scrollbars from 'react-custom-scrollbars-2';
 import ContainerWithLoadingIndication from '../components/Page/ContainerWithLoadingIndication';
 import { UserContext } from 'App';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
-import { ReactComponent as Welcome } from '../assets/welcome.svg';
+import Lottie from 'react-lottie-player';
+import welcome from '../assets/welcome.json';
 
 export default function HomePage() {
   const { user } = useContext(UserContext);
@@ -33,13 +34,30 @@ export default function HomePage() {
                 fontStyle: 'bold',
               }}
             >
-              
-              <Typography variant='h5' sx={{ textAlign: 'center', marginTop: '0.7em' }}>
+              <Typography
+                variant='h5'
+                sx={{
+                  textAlign: 'center',
+                  marginTop: '0.7em',
+                  display: 'inline-block',
+                  marginLeft: '15em',
+                }}
+              >
                 Welcome to your personal PMC! 🎉
               </Typography>
-              <Typography variant='h5' sx={{ textAlign: 'center', marginTop: '0.3em' }}>
+              <Typography
+                variant='h5'
+                sx={{ marginTop: '0.3em', marginLeft: '13em', display: 'inline-block' }}
+              >
                 Check out the courses we picked for you!
               </Typography>
+              <Lottie
+                loop
+                speed={0.5}
+                animationData={welcome}
+                play
+                style={{ width: '20%', height: '70%', marginLeft: '50em' }}
+              />
             </Box>
             {courseCategories &&
               courseCategories.map(({ directCourseSetName, courseList }, i) => (
