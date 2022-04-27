@@ -33,7 +33,7 @@ export default function ContainerWithStaticScheduler({ children }) {
           // "Log in to enable your personal shopping cart!"
           // ...instead of hiding the scheduler altogether.
           xs={shouldShowStaticScheduler ? 3.6 : 0}
-          sx={{ padding: '24px', display: shouldShowStaticScheduler ? '' : 'none' }}
+          sx={{ padding: '32px 0 32px 12px', display: shouldShowStaticScheduler ? '' : 'none' }}
         >
           <Card sx={{ height: '100%', overflow: 'visible' }}>
             <Box padding='20px' height='calc(100% - 40px)'>
