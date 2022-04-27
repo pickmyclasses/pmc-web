@@ -55,7 +55,11 @@ export default function CourseCard({ course }) {
             {formatCreditRange(course)}
             {course.tags.length > 0 && <>&nbsp;&nbsp;•&nbsp;&nbsp;</>}
           </Typography>
-          <TagList noWrap size='small' tags={course.tags.map((x) => x.name)} />
+          <TagList
+            noWrap
+            size='small'
+            tags={course.tags.filter((x) => x.type === 1).map((x) => x.name)}
+          />
         </CenterAligningFlexBox>
         <motion.div
           variants={extraInfoAnimationVariants}
