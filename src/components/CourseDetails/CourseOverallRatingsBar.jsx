@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { Grid } from '@mui/material';
-import LinearProgress from '@mui/material/LinearProgress';
+import { Box, Grid, Typography, LinearProgress } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Box, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles({
   orange: {
@@ -18,7 +16,7 @@ function NumberLinearProgress(props) {
   return (
     <Box display='flex' alignItems='center'>
       <Box width='3%' mr={1}>
-        <Typography variant='body2' color='textSecondary'>{`${props.stars}`}</Typography>
+        <Typography variant='body2' color='text.secondary'>{`${props.stars}`}</Typography>
       </Box>
 
       <Box width='100%' mr={1}>

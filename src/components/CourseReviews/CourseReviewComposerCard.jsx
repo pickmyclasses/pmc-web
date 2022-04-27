@@ -158,11 +158,17 @@ export const ComposerCard = ({
         });
         setOpenComposer(false);
       })
-      .catch((error) =>
-        enqueueSnackbar(snackBarMessage.error.message + error, {
-          variant: snackBarMessage.error.variant,
-        })
-      );
+      .catch((error) => {
+        if (error.response) {
+          enqueueSnackbar(snackBarMessage.lackAnswers.message, {
+            variant: snackBarMessage.lackAnswers.variant,
+          });
+        } else {
+          enqueueSnackbar(snackBarMessage.error.message + error, {
+            variant: snackBarMessage.error.variant,
+          });
+        }
+      });
   };
   const homeworkOptions = [
     {
@@ -276,16 +282,20 @@ export const ComposerCard = ({
         </Box>
         <Box sx={{ marginTop: '2em', textAlign: 'center', color: '#172c66' }}>
           <Typography component={'legend'} variant={'h6'} style={{ marginTop: '1%' }}>
-            * Does the course have a lot homeworks?
+            * Does the course have too much homework?
           </Typography>
-          <RadioButtonGroup radioOptions={homeworkOptions} setValue={setHomeworkHeavy} />
+          <RadioButtonGroup
+            radioOptions={homeworkOptions}
+            value={homeworkHeavy}
+            setValue={setHomeworkHeavy}
+          />
           <Typography component={'legend'} variant={'h6'} style={{ marginTop: '1%' }}>
-            * Does the course have a lot exams?
+            * Does the course have too many exams?
           </Typography>
           <RadioButtonGroup radioOptions={examOptions} setValue={setExamHeavy} />
           <Typography component={'legend'} variant={'h6'} style={{ marginTop: '1%' }}>
-            * This {course.maxCredit} credit class requires ~ {course.maxCredit < 4 ? 10 : 20}{' '}
-            hours/week, is it true?
+            * This {course.maxCredit} credit course requires about {course.maxCredit * 3} hours
+            of work per week, is it true?
           </Typography>
           <RadioButtonGroup radioOptions={spentHoursOptions} setValue={setSpentHour} />
           <Typography component={'legend'} variant={'h6'} style={{ marginTop: '1%' }}>
@@ -311,7 +321,7 @@ export const ComposerCard = ({
             variant={'h6'}
             style={{ marginTop: '3%', marginBottom: '1%' }}
           >
-            Would you like to select or compose some tags for the course?
+            How would you describe this course?
           </Typography>
           <ReviewTags
             tagSuggestion={tagList}
@@ -327,7 +337,7 @@ export const ComposerCard = ({
             variant={'h6'}
             style={{ marginTop: '3%', marginBottom: '1%' }}
           >
-            Is there anything you else want to share about the course or the professor?
+            Is there anything else you want to share about the course or the professor?
           </Typography>
           <TextField
             multiline
@@ -453,7 +463,7 @@ const snackBarMessage = {
   error: { message: 'Error : ', variant: 'error' },
 
   lackAnswers: {
-    message: 'You have question(s）unanswered',
+    message: 'You have questions unanswered',
     variant: 'warning',
   },
   reviewSuccess: {

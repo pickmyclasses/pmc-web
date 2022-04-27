@@ -20,31 +20,6 @@ export const CourseReviewOverviewCard = ({
           component='div'
           sx={{ paddingTop: '3%', paddingLeft: '3%' }}
         >
-          PROFESSORS
-        </Typography>
-        <hr />
-        <CardContent>
-          <Box sx={{ display: 'inline' }}>
-            {professors.map((professor, i) => (
-              <Typography key={i} variant='subtitle1' pb={'1em'}>
-                {professor.professorName}{' '}
-                <i>
-                  - (
-                  {reviews.filter((r) => r.classProfessor === professor.professorName).length}{' '}
-                  reviews)
-                </i>
-              </Typography>
-            ))}
-          </Box>
-        </CardContent>
-      </Card>
-      <Card sx={{ marginTop: '1em', overflow: 'visible' }}>
-        <Typography
-          variant='subtitle1'
-          gutterBottom
-          component='div'
-          sx={{ paddingTop: '3%', paddingLeft: '3%' }}
-        >
           RATING DISTRIBUTION
         </Typography>
         <hr />
@@ -135,6 +110,31 @@ export const CourseReviewOverviewCard = ({
                   )
                 )}
             </Stack>
+          </Box>
+        </CardContent>
+      </Card>
+      <Card sx={{ marginTop: '1em', overflow: 'visible' }}>
+        <Typography
+          variant='subtitle1'
+          gutterBottom
+          component='div'
+          sx={{ paddingTop: '3%', paddingLeft: '3%' }}
+        >
+          PROFESSORS
+        </Typography>
+        <hr />
+        <CardContent>
+          <Box sx={{ display: 'inline' }}>
+            {professors.map((professor, i) => (
+              <Typography key={i} variant='subtitle1' pb={'1em'}>
+                {professor.professorName}{' '}
+                <i>
+                  - (
+                  {reviews.filter((r) => r.classProfessor === professor.professorName).length}{' '}
+                  reviews)
+                </i>
+              </Typography>
+            ))}
           </Box>
         </CardContent>
       </Card>

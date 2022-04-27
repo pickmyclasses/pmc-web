@@ -71,8 +71,18 @@ export const fetchCoursesByIDs = async (courseIDs, userID = NaN) => {
 export const fetchCourseIDsByCourseNames = (courseNames) =>
   axios.post('/course', { courseNameList: courseNames }).then(({ data }) => data.data);
 
-export const fetchHomePageCourses = async (userID) => {
-  const { data } = await axios.get(`/user/${userID}/recommend`);
+export const fetchHomePageCourses = async (user) => {
+  user = { ...user };
+  let shouldFilterOnlyGenEds = false;
+  if (!['Computer Science', 'Accounting', 'Business Administration'].includes(user.major)) {
+    user.userID = 93;
+    shouldFilterOnlyGenEds = true;
+  }
+  const { data } = await axios.get(`/user/${user.userID}/recommend`);
+  if (shouldFilterOnlyGenEds)
+    data.data.courseCatalogList = data.data.courseCatalogList.filter(
+      (x) => !shouldFilterOnlyGenEds || x.directCourseSetName === 'General Education Courses'
+    );
   for (let { courseList } of data.data.courseCatalogList) {
     for (let course of courseList) injectFakePropertiesToCourse(course);
     PrerequisitesManager.prepare(courseList);
@@ -222,10 +232,19 @@ export const fetchRequirements = async (user) => {
   );
 };
 
-const fetchRequirementsByMajor = (majorName, emphasisName) =>
-  axios
-    .get(`college/2/major/course/requirements?major=${majorName}&emphasis=${emphasisName}`)
-    .then(({ data }) => data.data);
+const fetchRequirementsByMajor = (majorName, emphasisName) => {
+  if (['Computer Science', 'Accounting', 'Business Administration'].includes(majorName)) {
+    return axios
+      .get(`college/2/major/course/requirements?major=${majorName}&emphasis=${emphasisName}`)
+      .then(({ data }) => data.data);
+  }
+  return axios
+    .get(
+      `college/2/major/course/requirements?major=Computer%20Science&emphasis=${emphasisName}`
+    )
+    .then(({ data }) => data.data)
+    .then((data) => data.filter((x) => x.setName === 'General Education Courses'));
+};
 
 /** Argument `requirements` is modified in-place. */
 export const getRequirementsFromScheduleAndHistory = (

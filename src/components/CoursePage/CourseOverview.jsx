@@ -63,10 +63,10 @@ export default function CourseOverview() {
     <Card sx={{ width: '100%', height: '100%' }}>
       <Stack padding='24px' spacing='12px' height='calc(100% - 48px)'>
         <Stack spacing='12px' flex={1}>
-          {course.tags.length > 0 && '' && (
+          {course.keywords?.length > 0 && (
             <>
               <Typography variant='subtitle2'>Keywords</Typography>
-              <TagList tags={course.tags.map((x) => x.name)} />
+              <TagList tags={course.keywords.map((x) => x.name)} />
             </>
           )}
           <Typography variant='subtitle2'>Full Description</Typography>
