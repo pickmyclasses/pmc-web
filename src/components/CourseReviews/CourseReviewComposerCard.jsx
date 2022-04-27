@@ -23,6 +23,7 @@ import ReviewDropdownProfessor from '../ReviewInputDetails/ReviewDropdownProfess
 import { ReactComponent as Heart } from '../../assets/care.svg';
 import { fetchTagList, postReview } from 'api';
 import { useSnackbar } from 'notistack';
+import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 
 export const ProposalCard = ({
   hasTaken = false,
@@ -53,7 +54,7 @@ export const ProposalCard = ({
         <Typography variant='body1' component={'legend'}>
           {message}{' '}
           {!currentlyTaking && !hasTaken && !hasWrittenReviews && (
-            <Link sx={{ color: '#172c66' }} href='/profile/history'>
+            <Link sx={{ color: '#172c66' }} component={PreventableLink} to='/profile/history'>
               {' '}
               go add this course to yours schedule now?
             </Link>

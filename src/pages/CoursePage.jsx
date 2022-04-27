@@ -6,7 +6,7 @@ import React, {
   useState,
   useContext,
 } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Forum, PieChart, ShoppingCart, Widgets } from '@mui/icons-material';
 import { Box, Container } from '@mui/material';
 import {
@@ -20,6 +20,8 @@ import {
   fetchRatingTrend,
   fetchCoursePopularity,
   fetchReviewDifficultyByCourseID,
+  removeBookmarkedCourseID,
+  addBookmarkedCourseID,
 } from '../api';
 import CoursePageTop, { imageHeight } from '../components/CoursePage/CoursePageTop';
 import CourseOverview from '../components/CoursePage/CourseOverview';
@@ -28,11 +30,21 @@ import CourseReviews from '../components/CoursePage/CourseReviews';
 import CourseRegistration from '../components/CoursePage/CourseRegistration';
 import ContainerWithLoadingIndication from '../components/Page/ContainerWithLoadingIndication';
 import { UserContext } from '../App';
+import { PreventableNavigationContext } from '../components/PreventableNavigation/ContainerWithPreventableNavigation';
+import { useSnackbar } from 'notistack';
 
 import Scrollbars from 'react-custom-scrollbars-2';
+import { SchedulerContext } from 'components/Scheduler/ContainerWithScheduler';
+import { formatCourseName } from 'utils';
 
 export default function CoursePage() {
   const urlParams = useParams();
+  const location = useLocation();
+  const { user } = useContext(UserContext);
+  const { bookmarkedCourses } = useContext(SchedulerContext);
+  const { navigateIfAllowed } = useContext(PreventableNavigationContext);
+  const { enqueueSnackbar } = useSnackbar();
+
   const [activeTabName, setActiveTabName] = useState('');
   const [course, setCourse] = useState(null);
   const [reviews, setReviews] = useState(null);
@@ -44,12 +56,14 @@ export default function CoursePage() {
   const [courseTrend, setCourseTrend] = useState();
   const [coursePopularity, setCoursePopularity] = useState();
   const [difficulty, setDifficulty] = useState();
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
   // This avoids the useRef()'s not updating problem with useEffect().
   // See https://stackoverflow.com/a/67906087)
   // We can potentially include this pattern in the utils collection to reuse it.
   const [containerNode, setContainerNode] = useState(null);
   const containerRef = useCallback((node) => setContainerNode(node), []);
-  const { user } = useContext(UserContext);
+
   const refreshCourseData = useCallback(
     (courseID) => {
       fetchCourseByID(courseID, user?.userID).then(setCourse);
@@ -89,6 +103,30 @@ export default function CoursePage() {
     if (pageContent) pageContent.scrollTo(0, Math.min(pageContent.scrollTop, imageHeight));
   }, [urlParams, containerNode]);
 
+  useEffect(
+    () => setIsBookmarked(bookmarkedCourses.some((x) => x.id === course?.id)),
+    [bookmarkedCourses, course?.id]
+  );
+
+  const handleIsBookmarkedChange = useCallback(
+    (newIsBookmarked) => {
+      if (!user)
+        return void navigateIfAllowed('/auth', null, {
+          state: { linkTo: location.pathname },
+        });
+
+      if (newIsBookmarked) {
+        addBookmarkedCourseID(user.userID, course.id);
+        enqueueSnackbar('Added bookmark for ' + formatCourseName(course.catalogCourseName));
+      } else {
+        removeBookmarkedCourseID(user.userID, course.id);
+        enqueueSnackbar('Removed bookmark for ' + formatCourseName(course.catalogCourseName));
+      }
+      setIsBookmarked(newIsBookmarked);
+    },
+    [user, navigateIfAllowed, enqueueSnackbar, course, location.pathname]
+  );
+
   return (
     <ContainerWithLoadingIndication
       isLoading={[
@@ -106,7 +144,13 @@ export default function CoursePage() {
     >
       <Box ref={containerRef} width='100%' height='100%' minHeight={0}>
         <OnTopScrollBars>
-          <CoursePageTop course={course} tabs={tabs} activeTabName={activeTabName} />
+          <CoursePageTop
+            course={course}
+            tabs={tabs}
+            activeTabName={activeTabName}
+            isBookmarked={isBookmarked}
+            onIsBookmarkedChange={handleIsBookmarkedChange}
+          />
           <Container maxWidth='xl' sx={{ paddingTop: '32px' }}>
             <CourseContext.Provider
               value={{
@@ -121,6 +165,8 @@ export default function CoursePage() {
                 courseLoad,
                 courseTrend,
                 coursePopularity,
+                isBookmarked,
+                setIsBookmarked: handleIsBookmarkedChange,
               }}
             >
               {createElement(tabs[activeTabName].content)}
@@ -132,14 +178,6 @@ export default function CoursePage() {
   );
 }
 
-/**
- * @type {React.Context<{
- *   course: Object,
- *   reviews: Array<Object>,
- *   reviewTags: Array<Object>,
- *   refreshCourseData: (courseID: Number) => void,
- * }>}
- */
 export const CourseContext = createContext(null);
 
 const tabs = {
