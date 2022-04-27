@@ -58,7 +58,7 @@ export default function ProfileDashboard() {
             </Stack>
           </Card>
         </Grid>
-        {bookmarkedCourses?.length && (
+        {bookmarkedCourses?.length > 0 && (
           <>
             <Divider orientation='vertical' flexItem sx={{ marginX: '-1px' }} />
             <Grid item xs={5}>

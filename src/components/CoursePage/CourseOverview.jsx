@@ -22,6 +22,7 @@ import { SectionOverline } from 'pages/HomePage';
 import { PreventableNavigationContext } from '../PreventableNavigation/ContainerWithPreventableNavigation';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 import { UserContext } from 'App';
+import md5 from 'md5';
 
 export default function CourseOverview() {
   const { user } = useContext(UserContext);
@@ -68,11 +69,20 @@ export default function CourseOverview() {
           {course.keywordList?.length > 0 && (
             <>
               <Typography variant='subtitle2'>Keywords</Typography>
-              <TagList tags={course.keywordList.map((x) => x)} />
+              <TagList
+                fullWidth
+                tags={course.keywordList
+                  .sort((x, y) => md5(x).localeCompare(md5(y)))
+                  .slice(0, Math.min(Math.floor(course.keywordList.length / 2), 12))}
+              />
             </>
           )}
-          <Typography variant='subtitle2'>Full Description</Typography>
-          <Typography variant='body1'>{course.description}</Typography>
+          {course.description && (
+            <>
+              <Typography variant='subtitle2'>Full Description</Typography>
+              <Typography variant='body1'>{course.description}</Typography>
+            </>
+          )}
           <Typography variant='subtitle2'>Reward</Typography>
           <Stack direction='row' spacing='24px' flexWrap='wrap'>
             <LabelWithIcon
