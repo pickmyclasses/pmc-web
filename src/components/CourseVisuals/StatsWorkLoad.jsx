@@ -238,7 +238,8 @@ function generateRecommendation(reviews) {
   optionRecommend.series[1].title = 'no';
   optionRecommend.series[0].data[0] = 0;
   optionRecommend.series[1].data[0] = 0;
-
+  optionRecommend.series[0].color = '#568EA6';
+  optionRecommend.series[1].color = '#F18C8E';
   for (let i = 0; i < reviews.length; i++) {
     if (reviews[i].recommended) {
       optionRecommend.series[0].data[0] += 1;
