@@ -122,6 +122,7 @@ function populuateData(trends) {
 
 // Visualize the popularity of a course given by reviews
 export default function StatsPopularity({ coursePopularity }) {
+  console.log(coursePopularity);
   sortBySemester(coursePopularity.trends);
   populuateData(coursePopularity.trends);
 

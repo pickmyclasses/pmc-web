@@ -341,7 +341,9 @@ export default function CourseStats() {
                 {renderTagsSummary()}
               </Grid>
               <Grid item xs={4}>
-                {renderPopularitySummary()}
+                {coursePopularity.trends.length === 0
+                  ? renderPlaceHolder()
+                  : renderPopularitySummary()}
               </Grid>
 
               <Grid item xs={4}>
