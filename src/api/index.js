@@ -325,16 +325,9 @@ export const removeHistoryCourse = (userID, courseID) =>
   axios.put('/user/history', { userID, courseID });
 
 export const fetchBookmarkedCourses = async (userID) => {
-  // const courses = await axios.get(`/user/${userID}/bookmark`).then(({ data }) => data.data);
-  // for (let course of courses) injectFakePropertiesToCourse(course);
-  // await PrerequisitesManager.prepareAndAssign(courses);
-  const courses = Array.from(
-    new Map(
-      (await fetchScheduledClassesAndCustomEvents(userID)).scheduledClasses
-        .map(({ course }) => course)
-        .map((course) => [course.id, course])
-    ).values()
-  );
+  const courses = await axios.get(`/user/${userID}/bookmark`).then(({ data }) => data.data);
+  for (let course of courses) injectFakePropertiesToCourse(course);
+  await PrerequisitesManager.prepareAndAssign(courses);
 
   return courses;
 };
