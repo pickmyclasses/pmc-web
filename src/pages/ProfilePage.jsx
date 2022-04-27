@@ -29,7 +29,12 @@ export default function ProfilePage() {
   // Redirect to auth page if not logged in.
   useEffect(() => {
     if (user === null)
-      navigateIfAllowed('/auth', null, { replace: true, state: { linkTo: location.pathname } });
+      requestAnimationFrame(() =>
+        navigateIfAllowed('/auth', null, {
+          replace: true,
+          state: { linkTo: location.pathname },
+        })
+      );
   }, [user, navigateIfAllowed, location.pathname]);
 
   // Figure out the active tab from the URL.

@@ -1,4 +1,4 @@
-import { BookmarkBorder, Share } from '@mui/icons-material';
+import { Bookmark, BookmarkBorder, Share } from '@mui/icons-material';
 import {
   Box,
   Card,
@@ -10,8 +10,13 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
+import { addBookmarkedCourseID, removeBookmarkedCourseID } from 'api';
+import { UserContext } from 'App';
+import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
 import PreventableLink from 'components/PreventableNavigation/PreventableLink';
-import React, { createElement } from 'react';
+import { SchedulerContext } from 'components/Scheduler/ContainerWithScheduler';
+import React, { createElement, useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { formatCourseName, formatCreditRange, capitalizeFirst } from '../../utils';
 import { CenterAligningFlexBox } from '../CourseCardGrid/CourseCard/CourseCard';
 import CourseEligibilityIndicator from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
@@ -28,7 +33,19 @@ import CousreShare from '../CoursePage/CourseShare';
  * @param {String} props.activeTabName The `name` of the tab to highlight as selected.
  */
 export default function CoursePageTop({ course, tabs, activeTabName }) {
+  const { user } = useContext(UserContext);
+  const { bookmarkedCourses } = useContext(SchedulerContext);
+  const { navigateIfAllowed } = useContext(PreventableNavigationContext);
+
   const theme = useTheme();
+  const location = useLocation();
+
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  useEffect(
+    () => setIsBookmarked(bookmarkedCourses?.some((x) => x.id === course.id)),
+    [course.id, bookmarkedCourses]
+  );
 
   const coursePageURL = '/course/' + course.id;
 
@@ -50,9 +67,24 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
     </Box>
   );
 
+  const handleBookmarkClick = () => {
+    if (!user)
+      return void navigateIfAllowed('/auth', null, {
+        state: { linkTo: location.pathname },
+      });
+
+    if (isBookmarked) removeBookmarkedCourseID(user.userID, course.id);
+    else addBookmarkedCourseID(user.userID, course.id);
+    setIsBookmarked(!isBookmarked);
+  };
+
   const renderActionItems = () => (
     <Box maxHeight='72px' overflow='hidden'>
-      {/* <ActionItem label='Bookmark' icon={BookmarkBorder} onClick={() => alert('** bookmark')} /> */}
+      <ActionItem
+        label={isBookmarked ? 'Bookmarked' : 'Bookmark'}
+        icon={isBookmarked ? Bookmark : BookmarkBorder}
+        onClick={handleBookmarkClick}
+      />
       {/* <ActionItem label='Share' icon={Share} onClick={() => CousreShare()} />
       <CousreShare /> */}
     </Box>
@@ -99,7 +131,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
 export const imageHeight = 0;
 
 export const ActionItem = ({ icon, ...props }) => (
-  <Tab icon={createElement(icon)} sx={{ fontSize: 'x-small' }} {...props} />
+  <Tab icon={createElement(icon)} sx={{ fontSize: 'x-small', width: '112px' }} {...props} />
 );
 
 export const TabsWithoutBottomGap = styled(Tabs)({

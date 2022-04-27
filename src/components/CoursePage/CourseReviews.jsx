@@ -19,10 +19,15 @@ export default function CourseReviews() {
   const [openComposer, setOpenComposer] = useState(false);
 
   useEffect(() => {
-    fetchUserReviewInfo(user.userID, course.id).then((data) => {
-      setUserReviewInfo(data);
-    });
+    if (user) {
+      fetchUserReviewInfo(user.userID, course.id).then((data) => {
+        setUserReviewInfo(data);
+      });
+    }
     setOpenComposer(false);
+  }, [user, course]);
+
+  useEffect(() => {
     const comparatorByFilterMethod = {
       'most-recent': (x, y) =>
         new Date(y.createdAt).getTime() - new Date(x.createdAt).getTime(),

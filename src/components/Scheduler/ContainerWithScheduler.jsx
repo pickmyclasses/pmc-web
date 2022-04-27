@@ -3,6 +3,7 @@ import {
   fetchScheduledClassesAndCustomEvents,
   fetchRequirements,
   fetchHistoryCourses,
+  fetchBookmarkedCourses,
 } from '../../api';
 import { UserContext } from '../../App';
 
@@ -19,6 +20,7 @@ export default function ContainerWithScheduler({ children }) {
   const [customEvents, setCustomEvents] = useState([]);
   const [requirements, setRequirements] = useState([]);
   const [historyCourses, setHistoryCourses] = useState([]);
+  const [bookmarkedCourses, setBookmarkedCourses] = useState([]);
 
   const refreshSchedulerData = useCallback(
     (onComplete) => {
@@ -27,18 +29,28 @@ export default function ContainerWithScheduler({ children }) {
           fetchScheduledClassesAndCustomEvents(user.userID),
           fetchRequirements(user),
           fetchHistoryCourses(user.userID),
-        ]).then(([{ scheduledClasses, customEvents }, requirements, historyCourses]) => {
-          setClassesInShoppingCart(scheduledClasses);
-          setCustomEvents(customEvents);
-          setRequirements(requirements);
-          setHistoryCourses(historyCourses);
-          onComplete?.();
-        });
+          fetchBookmarkedCourses(user.userID),
+        ]).then(
+          ([
+            { scheduledClasses, customEvents },
+            requirements,
+            historyCourses,
+            bookmarkedCourses,
+          ]) => {
+            setClassesInShoppingCart(scheduledClasses);
+            setCustomEvents(customEvents);
+            setRequirements(requirements);
+            setHistoryCourses(historyCourses);
+            setBookmarkedCourses(bookmarkedCourses);
+            onComplete?.();
+          }
+        );
       } else {
         setClassesInShoppingCart([]);
         setCustomEvents([]);
         setRequirements([]);
         setHistoryCourses([]);
+        setBookmarkedCourses([]);
         onComplete?.();
       }
     },
@@ -55,6 +67,7 @@ export default function ContainerWithScheduler({ children }) {
         requirements,
         refreshSchedulerData,
         historyCourses,
+        bookmarkedCourses,
       }}
     >
       {children}
@@ -68,6 +81,7 @@ export default function ContainerWithScheduler({ children }) {
  *   requirements: Array<Object>,
  *   customEvents: Array<Object>,
  *   historyCourses: Array<Object>,
+ *   bookmarkedCourses: Array<Object>,
  *   refreshSchedulerData: (onComplete: () => void = null) => void,
  * }>}
  */
