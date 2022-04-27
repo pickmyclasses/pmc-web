@@ -1,4 +1,4 @@
-import { Bookmark, BookmarkBorder, Close, Facebook, Share } from '@mui/icons-material';
+import { BookmarkAdded, BookmarkBorder, Close, Facebook, Share } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -41,21 +41,17 @@ import { useSnackbar } from 'notistack';
  *     list.
  * @param {String} props.activeTabName The `name` of the tab to highlight as selected.
  */
-export default function CoursePageTop({ course, tabs, activeTabName }) {
-  const { user } = useContext(UserContext);
-  const { bookmarkedCourses } = useContext(SchedulerContext);
-  const { navigateIfAllowed } = useContext(PreventableNavigationContext);
+export default function CoursePageTop({
+  course,
+  tabs,
+  activeTabName,
+  isBookmarked,
+  onIsBookmarkedChange,
+}) {
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
-  const location = useLocation();
 
-  const [isBookmarked, setIsBookmarked] = useState(false);
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
-
-  useEffect(
-    () => setIsBookmarked(bookmarkedCourses?.some((x) => x.id === course.id)),
-    [course.id, bookmarkedCourses]
-  );
 
   const coursePageURL = '/course/' + course.id;
 
@@ -90,7 +86,13 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
             <Close />
           </IconButton>
         </Stack>
-        <Stack padding='8px' direction='row' alignItems='center' sx={{ bgcolor: '#f1f1f1' }}>
+        <Stack
+          padding='8px'
+          direction='row'
+          alignItems='center'
+          backgroundColor='action.selected'
+          borderRadius='4px'
+        >
           <Typography variant='body1' paddingLeft='8px' paddingRight='20px'>
             {window.location.href}
           </Typography>
@@ -122,29 +124,13 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
     </Dialog>
   );
 
-  const handleBookmarkClick = () => {
-    if (!user)
-      return void navigateIfAllowed('/auth', null, {
-        state: { linkTo: location.pathname },
-      });
-
-    if (isBookmarked) {
-      removeBookmarkedCourseID(user.userID, course.id);
-      enqueueSnackbar('Removed bookmark for ' + formatCourseName(course.catalogCourseName));
-    } else {
-      addBookmarkedCourseID(user.userID, course.id);
-      enqueueSnackbar('Added bookmark for ' + formatCourseName(course.catalogCourseName));
-    }
-    setIsBookmarked(!isBookmarked);
-  };
-
   const renderActionItems = () => (
     <>
       <Box maxHeight='72px' overflow='hidden'>
         <ActionItem
           label={isBookmarked ? 'Bookmarked' : 'Bookmark'}
-          icon={isBookmarked ? Bookmark : BookmarkBorder}
-          onClick={handleBookmarkClick}
+          icon={isBookmarked ? BookmarkAdded : BookmarkBorder}
+          onClick={() => onIsBookmarkedChange?.(!isBookmarked)}
         />
         <ActionItem label='Share' icon={Share} onClick={() => setIsShareDialogOpen(true)} />
       </Box>
