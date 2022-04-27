@@ -5,46 +5,39 @@ let option = {
   graphic: {
     elements: [
       {
-        type: 'text',
+        type: 'group',
         left: 'center',
         top: 'center',
-        style: {
-          text: 'N/A',
-          fontSize: 80,
-          fontWeight: 'bold',
-          lineDash: [0, 200],
-          lineDashOffset: 0,
-          fill: 'transparent',
-          stroke: '#000',
-          lineWidth: 1,
-        },
-        keyframeAnimation: {
-          duration: 3000,
-          loop: true,
-          keyframes: [
-            {
-              percent: 0.7,
-              style: {
-                fill: 'transparent',
-                lineDashOffset: 200,
-                lineDash: [200, 0],
+        children: new Array(7).fill(0).map((val, i) => ({
+          type: 'rect',
+          x: i * 20,
+          shape: {
+            x: 0,
+            y: -40,
+            width: 10,
+            height: 80,
+          },
+          style: {
+            fill: '#568EA6',
+          },
+          keyframeAnimation: {
+            duration: 1000,
+            delay: i * 200,
+            loop: true,
+            keyframes: [
+              {
+                percent: 0.5,
+                scaleY: 0.3,
+                easing: 'cubicIn',
               },
-            },
-            {
-              // Stop for a while.
-              percent: 0.8,
-              style: {
-                fill: 'transparent',
+              {
+                percent: 1,
+                scaleY: 1,
+                easing: 'cubicOut',
               },
-            },
-            {
-              percent: 1,
-              style: {
-                fill: 'black',
-              },
-            },
-          ],
-        },
+            ],
+          },
+        })),
       },
     ],
   },
