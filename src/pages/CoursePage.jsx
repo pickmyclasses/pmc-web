@@ -43,7 +43,7 @@ export default function CoursePage() {
   const [courseLoad, setCourseLoad] = useState();
   const [courseTrend, setCourseTrend] = useState();
   const [coursePopularity, setCoursePopularity] = useState();
-  const [difficulty, setDifficulty] = useState(0);
+  const [difficulty, setDifficulty] = useState();
   // This avoids the useRef()'s not updating problem with useEffect().
   // See https://stackoverflow.com/a/67906087)
   // We can potentially include this pattern in the utils collection to reuse it.
@@ -91,7 +91,18 @@ export default function CoursePage() {
 
   return (
     <ContainerWithLoadingIndication
-      isLoading={!course || !reviews || !professorRanking || !courseLoad || !courseTrend}
+      isLoading={[
+        refreshCourseData,
+        course,
+        reviews,
+        difficulty,
+        reviewTags,
+        professors,
+        professorRanking,
+        courseLoad,
+        courseTrend,
+        coursePopularity,
+      ].some((x) => x == null)}
     >
       <Box ref={containerRef} width='100%' height='100%' minHeight={0}>
         <OnTopScrollBars>

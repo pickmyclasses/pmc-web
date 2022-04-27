@@ -18,7 +18,7 @@ export default function HomePage() {
 
   const [courseCategories, setCourseCategories] = useState(null);
 
-  useEffect(() => user && fetchHomePageCourses(user.userID).then(setCourseCategories), [user]);
+  useEffect(() => user && fetchHomePageCourses(user).then(setCourseCategories), [user]);
 
   return (
     <ContainerWithStaticScheduler>
