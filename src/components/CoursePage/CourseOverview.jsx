@@ -58,15 +58,17 @@ export default function CourseOverview() {
     );
   }, [user, course]);
 
+  console.log('-----', course);
+
   const coursePageURL = '/course/' + course.id;
   const renderInfoSummary = () => (
     <Card sx={{ width: '100%', height: '100%' }}>
       <Stack padding='24px' spacing='12px' height='calc(100% - 48px)'>
         <Stack spacing='12px' flex={1}>
-          {course.keywords?.length > 0 && (
+          {course.keywordList?.length > 0 && (
             <>
               <Typography variant='subtitle2'>Keywords</Typography>
-              <TagList tags={course.keywords.map((x) => x.name)} />
+              <TagList tags={course.keywordList.map((x) => x)} />
             </>
           )}
           <Typography variant='subtitle2'>Full Description</Typography>
