@@ -40,12 +40,13 @@ export default function ProfileDashboard() {
             <Stack padding='20px' spacing='12px'>
               <Typography variant='h6'>Basic Information</Typography>
               <BasicInfoItem label='Name' value={user?.name} />
-              <BasicInfoItem label='Email' value={user?.email || 'example@domain.com'} />
+              {user?.email && <BasicInfoItem label='Email' value={user?.email} />}
               <BasicInfoItem
                 label='University'
                 value={user?.collegeName || 'University of Utah'}
               />
               <BasicInfoItem
+                noDivider
                 label='Major'
                 value={
                   user?.major + (user?.emphasis ? `(with ${user?.emphasis} emphasis)` : '')
