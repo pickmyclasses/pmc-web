@@ -3,7 +3,7 @@ import { fetchHomePageCourses } from '../api';
 import ContainerWithStaticScheduler from '../components/Scheduler/ContainerWithStaticScheduler';
 import CourseCardGrid from '../components/CourseCardGrid/CourseCardGrid';
 import ClickableIndicator from '../components/CourseCardGrid/CourseCard/ClickableIndicator';
-import { Box, Divider, Typography, colors, Link, Paper } from '@mui/material';
+import { Box, Divider, Typography, colors, Link, Paper, Stack } from '@mui/material';
 import { NavigationBarContext } from '../components/NavigationBar/ContainerWithNavigationBar';
 import Scrollbars from 'react-custom-scrollbars-2';
 import ContainerWithLoadingIndication from '../components/Page/ContainerWithLoadingIndication';
@@ -24,28 +24,19 @@ export default function HomePage() {
     <ContainerWithStaticScheduler>
       <ContainerWithLoadingIndication isLoading={!courseCategories}>
         <Scrollbars autoHide>
-          <Box
-            sx={{
-              width: '93.5%',
-              height: '10em',
-              bgcolor: '#d4f1fa',
-              marginTop: '3em',
-              marginLeft: '2em',
-              borderRadius: '10px',
-            }}
-          >
-            <Lottie
-              loop
-              animationData={emptyResult}
-              speed={0.5}
-              play
-              style={{
-                height: '100%',
-                marginLeft: '20em',
-              }}
-            />
-          </Box>
-          <Box padding='32px'>
+          <Stack padding='32px 32px 4px 0' spacing='12px'>
+            <Box sx={{ height: '10em', bgcolor: '#d4f1fa', borderRadius: '10px' }}>
+              <Lottie
+                loop
+                animationData={emptyResult}
+                speed={0.5}
+                play
+                style={{
+                  height: '100%',
+                  marginLeft: '20em',
+                }}
+              />
+            </Box>
             {courseCategories &&
               courseCategories.map(({ directCourseSetName, courseList }, i) => (
                 <Box key={i}>
@@ -67,7 +58,7 @@ export default function HomePage() {
                   </Box>
                 </Box>
               ))}
-          </Box>
+          </Stack>
         </Scrollbars>
       </ContainerWithLoadingIndication>
     </ContainerWithStaticScheduler>
@@ -75,7 +66,7 @@ export default function HomePage() {
 }
 
 export const SectionOverline = ({ children, ...props }) => (
-  <Typography {...props} variant='overline' fontSize='medium' color={colors.grey[600]}>
+  <Typography {...props} variant='overline' fontSize='medium' color={colors.grey[900]}>
     {children}
   </Typography>
 );

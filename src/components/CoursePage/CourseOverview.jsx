@@ -122,7 +122,7 @@ export default function CourseOverview() {
             <TagList
               tags={course.tags
                 .filter((x) => x.type === 1)
-                .slice(0, 3)
+                .slice(0, 5)
                 .map((x) => x.name)}
               variant='outlined'
               color='success'
@@ -137,7 +137,7 @@ export default function CourseOverview() {
             <TagList
               tags={course.tags
                 .filter((x) => x.type === 0)
-                .slice(0, 3)
+                .slice(0, 5)
                 .map((x) => x.name)}
               variant='outlined'
               color='error'
