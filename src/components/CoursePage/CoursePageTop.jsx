@@ -56,7 +56,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
       <ActionItem label='Bookmark' icon={BookmarkBorder} onClick={() => alert('** bookmark')} />
       {/*For your informaiton of editing the Sharing button https://github.com/nygardk/react-share#readme or https://www.npmjs.com/package/react-share */}
       <FacebookShareButton
-        url={'https://www.pickmyclass.com/'}
+        url={`https://www.pickmyclass.com/${coursePageURL}/`}
         quote={'Best website to pick your college classes!'}
         hashtag={'#PickMyClasses'}
         description={''}
@@ -79,7 +79,6 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
       sx={{ textDecoration: 'none', minHeight: 0 }}
     />
   );
-
   return (
     <>
       <CardMedia component='img' image={course.ImageURL} height={imageHeight} />
