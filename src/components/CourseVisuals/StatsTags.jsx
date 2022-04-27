@@ -15,9 +15,7 @@ let option = {
   },
   series: [
     {
-      color: ['#F18C8E ', '#568EA6 '],
       roam: false,
-
       levels: [
         {
           // itemStyle: {
@@ -39,8 +37,25 @@ let option = {
       type: 'treemap',
       data: [
         {
-          name: 'PostiveTags',
-          value: 10,
+          name: 'Positive Tags',
+          type: 'treemap',
+          visibleMin: 300,
+          color: ['#568EA6 '],
+
+          label: {
+            show: true,
+            formatter: '{b}',
+          },
+          upperLabel: {
+            show: true,
+            height: 20,
+            color: '#fff',
+          },
+          itemStyle: {
+            borderWidth: 3,
+            borderColor: '#305F72',
+            gapWidth: 3,
+          },
           children: [
             // {
             //   name: 'Great Lecture',
@@ -55,8 +70,25 @@ let option = {
           ],
         },
         {
-          name: 'NegativeTags',
-          value: 10,
+          name: 'Negative Tags',
+          type: 'treemap',
+          visibleMin: 300,
+          color: ['#F0B7A4'],
+
+          label: {
+            show: true,
+            formatter: '{b}',
+          },
+          upperLabel: {
+            show: true,
+            height: 20,
+            color: '#fff',
+          },
+          itemStyle: {
+            borderWidth: 3,
+            borderColor: '#F18C8E',
+            gapWidth: 3,
+          },
           children: [
             // {
             //   name: 'Heavy Homework',
