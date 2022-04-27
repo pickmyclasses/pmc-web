@@ -10,7 +10,6 @@ import Lottie from 'react-lottie-player';
 import poster from '../assets/poster.json';
 import graduation from '../assets/education-reward.json';
 import Scrollbars from 'react-custom-scrollbars-2';
-import Footer from 'components/Footer/Footer';
 
 const useStyle = makeStyles({
   main: {
