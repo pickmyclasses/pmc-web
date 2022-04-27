@@ -160,7 +160,7 @@ export default function SearchPage({ shouldShowScheduler }) {
         <ContainerWithStaticScheduler shouldShowScheduler={shouldShowScheduler}>
           <ContainerWithLoadingIndication isLoading={courses.length === 0 && numResults !== 0}>
             <Scrollbars autoHide>
-              <Stack padding='24px' spacing='16px'>
+              <Stack padding='24px 20px 24px 0' spacing='16px'>
                 <Typography variant='body2' gutterBottom>
                   Found {numResults} results for <b>"{urlParams.query}"</b>
                 </Typography>

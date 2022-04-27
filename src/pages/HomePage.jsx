@@ -24,17 +24,14 @@ export default function HomePage() {
     <ContainerWithStaticScheduler>
       <ContainerWithLoadingIndication isLoading={!courseCategories}>
         <Scrollbars autoHide>
-          <Stack padding='32px 32px 4px 0' spacing='12px'>
+          <Stack padding='32px 20px 12px 0' spacing='12px'>
             <Box sx={{ height: '10em', bgcolor: '#d4f1fa', borderRadius: '10px' }}>
               <Lottie
                 loop
                 animationData={emptyResult}
                 speed={0.5}
                 play
-                style={{
-                  height: '100%',
-                  marginLeft: '20em',
-                }}
+                style={{ height: '100%', marginLeft: '20em' }}
               />
             </Box>
             {courseCategories &&
