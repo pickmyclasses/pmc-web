@@ -44,7 +44,7 @@ export const CourseReviewOverviewCard = ({
             >
               Average Rating
               <Typography variant='h4' component='div' gutterBottom>
-                {overallRating}
+                {Math.round(overallRating * 100) / 100}
               </Typography>
             </Box>
             <Box
