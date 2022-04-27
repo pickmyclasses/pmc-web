@@ -1,11 +1,9 @@
 import { Button, Card, Grid, List, Stack, Typography } from '@mui/material';
 import { UserContext } from 'App';
 import React, { useContext, useEffect, useState } from 'react';
-import { formatInstructorName, getColorByString, getInitials, useMount } from 'utils';
 import Divider from '@mui/material/Divider';
 import { Edit } from '@mui/icons-material';
 import ContainerWithLoadingIndication from 'components/Page/ContainerWithLoadingIndication';
-import PreventableLink from 'components/PreventableNavigation/PreventableLink';
 import { PreventableNavigationContext } from 'components/PreventableNavigation/ContainerWithPreventableNavigation';
 import { fetchBookmarkedCourses } from 'api';
 import { SectionOverline } from 'pages/HomePage';
