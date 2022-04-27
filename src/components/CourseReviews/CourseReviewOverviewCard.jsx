@@ -44,7 +44,7 @@ export const CourseReviewOverviewCard = ({
             >
               Average Rating
               <Typography variant='h4' component='div' gutterBottom>
-                {overallRating}
+                {overallRating.toFixed(1)}
               </Typography>
             </Box>
             <Box
@@ -64,7 +64,7 @@ export const CourseReviewOverviewCard = ({
             >
               Difficulty
               <Typography variant='h4' component='div' gutterBottom>
-                {difficulty}
+                {difficulty.toFixed(1)}
               </Typography>
             </Box>
             <CourseOverallRatingsBar reviews={reviews} />
