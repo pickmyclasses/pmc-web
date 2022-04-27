@@ -206,8 +206,8 @@ function generateExamHeavy(reviews) {
   optionExam.series[1].title = 'no';
   optionExam.series[0].data[0] = 0;
   optionExam.series[1].data[0] = 0;
-  optionExam.series[0].color = '#568EA6';
-  optionExam.series[1].color = '#F18C8E';
+  optionExam.series[0].color = '#F18C8E';
+  optionExam.series[1].color = '#568EA6';
   for (let i = 0; i < reviews.length; i++) {
     if (reviews[i].isExamHeavy) {
       optionExam.series[0].data[0] += 1;
@@ -222,8 +222,8 @@ function generateHomeworkHeavy(reviews) {
   optionHomework.series[1].title = 'no';
   optionHomework.series[0].data[0] = 0;
   optionHomework.series[1].data[0] = 0;
-  optionHomework.series[0].color = '#568EA6';
-  optionHomework.series[1].color = '#F18C8E';
+  optionHomework.series[0].color = '#F18C8E';
+  optionHomework.series[1].color = '#568EA6';
   for (let i = 0; i < reviews.length; i++) {
     if (reviews[i].isHomeworkHeavy) {
       optionHomework.series[0].data[0] += 1;
@@ -238,8 +238,8 @@ function generateRecommendation(reviews) {
   optionRecommend.series[1].title = 'no';
   optionRecommend.series[0].data[0] = 0;
   optionRecommend.series[1].data[0] = 0;
-  optionRecommend.series[0].color = '#568EA6';
-  optionRecommend.series[1].color = '#F18C8E';
+  optionRecommend.series[0].color = '#F18C8E';
+  optionRecommend.series[1].color = '#568EA6';
   for (let i = 0; i < reviews.length; i++) {
     if (reviews[i].recommended) {
       optionRecommend.series[0].data[0] += 1;
