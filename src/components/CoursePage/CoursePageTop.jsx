@@ -1,14 +1,21 @@
-import { Bookmark, BookmarkBorder, Share } from '@mui/icons-material';
+import { Bookmark, BookmarkBorder, Close, Facebook, Share } from '@mui/icons-material';
 import {
   Box,
+  Button,
   Card,
   CardMedia,
   Container,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Stack,
   styled,
   Tab,
   Tabs,
   Typography,
   useTheme,
+  IconButton,
+  Divider,
 } from '@mui/material';
 import { addBookmarkedCourseID, removeBookmarkedCourseID } from 'api';
 import { UserContext } from 'App';
@@ -21,6 +28,8 @@ import { formatCourseName, formatCreditRange, capitalizeFirst } from '../../util
 import { CenterAligningFlexBox } from '../CourseCardGrid/CourseCard/CourseCard';
 import CourseEligibilityIndicator from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
 import { FacebookShareButton } from 'react-share';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import { useSnackbar } from 'notistack';
 
 /**
  * The top portion of the course page that displays an image banner (like the channel art from
@@ -36,11 +45,12 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
   const { user } = useContext(UserContext);
   const { bookmarkedCourses } = useContext(SchedulerContext);
   const { navigateIfAllowed } = useContext(PreventableNavigationContext);
-
+  const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const location = useLocation();
 
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
 
   useEffect(
     () => setIsBookmarked(bookmarkedCourses?.some((x) => x.id === course.id)),
@@ -67,35 +77,79 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
     </Box>
   );
 
+  const handleShareDialogClose = () => setIsShareDialogOpen(false);
+
+  const renderShareDialog = () => (
+    <Dialog open={isShareDialogOpen} onClose={handleShareDialogClose}>
+      <Stack padding='24px' spacing='12px'>
+        <Stack direction='row' justifyContent='space-between' paddingBottom='12px'>
+          <Typography variant='h6'>
+            Share {formatCourseName(course.catalogCourseName)}
+          </Typography>
+          <IconButton onClick={handleShareDialogClose} sx={{ padding: 0 }}>
+            <Close />
+          </IconButton>
+        </Stack>
+        <Stack padding='8px' direction='row' alignItems='center' sx={{ bgcolor: '#f1f1f1' }}>
+          <Typography variant='body1' paddingLeft='8px' paddingRight='20px'>
+            {window.location.href}
+          </Typography>
+          <CopyToClipboard text={window.location.href}>
+            <Button onClick={() => enqueueSnackbar('Link copied')}>Copy</Button>
+          </CopyToClipboard>
+        </Stack>
+        <Typography paddingTop='12px' variant='caption' color='text.secondary'>
+          On social media
+        </Typography>
+        <Divider sx={{ marginTop: '4px !important' }} />
+        <Stack direction='row' spacing='12px'>
+          {/*For your informaiton of editing the Sharing button https://github.com/nygardk/react-share#readme or https://www.npmjs.com/package/react-share */}
+          <FacebookShareButton
+            url={
+              window.location.href.includes('localhost:')
+                ? `https://pickmyclass.com/course/${course.id}`
+                : window.location.href
+            }
+            hashtag={'#PickMyClasses'}
+            quote={`Check out ${formatCourseName(course.catalogCourseName)} — ${course.title}`}
+          >
+            <IconButton>
+              <Facebook fontSize='large' sx={{ color: '#4267B2' }} />
+            </IconButton>
+          </FacebookShareButton>
+        </Stack>
+      </Stack>
+    </Dialog>
+  );
+
   const handleBookmarkClick = () => {
     if (!user)
       return void navigateIfAllowed('/auth', null, {
         state: { linkTo: location.pathname },
       });
 
-    if (isBookmarked) removeBookmarkedCourseID(user.userID, course.id);
-    else addBookmarkedCourseID(user.userID, course.id);
+    if (isBookmarked) {
+      removeBookmarkedCourseID(user.userID, course.id);
+      enqueueSnackbar('Removed bookmark for ' + formatCourseName(course.catalogCourseName));
+    } else {
+      addBookmarkedCourseID(user.userID, course.id);
+      enqueueSnackbar('Added bookmark for ' + formatCourseName(course.catalogCourseName));
+    }
     setIsBookmarked(!isBookmarked);
   };
 
   const renderActionItems = () => (
-    <Box maxHeight='72px' overflow='hidden'>
-      <ActionItem
-        label={isBookmarked ? 'Bookmarked' : 'Bookmark'}
-        icon={isBookmarked ? Bookmark : BookmarkBorder}
-        onClick={handleBookmarkClick}
-      />
-      {/*For your informaiton of editing the Sharing button https://github.com/nygardk/react-share#readme or https://www.npmjs.com/package/react-share */}
-      <FacebookShareButton
-        url={`https://www.pickmyclass.com/${coursePageURL}/`}
-        quote={`I recommend ${course.catalogCourseName} - ${course.title} at www.pickmyclass.com`}
-        hashtag={'#PickMyClasses'}
-        description={''}
-        className='Demo__some-network__share-button'
-      >
-        <ActionItem label='Share' icon={Share} />{' '}
-      </FacebookShareButton>
-    </Box>
+    <>
+      <Box maxHeight='72px' overflow='hidden'>
+        <ActionItem
+          label={isBookmarked ? 'Bookmarked' : 'Bookmark'}
+          icon={isBookmarked ? Bookmark : BookmarkBorder}
+          onClick={handleBookmarkClick}
+        />
+        <ActionItem label='Share' icon={Share} onClick={() => setIsShareDialogOpen(true)} />
+      </Box>
+      {renderShareDialog()}
+    </>
   );
 
   const renderTab = (name, title, icon) => (
@@ -138,7 +192,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
 export const imageHeight = 0;
 
 export const ActionItem = ({ icon, ...props }) => (
-  <Tab icon={createElement(icon)} sx={{ fontSize: 'x-small', width: '112px' }} {...props} />
+  <Tab icon={createElement(icon)} sx={{ fontSize: 'x-small', width: '96px' }} {...props} />
 );
 
 export const TabsWithoutBottomGap = styled(Tabs)({
