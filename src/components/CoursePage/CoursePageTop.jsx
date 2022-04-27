@@ -57,7 +57,7 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
       {/*For your informaiton of editing the Sharing button https://github.com/nygardk/react-share#readme or https://www.npmjs.com/package/react-share */}
       <FacebookShareButton
         url={`https://www.pickmyclass.com/${coursePageURL}/`}
-        quote={'Best website to pick your college classes!'}
+        quote={`I recommend ${course.catalogCourseName} - ${course.title} at www.pickmyclass.com`}
         hashtag={'#PickMyClasses'}
         description={''}
         className='Demo__some-network__share-button'
