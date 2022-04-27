@@ -8,6 +8,7 @@ export default function TagList({
   gutterLeft = false,
   variant = 'contained',
   color = 'default',
+  fullWidth = false,
   disableInteractive = false,
 }) {
   const maxHeight = { small: '24px', medium: '32px', large: '40px' }[size];
@@ -19,7 +20,7 @@ export default function TagList({
         display: 'flex',
         alignItems: 'center',
         flexWrap: 'wrap',
-        maxWidth: '288px',
+        maxWidth: fullWidth ? 'unset' : '288px',
         maxHeight: noWrap ? maxHeight : 'fit-content',
         overflow: 'hidden',
         marginLeft: gutterLeft ? '8px' : '',

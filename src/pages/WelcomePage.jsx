@@ -147,7 +147,7 @@ const WelcomePage = () => {
           </Box>
         </div>
 
-        <Footer />
+        {/* <Footer /> */}
       </Scrollbars>
     </>
   );
