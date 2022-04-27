@@ -1,4 +1,5 @@
 import { BookmarkBorder, Share } from '@mui/icons-material';
+
 import {
   Box,
   Card,
@@ -15,7 +16,7 @@ import React, { createElement } from 'react';
 import { formatCourseName, formatCreditRange, capitalizeFirst } from '../../utils';
 import { CenterAligningFlexBox } from '../CourseCardGrid/CourseCard/CourseCard';
 import CourseEligibilityIndicator from '../CourseCardGrid/CourseCard/CourseEligibilityIndicator';
-import CousreShare from '../CoursePage/CourseShare';
+import { FacebookShareButton } from 'react-share';
 
 /**
  * The top portion of the course page that displays an image banner (like the channel art from
@@ -52,9 +53,17 @@ export default function CoursePageTop({ course, tabs, activeTabName }) {
 
   const renderActionItems = () => (
     <Box maxHeight='72px' overflow='hidden'>
-      {/* <ActionItem label='Bookmark' icon={BookmarkBorder} onClick={() => alert('** bookmark')} /> */}
-      {/* <ActionItem label='Share' icon={Share} onClick={() => CousreShare()} />
-      <CousreShare /> */}
+      <ActionItem label='Bookmark' icon={BookmarkBorder} onClick={() => alert('** bookmark')} />
+      {/*For your informaiton of editing the Sharing button https://github.com/nygardk/react-share#readme or https://www.npmjs.com/package/react-share */}
+      <FacebookShareButton
+        url={'https://www.pickmyclass.com/'}
+        quote={'Best website to pick your college classes!'}
+        hashtag={'#PickMyClasses'}
+        description={''}
+        className='Demo__some-network__share-button'
+      >
+        <ActionItem label='Share' icon={Share} />{' '}
+      </FacebookShareButton>
     </Box>
   );
 
