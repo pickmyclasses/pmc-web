@@ -16,7 +16,7 @@
 
 ---
 
- Course Overview
+###  Course Overview
 
  <div align="center" ><img width="700" src="https://user-images.githubusercontent.com/33532467/164291896-199a5d9b-95ee-4eb9-992c-8da59e4f88da.png"></div>
 
@@ -24,11 +24,11 @@
 
 <div align="center"><img width="700" src="https://user-images.githubusercontent.com/33532467/164292295-c1fbaa0a-4b5b-4569-b6e5-8e28ad2d7fa0.png"></div>
 
- Course Reviews
+###  Course Reviews
 
 <div align="center"><img width="700" src="https://user-images.githubusercontent.com/33532467/164292431-82a7bbe9-e795-45f7-bef9-e128d719203f.png"></div>
 
- Course Registration
+###  Course Registration
 
  <div align="center"><img width="700" src="https://user-images.githubusercontent.com/33532467/164292615-a31ee439-aaba-4619-86b2-dc1ccc102f0f.png"></div>
 
