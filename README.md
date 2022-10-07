@@ -2,10 +2,6 @@
 
 ### Home Page
 
-- The Home page provides recommended courses for you according to the major and school years
-
-- You may hover onto a course card to reveal more information
-
  <div align="center" ><img  width="700" src="https://user-images.githubusercontent.com/33532467/164290608-7a8abe52-ec5a-4fb6-8fd2-6358c33ea189.png"></div>
 
 ---
@@ -20,7 +16,7 @@
 
  <div align="center" ><img width="700" src="https://user-images.githubusercontent.com/33532467/164291896-199a5d9b-95ee-4eb9-992c-8da59e4f88da.png"></div>
 
- Course Stats
+###  Course Stats
 
 <div align="center"><img width="700" src="https://user-images.githubusercontent.com/33532467/164292295-c1fbaa0a-4b5b-4569-b6e5-8e28ad2d7fa0.png"></div>
 
