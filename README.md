@@ -1,32 +1,44 @@
-## About PickMyClasses
+## PickMyClasses 
 
-### Home Page
+
+*a website with everything a student needs to succeed in picking classes*
+
+By Jiawen Song, Qianglang Chen, Jay Fu
+
+---
+
+### Quick Glance
 
  <div align="center" ><img  width="700" src="https://user-images.githubusercontent.com/33532467/164290608-7a8abe52-ec5a-4fb6-8fd2-6358c33ea189.png"></div>
+<p align="center">Course recommendations</p>
 
 ---
 
-### Search Page
+
 
  <div align="center" ><img width="700" src="https://user-images.githubusercontent.com/33532467/164321841-cfcc835c-bccb-4929-be0d-881909b0b9dd.png"></div>
+<p align="center">Search For your favorite courses</p>
 
 ---
 
-###  Course Overview
 
  <div align="center" ><img width="700" src="https://user-images.githubusercontent.com/33532467/164291896-199a5d9b-95ee-4eb9-992c-8da59e4f88da.png"></div>
+<p align="center">Overview of a college course</p>
 
-###  Course Stats
+---
 
 <div align="center"><img width="700" src="https://user-images.githubusercontent.com/33532467/164292295-c1fbaa0a-4b5b-4569-b6e5-8e28ad2d7fa0.png"></div>
+<p align="center">Interactive visuals and stats</p>
 
-###  Course Reviews
+---
 
 <div align="center"><img width="700" src="https://user-images.githubusercontent.com/33532467/164292431-82a7bbe9-e795-45f7-bef9-e128d719203f.png"></div>
+<p align="center">Reviews from the past students</p>
 
-###  Course Registration
+---
 
  <div align="center"><img width="700" src="https://user-images.githubusercontent.com/33532467/164292615-a31ee439-aaba-4619-86b2-dc1ccc102f0f.png"></div>
+<p align="center">Registrate your class and plan your schedule</p>
 
 ---
 
