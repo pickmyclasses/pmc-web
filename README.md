@@ -1,10 +1,16 @@
 ## PickMyClasses 
 
 
+
 *a website with everything a student needs to succeed in picking classes*
 
 By Jiawen Song, Qianglang Chen, Jay Fu
 
+<div align="center"><img width="700"  src="https://user-images.githubusercontent.com/33532467/164368367-d6be488a-6ee9-4701-8e28-2597cac61656.png"></div>
+
+
+Directly go to [PickMyClasses](https://www.pickmyclass.com/)
+ 
 ---
 
 ### Quick Glance
@@ -42,13 +48,6 @@ By Jiawen Song, Qianglang Chen, Jay Fu
 
 ---
 
-<div align="center"><img width="700"  src="https://user-images.githubusercontent.com/33532467/164368367-d6be488a-6ee9-4701-8e28-2597cac61656.png"></div>
-
-Directly go to [PickMyClasses](https://www.pickmyclass.com/)
- 
-Take a look at [Tutorials](/tutorials.md) and [Team](/about.md) for more information.
- 
- ---
 ### Motivation
 
 "What classes should I take next semester?"
